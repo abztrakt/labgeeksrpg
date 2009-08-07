@@ -5,7 +5,6 @@ TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
-    ('Craig', 'craig@hackingthesoul.com'),
 )
 
 MANAGERS = ADMINS
@@ -49,7 +48,7 @@ MEDIA_URL = ''
 ADMIN_MEDIA_PREFIX = '/media/'
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '@*+s^4j5+8!v0#du6j#zo44#baz99gc)#90%_$8hykrj&)8m#f'
+SECRET_KEY = '@*+s^5j5+8!v0#du6j#zo44#baz99gc)#90%_$8hykrj&)8m#f'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -70,6 +69,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    "/path/to/labgeeksrpg/templates",
 )
 
 INSTALLED_APPS = (
