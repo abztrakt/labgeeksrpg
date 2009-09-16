@@ -5,4 +5,4 @@ from labgeeksrpg.player.models import Player
 
 def list(request):
     players = Player.objects.all()
-    return render_to_response('player/list.html', locals())
+    return render_to_response('list.html', locals())
