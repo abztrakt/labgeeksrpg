@@ -4,7 +4,7 @@
 <h1>Player List</h1>
 <ul>
 {% for player in players %}
-    <li>{{ player }}</li>
+    <li><a href="{{ player }}">{{ player }}</a></li>
 {% endfor %}
 </ul>
 {% endblock %}
