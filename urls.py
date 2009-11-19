@@ -15,4 +15,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
+
+    # COMMENT THIS OUT IN PRODUCTION!!!
+    (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/Users/craig/Documents/Code/django/labgeeksrpg/templates/static'}),
 )
