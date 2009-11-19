@@ -1,3 +1,7 @@
-.nav {
-    border: 1px solid black;
+.nav li {
+    display: inline;
+}
+
+.nav li:after {
+    content:" | ";
 }
