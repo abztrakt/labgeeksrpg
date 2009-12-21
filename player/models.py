@@ -5,6 +5,7 @@ class Player(models.Model):
     lastname = models.CharField(max_length=50)
     uwnetid = models.CharField(max_length=8)
 # TODO: what is an appropriate field type for the points?
+    hp = models.CharField(max_length=5)
     xp = models.CharField(max_length=5)
     currency = models.CharField(max_length=5)
 # TODO: make status another model so statuses can be added/changed
