@@ -1,4 +1,5 @@
 *.pyc
 *.swp
 labgeeksrpg
+labgeeksrpg.db
 settings.py
