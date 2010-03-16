@@ -2,9 +2,9 @@ from django.db import models
 
 class Player(models.Model):
     firstname = models.CharField(max_length=50)
-    middlename = models.CharField(max_length=50)
+    middlename = models.CharField(max_length=50, blank=True)
     lastname = models.CharField(max_length=50)
-    nickname = models.CharField(max_length=50)
+    nickname = models.CharField(max_length=50, blank=True)
     uwnetid = models.CharField(max_length=8)
 # TODO: what is an appropriate field type for the points?
     hp = models.IntegerField()
@@ -16,8 +16,8 @@ class Player(models.Model):
     end_date = models.DateField(blank=True)
     grad_date = models.DateField()
 # Other Info
-    location = models.CharField(max_length=50)
-    about_me = models.TextField()
+    location = models.CharField(max_length=50, blank=True)
+    about_me = models.TextField(blank=True)
 #TODO: insert image field, and figure out where we store avatar images
 # Phone numbers
     phone = models.CharField(max_length=10)
