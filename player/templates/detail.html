@@ -3,9 +3,27 @@
 {% block content %}
 <h1>Player Detail</h1>
 <h2>{{ p.uwnetid }}:</h2>
-<p>{{ p.firstname }} {{ p.lastname }}</p>
+<p>{{ p.firstname }} {{ p.middlename }} {{ p.lastname }}</p>
+<p>"{{ p.nickname }}"</p>
 <p>HP: {{ p.hp }}</p>
 <p>XP: {{ p.xp }}</p>
 <p>$$: {{ p.currency }}</p>
 <p>Status: {{ p.status }}</p>
+<p>Started: {{ p.start_date }}</p>
+<p>Graduated: {{ p.grad_date }}</p>
+<p>Ended: {{ p.end_date  }}</p>
+<p>Location: {{ p.location }}</p>
+<p>About: {{ p.about_me }}</p>
+
+<p> {{ p.uw_gmail }} </p>
+<p> {{ p.uw_windows_live }} </p>
+<p> {{ p.mail }} </p>
+<p> {{ p.windows_live }} </p>
+<p> {{ p.aim_iChat }} </p>
+<p> {{ p.irc_nick }} </p>
+<p> {{ p.irc_network }} </p>
+<p> {{ p.skype }} </p>
+<p> {{ p.yahoo }} </p>
+
+
 {% endblock %}
