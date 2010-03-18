@@ -17,7 +17,9 @@ class Migration:
         db.create_table('player_player', (
             ('id', orm['player.Player:id']),
             ('firstname', orm['player.Player:firstname']),
+            ('middlename', orm['player.Player:middlename']),
             ('lastname', orm['player.Player:lastname']),
+            ('nickname', orm['player.Player:nickname']),
             ('uwnetid', orm['player.Player:uwnetid']),
             ('hp', orm['player.Player:hp']),
             ('xp', orm['player.Player:xp']),
@@ -26,6 +28,8 @@ class Migration:
             ('start_date', orm['player.Player:start_date']),
             ('end_date', orm['player.Player:end_date']),
             ('grad_date', orm['player.Player:grad_date']),
+            ('location', orm['player.Player:location']),
+            ('about_me', orm['player.Player:about_me']),
             ('phone', orm['player.Player:phone']),
             ('alt_phone', orm['player.Player:alt_phone']),
             ('uw_gmail', orm['player.Player:uw_gmail']),
@@ -81,6 +85,7 @@ class Migration:
     
     models = {
         'player.player': {
+            'about_me': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'aim_iChat': ('django.db.models.fields.CharField', [], {'max_length': '75', 'blank': 'True'}),
             'alt_phone': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
             'currency': ('django.db.models.fields.IntegerField', [], {}),
@@ -93,6 +98,9 @@ class Migration:
             'irc_network': ('django.db.models.fields.CharField', [], {'max_length': '75', 'blank': 'True'}),
             'irc_nick': ('django.db.models.fields.CharField', [], {'max_length': '75', 'blank': 'True'}),
             'lastname': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'location': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'}),
+            'middlename': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'}),
+            'nickname': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'}),
             'phone': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
             'skype': ('django.db.models.fields.CharField', [], {'max_length': '75', 'blank': 'True'}),
             'start_date': ('django.db.models.fields.DateField', [], {}),

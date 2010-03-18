@@ -18,8 +18,9 @@ class Punchclock(models.Model):
 class Shift(models.Model):
     person = models.ForeignKey(User)
     intime = models.DateTimeField()
-    outtime = models.DateTimeField()
+    outtime = models.DateTimeField(blank=True)
     punchclock = models.ForeignKey(Punchclock)
+    shiftnote = models.TextField(blank=True)
 
     def __unicode__(self):
         return "%s@[%s]-[%s]" % (self.person, self.intime, self.outtime)
