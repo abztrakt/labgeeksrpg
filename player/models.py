@@ -13,7 +13,7 @@ class Player(models.Model):
 # TODO: make status another model so statuses can be added/changed
     status = models.CharField(max_length=25)
     start_date = models.DateField()
-    end_date = models.DateField(blank=True)
+    end_date = models.DateField(null=True, blank=True)
     grad_date = models.DateField()
 # Other Info
     location = models.CharField(max_length=50, blank=True)
