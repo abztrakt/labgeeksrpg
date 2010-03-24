@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Chronos: Time</h1>
+<form action="">
+<select>
+{% for player in players %}
+<option value="{{ player.uwnetid }}">
+{{ player.uwnetid }}
+</option>
+{% endfor %}
+</select>
+<input type="submit" value="Clock it!" />
+</form>
+{% endblock %}
