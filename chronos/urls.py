@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns('labgeeksrpg.chronos.views',
-    (r'^$', 'report'),
+    (r'^report/$', 'report'),
+    (r'^time/$', 'time'),
 )
