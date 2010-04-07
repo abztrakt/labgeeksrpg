@@ -1,4 +1,5 @@
 from django.shortcuts import render_to_response, get_object_or_404, HttpResponseRedirect
+from datetime import datetime
 from labgeeksrpg.chronos.forms import ShiftForm
 from labgeeksrpg.chronos.models import Shift
 from labgeeksrpg.player.models import Player
@@ -16,6 +17,8 @@ def time(request):
         if form.is_valid():
             shift = form.save(commit=False)
             shift.person = request.user
+            if shift.intime == None:
+                shift.intime = datetime.now()
             shift.save()
             return HttpResponseRedirect('success/')
     else:
