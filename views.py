@@ -13,14 +13,9 @@ def labgeeks_login(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    #return HttpResponseRedirect('/success/')
-                    # Redirect to the success page
                 else:
-                    return HttpResponseRedirect('/inactive/')
                     # Return a disabled account error
-            else:
-                return HttpResponseRedirect('/invalid_login/')
-                #Return an invalid login error
+                    return HttpResponseRedirect('/inactive/')
     else:
         form = LoginForm()
 
