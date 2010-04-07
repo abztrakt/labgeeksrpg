@@ -8,6 +8,7 @@
         {{ form.as_table  }}
     </table>
     <input type="submit" value="Submit" />
+    <input type="hidden" name="next" value="{{ next }}" />
 </form>
 
 {% endblock %}

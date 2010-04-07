@@ -13,7 +13,7 @@ def labgeeks_login(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return HttpResponseRedirect('/success/')
+                    #return HttpResponseRedirect('/success/')
                     # Redirect to the success page
                 else:
                     return HttpResponseRedirect('/inactive/')
