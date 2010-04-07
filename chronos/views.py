@@ -7,11 +7,15 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def report(request):
+    """ Create a report of all of the shifts logged in the database.
+    """
     shifts = Shift.objects.all()
     return render_to_response('report.html', locals())
 
 @login_required
 def time(request):
+    """ Clock in / clock out for a shift.
+    """
     if request.method == 'POST':
         form = ShiftForm(request.POST)
         if form.is_valid():
@@ -28,4 +32,6 @@ def time(request):
     return render_to_response('time.html', locals())
 
 def success(request):
+    """ Show the user a success page after clocking in or out.
+    """
     return render_to_response('success.html')
