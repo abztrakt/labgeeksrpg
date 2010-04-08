@@ -16,7 +16,7 @@ class Player(models.Model):
     end_date = models.DateField(null=True, blank=True)
     grad_date = models.DateField()
 # Other Info
-    office = models.CharField(max_length=50, blank=True)
+    office = models.CharField(max_length=50, blank=True, default='')
     about_me = models.TextField(blank=True)
 #TODO: insert image field, and figure out where we store avatar images
 # Phone numbers

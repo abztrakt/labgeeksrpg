@@ -36,7 +36,7 @@ class Migration:
             'lastname': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'middlename': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'}),
             'nickname': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'}),
-            'office': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'}),
+            'office': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '50', 'blank': 'True'}),
             'phone': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
             'skype': ('django.db.models.fields.CharField', [], {'max_length': '75', 'blank': 'True'}),
             'start_date': ('django.db.models.fields.DateField', [], {}),
