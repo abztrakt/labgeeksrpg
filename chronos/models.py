@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+from labgeeksrpg.player.models import Player
 
 class Location(models.Model):
     name = models.CharField(max_length=256)
+    active_staff = models.ManyToManyField(Player, blank=True, null=True)
 
     def __unicode__(self):
         return self.name
