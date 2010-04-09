@@ -19,7 +19,13 @@ def time(request):
             shift.person = request.user
             if shift.intime == None:
                 shift.intime = datetime.now()
+            #On success, save the shift
             shift.save()
+            #After successful shift save, add person to active_staff in appropriate Location
+            punchclock = shift.punchclock
+            location = punchclock.location
+            active = Player.objects.get(uwnetid=request.user.username)
+            location.active_staff.add(active)
             return HttpResponseRedirect('success/')
     else:
         form = ShiftForm()
