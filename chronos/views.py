@@ -24,8 +24,8 @@ def time(request):
             #After successful shift save, add person to active_staff in appropriate Location
             punchclock = shift.punchclock
             location = punchclock.location
-            active = Player.objects.get(uwnetid=request.user.username)
-            location.active_staff.add(active)
+            active = request.user
+            location.active_users.add(active)
             return HttpResponseRedirect('success/')
     else:
         form = ShiftForm()
