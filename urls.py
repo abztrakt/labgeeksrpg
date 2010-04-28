@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     #(r'^accounts/login/$', 'django.contrib.auth.views.login'),
     
     (r'^login/$', 'labgeeksrpg.views.labgeeks_login'),
+    (r'^inactive/$', 'labgeeksrpg.views.inactive'),
     
     (r'^success/$', 'labgeeksrpg.views.success'),
     # Example:
