@@ -23,8 +23,10 @@ def time(request):
             #Getting machine location user is currently using
             punchclock = shift.punchclock
             location = punchclock.location
-            import pdb; pdb.set_trace()
+            #import pdb; pdb.set_trace()
             #Check whether user has open shift at this location
+            if shift.person in location.active_users.all():
+                print "User is alreday here!"
             #if shift.person  location.active_staff
             if shift.intime == None:
                 shift.intime = datetime.now()
