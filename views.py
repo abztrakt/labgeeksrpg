@@ -21,5 +21,8 @@ def labgeeks_login(request):
 
     return render_to_response('login.html', locals())
 
+def inactive(request):
+    return render_to_response('inactive.html')
+
 def success(request):
     return render_to_response('success.html')
