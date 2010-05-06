@@ -2,7 +2,6 @@ from django.shortcuts import render_to_response, get_object_or_404, HttpResponse
 from datetime import datetime
 from labgeeksrpg.chronos.forms import ShiftForm
 from labgeeksrpg.chronos.models import Shift
-from labgeeksrpg.player.models import Player
 from django.contrib.auth.decorators import login_required
 
 @login_required
