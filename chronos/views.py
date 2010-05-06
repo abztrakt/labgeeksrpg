@@ -11,18 +11,27 @@ def report(request):
 
 @login_required
 def time(request):
+    #Check for POST, if not blank form, if true 'take in data'
     if request.method == 'POST':
         form = ShiftForm(request.POST)
+        #Check form data for validity, if not valid, fail gracefully
         if form.is_valid():
+            #We are creating a shift object that we can manipulate programatically later
             shift = form.save(commit=False)
             shift.person = request.user
+            #Getting machine location user is currently using
+            punchclock = shift.punchclock
+            location = punchclock.location
+            #import pdb; pdb.set_trace()
+            #Check whether user has open shift at this location
+            if shift.person in location.active_users.all():
+                print "User is alreday here!"
+            #if shift.person  location.active_staff
             if shift.intime == None:
                 shift.intime = datetime.now()
             #On success, save the shift
             shift.save()
             #After successful shift save, add person to active_staff in appropriate Location
-            punchclock = shift.punchclock
-            location = punchclock.location
             active = request.user
             location.active_users.add(active)
             return HttpResponseRedirect('success/')
