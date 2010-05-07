@@ -17,24 +17,38 @@ def time(request):
         #Check form data for validity, if not valid, fail gracefully
         if form.is_valid():
             #We are creating a shift object that we can manipulate programatically later
-            shift = form.save(commit=False)
-            shift.person = request.user
+            this_shift = form.save(commit=False)
+            this_shift.person = request.user
             #Getting machine location user is currently using
-            punchclock = shift.punchclock
+            punchclock = this_shift.punchclock
             location = punchclock.location
-            #import pdb; pdb.set_trace()
             #Check whether user has open shift at this location
-            if shift.person in location.active_users.all():
+            if this_shift.person in location.active_users.all():
                 print "User is alreday here!"
-            #if shift.person  location.active_staff
-            if shift.intime == None:
-                shift.intime = datetime.now()
-            #On success, save the shift
-            shift.save()
-            #After successful shift save, add person to active_staff in appropriate Location
-            active = request.user
-            location.active_users.add(active)
+                try:
+                    oldshift = Shift.objects.filter(person=request.user, punchclock=location, outtime=None)
+                    #import pdb; pdb.set_trace()
+                    oldshift = oldshift[0]
+                    oldshift.outtime = datetime.now()
+                    oldshift.save()
+                    location.active_users.remove(request.user)
+                except:
+                    print "There was an error getting old shifts"
+            
+            else:
+                #import pdb; pdb.set_trace()
+                #if shift.person  location.active_staff
+                if this_shift.intime == None:
+                    this_shift.intime = datetime.now()
+                #On success, save the shift
+                this_shift.save()
+                #After successful shift save, add person to active_staff in appropriate Location
+                active = request.user
+                location.active_users.add(active)
+            
             return HttpResponseRedirect('success/')
+
+    #If POST is false, then return a new fresh form.
     else:
         form = ShiftForm()
 
