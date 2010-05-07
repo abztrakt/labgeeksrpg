@@ -1,7 +1,7 @@
 from django.shortcuts import render_to_response, get_object_or_404, HttpResponseRedirect
 from datetime import datetime
 from labgeeksrpg.chronos.forms import ShiftForm
-from labgeeksrpg.chronos.models import Shift
+from labgeeksrpg.chronos.models import Shift, Punchclock
 from django.contrib.auth.decorators import login_required
 
 @login_required
@@ -20,8 +20,18 @@ def time(request):
             this_shift = form.save(commit=False)
             this_shift.person = request.user
             #Getting machine location user is currently using
+            current_ip = request.META['REMOTE_ADDR']
+            
+            try: 
+                this_shift.punchclock = Punchclock.objects.filter(ip_address=current_ip)[0]
+            except:
+                #implement bad monkey page redirect
+                #print "you are a bad monkey!"
+                return HttpResponseRedirect("fail/")
+
             punchclock = this_shift.punchclock
             location = punchclock.location
+            
             #Check whether user has open shift at this location
             if this_shift.person in location.active_users.all():
                 print "User is alreday here!"
@@ -51,15 +61,18 @@ def time(request):
                 #Setting the success variable that users will see on the success page
                 success = "signed *IN*"
                 at_time = this_shift.intime
-
+                
+            print request.META['REMOTE_ADDR']
             return HttpResponseRedirect("success/?success=%s&at_time=%s&location=%s&user=%s" % (success, at_time, location, this_shift.person))
 
     #If POST is false, then return a new fresh form.
     else:
         form = ShiftForm()
-
     user = request.user
     return render_to_response('time.html', locals())
+
+def fail(request):
+    return render_to_response('fail.html')
 
 def success(request):
     success = request.GET['success']
