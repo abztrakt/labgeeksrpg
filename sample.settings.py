@@ -80,7 +80,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.flatpages',
-    'labgeeksrpg.player',
     'labgeeksrpg.chronos',
     'south',
 )
