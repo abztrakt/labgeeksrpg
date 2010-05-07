@@ -32,6 +32,9 @@ def time(request):
                     oldshift.outtime = datetime.now()
                     oldshift.save()
                     location.active_users.remove(request.user)
+                    #Setting the success variable that users will see on success page
+                    success = "signed *OUT*"
+                    at_time = oldshift.outtime
                 except:
                     print "There was an error getting old shifts"
             
@@ -43,10 +46,13 @@ def time(request):
                 #On success, save the shift
                 this_shift.save()
                 #After successful shift save, add person to active_staff in appropriate Location
-                active = request.user
-                location.active_users.add(active)
+                location.active_users.add(this_shift.person)
             
-            return HttpResponseRedirect('success/')
+                #Setting the success variable that users will see on the success page
+                success = "signed *IN*"
+                at_time = this_shift.intime
+
+            return HttpResponseRedirect("success/?success=%s&at_time=%s&location=%s&user=%s" % (success, at_time, location, this_shift.person))
 
     #If POST is false, then return a new fresh form.
     else:
@@ -56,4 +62,8 @@ def time(request):
     return render_to_response('time.html', locals())
 
 def success(request):
-    return render_to_response('success.html')
+    success = request.GET['success']
+    at_time = request.GET['at_time']
+    location = request.GET['location']
+    user = request.GET['user']
+    return render_to_response('success.html', locals())
