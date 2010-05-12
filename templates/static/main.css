@@ -1,11 +1,57 @@
+/*
+Color Scheme: 
+Dark Blue: rgb (70, 50, 140)
+Light Blue/Grey: (131, 129, 140)
+Green: (62, 86, 38)
+Light Green: (73, 101, 40)
+Greyish: (65, 66, 71)
+*/
+
+/* Elements */
+
 body {
     font-family: Helvetica, Arial, sans-serif;
+    background: rgba(127, 140, 136, .1);
+}
+
+h1 {
+    font-size: 5em;
+    color: rgba(70,50,140,1);
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+/* Classes */
+
+.nav {
+    text-align: center;
+    padding: 10px;
 }
 
 .nav li {
     display: inline;
 }
 
-.nav li:after {
+.nav li:before {
     content:" | ";
+}
+
+.nav li:first-child:before {
+    content: "";
+}
+
+.user_name {
+    color: rgba(70,50,140,1);
+}
+
+/* IDs */
+
+#submit_button {
+    color: blue;
+    font-size: 2em;
+}
+
+#content {
+    margin: 1em;
 }

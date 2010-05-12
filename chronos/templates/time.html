@@ -2,6 +2,7 @@
 
 {% block content %}
 
+
 <h1>Chronos: Time</h1>
 
 {% if errors %}
@@ -10,13 +11,25 @@
     </p>
 {% endif %}
 
-<h2> Welcome {{ user }}! </h2>
+<div id="content">
+
+<h2>Welcome 
+<span class="user_name"> 
+{% if user.first_name %}
+    {{ user.first_name }}!
+{% else %}
+    {{ user }}</span>!
+{% endif %}
+
+</h2>
 
 <form action="" method="post">
     <table>
         {{ form.as_table }}
     </table>
-    <input type="submit" value="Clock it!" />
+    <input type="submit" id="submit_button" value="Clock it!" />
 </form>
+
+</div> <!-- end content div  -->
 
 {% endblock %}
