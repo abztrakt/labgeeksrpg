@@ -4,6 +4,9 @@ from labgeeksrpg.chronos.forms import ShiftForm
 from labgeeksrpg.chronos.models import Shift, Punchclock
 from django.contrib.auth.decorators import login_required
 
+def list_options(request):
+    return render_to_response('options.html')
+
 @login_required
 def report(request):
     shifts = Shift.objects.all()
