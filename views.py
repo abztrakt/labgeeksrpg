@@ -13,6 +13,7 @@ def labgeeks_login(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
+                    return HttpResponseRedirect(request.GET['next'])
                 else:
                     # Return a disabled account error
                     return HttpResponseRedirect('/inactive/')
