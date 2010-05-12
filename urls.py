@@ -24,5 +24,5 @@ urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
 
     # COMMENT THIS OUT IN PRODUCTION!!!
-    (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/Users/craig/Documents/Code/django/labgeeksrpg/templates/static'}),
+    (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/Users/trauma/Documents/code/labgeeksrpg/templates/static'}),
 )
