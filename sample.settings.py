@@ -84,5 +84,6 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.flatpages',
     'labgeeksrpg.chronos',
+    'labgeeksrpg.people',
     'south',
 )
