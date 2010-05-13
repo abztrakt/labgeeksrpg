@@ -5,15 +5,21 @@ from labgeeksrpg.chronos.models import Shift, Punchclock
 from django.contrib.auth.decorators import login_required
 
 def list_options(request):
+    """ Lists the options that users can get to when using chronos.
+    """
     return render_to_response('options.html')
 
 @login_required
 def report(request):
+    """ Creates a report of all shifts in the history.
+    """
     shifts = Shift.objects.all()
     return render_to_response('report.html', locals())
 
 @login_required
 def time(request):
+    """ Sign in or sign out of a shift.
+    """
     #Check for POST, if not blank form, if true 'take in data'
     if request.method == 'POST':
         form = ShiftForm(request.POST)
@@ -75,9 +81,13 @@ def time(request):
     return render_to_response('time.html', locals())
 
 def fail(request):
+    """ If signing in or out of a shift fails, show the user a page stating that. This is the page shown if someone tries to log in from a non-punchclock.
+    """
     return render_to_response('fail.html')
 
 def success(request):
+    """ Show a page telling the user what they just successfully did.
+    """
     success = request.GET['success']
     at_time = request.GET['at_time']
     location = request.GET['location']

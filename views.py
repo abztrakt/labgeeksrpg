@@ -4,6 +4,8 @@ from django.contrib.auth import authenticate, login
 
 
 def labgeeks_login(request):
+    """ Login a user. Called by the @login_required decorator.
+    """
     if request.method == 'POST': 
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -23,7 +25,11 @@ def labgeeks_login(request):
     return render_to_response('login.html', locals())
 
 def inactive(request):
+    """ Return if a user's account has been disabled.
+    """
     return render_to_response('inactive.html')
 
 def success(request):
+    """ If the user just logs in, we should redirect them to this view unless there is a 'next' GET var.
+    """
     return render_to_response('login_success.html')
