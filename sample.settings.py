@@ -87,3 +87,5 @@ INSTALLED_APPS = (
     'labgeeksrpg.people',
     'south',
 )
+
+LOGIN_URL = '/login/'
