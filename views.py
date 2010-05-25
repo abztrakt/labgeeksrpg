@@ -6,7 +6,9 @@ from django.contrib.auth import authenticate, login
 def labgeeks_login(request):
     """ Login a user. Called by the @login_required decorator.
     """
-    if request.method == 'POST': 
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(request.GET['next'])
+    elif request.method == 'POST': 
         form = LoginForm(request.POST)
         if form.is_valid():
             username = request.POST['username']
