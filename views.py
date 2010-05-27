@@ -2,6 +2,11 @@ from django.shortcuts import render_to_response, HttpResponseRedirect
 from labgeeksrpg.forms import LoginForm
 from django.contrib.auth import authenticate, login
 
+def hello(request):
+    """ The root view of the site. Just static for now, but loater we can return useful information for logged in users.
+    """
+    return render_to_response('hello.html')
+
 
 def labgeeks_login(request):
     """ Login a user. Called by the @login_required decorator.

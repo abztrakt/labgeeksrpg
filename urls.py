@@ -18,6 +18,7 @@ urlpatterns = patterns('',
     # (r'^labgeeksrpg/', include('labgeeksrpg.foo.urls')),
     (r'^chronos/', include('labgeeksrpg.chronos.urls')),
     (r'^people/', include('labgeeksrpg.people.urls')),
+    (r'^$', 'labgeeksrpg.views.hello'),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:
