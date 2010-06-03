@@ -35,7 +35,6 @@ def time(request):
                 this_shift.punchclock = Punchclock.objects.filter(ip_address=current_ip)[0]
             except:
                 #implement bad monkey page redirect
-                #print "you are a bad monkey!"
                 return HttpResponseRedirect("fail/")
 
             punchclock = this_shift.punchclock
@@ -43,7 +42,6 @@ def time(request):
             
             #Check whether user has open shift at this location
             if this_shift.person in location.active_users.all():
-                print "User is alreday here!"
                 try:
                     oldshift = Shift.objects.filter(person=request.user, punchclock=location, outtime=None)
                     #import pdb; pdb.set_trace()
@@ -55,7 +53,7 @@ def time(request):
                     success = "signed *OUT*"
                     at_time = oldshift.outtime
                 except:
-                    print "There was an error getting old shifts"
+                    pass
             
             else:
                 #import pdb; pdb.set_trace()
@@ -71,7 +69,6 @@ def time(request):
                 success = "signed *IN*"
                 at_time = this_shift.intime
                 
-            print request.META['REMOTE_ADDR']
             return HttpResponseRedirect("success/?success=%s&at_time=%s&location=%s&user=%s" % (success, at_time, location, this_shift.person))
 
     #If POST is false, then return a new fresh form.
