@@ -1,5 +1,7 @@
 *.pyc
 *.swp
+.project
+.pydevproject
 labgeeks.wsgi
 labgeeksrpg
 labgeeksrpg.db
