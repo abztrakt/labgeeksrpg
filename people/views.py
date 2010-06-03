@@ -2,6 +2,7 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
+@login_required
 def list_all(request):
     """ List all users in the system.
     """
