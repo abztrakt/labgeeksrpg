@@ -68,9 +68,10 @@ MIDDLEWARE_CLASSES = (
     #'django.contrib.auth.middleware.RemoteUserMiddleware',
 )
 
-AUTHENTICATION_BACKENDS = (
-    #'django.contrib.auth.backends.RemoteUserBackend',
-)
+# Only use this if you're usint the RemoteUserMiddleware
+#AUTHENTICATION_BACKENDS = (
+#    'django.contrib.auth.backends.RemoteUserBackend',
+#)
 
 ROOT_URLCONF = 'labgeeksrpg.urls'
 
