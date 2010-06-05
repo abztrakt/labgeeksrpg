@@ -1,6 +1,8 @@
-from django.shortcuts import render_to_response, HttpResponseRedirect
-from labgeeksrpg.forms import LoginForm
 from django.contrib.auth import authenticate, login
+from django.core.context_processors import csrf
+from django.shortcuts import render_to_response, HttpResponseRedirect
+from django.template import RequestContext
+from labgeeksrpg.forms import LoginForm
 
 def hello(request):
     """ The root view of the site. Just static for now, but loater we can return useful information for logged in users.
@@ -11,6 +13,10 @@ def hello(request):
 def labgeeks_login(request):
     """ Login a user. Called by the @login_required decorator.
     """
+    # Get a token to protect from cross-site request forgery
+    c = {}
+    c.update(csrf(request))
+    
     if request.user.is_authenticated():
         return HttpResponseRedirect(request.GET['next'])
     elif request.method == 'POST': 
@@ -29,7 +35,7 @@ def labgeeks_login(request):
     else:
         form = LoginForm()
 
-    return render_to_response('login.html', locals())
+    return render_to_response('login.html', locals(), context_instance=RequestContext(request))
 
 def inactive(request):
     """ Return if a user's account has been disabled.

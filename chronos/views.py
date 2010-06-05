@@ -1,8 +1,11 @@
-from django.shortcuts import render_to_response, get_object_or_404, HttpResponseRedirect
 from datetime import datetime
+from django.contrib.auth.decorators import login_required
+from django.core.context_processors import csrf
+from django.shortcuts import render_to_response, get_object_or_404, \
+    HttpResponseRedirect
+from django.template import RequestContext
 from labgeeksrpg.chronos.forms import ShiftForm
 from labgeeksrpg.chronos.models import Shift, Punchclock
-from django.contrib.auth.decorators import login_required
 
 def list_options(request):
     """ Lists the options that users can get to when using chronos.
@@ -20,6 +23,9 @@ def report(request):
 def time(request):
     """ Sign in or sign out of a shift.
     """
+    #Generate a token to protect from cross-site request forgery
+    c = {}
+    c.update(csrf(request))
     #Check for POST, if not blank form, if true 'take in data'
     if request.method == 'POST':
         form = ShiftForm(request.POST)
@@ -44,7 +50,6 @@ def time(request):
             if this_shift.person in location.active_users.all():
                 try:
                     oldshift = Shift.objects.filter(person=request.user, punchclock=location, outtime=None)
-                    #import pdb; pdb.set_trace()
                     oldshift = oldshift[0]
                     oldshift.outtime = datetime.now()
                     oldshift.save()
@@ -75,7 +80,7 @@ def time(request):
     else:
         form = ShiftForm()
     user = request.user
-    return render_to_response('time.html', locals())
+    return render_to_response('time.html', locals(), context_instance=RequestContext(request))
 
 def fail(request):
     """ If signing in or out of a shift fails, show the user a page stating that. This is the page shown if someone tries to log in from a non-punchclock.
