@@ -49,7 +49,7 @@ def time(request):
             #Check whether user has open shift at this location
             if this_shift.person in location.active_users.all():
                 try:
-                    oldshift = Shift.objects.filter(person=request.user, punchclock=location, outtime=None)
+                    oldshift = Shift.objects.filter(person=request.user, outtime=None)
                     oldshift = oldshift[0]
                     oldshift.outtime = datetime.now()
                     oldshift.save()
