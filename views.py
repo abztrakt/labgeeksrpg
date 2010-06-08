@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.core.context_processors import csrf
 from django.shortcuts import render_to_response, HttpResponseRedirect
 from django.template import RequestContext
@@ -36,6 +36,12 @@ def labgeeks_login(request):
         form = LoginForm()
 
     return render_to_response('login.html', locals(), context_instance=RequestContext(request))
+    
+def labgeeks_logout(request):
+    """ Manually log a user out.
+    """
+    logout(request)
+    return HttpResponseRedirect('/')
 
 def inactive(request):
     """ Return if a user's account has been disabled.
