@@ -61,6 +61,7 @@ def time(request):
                 #Setting the success variable that users will see on success page
                 success = "signed *OUT*"
                 at_time = oldshift.outtime
+                at_time = at_time.strftime('%Y-%m-%d, %I:%M %p').replace(' 0', ' ') #get rid of zeros on the hour
             
             else:
                 #import pdb; pdb.set_trace()
@@ -75,6 +76,7 @@ def time(request):
                 #Setting the success variable that users will see on the success page
                 success = "signed *IN*"
                 at_time = this_shift.intime
+                at_time = at_time.strftime('%Y-%m-%d, %I:%M %p').replace(' 0', ' ') #get rid of zeros on the hour
                 
             return HttpResponseRedirect("success/?success=%s&at_time=%s&location=%s&user=%s" % (success, at_time, location, this_shift.person))
 
