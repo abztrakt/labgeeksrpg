@@ -7,7 +7,7 @@ from labgeeksrpg.forms import LoginForm
 def hello(request):
     """ The root view of the site. Just static for now, but loater we can return useful information for logged in users.
     """
-    return render_to_response('hello.html')
+    return render_to_response('hello.html', locals())
 
 
 def labgeeks_login(request):
@@ -28,7 +28,10 @@ def labgeeks_login(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return HttpResponseRedirect(request.GET['next'])
+                    try:
+                        return HttpResponseRedirect(request.GET['next'])
+                    except:
+                        return HttpResponseRedirect('/success')
                 else:
                     # Return a disabled account error
                     return HttpResponseRedirect('/inactive/')
@@ -46,9 +49,9 @@ def labgeeks_logout(request):
 def inactive(request):
     """ Return if a user's account has been disabled.
     """
-    return render_to_response('inactive.html')
+    return render_to_response('inactive.html', locals())
 
 def success(request):
     """ If the user just logs in, we should redirect them to this view unless there is a 'next' GET var.
     """
-    return render_to_response('login_success.html')
+    return render_to_response('login_success.html', locals())

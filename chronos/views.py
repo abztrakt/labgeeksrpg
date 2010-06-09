@@ -10,7 +10,7 @@ from labgeeksrpg.chronos.models import Shift, Punchclock
 def list_options(request):
     """ Lists the options that users can get to when using chronos.
     """
-    return render_to_response('options.html')
+    return render_to_response('options.html', locals())
 
 @login_required
 def report(request):
