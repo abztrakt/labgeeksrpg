@@ -41,8 +41,10 @@ def time(request):
                 this_shift.punchclock = Punchclock.objects.filter(ip_address=current_ip)[0]
             except:
                 #implement bad monkey page redirect
+                message = "You are a very bad monkey!"
                 reason = "This computer isn't one of the punchclocks, silly..."
-                return HttpResponseRedirect("fail/?reason=%s" % reason)
+                log_msg = "Your IP Address, %s, has been logged and will be reported. (Just kidding. But seriously, you can't sign in or out from here.)" % current_ip
+                return HttpResponseRedirect("fail/?message=%s&reason=%s&log_msg=%s" % (message, reason, log_msg))
 
             punchclock = this_shift.punchclock
             location = punchclock.location
@@ -89,7 +91,9 @@ def time(request):
 def fail(request):
     """ If signing in or out of a shift fails, show the user a page stating that. This is the page shown if someone tries to log in from a non-punchclock.
     """
+    message = request.GET['message']
     reason = request.GET['reason']
+    log_msg = request.GET['log_msg']
     return render_to_response('fail.html', locals())
 
 def success(request):
