@@ -2,6 +2,7 @@
 *.swp
 .project
 .pydevproject
+.settings
 .tmp*
 labgeeks.wsgi
 labgeeksrpg
