@@ -41,15 +41,20 @@ def time(request):
                 this_shift.punchclock = Punchclock.objects.filter(ip_address=current_ip)[0]
             except:
                 #implement bad monkey page redirect
-                return HttpResponseRedirect("fail/")
+                reason = "This computer isn't one of the punchclocks, silly..."
+                return HttpResponseRedirect("fail/?reason=%s" % reason)
 
             punchclock = this_shift.punchclock
             location = punchclock.location
             
             #Check whether user has open shift at this location
             if this_shift.person in location.active_users.all():
-                oldshift = Shift.objects.filter(person=request.user, outtime=None)
-                oldshift = oldshift[0]
+                try:
+                    oldshift = Shift.objects.filter(person=request.user, outtime=None)
+                    oldshift = oldshift[0]
+                except IndexError:
+                    reason = "Whoa. Something wacky is up. You appear to be signed in at %s, but don't have an open entry in my database." % location
+                    return HttpResponseRedirect("fail/?reason=%s" % reason)
                 oldshift.outtime = datetime.now()
                 oldshift.save()
                 location.active_users.remove(request.user)
@@ -82,7 +87,8 @@ def time(request):
 def fail(request):
     """ If signing in or out of a shift fails, show the user a page stating that. This is the page shown if someone tries to log in from a non-punchclock.
     """
-    return render_to_response('fail.html')
+    reason = request.GET['reason']
+    return render_to_response('fail.html', locals())
 
 def success(request):
     """ Show a page telling the user what they just successfully did.
