@@ -3,10 +3,10 @@
 {% block content %}
 <h1>FAIL</h1>
 
-<p>{{ message }}</p>
+{% if message %}<p>{{ message }}</p>{% endif %}
 
-<p>{{ reason }}</p>
+{% if reason %}<p>{{ reason }}</p>{% endif %}
 
-<p>{{ log_msg }}</p>
+{% if log_msg %}<p>{{ log_msg }}</p>{% endif %}
 
 {% endblock %}

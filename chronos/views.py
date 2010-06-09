@@ -55,7 +55,7 @@ def time(request):
                     oldshift = Shift.objects.filter(person=request.user, outtime=None)
                     oldshift = oldshift[0]
                 except IndexError:
-                    reason = "Whoa. Something wacky is up. You appear to be signed in at %s, but don't have an open entry in my database." % location
+                    reason = "Whoa. Something wacky is up. You appear to be signed in at %s, but don't have an open entry in my database. This is kind of a metaphysical crisis for me, I'm no longer sure what it all means." % location
                     return HttpResponseRedirect("fail/?reason=%s" % reason)
                 oldshift.outtime = datetime.now()
                 oldshift.save()
@@ -91,9 +91,18 @@ def time(request):
 def fail(request):
     """ If signing in or out of a shift fails, show the user a page stating that. This is the page shown if someone tries to log in from a non-punchclock.
     """
-    message = request.GET['message']
-    reason = request.GET['reason']
-    log_msg = request.GET['log_msg']
+    try:
+        message = request.GET['message']
+    except:
+        pass
+    try:
+        reason = request.GET['reason']
+    except:
+        pass
+    try:
+        log_msg = request.GET['log_msg']
+    except:
+        pass
     return render_to_response('fail.html', locals())
 
 def success(request):
