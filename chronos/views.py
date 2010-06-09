@@ -48,17 +48,14 @@ def time(request):
             
             #Check whether user has open shift at this location
             if this_shift.person in location.active_users.all():
-                try:
-                    oldshift = Shift.objects.filter(person=request.user, outtime=None)
-                    oldshift = oldshift[0]
-                    oldshift.outtime = datetime.now()
-                    oldshift.save()
-                    location.active_users.remove(request.user)
-                    #Setting the success variable that users will see on success page
-                    success = "signed *OUT*"
-                    at_time = oldshift.outtime
-                except:
-                    pass
+                oldshift = Shift.objects.filter(person=request.user, outtime=None)
+                oldshift = oldshift[0]
+                oldshift.outtime = datetime.now()
+                oldshift.save()
+                location.active_users.remove(request.user)
+                #Setting the success variable that users will see on success page
+                success = "signed *OUT*"
+                at_time = oldshift.outtime
             
             else:
                 #import pdb; pdb.set_trace()
