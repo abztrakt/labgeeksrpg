@@ -58,6 +58,7 @@ def time(request):
                     reason = "Whoa. Something wacky is up. You appear to be signed in at %s, but don't have an open entry in my database. This is kind of a metaphysical crisis for me, I'm no longer sure what it all means." % location
                     return HttpResponseRedirect("fail/?reason=%s" % reason)
                 oldshift.outtime = datetime.now()
+                oldshift.shiftnote = "IN: %s\n\nOUT: %s" % (oldshift.shiftnote, form.data['shiftnote'])
                 oldshift.save()
                 location.active_users.remove(request.user)
                 #Setting the success variable that users will see on success page
