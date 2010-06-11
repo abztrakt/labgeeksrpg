@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Hello</h1>
-<p>Welcome to labgeeks.</p>
+<h1>
+{% if request.user.is_authenticated %}Hello {{request.user}}. {% else %}Greetings. Please log in.{% endif %}
+</h1>
+<h2>Welcome to labgeeks.</h2>
 {% endblock %}

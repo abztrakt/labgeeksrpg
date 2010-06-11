@@ -14,11 +14,14 @@ body {
     background: rgba(127, 140, 136, .1);
 }
 
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+}
+
 h1 {
     font-size: 5em;
     color: rgba(70,50,140,1);
-    margin: 0;
-    padding: 0;
     text-align: center;
 }
 
@@ -32,7 +35,42 @@ h3 {
     text-align: center;
 }
 
+table {
+    margin: auto;
+}
+
+th, td {
+    padding: .2em .5em;
+}
+
+th {
+    text-align: left;
+}
+
+tr:nth-child(even) {background: rgba(70,50,140,.1);}
+tr:nth-child(odd) { background: rgba(70,50,140,.75); color: snow;}
+
+tr:first-child { 
+    color: white; 
+    background-color: rgba(70,50,140,1) ;
+}
 /* Classes */
+
+#chronos_nav li {
+    list-style: none;
+    font-size: 3em;
+    padding: .25em;
+}
+
+#chronos_nav a {
+    text-decoration: none;
+    padding: .1em;
+}
+
+#chronos_nav a:hover {
+    background: blue;
+    color: white;
+}
 
 .nav {
     text-align: center;
