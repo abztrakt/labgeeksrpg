@@ -61,7 +61,7 @@ def time(request):
                 oldshift.save()
                 location.active_users.remove(request.user)
                 #Setting the success variable that users will see on success page
-                success = "signed *OUT*"
+                success = "OUT"
                 at_time = oldshift.outtime
                 at_time = at_time.strftime('%Y-%m-%d, %I:%M %p').replace(' 0', ' ') #get rid of zeros on the hour
             
@@ -76,7 +76,7 @@ def time(request):
                 location.active_users.add(this_shift.person)
             
                 #Setting the success variable that users will see on the success page
-                success = "signed *IN*"
+                success = "IN"
                 at_time = this_shift.intime
                 at_time = at_time.strftime('%Y-%m-%d, %I:%M %p').replace(' 0', ' ') #get rid of zeros on the hour
                 

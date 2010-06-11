@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>{{user}} has successfully {{ success }} at {{ location }} at {{ at_time }}! </h1>
+<h1>Well done {{user}}.</h1>
+<h2>Clocked <span style="color:{% if success == "OUT" %}red">{% else %}green">{% endif %}{{ success }}</span>: {{ location }}.</h2>
+<h3>The date and time recorded: {{ at_time }}.</h3>
 {% endblock %}
