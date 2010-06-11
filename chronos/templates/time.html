@@ -23,10 +23,13 @@
 
 </h2>
 
-<form action="" method="post">{% csrf_token %}
+<form style="text-align: center;" action="" method="post">{% csrf_token %}
     <table>
-        {{ form.as_table }}
-    </table>
+    <div class="form_style">
+        <label for="shiftnote">Notes about your shift:</label><br />
+        {{ form.shiftnote }}
+    </div>
+    <br />
     <input type="submit" id="submit_button" value="Clock it!" />
 </form>
 
