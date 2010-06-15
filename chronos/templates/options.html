@@ -1,10 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div id="chronos_nav">
-<ul>
-<li><a href='time/'>Clock IN or OUT</a></li>
-<li><a href='report/'>View report</a></li>
-</ul>
-</div>
+<h1><a href="time/">Clock IN or OUT</a></h1>
+{% if shifts %}
+
+<h1>Your Shifts</h1>
+<table>
+<tr><th>Name</th><th>Punch Clock Locale</th><th>In Time</th><th>Out Time</th><th>Note</th></tr>
+{% for shift in shifts %}
+<tr><td>{{ shift.person }}</td><td>{{ shift.in_clock.location }}</td><td>{{ shift.intime }}</td><td>{{ shift.outtime }}</td><td>{{ shift.shiftnote }}</td></tr>
+{% endfor %}
+</table>
+    
+{% else %}<h2>Please log in to see your shifts or to clock in</h2>
+{% endif %}
 {% endblock %}

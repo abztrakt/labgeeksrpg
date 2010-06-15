@@ -5,5 +5,5 @@ urlpatterns = patterns('labgeeksrpg.chronos.views',
     (r'^time/$', 'time'),
     (r'^time/success/$', 'success'),
     (r'^time/fail/', 'fail'),
-    (r'^$', 'list_options'),
+    (r'^$', 'personal_report'),
 )

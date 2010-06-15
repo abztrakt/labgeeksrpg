@@ -19,6 +19,15 @@ def report(request):
     shifts = Shift.objects.all()
     return render_to_response('report.html', locals())
 
+def personal_report(request):
+    """ Creates a personal report of all shifts for that user.
+    """
+    if request.user.is_authenticated():
+        shifts = Shift.objects.filter(person = request.user)
+    else:
+        shifts = [] 
+    return render_to_response('options.html', locals())
+
 @login_required
 def time(request):
     """ Sign in or sign out of a shift.
