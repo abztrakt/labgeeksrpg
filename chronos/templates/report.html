@@ -5,7 +5,7 @@
 <table>
 <tr><th>Name</th><th>Punch Clock Locale</th><th>In Time</th><th>Out Time</th><th>Note</th></tr>
 {% for shift in shifts %}
-  <tr><td>{{ shift.person }}</td><td>{{ shift.punchclock.location }}</td><td>{{ shift.intime }}</td><td>{{ shift.outtime }}</td><td>{{ shift.shiftnote }}</td></tr>
+  <tr><td>{{ shift.person }}</td><td>{{ shift.in_clock.location }}</td><td>{{ shift.intime }}</td><td>{{ shift.outtime }}</td><td>{{ shift.shiftnote }}</td></tr>
 {% endfor %}
 </table>
 {% endblock %}
