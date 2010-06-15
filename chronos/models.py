@@ -26,7 +26,8 @@ class Shift(models.Model):
     person = models.ForeignKey(User)
     intime = models.DateTimeField()
     outtime = models.DateTimeField(blank=True, null=True)
-    punchclock = models.ForeignKey(Punchclock)
+    in_clock = models.ForeignKey(Punchclock, related_name="in_punchclock")
+    out_clock = models.ForeignKey(Punchclock, related_name="out_punchclock", null=True, blank=True)
     shiftnote = models.TextField(blank=True)
 
     def __unicode__(self):

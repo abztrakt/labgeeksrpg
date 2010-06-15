@@ -38,7 +38,7 @@ def time(request):
             current_ip = request.META['REMOTE_ADDR']
             
             try: 
-                this_shift.punchclock = Punchclock.objects.filter(ip_address=current_ip)[0]
+                punchclock = Punchclock.objects.filter(ip_address=current_ip)[0]
             except:
                 #implement bad monkey page redirect
                 message = "You are a very bad monkey!"
@@ -46,7 +46,6 @@ def time(request):
                 log_msg = "Your IP Address, %s, has been logged and will be reported. (Just kidding. But seriously, you can't sign in or out from here.)" % current_ip
                 return HttpResponseRedirect("fail/?message=%s&reason=%s&log_msg=%s" % (message, reason, log_msg))
 
-            punchclock = this_shift.punchclock
             location = punchclock.location
             
             #Check whether user has open shift at this location
@@ -59,6 +58,7 @@ def time(request):
                     return HttpResponseRedirect("fail/?reason=%s" % reason)
                 oldshift.outtime = datetime.now()
                 oldshift.shiftnote = "IN: %s\n\nOUT: %s" % (oldshift.shiftnote, form.data['shiftnote'])
+                oldshift.out_clock = punchclock
                 oldshift.save()
                 location.active_users.remove(request.user)
                 #Setting the success variable that users will see on success page
@@ -67,10 +67,10 @@ def time(request):
                 at_time = at_time.strftime('%Y-%m-%d, %I:%M %p').replace(' 0', ' ') #get rid of zeros on the hour
             
             else:
-                #import pdb; pdb.set_trace()
                 #if shift.person  location.active_staff
                 if this_shift.intime == None:
                     this_shift.intime = datetime.now()
+                this_shift.in_clock = punchclock
                 #On success, save the shift
                 this_shift.save()
                 #After successful shift save, add person to active_staff in appropriate Location
