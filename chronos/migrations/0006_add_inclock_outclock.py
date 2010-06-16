@@ -9,7 +9,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         
         # Adding field 'Shift.in_clock'
-        db.add_column('chronos_shift', 'in_clock', self.gf('django.db.models.fields.related.ForeignKey')(default='', related_name='in_punchclock', to=orm['chronos.Punchclock']), keep_default=False)
+        db.add_column('chronos_shift', 'in_clock', self.gf('django.db.models.fields.related.ForeignKey')(related_name='in_punchclock', blank=True, null=True, to=orm['chronos.Punchclock']), keep_default=False)
 
         # Adding field 'Shift.out_clock'
         db.add_column('chronos_shift', 'out_clock', self.gf('django.db.models.fields.related.ForeignKey')(related_name='out_punchclock', blank=True, null=True, to=orm['chronos.Punchclock']), keep_default=False)
