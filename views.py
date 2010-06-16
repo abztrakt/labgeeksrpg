@@ -18,7 +18,10 @@ def labgeeks_login(request):
     c.update(csrf(request))
     
     if request.user.is_authenticated():
-        return HttpResponseRedirect(request.GET['next'])
+        try:
+            return HttpResponseRedirect(request.GET['next'])
+        except:
+            return HttpResponseRedirect('/')
     elif request.method == 'POST': 
         form = LoginForm(request.POST)
         if form.is_valid():
