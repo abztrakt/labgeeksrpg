@@ -6,9 +6,9 @@
 
 <h1>Your Shifts</h1>
 <table>
-<tr><th>Name</th><th>Punch Clock Locale</th><th>In Time</th><th>Out Time</th><th>Note</th></tr>
+<tr><th>Name</th><th>Punch Clock Locale</th><th>In Time</th><th>Out Time</th><th>Hours Worked</th><th>Note</th></tr>
 {% for shift in shifts %}
-<tr><td>{{ shift.person }}</td><td>{{ shift.in_clock.location }}</td><td>{{ shift.intime }}</td><td>{{ shift.outtime }}</td><td>{{ shift.shiftnote }}</td></tr>
+<tr><td>{{ shift.person }}</td><td>{{ shift.in_clock.location }}</td><td>{{ shift.intime }}</td><td>{{ shift.outtime }}</td><td>{{ shift.length }}</td><td>{{ shift.shiftnote }}</td></tr>
 {% endfor %}
 </table>
     

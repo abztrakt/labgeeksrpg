@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import datetime
 
 class Location(models.Model):
     """ The location of the punchclock, as well as the location staff are signing in for. This lets us use multiple computers on site as punchclocks.
@@ -29,6 +30,14 @@ class Shift(models.Model):
     in_clock = models.ForeignKey(Punchclock, related_name="in_punchclock", null=True, blank=True)
     out_clock = models.ForeignKey(Punchclock, related_name="out_punchclock", null=True, blank=True)
     shiftnote = models.TextField(blank=True)
+
+    def length(self):
+        if self.outtime:
+            delta = self.outtime - self.intime
+            return delta/60/60
+        else:
+            return datetime.timedelta(0)
+
 
     def __unicode__(self):
         return "%s@[%s]-[%s]" % (self.person, self.intime, self.outtime)
