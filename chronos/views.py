@@ -35,6 +35,23 @@ def time(request):
     #Generate a token to protect from cross-site request forgery
     c = {}
     c.update(csrf(request))
+    
+    # Grab information we want to pass along no matter what state we're in
+    user = request.user
+    #Getting machine location user is currently using
+    current_ip = request.META['REMOTE_ADDR']
+
+    try: 
+        punchclock = Punchclock.objects.filter(ip_address=current_ip)[0]
+    except:
+        #implement bad monkey page redirect
+        message = "You are a very bad monkey!"
+        reason = "This computer isn't one of the punchclocks, silly..."
+        log_msg = "Your IP Address, %s, has been logged and will be reported. (Just kidding. But seriously, you can't sign in or out from here.)" % current_ip
+        return HttpResponseRedirect("fail/?message=%s&reason=%s&log_msg=%s" % (message, reason, log_msg))
+
+    location = punchclock.location
+
     #Check for POST, if not blank form, if true 'take in data'
     if request.method == 'POST':
         form = ShiftForm(request.POST)
@@ -43,19 +60,6 @@ def time(request):
             #We are creating a shift object that we can manipulate programatically later
             this_shift = form.save(commit=False)
             this_shift.person = request.user
-            #Getting machine location user is currently using
-            current_ip = request.META['REMOTE_ADDR']
-            
-            try: 
-                punchclock = Punchclock.objects.filter(ip_address=current_ip)[0]
-            except:
-                #implement bad monkey page redirect
-                message = "You are a very bad monkey!"
-                reason = "This computer isn't one of the punchclocks, silly..."
-                log_msg = "Your IP Address, %s, has been logged and will be reported. (Just kidding. But seriously, you can't sign in or out from here.)" % current_ip
-                return HttpResponseRedirect("fail/?message=%s&reason=%s&log_msg=%s" % (message, reason, log_msg))
-
-            location = punchclock.location
             
             #Check whether user has open shift at this location
             if this_shift.person in location.active_users.all():
@@ -95,7 +99,9 @@ def time(request):
     #If POST is false, then return a new fresh form.
     else:
         form = ShiftForm()
-    user = request.user
+        in_or_out = 'IN'
+        if user in location.active_users.all():
+            in_or_out = 'OUT'
     return render_to_response('time.html', locals(), context_instance=RequestContext(request))
 
 def fail(request):
