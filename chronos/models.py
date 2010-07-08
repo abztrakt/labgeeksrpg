@@ -32,9 +32,13 @@ class Shift(models.Model):
     shiftnote = models.TextField(blank=True)
 
     def length(self):
+        """ Returns the length of a shift in hours.
+        """
         if self.outtime:
             delta = self.outtime - self.intime
-            return delta/60/60
+            delta = float(delta.seconds)
+            hours = delta/60/60
+            return "%.02f" % hours
         else:
             return datetime.timedelta(0)
 
