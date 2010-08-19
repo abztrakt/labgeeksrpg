@@ -27,7 +27,7 @@ class UserProfile(models.Model):
     """ Defines additional things we should know about users.
     """
     user = models.ForeignKey(User, unique=True, related_name='uwnetid')
-    #staff_photo = models.ImageField(upload_to="images/%Y/%m/%d", null=True, blank=True)
+    staff_photo = models.ImageField(upload_to="images/%Y/%m/%d", null=True, blank=True)
     call_me_by = models.CharField(max_length=256, blank=True)
     status = models.ForeignKey(EmploymentStatus)
     start_date = models.DateField()

@@ -9,11 +9,11 @@ class Player(models.Model):
     hp = models.IntegerField()
     xp = models.IntegerField()
     currency = models.IntegerField()
-    # avatar = models.ImageField(upload_to = "images/%Y/%m/%d", null=True, blank=True)
+    avatar = models.ImageField(upload_to = "images/%Y/%m/%d", null=True, blank=True)
     seniority = models.IntegerField()
 
     def __unicode__(self):
-        return self.name
+        return "%s %s [%s]" % (self.user.first_name, self.user.last_name, self.user.username)
 
 class Pay_grade(models.Model):
     name = models.CharField(max_length=256)
