@@ -55,7 +55,7 @@ class UserProfile(models.Model):
     end_date = models.DateField(null=True, blank=True)
     grad_date = models.DateField(null=True, blank=True)
     supervisor = models.ForeignKey(User, related_name='supervisor')
-    title = models.CharField(max_length=256, blank=True) #To be made automagic later?
+    title = models.ForeignKey(Title)
     office = models.CharField(max_length=256, blank=True, default='')
     working_periods = models.ForeignKey(TimePeriod)
     about_me = models.TextField(blank=True)
