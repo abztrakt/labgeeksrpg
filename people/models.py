@@ -21,7 +21,6 @@ class WorkGroup(models.Model):
     slug = models.SlugField()
     name = models.CharField(max_length=256)
     description = models.TextField(blank=True)
-    manager = models.ForeignKey(User)
 
 class UserProfile(models.Model):
     """ Defines additional things we should know about users.
