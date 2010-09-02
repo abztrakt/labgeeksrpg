@@ -22,6 +22,28 @@ class WorkGroup(models.Model):
     name = models.CharField(max_length=256)
     description = models.TextField(blank=True)
 
+class PayGrade(models.Model):
+    """ A tier for a position which determines the wage.
+    """
+    name = models.CharField(max_length=256)
+    slug = models.SlugField()
+    description = models.TextField(blank=True)
+
+    def __unicode__(self):
+        return self.name
+
+class Title(models.Model):
+    """ Provides a relation between WorkGroups and PayGrades.
+    """
+    slug = models.SlugField()
+    name = models.CharField(max_length=256)
+    description = models.TextField()
+    workgroup = models.ForeignKey(WorkGroup)
+    pay_grade = models.ForeignKey(PayGrade)
+
+    def __unicode__(self):
+        return self.name
+
 class UserProfile(models.Model):
     """ Defines additional things we should know about users.
     """

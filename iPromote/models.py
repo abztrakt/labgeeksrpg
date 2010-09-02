@@ -15,14 +15,6 @@ class Player(models.Model):
     def __unicode__(self):
         return "%s %s [%s]" % (self.user.first_name, self.user.last_name, self.user.username)
 
-class Pay_grade(models.Model):
-    name = models.CharField(max_length=256)
-    slug = models.SlugField()
-    description = models.TextField(blank=True)
-
-    def __unicode__(self):
-        return self.name
-
 class Skill(models.Model):
     name = models.CharField(max_length=256)
     slug = models.SlugField()
