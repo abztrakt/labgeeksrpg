@@ -28,6 +28,7 @@ class PayGrade(models.Model):
     name = models.CharField(max_length=256)
     slug = models.SlugField()
     description = models.TextField(blank=True)
+    wage = models.FloatField()
 
     def __unicode__(self):
         return self.name
