@@ -36,6 +36,7 @@ class Review(models.Model):
     user = models.ForeignKey(User, related_name="review_user")
     manager = models.ForeignKey(User, related_name="review_manager")
     notes = models.TextField()
+    wage = models.FloatField()
 
     def __unicode__(self):
         return "%s on %s" % (self.user, self.date) 
