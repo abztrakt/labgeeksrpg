@@ -9,21 +9,21 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         
         # Adding model 'UserProfile'
-        #db.create_table('people_userprofile', (
-        #    ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        #    ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], unique=True)),
-        #    ('hp', self.gf('django.db.models.fields.IntegerField')()),
-        #    ('xp', self.gf('django.db.models.fields.IntegerField')()),
-        #    ('currency', self.gf('django.db.models.fields.IntegerField')()),
-        #    ('start_date', self.gf('django.db.models.fields.DateField')()),
-        #    ('end_date', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
-        #    ('grad_date', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
-        #    ('office', self.gf('django.db.models.fields.CharField')(default='', max_length=256, blank=True)),
-        #    ('about_me', self.gf('django.db.models.fields.TextField')(blank=True)),
-        #    ('phone', self.gf('django.db.models.fields.CharField')(max_length=12, blank=True)),
-        #    ('alt_phone', self.gf('django.db.models.fields.CharField')(max_length=12, blank=True)),
-        #))
-        #db.send_create_signal('people', ['UserProfile'])
+        db.create_table('people_userprofile', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], unique=True)),
+            ('hp', self.gf('django.db.models.fields.IntegerField')()),
+            ('xp', self.gf('django.db.models.fields.IntegerField')()),
+            ('currency', self.gf('django.db.models.fields.IntegerField')()),
+            ('start_date', self.gf('django.db.models.fields.DateField')()),
+            ('end_date', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
+            ('grad_date', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
+            ('office', self.gf('django.db.models.fields.CharField')(default='', max_length=256, blank=True)),
+            ('about_me', self.gf('django.db.models.fields.TextField')(blank=True)),
+            ('phone', self.gf('django.db.models.fields.CharField')(max_length=12, blank=True)),
+            ('alt_phone', self.gf('django.db.models.fields.CharField')(max_length=12, blank=True)),
+        ))
+        db.send_create_signal('people', ['UserProfile'])
 
         pass
 
