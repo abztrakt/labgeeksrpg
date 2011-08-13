@@ -147,3 +147,83 @@ textarea {
 label {
 	font-size: 16pt;
 }
+
+/*
+Calendar CSS
+*/
+#calendar fieldset{
+    width: 60em;
+    margin: auto;
+}
+#calendar tr:first-child {
+    background-color: #0D4F7F;
+    font-size: 3.0em;
+}
+
+#calendar tr:nth-child(2) {
+    background-color: #132127;
+    font-size: 1em;
+}
+
+#calendar th.month, #calendar tr:nth-child(2) th{
+    height: 2em;
+}
+
+#calendar .first{
+    background-color: #384246;
+    border: .3em solid #387AA2;
+}
+
+#calendar .second{
+    background-color: #0F3A55;
+    border: .3em solid #FFFFFF;
+}
+
+#calendar .first.filled{
+    background-color: #999999;
+    border: .2em solid #6A059A;
+}
+
+#calendar .second.filled{
+    background-color: #3F86B9;
+    border: .2em solid #18BA06;
+}
+
+#calendar .today{
+    text-decoration: underline;
+    border: .2em solid #B70C0C;
+}
+
+#calendar .noday{
+    background-color: white;
+}
+
+#calendar th, #calendar td{
+    padding: .5em;
+    border: .2em solid white;
+    height: 7em;
+    width: 7em;
+    vertical-align: text-top;
+}
+
+#calendar strong{
+    font-size: 1.5em;
+}
+
+#calendar strong.hours{
+    color:black;
+}
+
+#calendar_nav {
+    text-align: center;
+    margin-top: 2em;
+    margin-bottom: 3em;
+}
+
+.calendar_nav_link{
+    border: .2em solid white;
+    margin-left: 2em;
+    margin-right: 2em;
+    padding: 1em;
+    width: 4em;
+}

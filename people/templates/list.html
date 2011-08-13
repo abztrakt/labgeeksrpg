@@ -2,9 +2,22 @@
 
 {% block content %}
 <h1>People</h1>
-<ul>
-{% for user in users %}
-<li>{{ user }}</li>
-{% endfor %}
-</ul>
+
+<table class="issue_results">
+    <tbody>
+        <tr>
+            <th>Employee</th>
+            <th>Profile</th>
+            <th>Timesheet</th>
+        </tr>
+    {% for user in users %}
+        <tr>
+            <td>{{user}}</td>
+            <td><a href="{% url People-View_Profile user %}">Profile</a></td>
+            <td><a href="{% url People-View_Timesheet user %}">Timesheet</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
 {% endblock %}
