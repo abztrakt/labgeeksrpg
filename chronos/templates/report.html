@@ -2,10 +2,14 @@
 
 {% block content %}
 <h1>Chronos Report</h1>
-<table>
-<tr><th>Name</th><th>Punch Clock Locale</th><th>In Time</th><th>Out Time</th><th>Hours Worked</th><th>Note</th></tr>
-{% for shift in shifts %}
-  <tr><td>{{ shift.person }}</td><td>{{ shift.in_clock.location }}</td><td>{{ shift.intime }}</td><td>{{ shift.outtime }}</td><td>{{ shift.length }}</td><td>{{ shift.shiftnote}}</td></tr>
-{% endfor %}
-</table>
+<h3>Click "Shift Details" to view the shifts of that day in detail.</h3>
+<div id="calendar">
+    {{ calendar }}
+
+    <div id="calendar_nav">
+        <a class="calendar_nav_link" href="{% url Report-Monthly prev_date.year prev_date.month %}">&#060;&#060; Prev Month </a>
+        <a class="calendar_nav_link" href="{% url Report-Monthly next_date.year next_date.month %}">Next Month &#062;&#062;</a>
+    </div>
+
+</div>
 {% endblock %}

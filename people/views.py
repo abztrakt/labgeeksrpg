@@ -30,10 +30,8 @@ def view_specific_timesheet(request,name,year,month):
 def view_timesheet(request,name, target_date=date.today()):
     """ Show the timesheet of the user
     """
-    import pdb
     args = {}
 
-    day = target_date.day
     month = target_date.month
     year = target_date.year
 
@@ -42,7 +40,6 @@ def view_timesheet(request,name, target_date=date.today()):
     shifts = models.Shift.objects.filter(person = user, intime__month = month, intime__year = year)
 
     args['user'] = user[0]
-    args['shifts'] = shifts
     args['date'] = target_date
     
     #Figure out the prev and next months
@@ -87,7 +84,7 @@ class TimesheetCalendar(HTMLCalendar):
                 for shift in self.shifts[day]:
                     if shift.outtime:
                         total_hours += float(shift.length())
-                body = '<p><strong class="hours">' + str(total_hours) + '</strong></p>'
+                body = '<p>Total Hours: <strong class="hours">' + str(total_hours) + '</strong></p>'
                 s += '%s' % (body)
                 return self.day_cell(cssclass, s)
             return self.day_cell(cssclass, s)

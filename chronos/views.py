@@ -7,17 +7,77 @@ from django.template import RequestContext
 from labgeeksrpg.chronos.forms import ShiftForm
 from labgeeksrpg.chronos.models import Shift, Punchclock
 
+from labgeeksrpg.people.views import TimesheetCalendar
+from datetime import date
+from django.utils.safestring import mark_safe
+
 def list_options(request):
     """ Lists the options that users can get to when using chronos.
     """
     return render_to_response('options.html', locals())
 
-@login_required
-def report(request):
-    """ Creates a report of all shifts in the history.
+class ReportCalendar(TimesheetCalendar):
+    """ This class is used for displaying the reports in a monthly calendar format.
+        Overrides the TimesheetCalendar class by injecting the ability to view shifts of a the given day.
     """
-    shifts = Shift.objects.all()
-    return render_to_response('report.html', locals())
+    def formatday(self,day,weekday):
+        if day != 0:
+            cssclass = self.cssclasses[weekday]
+            if day <= 15:
+                cssclass += ' first'
+            else:
+                cssclass += ' second'
+            s = '<strong>%s</strong>' % (day)
+            if date.today() == date(self.year,self.month,day):
+                cssclass += ' today'
+            if day in self.shifts:
+                s += '<p><a href="/chronos/report/%s/%s/%s">Shift Details</a></p>' % (self.year,self.month,day)
+                return super(ReportCalendar,self).day_cell(cssclass,s)
+            return super(ReportCalendar,self).day_cell(cssclass,s)
+        return super(ReportCalendar,self).day_cell('noday','&nbsp;')
+
+@login_required
+def specific_report(request,year,month,day):
+    """ This view is used when viewing specific shifts in the given day.
+    """
+    shifts = Shift.objects.filter(intime__year=int(year), intime__month=int(month), intime__day=int(day))
+    spec_date = date(int(year),int(month),int(day))
+    return render_to_response('specific_report.html',locals())
+
+@login_required
+def monthly_report(request,year,month):
+    """ Creates a view of all shifts in a specific year and month in a calendar format.
+    """
+    return report(request,date(int(year),int(month),1))
+
+@login_required
+def report(request,target_date=date.today()):
+    """ Creates a report of shifts in the year and month.
+    """
+
+    args={}
+    year = target_date.year
+    month = target_date.month
+    shifts = Shift.objects.filter(intime__year= year, intime__month = month)
+
+    #Figure out the prev and next months
+    if target_date.month == 1:
+        #Its January
+        args['prev_date'] = date(year-1,12,1)
+        args['next_date'] = date(year, 2,1)
+    elif target_date.month == 12:
+        #Its December
+        args['prev_date'] = date(year, 11,1)
+        args['next_date'] = date(year+1,1,1)
+    else:
+        #Its a regular month
+        args['prev_date'] = date(year,month-1,1)
+        args['next_date'] = date(year,month+1,1)
+
+    args['shifts'] = shifts 
+    cal = mark_safe(ReportCalendar(shifts).formatmonth(year,month))
+    args['calendar'] = cal
+    return render_to_response('report.html', args)
 
 def personal_report(request):
     """ Creates a personal report of all shifts for that user.
