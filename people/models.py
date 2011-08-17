@@ -17,6 +17,9 @@ class TimePeriod(models.Model):
     slug = models.SlugField()
     name = models.CharField(max_length=256)
     description = models.TextField(blank=True)
+    
+    def __unicode__(self):
+        return self.name
 
 class WorkGroup(models.Model):
     """ Defines which team the person is on.
