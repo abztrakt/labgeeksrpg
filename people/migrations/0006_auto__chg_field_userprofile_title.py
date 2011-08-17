@@ -14,7 +14,7 @@ class Migration(SchemaMigration):
         db.alter_column('people_userprofile', 'title_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['people.Title']))
 
         # Adding index on 'UserProfile', fields ['title']
-        db.create_index('people_userprofile', ['title_id'])
+        #db.create_index('people_userprofile', ['title_id'])
 
 
     def backwards(self, orm):
@@ -25,7 +25,7 @@ class Migration(SchemaMigration):
         db.alter_column('people_userprofile', 'title', self.gf('django.db.models.fields.CharField')(max_length=256, blank=True))
 
         # Removing index on 'UserProfile', fields ['title']
-        db.delete_index('people_userprofile', ['title_id'])
+        #db.delete_index('people_userprofile', ['title_id'])
 
 
     models = {
