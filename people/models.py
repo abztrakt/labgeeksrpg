@@ -8,6 +8,9 @@ class EmploymentStatus(models.Model):
     name = models.CharField(max_length=256)
     description = models.TextField(blank=True)
 
+    def __unicode__(self):
+        return self.name
+
 class TimePeriod(models.Model):
     """ Defines possible periods of time when a person could choose to work or choose not to work.
     """
