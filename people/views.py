@@ -12,7 +12,7 @@ import chronos.models as models
 def list_all(request):
     """ List all users in the system.
     """
-    users = User.objects.all()
+    users = User.objects.filter(is_active=True)
     return render_to_response('list.html', locals(), context_instance=RequestContext(request))
 
 @login_required
