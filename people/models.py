@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 class EmploymentStatus(models.Model):
     """ Defines statuses that a Person could hold.
     """
-    slug = models.SlugField()
     name = models.CharField(max_length=256)
+    slug = models.SlugField()
     description = models.TextField(blank=True)
 
     def __unicode__(self):
@@ -14,8 +14,8 @@ class EmploymentStatus(models.Model):
 class TimePeriod(models.Model):
     """ Defines possible periods of time when a person could choose to work or choose not to work.
     """
-    slug = models.SlugField()
     name = models.CharField(max_length=256)
+    slug = models.SlugField()
     description = models.TextField(blank=True)
     
     def __unicode__(self):
@@ -24,8 +24,8 @@ class TimePeriod(models.Model):
 class WorkGroup(models.Model):
     """ Defines which team the person is on.
     """
-    slug = models.SlugField()
     name = models.CharField(max_length=256)
+    slug = models.SlugField()
     description = models.TextField(blank=True)
 
 class PayGrade(models.Model):
@@ -42,8 +42,8 @@ class PayGrade(models.Model):
 class Title(models.Model):
     """ Provides a relation between WorkGroups and PayGrades.
     """
-    slug = models.SlugField()
     name = models.CharField(max_length=256)
+    slug = models.SlugField()
     description = models.TextField()
     workgroup = models.ForeignKey(WorkGroup)
     pay_grade = models.ForeignKey(PayGrade)
