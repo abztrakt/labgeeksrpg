@@ -1,5 +1,43 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<p>This is a placeholder for the user profile view.</p>
+
+{% if user_profile %}
+
+    <p>{{user_profile.user}}</p>
+    <div id="user_picture">
+        <img src="{{user_profile.staff_photo.url}}" alt="Profile Picture"/>
+    </div>
+    
+
+    <div id="work_info">
+        <p>Work Related</p>
+        <ul>
+            <li>{{user_profile.title}}</li>
+            <li>{{user_profile.status}}</li>
+            <li>{{user_profile.supervisor}}</li>
+            <li>{{user_profile.start_date}}</li>
+            <li>{{user_profile.end_date}}</li>
+            <li>{{user_profile.office}}</li>
+        </ul>
+    </div>
+
+    <div id="person_info">
+        <p>Personal Info:</p>
+        <ul>
+            <li>{{user_profile.call_me_by}}</li>
+            <li>{{user_profile.phone}}</li>
+            <li>{{user_profile.alt_phone}}</li>
+            <li>{{user_profile.grad_date}}</li>
+        </ul>
+        <p>{{user_profile.about_me}}</p>
+    </div>
+
+
+
+
+
+
+{% endif %}
 {% endblock %}
+

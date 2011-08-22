@@ -2,11 +2,16 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.context_processors import csrf
 from calendar import HTMLCalendar
 from datetime import date
 from django.utils.safestring import mark_safe
 
 import chronos.models as models 
+from people.forms import *
+from people.models import UserProfile
+
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 @login_required
 def list_all(request):
@@ -19,8 +24,42 @@ def list_all(request):
 def view_profile(request, name):
     """ Show a user profile.
     """
+
     #profile = request.user.get_profile()
-    return render_to_response('profile.html', locals())
+    this_user = User.objects.filter(username=name)
+    if UserProfile.objects.filter(user=this_user):
+        #User has already created a user profile.
+        user_profile = UserProfile.objects.get(user=this_user)
+        return render_to_response('profile.html', locals())
+    else:
+        #User HAS NOT created a user profile, allow them to create one.
+        return create_user_profile(request,name)
+
+@login_required
+def create_user_profile(request,name):
+    """ This view is called when creating new user profile to the system.
+        Allows the user to edit and display certain things about their information.
+    """
+    c = {}
+    c.update(csrf(request))
+
+    if request.method == 'POST':
+        form = CreateUserProfileForm(request.POST,request.FILES)
+        if form.is_valid():
+            # Save the profile.
+            user_profile = form.save()
+
+            # View the profile
+            return render_to_response('profile.html',locals(),context_instance=RequestContext(request))
+    else:
+        form = CreateUserProfileForm()
+
+    args = {
+        'form': form,
+        'user': name
+    }
+
+    return render_to_response('create_profile.html',locals(),context_instance=RequestContext(request))
 
 @login_required
 def view_specific_timesheet(request,name,year,month):
