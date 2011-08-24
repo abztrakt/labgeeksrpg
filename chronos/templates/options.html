@@ -6,6 +6,18 @@
 {% if shifts %}
     <h3>Click "Shift Details" to view your shifts of that day in detail</h3>
         <div id="calendar">
+            <fieldset id="calendar_key">
+                <legend>Quick info:</legend>
+                <p>Color key:</p>
+                <div class="today key">Today</div>
+                <hr/>
+                <div class="first key">1st pay period</div>
+                <div class="first filled key">Filled shift in 1st pay period</div>
+                <hr/>
+                <div class="second key">2nd pay period</div>
+                <div class="second filled key">Filled shift in 2nd pay period</div>
+            </fieldset>          
+            
             {{ calendar }}
 
             <div id="calendar_nav">
