@@ -106,7 +106,8 @@ class TimesheetCalendar(HTMLCalendar):
     def __init__(self,shifts):
         super(TimesheetCalendar,self).__init__()
         self.shifts = self.group_by_day(shifts)
-    
+        self.personal = self.is_personal(shifts)
+
     def formatday(self,day,weekday):
         if day != 0:
             cssclass = self.cssclasses[weekday]
@@ -144,3 +145,12 @@ class TimesheetCalendar(HTMLCalendar):
     
     def day_cell(self,cssclass,body):
         return '<td class="%s">%s</td>' % (cssclass,body)
+
+    def is_personal(self,shifts):
+        if shifts:
+            user = shifts[0].person
+            for shift in shifts:
+                if shift.person != user:
+                    #Calendar is not personal, used for multiple all staff
+                    return False
+        return True

@@ -2,16 +2,19 @@
 
 {% block content %}
 <h1><a href="time/">Clock IN or OUT</a></h1>
-{% if shifts %}
 
-<h1>Your Shifts</h1>
-<table>
-<tr><th>Name</th><th>Punch Clock Locale</th><th>In Time</th><th>Out Time</th><th>Hours Worked</th><th>Note</th></tr>
-{% for shift in shifts %}
-<tr><td>{{ shift.person }}</td><td>{{ shift.in_clock.location }}</td><td>{{ shift.intime }}</td><td>{{ shift.outtime }}</td><td>{{ shift.length }}</td><td>{{ shift.shiftnote }}</td></tr>
-{% endfor %}
-</table>
-    
-{% else %}<h2>Please log in to see your shifts or to clock in</h2>
+{% if shifts %}
+    <h3>Click "Shift Details" to view your shifts of that day in detail</h3>
+        <div id="calendar">
+            {{ calendar }}
+
+            <div id="calendar_nav">
+                <a class="calendar_nav_link" href="{% url Personal-Report_Monthly prev_date.year prev_date.month %}">&#060;&#060; Prev month</a>
+                <a class="calendar_nav_link" href="{% url Personal-Report_Monthly next_date.year next_date.month %}">Next month &#062;&#062;</a>
+            </div>
+        </div>   
+{% else %}
+    <h2>Please log in to see your shifts or to clock in</h2>
 {% endif %}
+
 {% endblock %}
