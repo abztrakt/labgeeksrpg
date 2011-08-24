@@ -181,16 +181,13 @@ Calendar CSS
 
 #calendar .first.filled{
     background-color: #999999;
-    border: .2em solid #6A059A;
 }
 
 #calendar .second.filled{
     background-color: #3F86B9;
-    border: .2em solid #18BA06;
 }
 
 #calendar .today{
-    text-decoration: underline;
     border: .2em solid #B70C0C;
 }
 
