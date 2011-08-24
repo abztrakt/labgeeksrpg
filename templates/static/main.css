@@ -229,7 +229,11 @@ Calendar CSS
 
 #calendar_key{
     float: left;
-    width: 10em;
+    width: 12em;
+}
+
+#calendar_key p, #calendar_key legend{
+    font-weight: bold;
 }
 
 .key{
@@ -237,4 +241,9 @@ Calendar CSS
     text-align: center;
     padding: 10px;
     margin: auto;
+}
+
+.seperator{
+    height: .5em;
+    background-color: white;
 }
