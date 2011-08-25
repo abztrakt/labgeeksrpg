@@ -151,10 +151,12 @@ label {
 /*
 Calendar CSS
 */
-#calendar fieldset{
-    width: 60em;
+
+#calendar {
+    width: 75em;
     margin: auto;
 }
+
 #calendar tr:first-child {
     background-color: #0D4F7F;
     font-size: 3.0em;
@@ -188,7 +190,7 @@ Calendar CSS
 }
 
 #calendar .today{
-    border: .2em solid #B70C0C;
+    border: .3em solid #B70C0C;
 }
 
 #calendar .noday{
@@ -223,4 +225,25 @@ Calendar CSS
     margin-right: 2em;
     padding: 1em;
     width: 4em;
+}
+
+#calendar_key{
+    float: left;
+    width: 12em;
+}
+
+#calendar_key p, #calendar_key legend{
+    font-weight: bold;
+}
+
+.key{
+    width: 5em;
+    text-align: center;
+    padding: 10px;
+    margin: auto;
+}
+
+.seperator{
+    height: .5em;
+    background-color: white;
 }
