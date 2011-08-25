@@ -3,7 +3,7 @@
 {% block content %}
 <h1><a href="{% url Time %}">Clock IN or OUT</a></h1>
 
-    <h3>Click "Shift Details" to view your shifts of that day in detail</h3>
+    <h3>Click "Shift Details" to view your shifts in detail</h3>
         <div id="calendar">
             <fieldset id="calendar_key">
                 <legend>Quick info:</legend>
@@ -16,10 +16,10 @@
                 <hr class="seperator"/>
                 
                 <p>Weekly shifts :</p>
-                {% if weekly_shifts %}
+                {% if weeks %}
                     <ul>
-                    {% for week in weekly_shifts %}
-                        <li><a href="{% url Personal-Report-Weekly year month week.week %}">Week {{week.week}}</a></li>
+                    {% for week in weeks %}
+                        <li><a href="{% url Personal-Report-Weekly year month week.week_number %}">Week {{week.week_number}}</a></li>
                     {% endfor %}
                     </ul>
                 {% else %}
