@@ -40,10 +40,10 @@ class ReportCalendar(TimesheetCalendar):
             return super(ReportCalendar,self).day_cell(cssclass,s)
         return super(ReportCalendar,self).day_cell('noday','&nbsp;')
 
-def get_shifts(request,year,month,day=None,user=None):
+def get_shifts(request,year,month,day=None,user=None,week=None,payperiod=None):
     """ This method is used to return specific shifts
         Since the calendar model is used, year and month both need to be given
-        The day and user parameters are optional and only used for detailed shifts.
+        The day, user, week, and payperiod parameters are optional and only used for detailed shifts.
     """
     if day and user:
         # We are grabing a specific user's day shift.
@@ -57,6 +57,37 @@ def get_shifts(request,year,month,day=None,user=None):
     else:
         # We are grabing all of the total shifts in the given month and year.
         shifts = Shift.objects.filter(intime__year=int(year), intime__month=int(month))
+
+    if week:
+        #Filter the shifts by the given week of the month (i.e. week=1 means grab shifts in 1st week of month)
+        weekly = {}
+        for shift in shifts:
+            shift_date = shift.intime
+            week_number = shift_date.isocalendar()[1]
+            if week_number in weekly:
+                weekly[week_number].append(shift)
+            else:
+                weekly[week_number] = [shift]
+        #Sort the weekly shifts
+        weekly = sorted(weekly.items())
+        alist = {}
+        for i in range(0,len(weekly)):
+            alist[weekly[i][0]-weekly[0][0] + 1] = weekly[i][1]
+        shifts = alist[int(week)]
+    elif payperiod:
+        #Filter the shifts by the given payperiod of the mont (i.e. payperiod=1 means grab shifts in 1st payperiod of month)
+        payperiod_shifts = {'first':[],'second':[]}
+        for shift in shifts:
+            shift_date = shift.intime
+            if shift_date.day <= 15: 
+                payperiod_shifts['first'].append(shift)
+            else:
+                payperiod_shifts['second'].append(shift)
+
+        if int(payperiod) == 1:
+            shifts = payperiod_shifts['first']
+        else:
+            shifts = payperiod_shifts['second']
 
     #Return the correct shift
     return shifts
@@ -85,23 +116,19 @@ def get_calendar(target_date, shifts):
         #Its a regular month
         args['prev_date'] = date(year,month-1,1)
         args['next_date'] = date(year,month+1,1)
-    
-    weekly = {}
-
+   
+    #Find out how many of the shifts fit in each week of the month
+    weekly = []
     for shift in shifts:
-        shift_date = shift.intime
-        week_number = shift_date.isocalendar()[1]
-        if week_number in weekly:
-            weekly[week_number].append(shift)
-        else:
-            weekly[week_number] = [shift]
+        week_number = shift.intime.isocalendar()[1]
+        if week_number not in weekly:
+            weekly.append(week_number)
 
     #Sort the weekly shifts
-    weekly = sorted(weekly.items())
-    args['weekly_shifts'] = []
+    weekly = sorted(weekly)
+    args['weeks'] = []
     for i in range(0,len(weekly)):
-        args['weekly_shifts'].append({'week':i+1})
-
+        args['weeks'].append({'week_number':weekly[i]-weekly[0]+1})
     #Create calendar.
     args['calendar'] = mark_safe(ReportCalendar(shifts).formatmonth(year,month))
 
@@ -112,85 +139,42 @@ def get_calendar(target_date, shifts):
     The methods and views below deal with OVERALL calendar information
 """
 @login_required
-def specific_report(request,year,month,day):
+def specific_report(request,year,month,day=None,user=None,week=None,payperiod=None):
     """ This view is used when viewing specific shifts in the given day. (Table form)
     """
     #Grab shifts
-    shifts = get_shifts(request,year,month,day)
-
-    #Send in the date
-    spec_date = date(int(year),int(month),int(day))
-
-    return render_to_response('specific_report.html',locals())
-
-@login_required
-def monthly_report(request,year,month):
-    """ Creates a view of all shifts in a specific year and month in a calendar format.
-    """
-    return report(request,date(int(year),int(month),1))
-
-@login_required
-def payperiod_report(request,year,month,payperiod):
-    """ This view is used when viewing a specific payperiod (Table form)
-    """
-    shifts = get_shifts(request,year,month)
-    payperiod_shifts = {'first':[],'second':[]}
-    for shift in shifts:
-        shift_date = shift.intime
-        if shift_date.day <= 15: 
-            payperiod_shifts['first'].append(shift)
-        else:
-            payperiod_shifts['second'].append(shift)
-
-    if int(payperiod) == 1:
-        shifts = payperiod_shifts['first']
+    shifts = get_shifts(request,year,month,day,user,week,payperiod)
+    
+    if day:
+        description = "Viewing shifts for %s." % (date(int(year),int(month),int(day)).strftime("%B %d, %Y"))
+    elif week:
+        description = "Viewing shifts in week %d of %s." % (int(week),date(int(year),int(month),1).strftime("%B, %Y"))
     else:
-        shifts = payperiod_shifts['second']
-
-    return render_to_response('specific_report.html',locals())
-
-
-@login_required
-def weekly_report(request,year,month,week):
-    shifts = get_shifts(request,year,month)
-    weekly = {}
-
-    for shift in shifts:
-        shift_date = shift.intime
-        
-        week_number = shift_date.isocalendar()[1]
-        if week_number in weekly:
-            weekly[week_number].append(shift)
-        else:
-            weekly[week_number] = [shift]
-
-    #Sort the weekly shifts
-    weekly = sorted(weekly.items())
-    shifts = weekly[int(week)-1][1]
+        #This should be a payperiod view
+        description = "Viewing shifts in payperiod %d of %s." % (int(payperiod),date(int(year),int(month),1).strftime("%B, %Y"))
     return render_to_response('specific_report.html',locals())
     
 @login_required
-def report(request,target_date=date.today()):
+def report(request,year = date.today().year,month = date.today().month,user=None):
     """ Creates a report of shifts in the year and month.
     """
 
     # Grab shifts
-    shifts = get_shifts(request,target_date.year,target_date.month)
+    year = int(year)
+    month = int(month)
+    target_date = date(year,month,1)
+    shifts = get_shifts(request,year,month,None,user)
     
     # Create calendar and calendar related items (such as next_date).
     args = get_calendar(target_date, shifts)
-
     args['shifts'] = shifts 
+    
     return render_to_response('report.html', args)
 
 """
     The methods and views below deal with PERSONAL calendar information.
 """
-def monthly_personal_report(request, year,month):
-    """ Creates a view of all shifts in a specific year and month for the user in a calendar format.
-    """
-    return personal_report(request,year,month)
-
+@login_required
 def personal_report(request, year=date.today().year,month=date.today().month):
     """ Creates a personal report of all shifts for that user.
     """
@@ -207,52 +191,10 @@ def personal_report(request, year=date.today().year,month=date.today().month):
     return render_to_response('options.html', args)
 
 @login_required
-def personal_report_specific(request,year,month,day):
+def personal_report_specific(request,year,month,day=None,week=None,payperiod=None):
     """ Creates a specific daily report for the user
     """
-    shifts = get_shifts(request,year,month,day,request.user)
-    spec_date = date(int(year),int(month),int(day))
-    return render_to_response('specific_report.html',locals())
-
-@login_required
-def personal_weekly_report(request,year,month,week):
-    """ Creates a specific weekly report for the user
-    """
-    shifts = get_shifts(request,year,month,None,request.user)
-    weekly = {}
-
-    for shift in shifts:
-        shift_date = shift.intime
-        
-        week_number = shift_date.isocalendar()[1]
-        if week_number in weekly:
-            weekly[week_number].append(shift)
-        else:
-            weekly[week_number] = [shift]
-
-    #Sort the weekly shifts
-    weekly = sorted(weekly.items())
-    shifts = weekly[int(week)-1][1]
-
-    return render_to_response('specific_report.html',locals())
-
-@login_required
-def personal_payperiod_report(request,year,month,payperiod):
-    shifts = get_shifts(request,year,month,None,request.user)
-    payperiod_shifts = {'first':[],'second':[]}
-    for shift in shifts:
-        shift_date = shift.intime
-        if shift_date.day <= 15: 
-            payperiod_shifts['first'].append(shift)
-        else:
-            payperiod_shifts['second'].append(shift)
-
-    if int(payperiod) == 1:
-        shifts = payperiod_shifts['first']
-    else:
-        shifts = payperiod_shifts['second']
-
-    return render_to_response('specific_report.html',locals())
+    return specific_report(request,year,month,day,request.user,week,payperiod)
 
 @login_required
 def time(request):
