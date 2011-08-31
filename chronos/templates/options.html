@@ -1,17 +1,50 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1><a href="time/">Clock IN or OUT</a></h1>
-{% if shifts %}
+<h1><a href="{% url Time %}">Clock IN or OUT</a></h1>
 
-<h1>Your Shifts</h1>
-<table>
-<tr><th>Name</th><th>Punch Clock Locale</th><th>In Time</th><th>Out Time</th><th>Hours Worked</th><th>Note</th></tr>
-{% for shift in shifts %}
-<tr><td>{{ shift.person }}</td><td>{{ shift.in_clock.location }}</td><td>{{ shift.intime }}</td><td>{{ shift.outtime }}</td><td>{{ shift.length }}</td><td>{{ shift.shiftnote }}</td></tr>
-{% endfor %}
-</table>
-    
-{% else %}<h2>Please log in to see your shifts or to clock in</h2>
-{% endif %}
+    <h3>Click "Shift Details" to view your shifts in detail</h3>
+        <div id="calendar">
+            <fieldset id="calendar_key">
+                <legend>Quick info:</legend>
+                <p>Pay period shifts:</p>
+                <ul>
+                    <li><a href="{% url Personal-Report-Payperiod year month 1 %}">First</a></li>
+                    <li><a href="{% url Personal-Report-Payperiod year month 2 %}">Second</a></li>
+                </ul>
+               
+                <hr class="seperator"/>
+                
+                <p>Weekly shifts :</p>
+                {% if weeks %}
+                    <ul>
+                    {% for week in weeks %}
+                        <li><a href="{% url Personal-Report-Weekly year month week.week_number %}">Week {{week.week_number}}</a></li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No shifts this month</p>
+                {% endif %}
+
+                <hr class="seperator"/>
+
+                <p>Color key:</p>
+                <div class="today key">Today</div>
+                <hr/>
+                <div class="first key">1st pay period</div>
+                <div class="first filled key">Filled shift in 1st pay period (Timesheet)</div>
+                <hr/>
+                <div class="second key">2nd pay period</div>
+                <div class="second filled key">Filled shift in 2nd pay period (Timesheet)</div>
+            </fieldset>          
+            
+            {{ calendar }}
+
+            <div id="calendar_nav">
+                <a class="calendar_nav_link" href="{% url Personal-Report_Monthly prev_date.year prev_date.month %}">&#060;&#060; Prev month</a>
+                <a class="calendar_nav_link" href="{% url Personal-Report_Monthly next_date.year next_date.month %}">Next month &#062;&#062;</a>
+            </div>
+        </div>   
+    <!--<h2>Please log in to see your shifts or to clock in</h2>-->
+
 {% endblock %}

@@ -32,5 +32,5 @@ urlpatterns = patterns('',
 # only serve static files through the django server if debug is enabled. Only for development instances.
 if settings.DEBUG:
     urlpatterns += patterns('',
-        (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': "%s/templates/static" % os.path.realpath('.')}),
+        (r'^uploads/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT }),
     )

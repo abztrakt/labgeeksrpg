@@ -5,7 +5,40 @@
 <h2>{{user}}'s Timesheet </h2>
 
 <div id="calendar">
+    <fieldset id="calendar_key">
+        <legend>Quick info:</legend>
+        
+        <p>Pay period totals:</p>
+        <ul>
+            <li>First: <strong>{{payperiod_totals.first}}</strong></li>
+            <li>Second: <strong>{{payperiod_totals.second}}</strong></li>
+        </ul>
+        
+        <hr class="seperator"/>
 
+        <p>Weekly totals:</p>
+        {% if weekly_totals %}
+        <ul>
+            {% for week in weekly_totals %}
+                <li>Week {{week.week}}: <strong>{{week.total}}</strong></li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <p>Did not work this month</p>
+        {% endif %}
+
+        <hr class="seperator"/>
+
+        <p>Color key:</p>
+        <div class="today key">Today</div>
+        <hr/>
+        <div class="first key">1st pay period</div>
+        <div class="first filled key">Filled shift in 1st pay period (Timesheet)</div>
+        <hr/>
+        <div class="second key">2nd pay period</div>
+        <div class="second filled key">Filled shift in 2nd pay period (Timesheet)</div>
+    </fieldset>
+              
     {{ calendar }}
     
     <div id="calendar_nav">
