@@ -7,5 +7,5 @@
 labgeeks.wsgi
 labgeeksrpg
 labgeeksrpg.db
-settings.py
+local_settings.py
 uploads
