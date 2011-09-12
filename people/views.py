@@ -74,6 +74,8 @@ def create_user_profile(request,name):
                 # Now, save the many-to-many data for the form (Required when commit=False)
                 form.save_m2m()
 
+            # Allow editing right after creating/editing a profile.
+            edit = True
             # View the profile
             return render_to_response('profile.html',locals(),context_instance=RequestContext(request))
     else:
@@ -92,6 +94,7 @@ def create_user_profile(request,name):
         message += name + "."
 
     return render_to_response('create_profile.html',locals(),context_instance=RequestContext(request))
+
 
 @login_required
 def view_specific_timesheet(request,name,year,month):

@@ -149,6 +149,61 @@ label {
 }
 
 /*
+Profile CSS
+May have to place in its own css file for easier future editing.
+*/
+#user_profile{
+    font-size: 14px;
+    font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+    border: .2em solid white;
+    padding: 3em;
+    margin: auto;
+    width: 60em;
+    font-weight: bold;
+}
+
+#user_profile p{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.section{
+    margin-bottom: 1em;
+}
+
+#work_info img{
+    max-width: 17em;
+    max-height: 17em;
+    float: left;
+    margin-right: 2em;
+}
+
+#work_info{
+    height: 17em;
+}
+#work_text{
+    overflow: hidden;
+}
+
+#user_name{
+    font-size: 1.9em;
+}
+
+#work_statuses{
+    color: #B0B0B0;
+}
+
+#work_contact{
+    color: black;
+    font-size: 1.1em;
+}
+
+#user_aboutme{
+    font-weight: normal;
+    color: black;
+}
+
+/*
 Calendar CSS
 */
 
@@ -243,7 +298,7 @@ Calendar CSS
     margin: auto;
 }
 
-.seperator{
-    height: .5em;
+.separator{
+    height: .3em;
     background-color: white;
 }

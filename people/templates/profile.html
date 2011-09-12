@@ -4,43 +4,40 @@
 
 {% if profile %}
 <div id="user_profile">
-    <h3>{{profile.user}}</h3>
-    <div id="user_picture">
-        {% if profile.staff_photo %}<img src="{{profile.staff_photo.url}}" alt="Profile Picture"/>{% else %} <p>No picture given</p>{% endif %}
-    </div>
-    
-
     <div id="work_info">
-        <fieldset>
-            <legend>Work Related: </legend>
-                <ul>
-                    <li>Title: {{profile.title}}</li>
-                    <li>Status: {{profile.status}}</li>
-                    <li>Supervisor: {{profile.supervisor}}</li>
-                    <li>Starting Date: {{profile.start_date}}</li>
-                    <li>Ending Date: {{profile.end_date}}</li>
-                    <li>Office: {{profile.office}}</li>
-                </ul>
-        </fieldset>
+        {% if profile.staff_photo %}<img src="{{profile.staff_photo.url}}" alt="Profile Picture"/>{% endif %}
+        <div id="work_text">
+            <div class="section">
+                <p id="user_name">{{profile.user}} ({{profile.call_me_by}})</p>
+                {% if edit %}<strong><a href="{% url People-Create_Profile profile.user %}">Click here to edit this profile</a></strong>{% endif %}
+            </div>
+
+            <div id="work_statuses" class="section">
+                <p id="user_title">Title: {{profile.title}}</p>
+                <p id="user_status">Status: {{profile.status}}</p>
+                <p id="user_office">Office: {{profile.office}}</p>
+                <p id="user_supervisor">Supervisor: {{profile.supervisor}}</p>
+            </div>
+            <div id="work_contact" class="section">
+                <p>Phone: {{profile.phone}}</p>
+                <p>Alt Phone: {{profile.alt_phone}}</p>
+            </div>
+        </div>
     </div>
 
-    <div id="person_info">
-        <fieldset>
-            <legend>Personal Info: </legend>
-                {% if edit %}<a href="{% url People-Create_Profile profile.user %}">Click here to edit profile</a>{% endif %}
-                <ul>
-                    <li>Nickname: {{profile.call_me_by}}</li>
-                    <li>Phone: {{profile.phone}}</li>
-                    <li>Alt Phone: {{profile.alt_phone}}</li>
-                    <li>Graduation Date: {{profile.grad_date}}</li>
-                </ul>
-                
-            <fieldset>
-                <legend>About me:</legend>
-                    <p>{{profile.about_me}}</p>
-            </fieldset>
+    <hr class="separator"/>
 
-        </fieldset>
+    <div id="personal_info">
+            <div id="work_dates" class="section">
+                <p>Starting Date: {{profile.start_date}}</p>
+                <p>Ending Date: {{profile.end_date}}</p>
+                <p>Graduation Date: {{profile.grad_date}}</p>
+            </div>
+            
+            <div class="section">
+                <p>About me:</p>
+                <p id="user_aboutme">{{profile.about_me}}</p>
+            </div>
 
     </div>
 </div>
