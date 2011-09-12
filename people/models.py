@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import date
 from django.contrib.auth.models import User
 
 class EmploymentStatus(models.Model):
@@ -56,18 +57,18 @@ class UserProfile(models.Model):
     """
     user = models.ForeignKey(User, unique=True, related_name='uwnetid')
     staff_photo = models.ImageField(upload_to="images/%Y/%m/%d", null=True, blank=True)
-    call_me_by = models.CharField(max_length=256, blank=True)
-    status = models.ForeignKey(EmploymentStatus)
-    start_date = models.DateField()
-    end_date = models.DateField(null=True, blank=True)
-    grad_date = models.DateField(null=True, blank=True)
-    supervisor = models.ForeignKey(User, related_name='supervisor')
-    title = models.ForeignKey(Title)
-    office = models.CharField(max_length=256, blank=True, default='')
-    working_periods = models.ForeignKey(TimePeriod)
-    about_me = models.TextField(blank=True)
-    phone = models.CharField(max_length=12, blank=True)
-    alt_phone = models.CharField(max_length=12, blank=True)
+    call_me_by = models.CharField(max_length=256, null=True, blank=True)
+    status = models.ForeignKey(EmploymentStatus, blank=True)
+    start_date = models.DateField(null=True,blank=True)
+    end_date = models.DateField(null=True,blank=True)
+    grad_date = models.DateField(null=True,blank=True)
+    supervisor = models.ForeignKey(User, related_name='supervisor',blank=True)
+    title = models.ForeignKey(Title,blank=True)
+    office = models.CharField(max_length=256, null=True, blank=True, default='')
+    working_periods = models.ForeignKey(TimePeriod, blank=True)
+    about_me = models.TextField(null=True,blank=True)
+    phone = models.CharField(max_length=12, null=True,blank=True)
+    alt_phone = models.CharField(max_length=12, null=True, blank=True)
 
     def __unicode__(self):
         return "%s %s [%s]" % (self.user.first_name, self.user.last_name, self.user.username)

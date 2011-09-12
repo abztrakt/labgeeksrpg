@@ -9,5 +9,4 @@ class CreateUserProfileForm(ModelForm):
         return inst
     class Meta:
         model = UserProfile
-        fields = ('user','staff_photo','call_me_by','status','start_date','end_date','grad_date','supervisor','title','office','working_periods','about_me','phone','alt_phone')
-
+        fields = ('staff_photo','call_me_by','grad_date','office','about_me','phone','alt_phone')

@@ -2,7 +2,8 @@
 
 {% block content %}
 
-<p>Hello {{user}}, you are creating a profile</p>
+<h2>Hello {{this_user}}.</h2>
+<h3>{{message}}</h3>
 
 <form action="" method='post' id="create_user_profile" enctype="multipart/form-data">{% csrf_token %}
     

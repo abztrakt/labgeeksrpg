@@ -2,37 +2,48 @@
 
 {% block content %}
 
-{% if user_profile %}
-
-    <p>{{user_profile.user}}</p>
+{% if profile %}
+<div id="user_profile">
+    <h3>{{profile.user}}</h3>
     <div id="user_picture">
-        <img src="{{user_profile.staff_photo.url}}" alt="Profile Picture"/>
+        {% if profile.staff_photo %}<img src="{{profile.staff_photo.url}}" alt="Profile Picture"/>{% else %} <p>No picture given</p>{% endif %}
     </div>
     
 
     <div id="work_info">
-        <p>Work Related</p>
-        <ul>
-            <li>{{user_profile.title}}</li>
-            <li>{{user_profile.status}}</li>
-            <li>{{user_profile.supervisor}}</li>
-            <li>{{user_profile.start_date}}</li>
-            <li>{{user_profile.end_date}}</li>
-            <li>{{user_profile.office}}</li>
-        </ul>
+        <fieldset>
+            <legend>Work Related: </legend>
+                <ul>
+                    <li>Title: {{profile.title}}</li>
+                    <li>Status: {{profile.status}}</li>
+                    <li>Supervisor: {{profile.supervisor}}</li>
+                    <li>Starting Date: {{profile.start_date}}</li>
+                    <li>Ending Date: {{profile.end_date}}</li>
+                    <li>Office: {{profile.office}}</li>
+                </ul>
+        </fieldset>
     </div>
 
     <div id="person_info">
-        <p>Personal Info:</p>
-        <ul>
-            <li>{{user_profile.call_me_by}}</li>
-            <li>{{user_profile.phone}}</li>
-            <li>{{user_profile.alt_phone}}</li>
-            <li>{{user_profile.grad_date}}</li>
-        </ul>
-        <p>{{user_profile.about_me}}</p>
-    </div>
+        <fieldset>
+            <legend>Personal Info: </legend>
+                {% if edit %}<a href="{% url People-Create_Profile profile.user %}">Click here to edit profile</a>{% endif %}
+                <ul>
+                    <li>Nickname: {{profile.call_me_by}}</li>
+                    <li>Phone: {{profile.phone}}</li>
+                    <li>Alt Phone: {{profile.alt_phone}}</li>
+                    <li>Graduation Date: {{profile.grad_date}}</li>
+                </ul>
+                
+            <fieldset>
+                <legend>About me:</legend>
+                    <p>{{profile.about_me}}</p>
+            </fieldset>
 
+        </fieldset>
+
+    </div>
+</div>
 
 
 
