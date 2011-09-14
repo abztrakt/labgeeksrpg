@@ -12,7 +12,7 @@ Greyish: (65, 66, 71)
 body {
     font-family: Helvetica,Arial,sans-serif;
     background: rgba(75, 75, 75, 1);
-	color: white;
+    color: white;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -148,6 +148,152 @@ label {
 	font-size: 16pt;
 }
 
+/* Log-in CSS (used for dev purposes, but could be used for future log-in forms)*/
+#login_content{
+    padding: 0;
+    max-width: 1000px;
+    min-width: 780px;
+    height: 500px;
+    margin: auto;
+}
+
+#login_box{
+    float: right;
+    width: 335px;
+}
+
+#login_form{
+    background: none repeat scroll 0 0 #F5F5F5;
+    padding: 20px 25px 15px;
+    border: 1px solid #E5E5E5;
+    margin: 12px 0 0;
+}
+
+#login_form strong, #login_form p{
+    color:black;
+}
+
+#login_form form{
+    margin-top: 2em;
+    text-align: left;
+}
+
+#login_form a{
+    font-size: 15pt;
+    color:black;
+}
+#login_form label{
+    display: block;
+    margin: 0 0 1.5em;
+}
+
+#login_form label strong{
+    font-size: 11pt;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 1em;
+}
+
+#login_form input{
+    height: 32px;
+    border: 1px solid #C0C0C0;
+}
+
+#login_button{
+    background-color: #4D90FE;
+    color: #FFFFFF;
+    border: 1px solid #3079ED;
+    height: 32px;
+    font-weight: bold;
+}
+
+#login_form h2{
+    font-size: 16px;
+    text-align: left;
+    color: black;
+}
+
+#login_info h1{
+    color: #DD4B39;
+    font-size: 25px;
+    text-align: left;
+}
+
+#login_info h2{
+    font-size: 16px;
+    text-align: left;
+    margin: 0.4em 0 0; 
+}
+
+#login_info ul{
+    padding: 1em;
+    line-height: 17px;
+    list-style: none outside none;
+}
+
+
+#login_info li{
+    margin: 3px 0 2em;
+}
+
+.greeting{
+    margin-bottom: 1.5em;
+}
+/*
+Profile CSS
+May have to place in its own css file for easier future editing.
+*/
+#user_profile{
+    font-size: 14px;
+    font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+    border: .2em solid white;
+    padding: 3em;
+    margin: auto;
+    width: 60em;
+    font-weight: bold;
+}
+
+#user_profile p{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.section{
+    margin-bottom: 1em;
+}
+
+#work_info img{
+    max-width: 17em;
+    max-height: 17em;
+    float: left;
+    margin-right: 2em;
+}
+
+#work_info{
+    height: 17em;
+}
+#work_text{
+    overflow: hidden;
+}
+
+#user_name{
+    font-size: 1.9em;
+}
+
+#work_statuses{
+    color: #B0B0B0;
+}
+
+#work_contact{
+    color: black;
+    font-size: 1.1em;
+}
+
+#user_aboutme{
+    font-weight: normal;
+    color: black;
+}
+
 /*
 Calendar CSS
 */
@@ -236,6 +382,10 @@ Calendar CSS
     font-weight: bold;
 }
 
+#calendar_key legend{
+    font-size: 14pt;
+}
+
 .key{
     width: 5em;
     text-align: center;
@@ -243,7 +393,7 @@ Calendar CSS
     margin: auto;
 }
 
-.seperator{
-    height: .5em;
+.separator{
+    height: .3em;
     background-color: white;
 }

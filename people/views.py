@@ -25,11 +25,14 @@ def view_profile(request, name):
     """ Show a user profile.
     """
 
-    #profile = request.user.get_profile()
-    this_user = User.objects.filter(username=name)
-    if UserProfile.objects.filter(user=this_user):
+    this_user = User.objects.get(username=name)
+    if UserProfile.objects.filter(user=this_user): 
         #User has already created a user profile.
-        user_profile = UserProfile.objects.get(user=this_user)
+        profile = UserProfile.objects.get(user=this_user)
+
+        if request.user.__str__() == name or request.user.is_superuser:
+            edit = True
+
         return render_to_response('profile.html', locals())
     else:
         #User HAS NOT created a user profile, allow them to create one.
@@ -37,29 +40,61 @@ def view_profile(request, name):
 
 @login_required
 def create_user_profile(request,name):
-    """ This view is called when creating new user profile to the system.
+    """ This view is called when creating or editing a user profile to the system.
         Allows the user to edit and display certain things about their information.
     """
     c = {}
     c.update(csrf(request))
 
-    if request.method == 'POST':
-        form = CreateUserProfileForm(request.POST,request.FILES)
-        if form.is_valid():
-            # Save the profile.
-            user_profile = form.save()
+    if request.user.__str__() != name and not request.user.is_superuser:
+        # Don't allow editing of other people's profiles.
+        return render_to_response('not_your_profile.html',locals(),context_instance=RequestContext(request))
 
+    #Grab the user that the name belongs to and check to see if they have an existing profile.
+    user = User.objects.get(username=name)
+    try:
+        profile = UserProfile.objects.get(user=user)
+    except UserProfile.DoesNotExist:
+        profile = None
+
+    if request.method == 'POST':
+        form = CreateUserProfileForm(request.POST,request.FILES,instance=profile)
+        if form.is_valid():
+            if profile:
+                # Update the user profile
+                profile = form.save()
+            else:
+                # Create a user profile, but DON'T add to database quite yet.
+                profile = form.save(commit=False)
+
+                # Add user to the profile and save
+                profile.user = user
+                profile.save()
+
+                # Now, save the many-to-many data for the form (Required when commit=False)
+                form.save_m2m()
+
+            # Allow editing right after creating/editing a profile.
+            edit = True
             # View the profile
             return render_to_response('profile.html',locals(),context_instance=RequestContext(request))
     else:
-        form = CreateUserProfileForm()
+        form = CreateUserProfileForm(instance=profile)
 
-    args = {
-        'form': form,
-        'user': name
-    }
+    # Differentiate between a super user creating a profile or a person creating their own profile.
+    this_user = request.user
+    if profile:
+        message = "You are editing a user profile for "
+    else:
+        message = "You are creating a user profile for "
+
+    if this_user.__str__() == name:
+        message += "yourself."
+    else:
+        message += name + "."
 
     return render_to_response('create_profile.html',locals(),context_instance=RequestContext(request))
+
 
 @login_required
 def view_specific_timesheet(request,name,year,month):
@@ -126,6 +161,7 @@ def view_timesheet(request,name, target_date=date.today()):
 
     cal = TimesheetCalendar(shifts).formatmonth(year,month)
     args['calendar'] = mark_safe(cal)
+    args['request'] = request
     return render_to_response('timesheet.html',args)
 
 class TimesheetCalendar(HTMLCalendar):

@@ -1,9 +1,9 @@
 <div id="navbar">
 <ul class="nav">
-<li><a href="/chronos">Chronos</a></li>
-<li><a href="/people">People</a></li>
-{% if request.user.is_staff %}<li><a href="/admin">Admin</a></li><li><a href="/chronos/report">Reports</a>{% endif %}
-<!--<li><a class="bug_sug" "href="http://trac.eplt.washington.edu/labgeeks4/newticket">Bugs + Feedback</a></li>-->
-{% if request.user.is_authenticated %}<li><a href="/logout">Log-out</a></li>{% else %}<li><a href="/login">Log-in</a></li>{% endif %}
+    <li><a href="/chronos">Chronos</a></li>
+    <li><a href="/people">People</a></li>
+    {% if request.user.is_staff %}<li><a href="/admin">Admin</a></li><li><a href="/chronos/report">Reports</a>{% endif %}
+    <!--<li><a class="bug_sug" href="http://trac.eplt.washington.edu/labgeeks4/newticket">Bugs + Feedback</a></li>-->
+    {% if request.user.is_authenticated %}<li><a href="/logout">Log-out</a></li>{% else %}<li><a href="/login">Log-in</a></li>{% endif %}
 </ul>
 </div>

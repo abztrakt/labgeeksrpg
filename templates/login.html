@@ -1,21 +1,66 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-
-<h1>Log In!</h1>
-
 {% if form.errors %}
     <p style="color:red;">
         Please correct the error {{ form.errors|pluralize }} below.
     </p>
 {% endif %}
 
-<form action="" method="post">{% csrf_token %}
-    <table>
-        {{ form.as_table  }}
-    </table>
-    <input type="submit" value="Submit" />
-    <input type="hidden" name="next" value="{{ next }}" />
-</form>
+<div id="login_content">
+    <div id="login_box">
+        <div id="login_form">
+
+            <h2>Log in</h2>
+            <form action="" method="post">{% csrf_token %}
+
+                <label>
+                    <strong>Username</strong>
+                    {{ form.username }}
+                </label>
+
+                <label>
+                    <strong>Password</strong>
+                    {{ form.password}}
+                </label>
+                <input id="login_button" type="submit" value="Log in"/>
+                <input type="hidden" name="next" value="{{next}}"/>
+            </form>
+        </div>
+    </div>
+    
+    <div id="login_info">
+        <div class="greeting">
+            <h1>
+            {% if request.user.is_authenticated %}Hello {{request.user}}. {% else %}Labgeeks{% endif %}
+            </h1>
+
+            <h2>Greetings. Please log in.</h2>
+        </div>
+
+        <p>
+        Welcome to Labgeeks, a staff and work shift management site. Labgeeks offers the following features:
+        </p>
+
+        <ul>
+            <li>
+                <h2>Punchclock system</h2>
+                <p>Clock in and out of your shifts for accurate times.</p>
+            </li>
+
+            <li>
+                <h2>Timesheets and shift histories</h2>
+                <p>For easy comparasons between UW's timesheet and for history logs.</p>    
+            </li>
+
+            <li>
+                <h2>User profiles</h2>
+                <p>Create a user profile and view other profiles for easy staff directories.</p>
+            </li>
+        </ul>
+    </div>
+    
+</div>
+
 
 {% endblock %}

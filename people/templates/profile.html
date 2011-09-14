@@ -2,37 +2,45 @@
 
 {% block content %}
 
-{% if user_profile %}
-
-    <p>{{user_profile.user}}</p>
-    <div id="user_picture">
-        <img src="{{user_profile.staff_photo.url}}" alt="Profile Picture"/>
-    </div>
-    
-
+{% if profile %}
+<div id="user_profile">
     <div id="work_info">
-        <p>Work Related</p>
-        <ul>
-            <li>{{user_profile.title}}</li>
-            <li>{{user_profile.status}}</li>
-            <li>{{user_profile.supervisor}}</li>
-            <li>{{user_profile.start_date}}</li>
-            <li>{{user_profile.end_date}}</li>
-            <li>{{user_profile.office}}</li>
-        </ul>
+        {% if profile.staff_photo %}<img src="{{profile.staff_photo.url}}" alt="Profile Picture"/>{% endif %}
+        <div id="work_text">
+            <div class="section">
+                <p id="user_name">{{profile.user}} ({{profile.call_me_by}})</p>
+                {% if edit %}<strong><a href="{% url People-Create_Profile profile.user %}">Click here to edit this profile</a></strong>{% endif %}
+            </div>
+
+            <div id="work_statuses" class="section">
+                <p id="user_title">Title: {{profile.title}}</p>
+                <p id="user_status">Status: {{profile.status}}</p>
+                <p id="user_office">Office: {{profile.office}}</p>
+                <p id="user_supervisor">Supervisor: {{profile.supervisor}}</p>
+            </div>
+            <div id="work_contact" class="section">
+                <p>Phone: {{profile.phone}}</p>
+                <p>Alt Phone: {{profile.alt_phone}}</p>
+            </div>
+        </div>
     </div>
 
-    <div id="person_info">
-        <p>Personal Info:</p>
-        <ul>
-            <li>{{user_profile.call_me_by}}</li>
-            <li>{{user_profile.phone}}</li>
-            <li>{{user_profile.alt_phone}}</li>
-            <li>{{user_profile.grad_date}}</li>
-        </ul>
-        <p>{{user_profile.about_me}}</p>
-    </div>
+    <hr class="separator"/>
 
+    <div id="personal_info">
+            <div id="work_dates" class="section">
+                <p>Starting Date: {{profile.start_date}}</p>
+                <p>Ending Date: {{profile.end_date}}</p>
+                <p>Graduation Date: {{profile.grad_date}}</p>
+            </div>
+            
+            <div class="section">
+                <p>About me:</p>
+                <p id="user_aboutme">{{profile.about_me}}</p>
+            </div>
+
+    </div>
+</div>
 
 
 
