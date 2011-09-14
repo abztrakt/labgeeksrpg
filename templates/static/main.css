@@ -225,7 +225,7 @@ label {
     margin: 0.4em 0 0; 
 }
 
-ul{
+#login_info ul{
     padding: 1em;
     line-height: 17px;
     list-style: none outside none;
