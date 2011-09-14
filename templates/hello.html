@@ -1,8 +1,46 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>
-{% if request.user.is_authenticated %}Hello {{request.user}}. {% else %}Greetings. Please log in.{% endif %}
-</h1>
-<h2>Welcome to labgeeks.</h2>
+
+<div id="login_content">
+    {% if not request.user.is_authenticated %}
+        <div id="login_box">
+            <div id="login_form">
+                <a href="/login">Log-in</a>    
+            </div>
+        </div>
+    {% endif %}
+    <div id="login_info">
+        <div class="greeting">
+            <h1>
+            {% if request.user.is_authenticated %}Hello {{request.user}}. {% else %}Labgeeks{% endif %}
+            </h1>
+
+            <h2>Greetings. {% if not request.user.is_authenticated %}Please log in.{% endif %}</h2> 
+        </div>
+
+        <p>
+        Welcome to Labgeeks, a staff and work shift management site. Labgeeks offers the following features:
+        </p>
+
+        <ul>
+            <li>
+                <h2>Punchclock system</h2>
+                <p>Clock in and out of your shifts for accurate times.</p>
+            </li>
+
+            <li>
+                <h2>Timesheets and shift histories</h2>
+                <p>For easy comparasons between UW's timesheet and for history logs.</p>    
+            </li>
+
+            <li>
+                <h2>User profiles</h2>
+                <p>Create a user profile and view other profiles for easy staff directories.</p>
+            </li>
+        </ul>
+    </div>
+    
+</div>
+
 {% endblock %}

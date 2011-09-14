@@ -12,7 +12,7 @@ Greyish: (65, 66, 71)
 body {
     font-family: Helvetica,Arial,sans-serif;
     background: rgba(75, 75, 75, 1);
-	color: white;
+    color: white;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -148,6 +148,97 @@ label {
 	font-size: 16pt;
 }
 
+/* Log-in CSS (used for dev purposes, but could be used for future log-in forms)*/
+#login_content{
+    padding: 0;
+    max-width: 1000px;
+    min-width: 780px;
+    height: 500px;
+    margin: auto;
+}
+
+#login_box{
+    float: right;
+    width: 335px;
+}
+
+#login_form{
+    background: none repeat scroll 0 0 #F5F5F5;
+    padding: 20px 25px 15px;
+    border: 1px solid #E5E5E5;
+    margin: 12px 0 0;
+}
+
+#login_form strong, #login_form p{
+    color:black;
+}
+
+#login_form form{
+    margin-top: 2em;
+    text-align: left;
+}
+
+#login_form a{
+    font-size: 15pt;
+    color:black;
+}
+#login_form label{
+    display: block;
+    margin: 0 0 1.5em;
+}
+
+#login_form label strong{
+    font-size: 11pt;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 1em;
+}
+
+#login_form input{
+    height: 32px;
+    border: 1px solid #C0C0C0;
+}
+
+#login_button{
+    background-color: #4D90FE;
+    color: #FFFFFF;
+    border: 1px solid #3079ED;
+    height: 32px;
+    font-weight: bold;
+}
+
+#login_form h2{
+    font-size: 16px;
+    text-align: left;
+    color: black;
+}
+
+#login_info h1{
+    color: #DD4B39;
+    font-size: 25px;
+    text-align: left;
+}
+
+#login_info h2{
+    font-size: 16px;
+    text-align: left;
+    margin: 0.4em 0 0; 
+}
+
+ul{
+    padding: 1em;
+    line-height: 17px;
+    list-style: none outside none;
+}
+
+
+#login_info li{
+    margin: 3px 0 2em;
+}
+
+.greeting{
+    margin-bottom: 1.5em;
+}
 /*
 Profile CSS
 May have to place in its own css file for easier future editing.
@@ -289,6 +380,10 @@ Calendar CSS
 
 #calendar_key p, #calendar_key legend{
     font-weight: bold;
+}
+
+#calendar_key legend{
+    font-size: 14pt;
 }
 
 .key{
