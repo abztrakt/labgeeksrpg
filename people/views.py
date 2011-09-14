@@ -161,6 +161,7 @@ def view_timesheet(request,name, target_date=date.today()):
 
     cal = TimesheetCalendar(shifts).formatmonth(year,month)
     args['calendar'] = mark_safe(cal)
+    args['request'] = request
     return render_to_response('timesheet.html',args)
 
 class TimesheetCalendar(HTMLCalendar):

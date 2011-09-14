@@ -168,7 +168,7 @@ def report(request,year = date.today().year,month = date.today().month,user=None
     # Create calendar and calendar related items (such as next_date).
     args = get_calendar(target_date, shifts)
     args['shifts'] = shifts 
-    
+    args['request'] = request    
     return render_to_response('report.html', args)
 
 """
@@ -188,6 +188,7 @@ def personal_report(request, year=date.today().year,month=date.today().month):
         args['shifts'] = shifts
     else:
         args['shifts'] = [] 
+    args['request'] = request
     return render_to_response('options.html', args)
 
 @login_required
