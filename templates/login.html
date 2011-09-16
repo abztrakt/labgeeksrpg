@@ -7,7 +7,6 @@
     </p>
 {% endif %}
 
-<div id="login_content">
     <div id="login_box">
         <div id="login_form">
 
@@ -30,7 +29,7 @@
     </div>
     
     <div id="login_info">
-        <div class="greeting">
+        <div class="section">
             <h1>
             {% if request.user.is_authenticated %}Hello {{request.user}}. {% else %}Labgeeks{% endif %}
             </h1>
@@ -58,9 +57,8 @@
                 <p>Create a user profile and view other profiles for easy staff directories.</p>
             </li>
         </ul>
-    </div>
     
-</div>
+    </div>
 
 
 {% endblock %}
