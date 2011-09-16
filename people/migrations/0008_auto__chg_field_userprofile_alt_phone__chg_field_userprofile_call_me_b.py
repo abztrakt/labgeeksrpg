@@ -15,7 +15,7 @@ class Migration(SchemaMigration):
         db.alter_column('people_userprofile', 'call_me_by', self.gf('django.db.models.fields.CharField')(max_length=256, null=True))
 
         # Changing field 'UserProfile.end_date'
-        db.alter_column('people_userprofile', 'end_date', self.gf('django.db.models.fields.DateField')())
+        db.alter_column('people_userprofile', 'end_date', self.gf('django.db.models.fields.DateField')(null=True))
 
         # Changing field 'UserProfile.office'
         db.alter_column('people_userprofile', 'office', self.gf('django.db.models.fields.CharField')(max_length=256, null=True))
@@ -26,8 +26,11 @@ class Migration(SchemaMigration):
         # Changing field 'UserProfile.about_me'
         db.alter_column('people_userprofile', 'about_me', self.gf('django.db.models.fields.TextField')(null=True))
 
+        # Changing field 'UserProfile.start_date'
+        db.alter_column('people_userprofile', 'start_date', self.gf('django.db.models.fields.DateField')(null=True))
+
         # Changing field 'UserProfile.grad_date'
-        db.alter_column('people_userprofile', 'grad_date', self.gf('django.db.models.fields.DateField')())
+        db.alter_column('people_userprofile', 'grad_date', self.gf('django.db.models.fields.DateField')(null=True))
 
 
     def backwards(self, orm):
@@ -49,6 +52,9 @@ class Migration(SchemaMigration):
 
         # Changing field 'UserProfile.about_me'
         db.alter_column('people_userprofile', 'about_me', self.gf('django.db.models.fields.TextField')(default=''))
+
+        # Changing field 'UserProfile.start_date'
+        db.alter_column('people_userprofile', 'start_date', self.gf('django.db.models.fields.DateField')())
 
         # Changing field 'UserProfile.grad_date'
         db.alter_column('people_userprofile', 'grad_date', self.gf('django.db.models.fields.DateField')(null=True))
@@ -127,13 +133,13 @@ class Migration(SchemaMigration):
             'about_me': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'alt_phone': ('django.db.models.fields.CharField', [], {'max_length': '12', 'null': 'True', 'blank': 'True'}),
             'call_me_by': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
-            'end_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2011, 9, 9)', 'blank': 'True'}),
-            'grad_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2011, 9, 9)', 'blank': 'True'}),
+            'end_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 12, 21)', 'blank': 'True'}),
+            'grad_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(1861, 9, 13)', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'office': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'phone': ('django.db.models.fields.CharField', [], {'max_length': '12', 'null': 'True', 'blank': 'True'}),
             'staff_photo': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'start_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2011, 9, 9)', 'blank': 'True'}),
+            'start_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date.fromtimestamp(0)', 'blank': 'True'}),
             'status': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['people.EmploymentStatus']", 'blank': 'True'}),
             'supervisor': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'supervisor'", 'blank': 'True', 'to': "orm['auth.User']"}),
             'title': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['people.Title']", 'blank': 'True'}),
