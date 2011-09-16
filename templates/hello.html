@@ -2,7 +2,6 @@
 
 {% block content %}
 
-<div id="login_content">
     {% if not request.user.is_authenticated %}
         <div id="login_box">
             <div id="login_form">
@@ -11,7 +10,7 @@
         </div>
     {% endif %}
     <div id="login_info">
-        <div class="greeting">
+        <div class="section">
             <h1>
             {% if request.user.is_authenticated %}Hello {{request.user}}. {% else %}Labgeeks{% endif %}
             </h1>
@@ -41,6 +40,5 @@
         </ul>
     </div>
     
-</div>
 
 {% endblock %}

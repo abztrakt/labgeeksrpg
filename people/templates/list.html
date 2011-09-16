@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>People</h1>
-
-<table class="issue_results">
+    <div class="section">
+        <h1>People List</h1>
+        <h2>Below is the list of employees.</h2>
+    </div>
+    
+    <table id="people">
     <tbody>
         <tr>
             <th>Employee</th>
@@ -18,6 +21,7 @@
         </tr>
     {% endfor %}
     </tbody>
-</table>
+    </table>
+
 
 {% endblock %}

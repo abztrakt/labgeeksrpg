@@ -35,7 +35,7 @@ class ReportCalendar(TimesheetCalendar):
                 if not self.personal:
                     s += '<p><a href="/chronos/report/%s/%s/%s">Shift Details</a></p>' % (self.year,self.month,day)
                 else:
-                    s += '<p><a href="/chronos/report/personal/%s/%s/%s">Shift Details</a></p>' % (self.year,self.month,day)
+                    s += '<p><a href="/chronos/%s/%s/%s">Shift Details</a></p>' % (self.year,self.month,day)
                 return super(ReportCalendar,self).day_cell(cssclass,s)
             return super(ReportCalendar,self).day_cell(cssclass,s)
         return super(ReportCalendar,self).day_cell('noday','&nbsp;')
