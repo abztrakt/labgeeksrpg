@@ -141,11 +141,11 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.flatpages',
     'django.contrib.messages',
-    'labgeeksrpg.chronos',
-    'labgeeksrpg.people',
-    'south',
     'django.contrib.staticfiles',
     'labgeeksrpg.chronos',
+    'labgeeksrpg.people',
+    'labgeeksrpg.labgeeksrpg_config',
+    'south',
     #'debug_toolbar',
 )
 
