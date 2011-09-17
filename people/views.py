@@ -101,10 +101,12 @@ def view_specific_timesheet(request,name,year,month):
     return view_timesheet(request,name,date(int(year),int(month),1))
 
 @login_required
-def view_timesheet(request,name, target_date=date.today()):
+def view_timesheet(request,name, target_date=None):
     """ Show the timesheet of the user
     """
     args = {}
+    if not target_date:
+        target_date = date.today()
 
     month = target_date.month
     year = target_date.year
@@ -133,7 +135,7 @@ def view_timesheet(request,name, target_date=date.today()):
     # Figure out total hours were worked in pay periods and in weeks
     args['payperiod_totals'] = {'first':0,'second':0}
     weekly = {}
-    first_week = target_date.isocalendar()[1]
+    first_week = date(year,month,1).isocalendar()[1]
     for shift in shifts:
         if shift.outtime:
             shift_date = shift.intime

@@ -10,6 +10,7 @@ from labgeeksrpg.chronos.models import Shift, Punchclock
 from labgeeksrpg.people.views import TimesheetCalendar
 from datetime import date
 from django.utils.safestring import mark_safe
+import re
 
 def list_options(request):
     """ Lists the options that users can get to when using chronos.
@@ -117,7 +118,7 @@ def get_calendar(target_date, shifts):
    
     #Find out how many of the shifts fit in each week of the month
     weekly = []
-    first_week = target_date.isocalendar()[1]
+    first_week = date(year,month,1).isocalendar()[1]
     for shift in shifts:
         week_number = shift.intime.isocalendar()[1] - first_week + 1
         if week_number not in weekly:
@@ -151,11 +152,16 @@ def specific_report(request,year,month,day=None,user=None,week=None,payperiod=No
     return render_to_response('specific_report.html',locals())
     
 @login_required
-def report(request,year = date.today().year,month = date.today().month,user=None):
+def report(request,year=None,month=None,user=None):
     """ Creates a report of shifts in the year and month.
     """
 
     # Grab shifts
+    if not year:
+        year = date.today().year
+    if not month:
+        month = date.today().month
+
     year = int(year)
     month = int(month)
     target_date = date(year,month,1)
@@ -171,9 +177,13 @@ def report(request,year = date.today().year,month = date.today().month,user=None
     The methods and views below deal with PERSONAL calendar information.
 """
 @login_required
-def personal_report(request, year=date.today().year,month=date.today().month):
+def personal_report(request, year=None,month=None):
     """ Creates a personal report of all shifts for that user.
     """
+    if not year:
+        year = date.today().year
+    if not month:
+        month = date.today().month
     args = {}
     args['request'] = request
     if request.user.is_authenticated():
