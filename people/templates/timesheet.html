@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div id="content">
 <div class="section">
     <h1>{{user}}'s Timesheet </h1>
     <h2>Any hours worked are displayed on the calendar. Use the toolbar on the left for quick references.</h2>
@@ -50,6 +49,5 @@
         <a class="calendar_nav_link" href="{% url People-View_Specific_Timesheet user prev_date.year prev_date.month %}">&#060;&#060; Prev Month</a>
         <a class="calendar_nav_link" href="{% url People-View_Specific_Timesheet user next_date.year next_date.month %}">Next Month &#062;&#062;</a> 
     </div>
-</div>
 </div>
 {% endblock %}

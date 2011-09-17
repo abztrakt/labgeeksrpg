@@ -25,7 +25,7 @@
                 {% if weeks %}
                     <ul>
                     {% for week in weeks %}
-                        <li><a href="{% url Personal-Report-Weekly year month week.week_number %}">Week {{week.week_number}}</a></li>
+                        <li><a href="{% url Personal-Report-Weekly year month week %}">Week {{week}}</a></li>
                     {% endfor %}
                     </ul>
                 {% else %}

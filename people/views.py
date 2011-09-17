@@ -133,6 +133,7 @@ def view_timesheet(request,name, target_date=date.today()):
     # Figure out total hours were worked in pay periods and in weeks
     args['payperiod_totals'] = {'first':0,'second':0}
     weekly = {}
+    first_week = target_date.isocalendar()[1]
     for shift in shifts:
         if shift.outtime:
             shift_date = shift.intime
@@ -147,7 +148,7 @@ def view_timesheet(request,name, target_date=date.today()):
                 args['payperiod_totals']['second'] += length
 
             #Keep track of weekly totals
-            week_number = shift_date.isocalendar()[1]
+            week_number = shift_date.isocalendar()[1] - first_week + 1
             if week_number in weekly:
                 weekly[week_number] += length
             else:
@@ -157,7 +158,7 @@ def view_timesheet(request,name, target_date=date.today()):
     weekly = sorted(weekly.items())
     args['weekly_totals'] = []
     for i in range(0,len(weekly)):
-        args['weekly_totals'].append({'week':weekly[i][0]-weekly[0][0]+1,'total':weekly[i][1]})
+        args['weekly_totals'].append({'week':weekly[i][0],'total':weekly[i][1]})
 
     cal = TimesheetCalendar(shifts).formatmonth(year,month)
     args['calendar'] = mark_safe(cal)

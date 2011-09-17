@@ -60,20 +60,18 @@ def get_shifts(request,year,month,day=None,user=None,week=None,payperiod=None):
 
     if week:
         #Filter the shifts by the given week of the month (i.e. week=1 means grab shifts in 1st week of month)
+        first_week = date(int(year),int(month),1).isocalendar()[1]
+
         weekly = {}
         for shift in shifts:
             shift_date = shift.intime
-            week_number = shift_date.isocalendar()[1]
+            this_week = shift_date.isocalendar()[1]
+            week_number = this_week - first_week + 1
             if week_number in weekly:
                 weekly[week_number].append(shift)
             else:
                 weekly[week_number] = [shift]
-        #Sort the weekly shifts
-        weekly = sorted(weekly.items())
-        alist = {}
-        for i in range(0,len(weekly)):
-            alist[weekly[i][0]-weekly[0][0] + 1] = weekly[i][1]
-        shifts = alist[int(week)]
+        shifts = weekly[int(week)]
     elif payperiod:
         #Filter the shifts by the given payperiod of the mont (i.e. payperiod=1 means grab shifts in 1st payperiod of month)
         payperiod_shifts = {'first':[],'second':[]}
@@ -119,16 +117,14 @@ def get_calendar(target_date, shifts):
    
     #Find out how many of the shifts fit in each week of the month
     weekly = []
+    first_week = target_date.isocalendar()[1]
     for shift in shifts:
-        week_number = shift.intime.isocalendar()[1]
+        week_number = shift.intime.isocalendar()[1] - first_week + 1
         if week_number not in weekly:
             weekly.append(week_number)
-
     #Sort the weekly shifts
     weekly = sorted(weekly)
-    args['weeks'] = []
-    for i in range(0,len(weekly)):
-        args['weeks'].append({'week_number':weekly[i]-weekly[0]+1})
+    args['weeks'] = weekly
     #Create calendar.
     args['calendar'] = mark_safe(ReportCalendar(shifts).formatmonth(year,month))
 
