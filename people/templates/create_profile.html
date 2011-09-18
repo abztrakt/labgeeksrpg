@@ -1,18 +1,52 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="section">
+    <h1>Hello {{this_user}}.</h1>
+    <h2>{{message}}</h2>
+</div>
+<div id="create_profile_box">
+    <div class="form_box">
+        <form action="" method='post' id="create_user_profile" enctype="multipart/form-data">{% csrf_token %}
+            
+            <label class="input_label">
+                <strong>Staff Photo</strong>
+                {{ form.staff_photo }}
+            </label>
 
-<h2>Hello {{this_user}}.</h2>
-<h3>{{message}}</h3>
+            <label class="input_label">
+                <strong>Call me by</strong>
+                {{ form.call_me_by }}
+            </label>
 
-<form action="" method='post' id="create_user_profile" enctype="multipart/form-data">{% csrf_token %}
-    
-    <table>
-        {{ form.as_table }}
-    </table>
-    
-    <input type="submit" value="Submit"/>
-    <input type="hidden" name="next" value="{{next}}"/>
-</form>
+            <label class="input_label">
+                <strong>Graduation Date</strong>
+                {{ form.grad_date }}
+            </label>
 
+            <label class="input_label">
+                <strong>Phone</strong>
+                {{ form.phone}}
+            </label>
+
+            <label class="input_label">
+                <strong>Alt Phone</strong>
+                {{ form.alt_phone }}
+            </label>
+
+            <label class="input_label">
+                <strong>Office</strong>
+                {{ form.office }}
+            </label>
+
+            <label class="input_label">
+                <strong>About me</strong>
+                {{ form.about_me}}
+            </label>
+
+            <input type="submit" value="Submit"/>
+            <input type="hidden" name="next" value="{{next}}"/>
+        </form>
+    </div>
+</div>
 {% endblock %}

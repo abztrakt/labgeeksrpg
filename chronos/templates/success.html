@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Well done {{user}}.</h1>
-<h2>Clocked <span style="color:{% if success == "OUT" %}red">{% else %}green">{% endif %}{{ success }}</span>: {{ location }}.</h2>
-<h3>The date and time recorded: {{ at_time }}.</h3>
+<div class="section">
+    <h1>Well done {{user}}.</h1>
+    <h2>Clocked <span style="color:{% if success == "OUT" %}red">{% else %}green">{% endif %}{{ success }}</span>: {{ location }}.</h2>
+    <h3>The date and time recorded: {{ at_time }}.</h3>
+</div>
 {% endblock %}

@@ -8,17 +8,17 @@
 {% endif %}
 
     <div id="login_box">
-        <div id="login_form">
+        <div class="form_box">
 
             <h2>Log in</h2>
             <form action="" method="post">{% csrf_token %}
 
-                <label>
+                <label class="input_label">
                     <strong>Username</strong>
                     {{ form.username }}
                 </label>
 
-                <label>
+                <label class="input_label">
                     <strong>Password</strong>
                     {{ form.password}}
                 </label>
