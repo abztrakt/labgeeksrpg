@@ -15,9 +15,9 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 
 @login_required
 def list_all(request):
-    """ List all users in the system.
+    """ List all users in the system. (Alphabetically, ignoring case)
     """
-    users = User.objects.filter(is_active=True)
+    users = User.objects.filter(is_active=True).extra(select={'username_upper': 'upper(username)'}, order_by=['username_upper'])
     return render_to_response('list.html', locals(), context_instance=RequestContext(request))
 
 @login_required
