@@ -1,0 +1,468 @@
+/* Elements */
+
+body {
+    font: 81.25%/1 arial,helvetica,sans-serif;
+    background-color: white;
+	color: black;
+    margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+	font-weight: normal;
+}
+
+h1 {
+    font-size: 5em;
+    text-align: center;
+}
+
+h2 {
+    font-size: 4em;
+    text-align: center;
+}
+
+h3 {
+    font-size: 3em;
+    text-align: center;
+}
+
+table {
+    margin: auto;
+    border-collapse: collapse;
+}
+
+form {
+	text-align: center;
+	margin-top: 50px;
+}
+
+th, td {
+    padding: .2em .5em;
+}
+
+th {
+    text-align: left;
+}
+
+tr:first-child {
+    background-color: #616D7E;
+    font-size: 1.3em;
+}
+
+tr:hover td {
+    background-color: #DDDDDD;
+}
+
+/* Classes */
+
+.seps {
+    font-size: 2em;
+}
+
+/* nav.html (used for navagation styles) */
+
+.active_tab{
+    border: 1px solid black;
+    border-bottom: none;
+    border-top: none;
+    background-color: white;
+}
+
+.nonactive_tab{
+    border: 1px solid #F5F5F5;
+    border-bottom: none;
+    border-top: none;
+}
+
+.nav a{
+    padding: 1em 1em .8em;
+}
+
+#navbar, #chronos_nav {
+	background-color: #F5F5F5;
+    border-bottom: 1px solid #E5E5E5;
+	font-size: 12pt;
+	padding-left: 1em;
+    margin-bottom: 1em;
+}
+
+.nav, #chronos_nav ul {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: .85em;
+}
+
+#chronos_nav {
+    background-color: rgba(200,200,200, .25);
+    margin-top: 0;
+}
+
+.nav li, #chronos_nav ul li {
+    float: left;
+}
+
+.user_name, .bug_sug {
+    color: rgba(252,138,69,1);
+}
+
+/* IDs */
+
+#submit_button {
+    font-size: 16pt;
+	font-family: Helvetica,Arial,sans-serif;
+}
+
+#content {
+    padding: 0;
+    max-width: 1000px;
+    min-width: 780px;
+    margin: auto;
+    margin-bottom: 2em;
+    overflow: hidden;
+}
+
+#clock_in_or_out{
+    font-size: 4.6em;
+    color: #DD4B39;
+}
+
+#clock_in_or_out:hover {
+    color: #4D90FE;
+    text-decoration: underline;
+}
+
+a {
+	color: black;
+	text-decoration: none;
+}
+
+a:hover {
+    color: #4D90FE;
+}
+
+textarea {
+	padding: 5px;
+}
+
+/* Log-in CSS (used for dev purposes, but could be used for future log-in forms)*/
+
+#login_box{
+    float: right;
+    width: 335px;
+}
+
+#create_profile_box{
+    width: 600px;
+}
+
+.form_box{
+    background: none repeat scroll 0 0 #F5F5F5;
+    padding: 20px 25px 15px;
+    border: 1px solid #E5E5E5;
+    margin: 12px 0 0;
+}
+
+form{
+    margin-top: 2em;
+    text-align: left;
+}
+
+#login_box a{
+    font-size: 15pt;
+}
+
+form .input_label{
+    margin: 0 0 1.5em;
+    display: block;
+}
+
+form label strong{
+    font-weight: bold;
+    display: block;
+    margin-bottom: 1em;
+}
+
+form input[type="submit"]{
+    background-color: #4D90FE;
+    color: #FFFFFF;
+    border: 1px solid #3079ED;
+    height: 32px;
+    font-weight: bold;
+    padding: 0 8px;
+    width: 6em;
+}
+
+
+form input[type="text"], form input[type="password"]{
+    height: 32px;
+    border: 1px solid #C0C0C0;
+    padding-left: 8px;
+}
+
+.form_box h2{
+    font-size: 16px;
+    text-align: left;
+}
+
+#login_info h2{
+    font-size: 16px;
+    text-align: left;
+    margin: 0.4em 0 0; 
+}
+
+ul{
+    padding: 1em;
+    line-height: 17px;
+    list-style: none outside none;
+}
+
+
+#login_info li{
+    margin: 3px 0 2em;
+}
+
+.section{
+    margin-bottom: 1.5em;
+}
+
+.section h1{
+    color: #DD4B39;
+    font-size: 25px;
+    text-align: left;
+}
+
+.section h2{
+    font-size: 16px;
+    text-align: left;
+    margin: 0.4em 0 0;
+}
+
+#people{
+    float: left;
+}
+
+
+/*
+Profile CSS
+May have to place in its own css file for easier future editing.
+*/
+#user_profile{
+    font-size: 14px;
+    font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+    border: .2em solid white;
+    padding: 2em;
+    margin: auto;
+    width: 960px;
+    font-weight: bold;
+}
+
+#user_profile #photo_box{
+    float: left;
+    padding: 1em;
+    margin: 1em;
+}
+
+
+#user_profile p{
+    margin-top: 0;
+    margin-bottom: .5em;
+}
+
+
+#user_profile img{
+    max-width: 17em;
+    max-height: 17em;
+    float: left;
+}
+
+#user_profile .profile_section{
+    margin-bottom: 1em;
+}
+
+.section_title{
+    color: #DD4B39;
+    font-size: 15pt;
+    text-align: left;
+}
+
+#profile_info{
+    padding: 1em;
+    overflow: hidden;
+    border-left: 2px solid #EBEBEB;
+}
+
+.profile_info_section{
+    padding: 10px 0;    
+    overflow: hidden;
+}
+
+.profile_info_section:hover {
+    background-color: #DDDDDD;
+
+}
+
+.profile_info_section_title{
+    width: 110px;
+}
+
+.profile_info_section_info{
+    width: 100px;
+
+}
+.profile_info_section h1{
+    font-size: 15px;
+    width: 110px;
+    text-align: right;
+    float: left;
+    font-weight: bold;
+    color: #616D7E;
+}
+
+.profile_info_section h2{
+    font-size: 15px;
+    width: 382px;
+    display: inline-block;
+    text-align: left;
+    margin-left: 1.5em;
+}
+
+#user_name{
+    font-size: 32px;
+}
+
+
+/*
+Calendar CSS
+*/
+#calendar {
+    width: 85em;
+    margin: auto;
+    margin-top: 1em;
+}
+
+#calendar tr:first-child {
+    background-color: #F5F5F5;
+    font-size: 2.0em;
+}
+
+#calendar tr:nth-child(2) {
+    background-color: #DDDDDD;
+    font-size: 1em;
+}
+
+#calendar th.month, #calendar tr:nth-child(2) th{
+    height: 2em;
+}
+
+#calendar .first{
+    background-color: #FFFFFF;
+    /*border: .3em solid #387AA2;*/
+}
+
+#calendar .second{
+    background-color: #DDDDDD;
+    border-color: #FFFFFF;
+}
+
+#calendar .first.filled{
+    background-color: #999999;
+    color: white;
+}
+
+#calendar .second.filled{
+    background-color: #616D7E;
+    color: white;
+}
+
+#calendar .today{
+    border: .2em solid #B70C0C;
+}
+
+#calendar .noday{
+    background-color: white;
+    border: none;
+    border-top: 1px solid #DDDDDD;
+}
+
+#calendar th, #calendar td{
+    padding: .5em;
+    border-left: 1px solid #DDDDDD;
+    border-top: 1px solid #DDDDDD;
+    height: 5em;
+    width: 5em;
+    color: black;
+    vertical-align: text-top;
+}
+
+#calendar td a:hover {
+    color: white;
+}
+
+#calendar .month .first:hover , #calendar .month .second:hover {
+    background-color: #DD4B39;
+    color: black;
+    /*border-left: 1px solid black;
+    border-top: 1px solid black;
+    */
+}
+
+.month{
+    margin: .55em 0 0;
+}
+
+#calendar p{
+    font-size: .9em;    
+}
+
+#calendar strong.hours{
+    color:black;
+}
+
+#calendar_nav {
+    margin: 3em auto; 
+    text-align: center;
+    width: 50%;
+}
+
+.calendar_nav_link{
+    border: .2em solid #E5E5E5;
+    margin-left: 2em;
+    margin-right: 2em;
+    padding: 1em;
+    width: 4em;
+}
+
+#calendar_key{
+    background: none repeat scroll 0 0 #F5F5F5;
+    padding: 15px;
+    border: 1px solid #E5E5E5;
+    margin: 0 12px 0;
+    float: left;
+    width: 12em;
+}
+
+#calendar_key p, #calendar_key legend{
+    font-weight: bold;
+}
+
+#calendar_key p{
+    font-size: 11pt;
+}
+
+#calendar_key legend{
+    font-size: 14pt;
+}
+
+.key{
+    width: 5em;
+    text-align: center;
+    padding: 10px;
+    margin: auto;
+}
+
+.separator{
+    height: .3em;
+    background-color: black;
+}
