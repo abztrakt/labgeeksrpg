@@ -253,52 +253,83 @@ May have to place in its own css file for easier future editing.
 #user_profile{
     font-size: 14px;
     font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
-    border: .2em solid white;
-    padding: 3em;
+    padding: 2em;
     margin: auto;
-    width: 60em;
+    width: 960px;
     font-weight: bold;
 }
 
+#user_profile #photo_box{
+    float: left;
+    padding: 1em;
+    margin: 1em;
+}
 #user_profile p{
     margin-top: 0;
-    margin-bottom: 0;
+    margin-bottom: .5em;
 }
 
-.section{
-    margin-bottom: 1em;
-}
 
-#work_info img{
+#user_profile img{
     max-width: 17em;
     max-height: 17em;
     float: left;
-    margin-right: 2em;
 }
 
-#work_info{
-    height: 17em;
+#user_profile .profile_section{
+
+    margin-bottom: 1em;
 }
-#work_text{
+
+.section_title{
+    color: #DD4B39;
+    font-size: 15pt;
+    text-align: left;
+}
+
+#profile_info{
+    padding: 1em;
     overflow: hidden;
+    border-left: 2px solid #EBEBEB;
+}
+
+.profile_info_section{
+    padding: 10px 0;    
+    overflow: hidden;
+}
+
+.profile_info_section:hover {
+    background-color: #000000;
+
+}
+
+.profile_info_section_title{
+    width: 110px;
+}
+
+.profile_info_section_info{
+    width: 100px;
+
+}
+.profile_info_section h1{
+    font-size: 15px;
+    width: 110px;
+    text-align: right;
+    float: left;
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+.profile_info_section h2{
+    font-size: 13px;
+    width: 382px;
+    display: inline-block;
+    text-align: left;
+    margin-left: 1.5em;
 }
 
 #user_name{
     font-size: 1.9em;
-}
-
-#work_statuses{
-    color: #B0B0B0;
-}
-
-#work_contact{
-    color: black;
-    font-size: 1.1em;
-}
-
-#user_aboutme{
-    font-weight: normal;
-    color: black;
 }
 
 /*

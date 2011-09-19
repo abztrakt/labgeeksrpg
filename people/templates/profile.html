@@ -4,41 +4,77 @@
 
 {% if profile %}
 <div id="user_profile">
-    <div id="work_info">
+    <div id="photo_box">
         {% if profile.staff_photo %}<img src="{{profile.staff_photo.url}}" alt="Profile Picture"/>{% endif %}
-        <div id="work_text">
-            <div class="section">
-                <p id="user_name">{{profile.user}} ({{profile.call_me_by}})</p>
-                {% if edit %}<strong><a href="{% url People-Create_Profile profile.user %}">Click here to edit this profile</a></strong>{% endif %}
-            </div>
-
-            <div id="work_statuses" class="section">
-                <p id="user_title">Title: {{profile.title}}</p>
-                <p id="user_status">Status: {{profile.status}}</p>
-                <p id="user_office">Office: {{profile.office}}</p>
-                <p id="user_supervisor">Supervisor: {{profile.supervisor}}</p>
-            </div>
-            <div id="work_contact" class="section">
-                <p>Phone: {{profile.phone}}</p>
-                <p>Alt Phone: {{profile.alt_phone}}</p>
-            </div>
-        </div>
     </div>
 
-    <hr class="separator"/>
+    <div id="profile_info">
+        <div class="profile_section">
+            <p id="user_name">{{profile.user}} ({{profile.call_me_by}})</p>
+            {% if edit %}<strong><a href="{% url People-Create_Profile profile.user %}">Click here to edit this profile</a></strong>{% endif %}
+        </div>
 
-    <div id="personal_info">
-            <div id="work_dates" class="section">
-                <p>Starting Date: {{profile.start_date}}</p>
-                <p>Ending Date: {{profile.end_date}}</p>
-                <p>Graduation Date: {{profile.grad_date}}</p>
-            </div>
-            
-            <div class="section">
-                <p>About me:</p>
-                <p id="user_aboutme">{{profile.about_me}}</p>
+        <div id="work_status" class="profile_section" >
+            <h1 class="section_title">Work info</h1>
+            <div class="profile_info_section">
+                <h1>Title</h1>
+                <h2>{{profile.title}}</h2>
             </div>
 
+            <div class="profile_info_section">
+                <h1>Status</h1>
+                <h2>{{profile.status}}</h2>
+            </div>
+
+            <div class="profile_info_section">
+                <h1>Office</h1>
+                <h2>{{profile.office}}</h2>
+            </div>
+
+            <div class="profile_info_section">
+                <h1>Supervisor</h1>
+                <h2>{{profile.supervisor}}</h2>
+            </div>
+        </div>
+
+        <div id="work_contact" class="profile_section">
+            <h1 class="section_title">Contact info</h1>
+            <div class="profile_info_section">
+                <h1>Phone</h1>
+                <h2>{{profile.phone}}</h2>
+            </div>
+
+            <div class="profile_info_section">
+                <h1>Alt Phone</h1>
+                <h2>{{profile.alt_phone}}</h2>
+            </div>
+        </div>
+    
+        <div id="work_dates" class="profile_section">
+            <h1 class="section_title">Dates of hire</h1>
+            <div class="profile_info_section">
+                <h1>Starting Date</h1>
+                <h2>{{profile.start_date}}</h2>
+            </div>
+
+            <div class="profile_info_section">
+                <h1>Ending Date</h1>
+                <h2>{{profile.end_date}}</h2>
+            </div>
+
+            <div class="profile_info_section">
+                <h1>Graduation Date</h1>
+                <h2>{{profile.grad_date}}</h2>
+            </div>
+        </div>
+
+        <div id="personal_info" class="profile_section">
+            <h1 class="section_title">Personal info</h1>
+            <div class="profile_info_section">
+                <h1>About me</h1>
+                <h2>{{profile.about_me}}</h2>
+            </div>
+        </div>
     </div>
 </div>
 
