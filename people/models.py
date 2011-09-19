@@ -69,6 +69,7 @@ class UserProfile(models.Model):
     about_me = models.TextField(null=True,blank=True)
     phone = models.CharField(max_length=12, null=True,blank=True)
     alt_phone = models.CharField(max_length=12, null=True, blank=True)
+    site_skin = models.CharField(max_length=256, null=True, blank=True)
 
     def __unicode__(self):
         return "%s %s [%s]" % (self.user.first_name, self.user.last_name, self.user.username)

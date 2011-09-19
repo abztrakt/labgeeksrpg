@@ -4,7 +4,8 @@
 <head>
 <title>Labgeeks RPG</title>
 <link rel="ico" type="image/x-icon" href="/static/favicon.ico" id="uwfavicon" />
-<style>@import url("/static/main.css");</style>
+{% load labgeeksrpg_extras %}
+<style>@import url("/static/{% active_css request %}");</style>
 </head>
 <body>
 {% include "nav.html" %}
