@@ -139,6 +139,13 @@ def get_calendar(target_date, shifts):
 def specific_report(request,year,month,day=None,user=None,week=None,payperiod=None):
     """ This view is used when viewing specific shifts in the given day. (Table form)
     """
+
+    if not request.user.is_staff:
+        message = 'Permission Denied'
+        reason = 'You do not have permission to visit this part of the page.'
+
+        return render_to_response('fail.html',locals())
+
     #Grab shifts
     shifts = get_shifts(request,year,month,day,user,week,payperiod)
     
@@ -155,6 +162,12 @@ def specific_report(request,year,month,day=None,user=None,week=None,payperiod=No
 def report(request,year=None,month=None,user=None):
     """ Creates a report of shifts in the year and month.
     """
+
+    if not request.user.is_staff:
+        message = 'Permission Denied'
+        reason = 'You do not have permission to visit this part of the page.'
+
+        return render_to_response('fail.html',locals())
 
     # Grab shifts
     if not year:
@@ -180,6 +193,7 @@ def report(request,year=None,month=None,user=None):
 def personal_report(request, year=None,month=None):
     """ Creates a personal report of all shifts for that user.
     """
+
     if not year:
         year = date.today().year
     if not month:

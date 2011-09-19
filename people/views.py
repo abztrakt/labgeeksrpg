@@ -10,7 +10,6 @@ from django.utils.safestring import mark_safe
 import chronos.models as models 
 from people.forms import *
 from people.models import UserProfile
-
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 @login_required
@@ -95,6 +94,16 @@ def create_user_profile(request,name):
 
     return render_to_response('create_profile.html',locals(),context_instance=RequestContext(request))
 
+@login_required
+def view_shifts_timesheet(request,name,year,month,day):
+
+    if not request.user.is_staff:
+        message = 'Permission Denied'
+        reason = 'You do not have permission to visit this part of the page.'
+        return render_to_response('fail.html',locals(),context_instance=RequestContext(request))
+    user = User.objects.get(username=name)
+    shifts = models.Shift.objects.filter(person = user, intime__month = month, intime__year = year, intime__day = day)
+    return render_to_response('specific_report.html', locals(), context_instance=RequestContext(request))
 
 @login_required
 def view_specific_timesheet(request,name,year,month):
@@ -112,10 +121,10 @@ def view_timesheet(request,name, target_date=None):
     year = target_date.year
 
     #Grab the user and their shifts.
-    user = User.objects.filter(username = name)
+    user = User.objects.get(username = name)
     shifts = models.Shift.objects.filter(person = user, intime__month = month, intime__year = year)
 
-    args['user'] = user[0]
+    args['user'] = user
     args['date'] = target_date
     
     #Figure out the prev and next months
@@ -162,7 +171,7 @@ def view_timesheet(request,name, target_date=None):
     for i in range(0,len(weekly)):
         args['weekly_totals'].append({'week':weekly[i][0],'total':weekly[i][1]})
 
-    cal = TimesheetCalendar(shifts).formatmonth(year,month)
+    cal = TimesheetCalendar(shifts,request,user).formatmonth(year,month)
     args['calendar'] = mark_safe(cal)
     args['request'] = request
     return render_to_response('timesheet.html',args)
@@ -171,10 +180,16 @@ class TimesheetCalendar(HTMLCalendar):
     """ This class is used for displaying the timesheet in a calendar format
     """
     
-    def __init__(self,shifts):
+    def __init__(self,shifts,request=None,user=None):
         super(TimesheetCalendar,self).__init__()
         self.shifts = self.group_by_day(shifts)
         self.personal = self.is_personal(shifts)
+        if user or request:
+            self.user = user
+            self.can_view_shifts = self.is_staff(request,user)
+        else:
+            self.user = ''
+
 
     def formatday(self,day,weekday):
         if day != 0:
@@ -192,7 +207,10 @@ class TimesheetCalendar(HTMLCalendar):
                 for shift in self.shifts[day]:
                     if shift.outtime:
                         total_hours += float(shift.length())
-                body = '<p>Total Hours: <strong class="hours">' + str(total_hours) + '</strong></p>'
+                if self.can_view_shifts:
+                    body = '<p><a href="/people/%s/timesheet/%s/%s/%s">Total Hours: <strong class="hours">' % (self.user.username,self.year,self.month,day) + str(total_hours) + '</strong></a></p>'
+                else:
+                    body = '<p>Total Hours: <strong class="hours">' + str(total_hours) + '</strong></p>'
                 s += '%s' % (body)
                 return self.day_cell(cssclass, s)
             return self.day_cell(cssclass, s)
@@ -222,3 +240,8 @@ class TimesheetCalendar(HTMLCalendar):
                     #Calendar is not personal, used for multiple all staff
                     return False
         return True
+
+    def is_staff(self,request,user):
+        if request.user.is_staff or request.user == user:
+            return True
+        return False

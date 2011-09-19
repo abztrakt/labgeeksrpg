@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="section">
+    <h1>FAIL</h1>
+    {% if message %}<p>{{ message }}</p>{% endif %}
+    {% if reason %}<p>{{ reason }}</p>{% endif %}
+    {% if log_msg %}<p>{{ log_msg }}</p>{% endif %}
+</div>
+{% endblock %}
