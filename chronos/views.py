@@ -215,7 +215,20 @@ def personal_report(request, year=None,month=None):
 def personal_report_specific(request,year,month,day=None,week=None,payperiod=None):
     """ Creates a specific daily report for the user
     """
-    return specific_report(request,year,month,day,request.user,week,payperiod)
+
+    #Grab shifts
+    user = request.user
+    shifts = get_shifts(request,year,month,day,user,week,payperiod)
+    
+    if day:
+        description = "Viewing shifts for %s." % (date(int(year),int(month),int(day)).strftime("%B %d, %Y"))
+    elif week:
+        description = "Viewing shifts in week %d of %s." % (int(week),date(int(year),int(month),1).strftime("%B, %Y"))
+    else:
+        #This should be a payperiod view
+        description = "Viewing shifts in payperiod %d of %s." % (int(payperiod),date(int(year),int(month),1).strftime("%B, %Y"))
+
+    return render_to_response('specific_report.html',locals())
 
 @login_required
 def time(request):
