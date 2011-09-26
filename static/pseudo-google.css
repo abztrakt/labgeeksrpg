@@ -153,7 +153,7 @@ textarea {
     width: 335px;
 }
 
-#create_profile_box{
+#create_profile_box, #time_period_box{
     width: 600px;
 }
 

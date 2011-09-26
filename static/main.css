@@ -127,7 +127,15 @@ tr:first-child {
 #content {
     margin: 1em;
 }
+#clock_in_or_out{
+    font-size: 4.6em;
+    color: #DD4B39;
+}
 
+#clock_in_or_out:hover {
+    color: #4D90FE;
+    text-decoration: underline;
+}
 a {
 	color: white;
 	text-decoration: none;
@@ -162,7 +170,7 @@ label {
     width: 335px;
 }
 
-#create_profile_box{
+#create_profile_box, #time_period_box{
     width: 700px;
     margin: auto;
 }
@@ -172,6 +180,7 @@ label {
     padding: 20px 25px 15px;
     border: 1px solid #E5E5E5;
     margin: 12px 0 0;
+    color: black;
 }
 
 .form_box strong, .form_box p{
@@ -246,6 +255,16 @@ form input[type="text"], form input[type="password"]{
 .greeting{
     margin-bottom: 1.5em;
 }
+
+.section h1{
+    font-size: 35px;
+}
+
+.section h2{
+    font-size: 25px;
+    margin: 0.4em 0 0;
+}
+
 /*
 Profile CSS
 May have to place in its own css file for easier future editing.
