@@ -65,7 +65,7 @@ class UserProfile(models.Model):
     supervisor = models.ForeignKey(User, related_name='supervisor', null=True, blank=True)
     title = models.ForeignKey(Title, null=True, blank=True)
     office = models.CharField(max_length=256, null=True, blank=True, default='')
-    working_periods = models.ForeignKey(TimePeriod, null=True, blank=True)
+    working_periods = models.ManyToManyField(TimePeriod, null=True, blank=True)
     about_me = models.TextField(null=True,blank=True)
     phone = models.CharField(max_length=12, null=True,blank=True)
     alt_phone = models.CharField(max_length=12, null=True, blank=True)
