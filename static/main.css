@@ -170,7 +170,7 @@ label {
     width: 335px;
 }
 
-#create_profile_box, #time_period_box{
+#create_profile_box, .time_period_box{
     width: 700px;
     margin: auto;
 }

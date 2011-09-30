@@ -48,7 +48,6 @@ th {
 
 tr:first-child {
     background-color: #616D7E;
-    font-size: 1.3em;
 }
 
 tr:hover td {
@@ -153,8 +152,8 @@ textarea {
     width: 335px;
 }
 
-#create_profile_box, #time_period_box{
-    width: 600px;
+#create_profile_box, .time_period_box{
+    width: 650px;
 }
 
 .form_box{
