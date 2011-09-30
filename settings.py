@@ -145,6 +145,7 @@ INSTALLED_APPS = (
     'labgeeksrpg.chronos',
     'labgeeksrpg.people',
     'labgeeksrpg.labgeeksrpg_config',
+    'labgeeksrpg.schedule',
     'south',
     #'debug_toolbar',
 )

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="section">
+    <h1>Schedule</h1>
+    <h2>Below is a list of options regarding scheduling.</h2>
+
+    <h2>This part of the site is still under construction (Alpha stage).</h2>
+</div>
+
+<hr class="separator"/>
+
+<div class="time_period_box">
+    <div class="form_box">
+        <!--<div class="section">
+            <h1>Select options</h1>
+        </div>-->
+        <table>
+            <tbody>
+                <tr>
+                    <th>Time Period</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Availability</th>
+                </tr>
+                {% for timeperiod in timeperiod_stats %}
+                <tr>
+                    <td>{{timeperiod.timeperiod}}</td>
+                    <td>{{timeperiod.start_date}}</td>
+                    <td>{{timeperiod.end_date}}</td>
+                    <td>{{timeperiod.count}} can work this time period.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+   </div>
+</div>
+
+{% endblock %}
+
