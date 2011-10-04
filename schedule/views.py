@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.core.context_processors import csrf
 
 from people.models import UserProfile, TimePeriod
+from schedule.models import *
 from schedule.forms import *
 
 def list_options(request):
@@ -30,8 +31,25 @@ def list_options(request):
             'count': people.count()
             }
 
+        users = {
+            'timeperiod': timeperiod.name,
+            'people': people
+        }
         timeperiod_stats.append(data)
-        timeperiod_users.append(people)
+        timeperiod_users.append(users)
+    
+    if request.method == 'POST':
+        form = SelectDailyScheduleForm(request.POST)
+        if form.is_valid():
+            day = form.cleaned_data['day']
+            data = WorkShift.objects.filter(scheduled_in__day=day.day,scheduled_in__month=day.month,scheduled_in__year=day.year)
+            shifts = []
+            for shift in data:
+                x = {'person':shift.person,'day':shift.scheduled_in.date(),'scheduled_in':shift.scheduled_in.time(),'scheduled_out':shift.scheduled_out.time(),'location':shift.location}
+                shifts.append(x)
+    else:
+        form = SelectDailyScheduleForm()
+
     """
     if request.method == 'POST':
         form = SelectTimePeriodForm(request.POST)

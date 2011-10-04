@@ -33,10 +33,45 @@
                 {% endfor %}
             </tbody>
         </table>
+        
+        <form action="" method='post' id="schedule_chooser">{% csrf_token %}
+            <label class="input_label">
+                <strong>Select a day to view its schedule.</strong>
+                {{ form.day }}
+            </label>
 
+            <input type="submit" value="Submit"/>
+            <input type="hidden" value="next" value="{{next}}"/>
+
+        </form>
 
    </div>
 </div>
+
+{% if shifts %}
+    <strong>Viewing the created schedule for {{day}}</strong>
+    <table>
+        <tbody>
+                <tr>
+                    <th>Person</th>
+                    <th>Day</th>
+                    <th>Scheduled in</th>
+                    <th>Scheduled out</th>
+                    <th>Location</th>
+                </tr>
+                {% for shift in shifts %}
+                <tr>
+                    <td>{{shift.person}}</td>
+                    <td>{{shift.day}}</td>
+                    <td>{{shift.scheduled_in}}</td>
+                    <td>{{shift.scheduled_out}}</td>
+                    <td>{{shift.location}}</td>
+                </tr>
+                {% endfor %}
+
+        </tbody>
+    </table>
+{% endif %}
 
 {% endblock %}
 
