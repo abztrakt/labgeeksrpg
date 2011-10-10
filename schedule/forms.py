@@ -6,3 +6,5 @@ class SelectTimePeriodForm(forms.Form):
     time_periods = forms.ChoiceField(choices=[(tp.name,tp.name) for tp in TimePeriod.objects.all()])
     time_period_filter = forms.ChoiceField(required=True, label=False, widget=forms.RadioSelect(), choices=filter_choices)
 
+class SelectDailyScheduleForm(forms.Form):
+    day = forms.DateField()
