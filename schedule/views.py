@@ -37,19 +37,9 @@ def list_options(request):
         }
         timeperiod_stats.append(data)
         timeperiod_users.append(users)
-    
-    if request.method == 'POST':
-        form = SelectDailyScheduleForm(request.POST)
-        if form.is_valid():
-            day = form.cleaned_data['day']
-            data = WorkShift.objects.filter(scheduled_in__day=day.day,scheduled_in__month=day.month,scheduled_in__year=day.year)
-            shifts = []
-            for shift in data:
-                x = {'person':shift.person,'day':shift.scheduled_in.date(),'scheduled_in':shift.scheduled_in.time(),'scheduled_out':shift.scheduled_out.time(),'location':shift.location}
-                shifts.append(x)
-    else:
-        form = SelectDailyScheduleForm()
 
+    if not timeperiods:
+        message = 'Nobody available for timeperiods or nobody filled out preferences'
     """
     if request.method == 'POST':
         form = SelectTimePeriodForm(request.POST)
@@ -67,20 +57,44 @@ def list_options(request):
     """
     return render_to_response('schedule_home.html',locals(), context_instance=RequestContext(request))
 
-def view_availability(request,form):
-    timeperiod = form.cleaned_data['time_periods']
+def view_available_shifts(request):
+    ''' Display a list of all available shifts. (Shifts that have no user attached to them)
+    '''
+    #Grab all available shifts
+    data = WorkShift.objects.filter(person=None)
 
-    #Display all of the users who have selected this timeperiod as an available timeperiod.
-    people = UserProfile.objects.filter(working_periods__name=timeperiod)
+    shifts=[]
+    for shift in data:
+        x = {'day':shift.scheduled_in.date(),'scheduled_in':shift.scheduled_in.time(),'scheduled_out':shift.scheduled_out.time(),'location':shift.location}
+        shifts.append(x)
+    
+    if not shifts:
+        message = "No available shifts."
 
-    if people:
-        message = "Below is the list of people who can work this time period."
+    return render_to_response('available.html', locals(), context_instance=RequestContext(request))
+
+def view_shifts(request):
+    ''' Display a list of scheduled work shifts. Allows user to specify which day they want to look at.
+    '''
+    c = {}
+    c.update(csrf(request))
+    if request.method == 'POST':
+        form = SelectDailyScheduleForm(request.POST)
+        if form.is_valid():
+            day = form.cleaned_data['day']
+            data = WorkShift.objects.filter(scheduled_in__day=day.day,scheduled_in__month=day.month,scheduled_in__year=day.year,person__isnull=False)
+            shifts = []
+            for shift in data:
+                x = {'person':shift.person,'day':shift.scheduled_in.date(),'scheduled_in':shift.scheduled_in.time(),'scheduled_out':shift.scheduled_out.time(),'location':shift.location}
+                shifts.append(x)
+
+            if not data:
+                message = 'Nobody scheduled for %s' %  (day)
+        
     else:
-        message = "Nobody available, or nobody filled out preferences in their profile."
+        form = SelectDailyScheduleForm()
 
-    total = people.count()
-    return render_to_response('schedule_home.html', locals(), context_instance=RequestContext(request))
-
+    return render_to_response('view_shifts.html', locals(),context_instance=RequestContext(request))
 
 def view_preferences(request,form):
 

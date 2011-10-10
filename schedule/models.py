@@ -12,4 +12,9 @@ class WorkShift(models.Model):
     location = models.ForeignKey(Location)
 
     def __unicode__(self):
-        return "%s: [%s] %s-%s @%s" % (self.person,self.scheduled_in.date(),self.scheduled_in.time(),self.scheduled_out.time(), self.location)
+        if self.person:
+            person_string = self.person
+        else:
+            person_string = "Open Shift"
+
+        return "%s: [%s] %s-%s @%s" % (person_string,self.scheduled_in.date(),self.scheduled_in.time(),self.scheduled_out.time(), self.location)
