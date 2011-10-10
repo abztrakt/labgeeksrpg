@@ -8,12 +8,6 @@ from people.models import UserProfile, TimePeriod
 from schedule.forms import *
 
 def list_options(request):
-
-    if not request.user.is_superuser:
-        message = 'Permission Denied'
-        reason = 'You do not have permission to visit this part of the page.'
-        return render_to_response('fail.html', locals(),context_instance=RequestContext(request))
-
     c = {}
     c.update(csrf(request))
 
