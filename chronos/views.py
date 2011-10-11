@@ -7,7 +7,7 @@ from django.template import RequestContext
 from labgeeksrpg.chronos.forms import ShiftForm
 from labgeeksrpg.chronos.models import Shift, Punchclock
 
-from labgeeksrpg.people.views import TimesheetCalendar
+from labgeeksrpg.utils import ReportCalendar
 from datetime import date
 from django.utils.safestring import mark_safe
 import re
@@ -16,30 +16,6 @@ def list_options(request):
     """ Lists the options that users can get to when using chronos.
     """
     return render_to_response('options.html', locals())
-
-class ReportCalendar(TimesheetCalendar):
-    """ This class is used for displaying the reports in a monthly calendar format.
-        Overrides the TimesheetCalendar class by injecting the ability to view shifts of a the given day.
-    """
-
-    def formatday(self,day,weekday):
-        if day != 0:
-            cssclass = self.cssclasses[weekday]
-            if day <= 15:
-                cssclass += ' first'
-            else:
-                cssclass += ' second'
-            s = '<strong>%s</strong>' % (day)
-            if date.today() == date(self.year,self.month,day):
-                cssclass += ' today'
-            if day in self.shifts:
-                if not self.personal:
-                    s += '<p><a href="/chronos/report/%s/%s/%s">Shift Details</a></p>' % (self.year,self.month,day)
-                else:
-                    s += '<p><a href="/chronos/%s/%s/%s">Shift Details</a></p>' % (self.year,self.month,day)
-                return super(ReportCalendar,self).day_cell(cssclass,s)
-            return super(ReportCalendar,self).day_cell(cssclass,s)
-        return super(ReportCalendar,self).day_cell('noday','&nbsp;')
 
 def get_shifts(request,year,month,day=None,user=None,week=None,payperiod=None):
     """ This method is used to return specific shifts
