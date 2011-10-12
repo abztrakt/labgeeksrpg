@@ -3,10 +3,11 @@
 <div id="navbar">
 <ul class="nav">
     <li><a class="{% active_tab request "/chronos" %}" href="/chronos">Chronos</a></li>
-    <li><a class="{% active_tab request "/people" %}" href="/people">People</a></li>
     {% if request.user.is_staff %}<li><a class="{% active_tab request "/schedule" %}" href="/schedule">Schedule</a></li>{% endif %}
-    {% if request.user.is_staff %}<li><a class="{% active_tab request "/admin"%}" href="/admin">Admin</a></li><li><a class="{% active_tab request "chronos/report" %}"href="/chronos/report">Reports</a>{% endif %}
+    {% if request.user.is_staff %}<li><a class="{% active_tab request "chronos/report" %}"href="/chronos/report">Reports</a>{% endif %}
+    <li><a class="{% active_tab request "/people" %}" href="/people">People</a></li>
     <!--<li><a class="bug_sug" href="http://trac.eplt.washington.edu/labgeeks4/newticket">Bugs + Feedback</a></li>-->
+    {% if request.user.is_staff %}<li><a class="{% active_tab request "/admin"%}" href="/admin">Admin</a></li>{% endif %}
     {% if request.user.is_authenticated %}<li><a class="{% active_tab request "/logout" %}" href="/logout">Log-out</a></li>
     {% else %}<li><a class="{% active_tab request "/login" %}" href="/login">Log-in</a></li>{% endif %}
 </ul>
