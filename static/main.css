@@ -175,6 +175,10 @@ label {
     margin: auto;
 }
 
+.time_period_box td{
+    color: black;
+}
+
 .form_box{
     background: none repeat scroll 0 0 #F5F5F5;
     padding: 20px 25px 15px;
