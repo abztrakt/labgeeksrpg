@@ -14,7 +14,7 @@ class Migration(SchemaMigration):
             ('person', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True)),
             ('scheduled_in', self.gf('django.db.models.fields.DateTimeField')()),
             ('scheduled_out', self.gf('django.db.models.fields.DateTimeField')()),
-            ('location', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['chronos.Location'], null=True, blank=True)),
+            ('location', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['chronos.Location'])),
         ))
         db.send_create_signal('schedule', ['WorkShift'])
 
@@ -71,7 +71,7 @@ class Migration(SchemaMigration):
         'schedule.workshift': {
             'Meta': {'object_name': 'WorkShift'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'location': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['chronos.Location']", 'null': 'True', 'blank': 'True'}),
+            'location': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['chronos.Location']"}),
             'person': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),
             'scheduled_in': ('django.db.models.fields.DateTimeField', [], {}),
             'scheduled_out': ('django.db.models.fields.DateTimeField', [], {})

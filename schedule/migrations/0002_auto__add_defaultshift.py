@@ -8,21 +8,22 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'WorkShift'
-        db.create_table('schedule_workshift', (
+        # Adding model 'DefaultShift'
+        db.create_table('schedule_defaultshift', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('person', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True)),
-            ('scheduled_in', self.gf('django.db.models.fields.DateTimeField')()),
-            ('scheduled_out', self.gf('django.db.models.fields.DateTimeField')()),
+            ('day', self.gf('django.db.models.fields.CharField')(max_length=256)),
+            ('in_time', self.gf('django.db.models.fields.TimeField')()),
+            ('out_time', self.gf('django.db.models.fields.TimeField')()),
             ('location', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['chronos.Location'])),
         ))
-        db.send_create_signal('schedule', ['WorkShift'])
+        db.send_create_signal('schedule', ['DefaultShift'])
 
 
     def backwards(self, orm):
         
-        # Deleting model 'WorkShift'
-        db.delete_table('schedule_workshift')
+        # Deleting model 'DefaultShift'
+        db.delete_table('schedule_defaultshift')
 
 
     models = {
@@ -67,6 +68,15 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
+        'schedule.defaultshift': {
+            'Meta': {'object_name': 'DefaultShift'},
+            'day': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'in_time': ('django.db.models.fields.TimeField', [], {}),
+            'location': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['chronos.Location']"}),
+            'out_time': ('django.db.models.fields.TimeField', [], {}),
+            'person': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'})
         },
         'schedule.workshift': {
             'Meta': {'object_name': 'WorkShift'},
