@@ -7,18 +7,18 @@
 </div>
 
 <hr class="separator"/>
+<div id="calendar">
+</div>
 <div class="form_box">
     <a href="/schedule/">Click here to go back</a>
     <form action="" method='post' id="schedule_chooser">{% csrf_token %}
-            <label class="input_label">
-            <strong>Select a day to view its schedule.</strong>
-            {{ form.day }}
-        </label>
+        <strong>Select Day</strong>
+        {{ form.day }}
 
-        <input type="submit" value="Submit"/>
+        <input type="submit" value="Go!"/>
+        <input type="button" value="< Prev"/>
+        <input type="button" value="Next >" />
         <input type="hidden" value="next" value="{{next}}"/>
-
-    </form>
 
 {% if shifts %}
     <table>
@@ -41,13 +41,17 @@
                 {% endfor %}
         </tbody>
     </table>
-</div>
-{% else %}
+    <input type="submit" value="Save!" id="save"/>
+    <input type="reset" value="Reset!"/>
 
-<div class="section">
-    <h2>{{message}}</h2>
-</div>
+{% else %}
+    <div class="section">
+        <h2>{{message}}</h2>
+    </div>
 {% endif %}
+
+    </form>
+</div>
 
 
 {% endblock %}

@@ -18,3 +18,28 @@ class WorkShift(models.Model):
             person_string = "Open Shift"
 
         return "%s: [%s] %s-%s @%s" % (person_string,self.scheduled_in.date(),self.scheduled_in.time(),self.scheduled_out.time(), self.location)
+
+class DefaultShift(models.Model):
+    DAY_CHOICES = (
+        ('Sunday', 'Sunday'),
+        ('Monday', 'Monday'),
+        ('Tuesday', 'Tuesday'),
+        ('Wednesday', 'Wednesday'),
+        ('Thursday', 'Thursday'),
+        ('Friday', 'Friday'),
+        ('Saturday', 'Saturday'),
+    )
+    person = models.ForeignKey(User, null=True, blank=True)
+    day = models.CharField(max_length=256, choices=DAY_CHOICES)
+    in_time = models.TimeField()
+    out_time = models.TimeField()
+    location = models.ForeignKey(Location)
+
+    def __unicode__(self):
+        if self.person:
+            person_string = self.person
+        else:
+            person_string = "Open Shift"
+
+        return "%s: [%s] %s-%s @%s" % (person_string,self.day,self.in_time,self.out_time, self.location)
+
