@@ -465,3 +465,14 @@ Calendar CSS
     height: .3em;
     background-color: black;
 }
+
+/*
+Schedule CSS 
+*/
+
+#schedule .filled{
+    background-color: red;
+}
+
+
+

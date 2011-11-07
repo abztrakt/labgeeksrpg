@@ -1,5 +1,6 @@
 from django import forms
 from labgeeksrpg.people.models import UserProfile, TimePeriod
+from labgeeksrpg.chronos.models import Location
 
 class SelectTimePeriodForm(forms.Form):
     filter_choices = [['avail','Availability'],['prefs','Preferences']]
@@ -21,4 +22,5 @@ class CreateDailyScheduleForm(forms.Form):
 
 
 class SelectDailyScheduleForm(forms.Form):
+    location = forms.ChoiceField(widget=forms.RadioSelect,choices=[(loc.name,loc.name) for loc in Location.objects.all()],required=True)
     day = forms.DateField()

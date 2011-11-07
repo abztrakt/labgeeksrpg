@@ -15,34 +15,47 @@
         <strong>Select Day</strong>
         {{ form.day }}
 
+        <br/><br/>
+        <strong>Select Location</strong>
+        {{ form.location }}
         <input type="submit" value="Go!"/>
+        <!--
         <input type="button" value="< Prev"/>
         <input type="button" value="Next >" />
-        <input type="hidden" value="next" value="{{next}}"/>
+        -->
 
 {% if shifts %}
-    <table>
-        <tbody>
-                <tr>
-                    <th>Person</th>
-                    <th>Day</th>
-                    <th>Scheduled in</th>
-                    <th>Scheduled out</th>
-                    <th>Location</th>
-                </tr>
-                {% for shift in shifts %}
-                <tr>
-                    <td>{{shift.person}}</td>
-                    <td>{{shift.day}}</td>
-                    <td>{{shift.scheduled_in}}</td>
-                    <td>{{shift.scheduled_out}}</td>
-                    <td>{{shift.location}}</td>
-                </tr>
-                {% endfor %}
-        </tbody>
+<div id="schedule">
+    <table> 
+        <tr>
+            <th colspan="3">{{day}}</th>
+        </tr>
+        <tr>
+            <th></th>
+            {% for person in people %}
+                <th>{{person}}</th>
+            {% endfor %}
+        </tr>
+
+        {% for shift in shifts %}
+        <tr>
+            <td>{{shift.time}}</td>
+            {% for person in shift.people %}
+                {% if person %}
+                    <td class="filled">{{person}}</td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
     </table>
+</div>
+
+    <!--
     <input type="submit" value="Save!" id="save"/>
     <input type="reset" value="Reset!"/>
+    -->
 
 {% else %}
     <div class="section">

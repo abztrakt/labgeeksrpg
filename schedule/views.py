@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.core.context_processors import csrf
 
 from people.models import UserProfile, TimePeriod
+from chronos.models import Location
 from schedule.models import *
 from schedule.forms import SelectTimePeriodForm, SelectDailyScheduleForm, CreateDailyScheduleForm
 
@@ -70,7 +71,8 @@ def view_shifts(request):
         form = SelectDailyScheduleForm(request.POST)
         if form.is_valid():
             day = form.cleaned_data['day']
-            data = WorkShift.objects.filter(scheduled_in__day=day.day,scheduled_in__month=day.month,scheduled_in__year=day.year,person__isnull=False).order_by('person__username')
+            location = form.cleaned_data['location']
+            data = WorkShift.objects.filter(scheduled_in__day=day.day,scheduled_in__month=day.month,scheduled_in__year=day.year,person__isnull=False,location__name=location).order_by('person__username')
             if not data:
                 message = 'Nobody scheduled for %s' %  (day)
             else:
@@ -80,21 +82,45 @@ def view_shifts(request):
                 y_axis = []
                 grouping = []
 
-                # y_axis
+                # x_axis
+                # maybe dont need this... for now.
+                '''
                 weekdays = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
                 starting = day - timedelta(days = day.weekday())
                 for i in range(0,7):
-                    y = {'day' : weekdays[i],'date':starting + timedelta(days = i)}
-                    y_axis.append(y)
+                    x = {'day' : weekdays[i],'date':starting + timedelta(days = i)}
+                    x_axis.append(x)
+                '''
 
-                # y_axis
-                shifts = [] 
- 
-                for shift in data:
-                    x = {'person':shift.person,'day':shift.scheduled_in.date(),'scheduled_in':shift.scheduled_in.time(),'scheduled_out':shift.scheduled_out.time(),'location':shift.location}
+                # y_axis - The time scale
+                counter = datetime(day.year,day.month,day.day,7,0)
+
+                while counter.hour != 1:
+                    y_axis.append(counter.time())
+                    counter += timedelta(minutes=30)
+                
+                #Grab the unique users from the shifts.
+                unique_people = data.values('person__username').distinct()
+                people = []
+                for person in unique_people:
+                    people.append(person['person__username'])
+
+                shifts = []
+                        
+                for time in y_axis:
+                    x = {'time':time, 'people':[]}
+
+                    for shift in data:
+                        if shift.scheduled_in.time() <= time and shift.scheduled_out.time() >= time:
+                            x['people'].append(shift.person)
+                        else:
+                            x['people'].append(None)
+
+                    while len(x['people']) != len(people):
+                        x['people'].append(None)
+
+
                     shifts.append(x)
-                #import pdb; pdb.set_trace()
-
         
     else:
         form = SelectDailyScheduleForm()
@@ -115,32 +141,6 @@ def create_default_daily_schedule(request):
         form = CreateDailyScheduleForm()
     
     return render_to_response('create_schedule.html', locals(), context_instance=RequestContext(request))
-
-def create_schedule(request,shifts=None):
-    """ Create a table that will display the shifts
-    """
-    time_frame = []
-
-    # For testing, delete later
-    day = 4
-    month = 10
-    year = 2011
-    hour = 7
-    minute = 15
-    target_date = datetime(year,month,day,hour,minute)
-    t1 = target_date.time()
-
-    for i in range(0,28):
-        if t1.minute == 15:
-            t2 = time(t1.hour,t1.minute+30)
-        else:
-            t2 = time(t1.hour+1,t1.minute-30)
-
-        data = {'first':t1,'second':t2}
-        time_frame.append(data)
-        t1 = t2
-
-    return render_to_response('view_shifts.html',locals(),context_instance=RequestContext(request))
 
 def view_preferences(request,form):
     pass
