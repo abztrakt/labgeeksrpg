@@ -36,8 +36,8 @@ class Shift(models.Model):
         """
         if self.outtime:
             delta = self.outtime - self.intime
-            delta = float(delta.seconds)
-            hours = delta/60/60
+            seconds = float((delta.microseconds + (delta.seconds + delta.days * 24 * 3600) * 10**6) / 10**6)
+            hours = float(seconds/60/60)
             return "%.02f" % hours
         else:
             return datetime.timedelta(0)
