@@ -1,5 +1,13 @@
 {% extends 'base.html' %}
 
+{% block pageJS %}
+<script type="text/javascript">
+    $(function() {
+            $('#id_grad_date').datepicker();
+    });
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="section">
     <h1>Hello {{this_user}}.</h1>
