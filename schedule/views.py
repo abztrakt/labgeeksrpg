@@ -80,7 +80,6 @@ def view_shifts(request):
                 # TODO EDIT LATER
                 x_axis = []
                 y_axis = []
-                grouping = []
 
                 # x_axis
                 # maybe dont need this... for now.
@@ -94,7 +93,6 @@ def view_shifts(request):
 
                 # y_axis - The time scale
                 counter = datetime(day.year,day.month,day.day,7,0)
-
                 while counter.hour != 1:
                     y_axis.append(counter.time())
                     counter += timedelta(minutes=30)
@@ -105,22 +103,27 @@ def view_shifts(request):
                 for person in unique_people:
                     people.append(person['person__username'])
 
+                # Content - fill in the grid with the user's name to show that they are working that time frame.
                 shifts = []
-                        
                 for time in y_axis:
-                    x = {'time':time, 'people':[]}
-
+                    x = {'time':time,'people':[]}
+                    
+                    group = {}
                     for shift in data:
                         if shift.scheduled_in.time() <= time and shift.scheduled_out.time() >= time:
-                            x['people'].append(shift.person)
-                        else:
+                            group[shift.person.username] = shift.person
+                        elif shift.person.username not in group.keys():
+                            group[shift.person.username] = None
+
+                    for person in people:
+                        if not group[person]:
                             x['people'].append(None)
-
-                    while len(x['people']) != len(people):
-                        x['people'].append(None)
-
-
+                        else:
+                            x['people'].append(person)
                     shifts.append(x)
+
+                # The total columns in the schedule.
+                rowlength = len(people) + 1
         
     else:
         form = SelectDailyScheduleForm()
