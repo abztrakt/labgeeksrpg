@@ -24,27 +24,33 @@
         <input type="button" value="Next >" />
         -->
 
+    </form>
+</div>
+
 {% if shifts %}
 <div id="schedule">
     <table> 
-        <tr>
+        <tr class="date">
             <th colspan="{{rowlength}}">{{day}}</th>
         </tr>
-        <tr>
-            <th></th>
+        <tr class="location">
+            <th colspan="{{rowlength}}">{{location}}</th>
+        </tr>
+        <tr class="users">
+            <th>Time</th>
             {% for person in people %}
-                <th>{{person}}</th>
+                <th class="user">{{person}}</th>
             {% endfor %}
         </tr>
 
         {% for shift in shifts %}
-        <tr>
-            <td>{{shift.time}}</td>
+        <tr class="{{shift.class}}">
+            <td class="time">{{shift.time}}</td>
             {% for person in shift.people %}
                 {% if person %}
-                    <td class="filled">{{person}}</td>
+                    <td class="content filled">{{person}}</td>
                 {% else %}
-                    <td></td>
+                    <td class="content empty"></td>
                 {% endif %}
             {% endfor %}
         </tr>
@@ -63,8 +69,6 @@
     </div>
 {% endif %}
 
-    </form>
-</div>
 
 
 {% endblock %}

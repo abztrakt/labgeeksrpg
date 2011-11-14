@@ -50,7 +50,7 @@ tr:first-child {
     background-color: #616D7E;
 }
 
-tr:hover td {
+.regular_table tr:hover td {
     background-color: #DDDDDD;
 }
 
@@ -470,9 +470,57 @@ Calendar CSS
 Schedule CSS 
 */
 
-#schedule .filled{
-    background-color: red;
+#schedule{
+    margin-top: 1em;
 }
 
+#schedule table{
+    border: 1px solid #DDDDDD;    
+    margin: 0;
+}
 
+#schedule tr:hover td{
+    
+}
 
+#schedule td{
+    border-bottom: 1px solid #DDDDDD;
+    border-right: 1px solid #DDDDDD;
+}
+
+#schedule .filled{
+    background-color: #DDDDDD;
+    border: 1px solid white;
+}
+
+#schedule .date{
+    height: 2em;
+    font-size: 2em;
+    background-color: #F5F5F5;
+}
+
+#schedule .user{
+    border-left: 1px solid white;
+}
+
+#schedule .users{
+    font-size: 1em;
+    background-color: #DDDDDD;
+    border: 1px solid #DDDDDD;
+}
+
+#schedule .time{
+    width: 5em;
+}
+
+#schedule .row{
+    height: 3em;
+}
+
+#schedule .content{
+    width: 10em;
+}
+
+#schedule .now{
+    border-left: 1px solid red;
+}

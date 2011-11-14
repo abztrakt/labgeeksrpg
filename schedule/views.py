@@ -93,6 +93,7 @@ def view_shifts(request):
 
                 # y_axis - The time scale
                 counter = datetime(day.year,day.month,day.day,7,0)
+                
                 while counter.hour != 1:
                     y_axis.append(counter.time())
                     counter += timedelta(minutes=30)
@@ -105,9 +106,14 @@ def view_shifts(request):
 
                 # Content - fill in the grid with the user's name to show that they are working that time frame.
                 shifts = []
+                now = datetime.time(datetime.now())
+
                 for time in y_axis:
-                    x = {'time':time,'people':[]}
+                    x = {'time':time.strftime('%I:%M %p').lower(),'people':[],'class':"row"}
                     
+                    if time.hour == now.hour:
+                        x['class'] += " now"
+
                     group = {}
                     for shift in data:
                         if shift.scheduled_in.time() <= time and shift.scheduled_out.time() >= time:
