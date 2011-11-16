@@ -479,10 +479,6 @@ Schedule CSS
     margin: 0;
 }
 
-#schedule tr:hover td{
-    
-}
-
 #schedule td{
     border-bottom: 1px solid #DDDDDD;
     border-right: 1px solid #DDDDDD;
@@ -523,4 +519,34 @@ Schedule CSS
 
 #schedule .now{
     border-left: 1px solid red;
+}
+
+#schedule_options{
+    margin: 2em;
+}
+
+#schedule_options a{
+    display: block;
+    margin: 1em;
+    border: 1px solid black;
+    border-radius: 4px 4px 4px 4px;
+    padding: 1.5em;
+}
+
+#schedule_options a:hover {
+    border: 1px solid #4D90FE;
+}
+
+.option_title{
+    font-size: 20px;
+    float: left;
+    margin-right: 2em;
+    width: 5em;
+}
+
+.option_description{
+    font-size: 12px;
+    float: right;
+    margin-right: 2em;
+    width: 6em;
 }

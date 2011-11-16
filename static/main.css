@@ -458,3 +458,85 @@ Calendar CSS
     height: .3em;
     background-color: white;
 }
+
+
+/*
+Schedule CSS 
+*/
+
+#schedule{
+    margin-top: 1em;
+}
+
+#schedule table{
+    border: 1px solid #DDDDDD;    
+    margin: 0;
+}
+
+#schedule td{
+    border-bottom: 1px solid #DDDDDD;
+    border-right: 1px solid #DDDDDD;
+}
+
+#schedule .filled{
+    background-color: #0F3A55;
+    border: 1px solid white;
+}
+
+#schedule .date{
+    height: 2em;
+    font-size: 2em;
+}
+
+#schedule .users{
+    font-size: 1em;
+}
+
+#schedule .time{
+    width: 5em;
+}
+
+#schedule .row{
+    height: 3em;
+}
+
+#schedule .content{
+    width: 10em;
+}
+
+#schedule .now{
+    border-left: 1px solid red;
+}
+
+#schedule_options{
+    margin: 2em;
+}
+
+#schedule_options a{
+    display: block;
+    margin: 1em;
+    border: 1px solid black;
+    border-radius: 4px 4px 4px 4px;
+    padding: 1.5em;
+}
+
+#schedule_options a:hover {
+    border: 1px solid #4D90FE;
+    text-decoration: none;
+}
+
+.option_title{
+    font-size: 20px;
+    overflow:hidden;
+    /*
+    float: left;
+    margin-right: 2em;
+    width: 5em;
+    */
+}
+
+.option_description{
+    float: right;
+    width: 6em;
+    margin-left: 2em;
+}
