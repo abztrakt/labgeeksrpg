@@ -529,8 +529,13 @@ Schedule CSS
     display: block;
     margin: 1em;
     border: 1px solid black;
-    border-radius: 4px 4px 4px 4px;
     padding: 1.5em;
+}
+
+#schedule_options a{
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px
 }
 
 #schedule_options a:hover {
