@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="section">
+    <h1>Schedule</h1>
+    <h2>Below are timeperiods and any data associated with them.</h2>
+</div>
+
+<hr class="separator"/>
+
+<div id="timeperiods">
+    <a href="/schedule/">Click here to go back</a>
+    {% if timeperiod_stats %}
+        {% for timeperiod in timeperiod_stats %}
+        <div class="timeperiod">
+            <div class="timeperiod_heading">
+                <div class="timeperiod_title">{{timeperiod.timeperiod}}</div>
+                <div class="timeperiod_date">{{timeperiod.start_date}} - {{timeperiod.end_date}}</div>
+            </div>
+            <p><strong>Total:</strong> {{timeperiod.count}} can work this time period.</p>
+            {% if timeperiod.count %}
+            <div>
+                <strong>People:</strong>
+                <ul>
+                {% for person in timeperiod.people %}
+                    <li>{{person}}</li>
+                {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="section">
+            <h2>{{message}}</h2>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
