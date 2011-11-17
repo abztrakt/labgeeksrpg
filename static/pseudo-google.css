@@ -527,19 +527,39 @@ Schedule CSS
 
 #schedule_options a{
     display: block;
-    margin: 1em;
+    /*margin: 1em;*/
     border: 1px solid black;
     padding: 1.5em;
+    background-color: #F5F5F5;
 }
 
 #schedule_options a{
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
-    border-radius: 4px
+    border-radius: 4px;
+    box-shadow: 0 2px 3px rgba(20,20,20,0.5);
+}
+
+
+#schedule_options li{
+    padding: 3px;
+    margin: 1em;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
+
+#schedule_options li:hover {
+    background-color: #4D90FE;
 }
 
 #schedule_options a:hover {
     border: 1px solid #4D90FE;
+}
+
+#schedule_options img{
+    max-width: 3em;
+    max-height: 3em;
 }
 
 .option_title{
@@ -554,4 +574,29 @@ Schedule CSS
     float: right;
     margin-right: 2em;
     width: 6em;
+}
+
+#timeperiods{
+    background-color: #F5F5F5;
+    border: 1px solid #E5E5E5;
+    padding: 1.5em;
+}
+
+.timeperiod_title{
+    text-align: left;
+    font-size: 20px;
+    margin: 0;
+    font-weight: bold;
+}
+
+.timeperiod_date{
+    margin: 0;
+}
+
+.timeperiod_info{
+    margin-left: 3em;
+
+}
+
+#timeperiods ul{
 }

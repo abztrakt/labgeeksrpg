@@ -6,5 +6,6 @@ urlpatterns = patterns('labgeeksrpg.schedule.views',
     url(r'^create/$', 'create_default_daily_schedule', name="Schedule-Create_Schedule"),
     url(r'^shifts/$', 'view_shifts', name="Schedule-View_Shifts"),
     url(r'^available/$','view_available_shifts', name="Schedule-View_Avail"),
+    url(r'^timeperiods/$','view_timeperiods',name="Schedule-View_Timeperiods"),
     (r'^$','list_options'),
 )

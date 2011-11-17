@@ -18,32 +18,6 @@ def list_options(request):
         reason = 'You do not have permission to visit this part of the page.'
         return render_to_response('fail.html', locals(),context_instance=RequestContext(request))
 
-    c = {}
-    c.update(csrf(request))
-
-    timeperiod_stats = []
-    timeperiod_users = []
-    timeperiods = TimePeriod.objects.all().order_by('start_date')
-
-    for timeperiod in timeperiods:
-        people = UserProfile.objects.filter(working_periods__name=timeperiod.name)
-        data = {
-            'timeperiod': timeperiod.name,
-            'start_date': timeperiod.start_date,
-            'end_date': timeperiod.end_date,
-            'count': people.count()
-            }
-
-        users = {
-            'timeperiod': timeperiod.name,
-            'people': people
-        }
-        timeperiod_stats.append(data)
-        timeperiod_users.append(users)
-
-    if not timeperiods:
-        message = 'Nobody available for timeperiods or nobody filled out preferences'
-        
     return render_to_response('schedule_home.html',locals(), context_instance=RequestContext(request))
 
 def view_available_shifts(request):
@@ -135,6 +109,32 @@ def view_shifts(request):
         form = SelectDailyScheduleForm()
 
     return render_to_response('view_shifts.html', locals(),context_instance=RequestContext(request))
+
+def view_timeperiods(request):
+    timeperiod_stats = []
+    timeperiod_users = []
+    timeperiods = TimePeriod.objects.all().order_by('start_date')
+
+    for timeperiod in timeperiods:
+        people = UserProfile.objects.filter(working_periods__name=timeperiod.name)
+        data = {
+            'timeperiod': timeperiod.name,
+            'start_date': timeperiod.start_date,
+            'end_date': timeperiod.end_date,
+            'count': people.count(),
+            'people': people
+            }
+
+        users = {
+            'timeperiod': timeperiod.name,
+            'people': people
+        }
+        timeperiod_stats.append(data)
+        timeperiod_users.append(users)
+    if not timeperiods:
+        message = 'Nobody available for timeperiods or nobody filled out preferences'
+     
+    return render_to_response('view_timeperiods.html',locals(),context_instance=RequestContext(request))
 
 
 def create_default_daily_schedule(request):
