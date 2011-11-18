@@ -15,17 +15,14 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
     font-size: 5em;
-    text-align: center;
 }
 
 h2 {
     font-size: 4em;
-    text-align: center;
 }
 
 h3 {
     font-size: 3em;
-    text-align: center;
 }
 
 table {
@@ -34,8 +31,8 @@ table {
 }
 
 form {
-	text-align: center;
-	margin-top: 50px;
+    margin-top: 2em;
+    text-align: left;
 }
 
 th, td {
@@ -54,7 +51,6 @@ tr:first-child {
     background-color: #DDDDDD;
 }
 
-/* Classes */
 
 .seps {
     font-size: 2em;
@@ -156,6 +152,15 @@ textarea {
     width: 650px;
 }
 
+.normal_box{
+    background: none repeat scroll 0 0 #F5F5F5;
+    padding: 20px 25px 15px;
+    border: 1px solid #E5E5E5;
+    margin: 12px 0 0;
+    width: 650px;
+}
+
+
 .form_box{
     background: none repeat scroll 0 0 #F5F5F5;
     padding: 20px 25px 15px;
@@ -163,10 +168,6 @@ textarea {
     margin: 12px 0 0;
 }
 
-form{
-    margin-top: 2em;
-    text-align: left;
-}
 
 #login_box a{
     font-size: 15pt;
@@ -357,12 +358,11 @@ Calendar CSS
 
 #calendar .first{
     background-color: #FFFFFF;
-    /*border: .3em solid #387AA2;*/
 }
 
 #calendar .second{
     background-color: #DDDDDD;
-    border-color: #FFFFFF;
+    border: .3px solid #FFFFFF;
 }
 
 #calendar .first.filled{
@@ -402,9 +402,6 @@ Calendar CSS
 #calendar .month .first:hover , #calendar .month .second:hover {
     background-color: #DD4B39;
     color: black;
-    /*border-left: 1px solid black;
-    border-top: 1px solid black;
-    */
 }
 
 .month{
@@ -564,10 +561,6 @@ Schedule CSS
     border: 1px solid #4D90FE;
 }
 
-#schedule_options img{
-    max-width: 3em;
-    max-height: 3em;
-}
 
 .option_title{
     font-size: 20px;
