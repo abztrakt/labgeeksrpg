@@ -3,12 +3,13 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
-
+from django.http import HttpResponse
 from people.models import UserProfile, TimePeriod
 from chronos.models import Location
 from schedule.models import *
 from schedule.forms import SelectTimePeriodForm, SelectDailyScheduleForm, CreateDailyScheduleForm
-
+from django import forms
+import json
 #EDIT LATER
 from datetime import date, datetime, time, timedelta
 def list_options(request):
@@ -122,7 +123,8 @@ def view_timeperiods(request):
             'start_date': timeperiod.start_date,
             'end_date': timeperiod.end_date,
             'count': people.count(),
-            'people': people
+            'people': people,
+            'slug': timeperiod.slug
             }
 
         users = {
@@ -136,6 +138,23 @@ def view_timeperiods(request):
      
     return render_to_response('view_timeperiods.html',locals(),context_instance=RequestContext(request))
 
+def view_timeperiod_data(request):
+    data = request.REQUEST.copy()
+    slug = data.getlist('name')[0]
+    
+    
+    timeperiod = TimePeriod.objects.get(slug=slug)
+    people_list = UserProfile.objects.filter(working_periods__name=timeperiod.name)
+    people = [str(c.user) for c in people_list]
+    result = json.dumps({
+        'timeperiod':timeperiod.name,
+        'start_date': timeperiod.start_date.strftime('%b. %d, %Y'),
+        'end_date': timeperiod.end_date.strftime('%b. %d, %Y'),
+        'count': len(people),
+        'people': people
+        })
+
+    return HttpResponse(result)
 
 def create_default_daily_schedule(request):
     if request.method == 'POST':

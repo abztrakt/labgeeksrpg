@@ -618,40 +618,43 @@ Schedule CSS
     width: 6em;
 }
 
-#timeperiods{
-    background-color: #F5F5F5;
-    border: 1px solid #E5E5E5;
-    padding: 1.5em;
+.hidden{
+    visibility: hidden;
 }
 
+.visible {
+    visibility: visible;
+}
 
-.timeperiod_heading{
+.timeperiod_selector:hover {
+    cursor: pointer;
+}
+#timeperiod_info{
+    margin: 1em;
+}
+
+#timeperiod_heading{
     border-top: 1px solid #DD4B39;
     border-left: 10px solid #DD4B39;
     padding: 10px;
 }
 
-.timeperiod_title{
+#timeperiod_title{
     text-align: left;
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 3px;
 }
 
-.timeperiod_date{
+#timeperiod_details{
+    margin-left: 2em;
 }
 
-.timeperiod_info{
-    margin-left: 3em;
-
-}
-
-#timeperiods ul{
+#timeperiod_info ul{
     margin: 0;
 }
 
-.timeperiod {
-    margin-top: 1em;
-    margin-bottom: 1em;
+#timeperiod_info strong{
+    float: left;
+    margin-right: 3px;
 }
-
