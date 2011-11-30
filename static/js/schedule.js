@@ -40,6 +40,16 @@ $(document).ready(function(){
 
     getPeopleList();
 
+    $(".add_person").change(function () {
+        $(this).parent().text($(this).val());
+
+        var table = $(this).parent("table");
+        var date = $(table).find(".date th");
+        $("#test").append(table.innerHTML);
+
+    })
+    .change();
+
     /*
     $(".test").click(function(){
         var str = $(this).text();
