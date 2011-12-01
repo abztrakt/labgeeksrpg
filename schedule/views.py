@@ -10,7 +10,7 @@ from schedule.models import *
 from schedule.forms import SelectTimePeriodForm, SelectDailyScheduleForm, CreateDailyScheduleForm
 from django import forms
 import json
-#EDIT LATER
+#TODO: figure out exactly which of the libraries below are needed and don't import them all
 from datetime import date, datetime, time, timedelta
 def list_options(request):
 
