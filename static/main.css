@@ -60,6 +60,11 @@ tr:first-child {
     background-color: rgba(70,50,140,1) ;
 }
 
+.ui-datepicker-calendar tbody tr,
+.ui-datepicker-calendar thead tr {
+    background: #616D7E;
+}
+
 /* Classes */
 
 /*#chronos_nav li {
