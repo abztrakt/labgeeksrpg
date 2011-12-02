@@ -14,7 +14,7 @@ import json
 from datetime import date, datetime, time, timedelta
 def list_options(request):
 
-    if not request.user.is_superuser:
+    if not request.user.is_authenticated():
         message = 'Permission Denied'
         reason = 'You do not have permission to visit this part of the page.'
         return render_to_response('fail.html', locals(),context_instance=RequestContext(request))
