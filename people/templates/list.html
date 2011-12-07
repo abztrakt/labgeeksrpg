@@ -9,12 +9,14 @@
     <table id="people">
     <tbody>
         <tr>
-            <th>Employee</th>
+            <th>Name</th>
+            <th>NetID</th>
             <th>Profile</th>
             <th>Timesheet</th>
         </tr>
     {% for user in users %}
         <tr>
+            <td>{{user.last_name}}, {{user.first_name}}</td>
             <td>{{user}}</td>
             <td><a href="{% url People-View_Profile user %}">Profile</a></td>
             <td><a href="{% url People-View_Timesheet user %}">Timesheet</a></td>
