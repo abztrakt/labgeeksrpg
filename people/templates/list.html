@@ -1,5 +1,16 @@
 {% extends 'base.html' %}
 
+{% block pageJS %}
+<script type="text/javascript" src="/static/js/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() 
+    { 
+        $("#people").tablesorter(); 
+    } 
+);
+</script>
+{% endblock %}
+
 {% block content %}
     <div class="section">
         <h1>People List</h1>
@@ -7,17 +18,21 @@
     </div>
     
     <table id="people">
-    <tbody>
+    <thead>
         <tr>
-            <th>Name</th>
-            <th>NetID</th>
+            <th><a href='#'>First Name</a></th>
+            <th><a href='#'>Last Name</a></th>
+            <th><a href='#'>NetID</a></th>
             <th>Profile</th>
             <th>Timesheet</th>
         </tr>
+    </thead>
+    <tbody>
     {% for user in users %}
         <tr>
-            <td>{{user.last_name}}, {{user.first_name}}</td>
-            <td>{{user}}</td>
+            <td>{{ user.first_name }}</td>
+            <td>{{ user.last_name }}</td>
+            <td>{{ user }}</td>
             <td><a href="{% url People-View_Profile user %}">Profile</a></td>
             <td><a href="{% url People-View_Timesheet user %}">Timesheet</a></td>
         </tr>

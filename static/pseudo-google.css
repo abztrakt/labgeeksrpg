@@ -46,7 +46,7 @@ th {
     text-align: left;
 }
 
-tr:first-child {
+thead {
     background-color: #616D7E;
 }
 

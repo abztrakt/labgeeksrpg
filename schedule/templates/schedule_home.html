@@ -14,13 +14,15 @@
         </div>
         {% if timeperiod_stats %}
         <table>
-            <tbody>
+            <thead>
                 <tr>
                     <th>Time Period</th>
                     <th>Start Date</th>
                     <th>End Date</th>
                     <th>Availability</th>
                 </tr>
+            </thead>
+            <tbody>
                 {% for timeperiod in timeperiod_stats %}
                 <tr>
                     <td>{{timeperiod.timeperiod}}</td>
