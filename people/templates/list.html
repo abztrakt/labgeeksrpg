@@ -5,10 +5,34 @@
 <script type="text/javascript">
 $(document).ready(function() 
     { 
-        $("#people").tablesorter(); 
+        $("#people").tablesorter(
+            {
+                cssAsc: 'headerSortUp',
+                cssDesc: 'headerSortDown',
+                cssHeader: 'header',
+            }
+        ); 
     } 
 );
 </script>
+{% endblock %}
+
+{% block pageCSS %}
+<style type='text/css'>
+th.header {
+    background-image: url('/static/img/bg.gif');
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-position: center left;
+    padding-left: 20px;
+}
+th.headerSortUp {
+    background-image: url('/static/img/asc.gif');
+}
+th.headerSortDown {
+    background-image: url('/static/img/desc.gif');
+}
+</style>
 {% endblock %}
 
 {% block content %}
