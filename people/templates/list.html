@@ -10,7 +10,7 @@ $(document).ready(function()
                 cssAsc: 'headerSortUp',
                 cssDesc: 'headerSortDown',
                 cssHeader: 'header',
-                headers: { 3: { sorter: false}, 4: {sorter: false} },
+                headers: { 4: { sorter: false}, 5: {sorter: false} },
             }
         ); 
     } 
@@ -48,6 +48,7 @@ th.headerSortDown {
             <th><a href='#'>First Name</a></th>
             <th><a href='#'>Last Name</a></th>
             <th><a href='#'>NetID</a></th>
+            <th><a href='#'>Title</a></th>
             <th></th>
             <th></th>
         </tr>
@@ -58,6 +59,7 @@ th.headerSortDown {
             <td>{{ user.first_name }}</td>
             <td>{{ user.last_name }}</td>
             <td>{{ user }}</td>
+            <td>{{ user.get_profile.title }}</td>
             <td><a href="{% url People-View_Profile user %}">Profile</a></td>
             <td><a href="{% url People-View_Timesheet user %}">Timesheet</a></td>
         </tr>
