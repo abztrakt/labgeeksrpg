@@ -1,11 +1,35 @@
 {% extends 'base.html' %}
 
+{% block pageJS %}
+{% if profile.staff_photo and profile.badge_photo %}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#profile_p').click(function() {
+        $('#photo').attr('src', '{{ profile.staff_photo.url }}');
+    });
+    $('#badge_p').click(function() {
+        $('#photo').attr('src', '{{ profile.badge_photo.url }}');
+    });
+});
+</script>
+{% endif %}
+{% endblock %}
+
 {% block content %}
 
 {% if profile %}
 <div id="user_profile">
     <div id="photo_box">
-        {% if profile.staff_photo %}<img src="{{profile.staff_photo.url}}" alt="Profile Picture"/>{% endif %}
+        {% if profile.staff_photo %}
+        <img id="photo" src="{{profile.staff_photo.url}}" alt="Profile Picture"/>
+        {% else %}
+        {% if profile.badge_photo %}
+        <img id="photo" src="{{profile.badge_photo.url}}" alt="Profile Picture"/>
+        {% endif %}
+        {% endif %}
+        {% if profile.staff_photo and profile.badge_photo %}
+        <div id="photo_chooser"><a id="profile_p" href='#'>Profile</a> | <a id="badge_p" href='#'>Official</a></div>
+        {% endif %}
     </div>
 
     <div id="profile_info">

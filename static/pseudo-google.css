@@ -263,6 +263,11 @@ May have to place in its own css file for easier future editing.
     margin: 1em;
 }
 
+#photo_chooser{
+    clear: both;
+    padding: 10px 0px 10px 0px;
+}
+
 
 #user_profile p{
     margin-top: 0;
