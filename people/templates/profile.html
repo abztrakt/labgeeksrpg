@@ -34,7 +34,12 @@ $(document).ready(function() {
 
     <div id="profile_info">
         <div class="profile_section">
-            <p id="user_name">{{profile.user}} {% if profile.call_me_by%} ({{profile.call_me_by}}){% endif %}</p>
+            <p id="user_name">
+                {{ profile.user.first_name }}
+                {% if profile.call_me_by %} "{{ profile.call_me_by }}"{% endif %}
+                {{ profile.user.last_name }} 
+                ({{ profile.user }})
+            </p>
             {% if edit %}<strong><a href="{% url People-Create_Profile profile.user %}">Click here to edit this profile</a></strong>{% endif %}
         </div>
 
