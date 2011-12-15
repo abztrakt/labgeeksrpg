@@ -31,6 +31,9 @@ class WorkGroup(models.Model):
     slug = models.SlugField()
     description = models.TextField(blank=True)
 
+    def __unicode__(self):
+        return self.name
+
 class PayGrade(models.Model):
     """ A tier for a position which determines the wage.
     """
