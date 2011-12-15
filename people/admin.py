@@ -22,7 +22,12 @@ admin.site.register(PayGrade, PayGradeAdmin)
 class TitleAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 admin.site.register(Title, TitleAdmin)
-admin.site.register(UserProfile)
+
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'status', 'start_date', 'grad_date', 'supervisor', 'title', 'office',)
+    search_fields = ('user', 'title', 'office', 'phone', 'alt_phone',)
+    list_filter = ('status', 'start_date', 'grad_date', 'title', 'office',)
+admin.site.register(UserProfile, UserProfileAdmin)
 
 UserAdmin.list_display = ('email', 'first_name', 'last_name', 'is_active', 'is_staff')
 admin.site.unregister(User)
