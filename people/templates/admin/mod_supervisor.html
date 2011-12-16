@@ -1,0 +1,16 @@
+{% extends "admin/base_site.html" %}
+
+{% block breadcrumbs %}<div class="breadcrumbs"><a href="/admin/">Home</a>{% if title %} &rsaquo; {{ title }}{% endif %}</div>{% endblock %}
+
+{% block content %}
+<br />
+<form action="" method="POST">{% csrf_token %}
+
+{{ mod_supervisor_form.as_p }}
+
+<br />
+<input type="hidden" name="action" value="{{ selected_action }}" />
+<input type="submit" name="submit" value="Submit" />
+
+</form>
+{% endblock %}
