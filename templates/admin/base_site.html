@@ -1,0 +1,19 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }} | {% trans 'Labgeeks site admin' %}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">{% trans 'Labgeeks administration' %}</h1>
+{% endblock %}
+
+{% block nav-global %}
+    <ul class='plainlist'>
+        <li style='display: inline'><a href="/">Site Home</a> | </li>
+        <li style='display: inline'><a href="/chronos/">Chronos</a> | </li>
+        <li style='display: inline'><a href="/schedule/">Schedule</a> | </li>
+        <li style='display: inline'><a href="/report/">Reports</a> | </li>
+        <li style='display: inline'><a href="/people/">People</a> | </li>
+        <li style='display: inline'><a href="/admin/">Admin Home</a></li>
+    </ul>
+{% endblock %}
