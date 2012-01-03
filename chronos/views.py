@@ -39,6 +39,10 @@ def get_shifts(request,year,month,day=None,user=None,week=None,payperiod=None):
         #Filter the shifts by the given week of the month (i.e. week=1 means grab shifts in 1st week of month)
         first_week = date(int(year),int(month),1).isocalendar()[1]
 
+        #TODO: fix this hack to get around isocaledar's first week of the year wierdness. See #98
+        if first_week == 52 and int(month) == 1:
+            first_week = 1
+
         weekly = {}
         for shift in shifts:
             shift_date = shift.intime
@@ -54,7 +58,7 @@ def get_shifts(request,year,month,day=None,user=None,week=None,payperiod=None):
         payperiod_shifts = {'first':[],'second':[]}
         for shift in shifts:
             shift_date = shift.intime
-            if shift_date.day <= 15: 
+            if shift_date.day <= 15:
                 payperiod_shifts['first'].append(shift)
             else:
                 payperiod_shifts['second'].append(shift)
@@ -94,7 +98,14 @@ def get_calendar(target_date, shifts):
    
     #Find out how many of the shifts fit in each week of the month
     weekly = []
+    
     first_week = date(year,month,1).isocalendar()[1]
+
+    #TODO: fix this hack around isocalendars calculating first week of the year, see #98
+    if month == 1 and first_week == 52:
+        first_week = 1
+
+
     for shift in shifts:
         week_number = shift.intime.isocalendar()[1] - first_week + 1
         if week_number not in weekly:
