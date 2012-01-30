@@ -31,6 +31,9 @@ class WorkGroup(models.Model):
     slug = models.SlugField()
     description = models.TextField(blank=True)
 
+    def __unicode__(self):
+        return self.name
+
 class PayGrade(models.Model):
     """ A tier for a position which determines the wage.
     """
@@ -59,6 +62,7 @@ class UserProfile(models.Model):
     """
     user = models.ForeignKey(User, unique=True, related_name='uwnetid')
     staff_photo = models.ImageField(upload_to="images/%Y/%m/%d", null=True, blank=True)
+    badge_photo = models.ImageField(upload_to="images/%Y/%m/%d", null=True, blank=True)
     call_me_by = models.CharField(max_length=256, null=True, blank=True)
     status = models.ForeignKey(EmploymentStatus, null=True, blank=True)
     start_date = models.DateField(null=True,blank=True)
