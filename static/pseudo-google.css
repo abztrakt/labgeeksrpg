@@ -178,6 +178,11 @@ form .input_label{
     display: block;
 }
 
+.input_label{
+    display: block;
+    margin: 0 0 1.5em;
+}
+
 form label strong{
     font-weight: bold;
     display: block;
@@ -673,4 +678,62 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
 #timeperiod_info strong{
     float: left;
     margin-right: 3px;
+}
+
+#schedule .selected{
+    background-color: yellow;
+}
+ 
+#schedule .ui-selecting{
+    background-color: lightsteelblue;
+}
+
+/* trigger button */
+#download_now {
+    /*background:transparent url(/img/home/download.png) no-repeat scroll 0 0;*/
+    display:block;
+    height:44px;
+    margin-bottom:30px;
+    overflow:hidden;
+    width:159px;
+    cursor:pointer;
+}
+
+/* mouseover state */
+#download_now:hover {
+background-position:0 -44px ;       
+}
+
+/* clicked state */
+#download_now:focus {
+    background-position:0 -88px;
+}
+
+/* tooltip styling */
+.tooltip {
+    display:none;
+    background-color: #585858;
+    border: 2px solid #DDDDDD;
+    height:163px;
+    padding:40px 30px 10px 30px;
+    width:310px;
+    font-size:11px;
+    color:#fff;
+}
+
+/* a .label element inside tooltip */
+.tooltip .label {
+    color:yellow;
+    width:35px;
+}
+
+.tooltip a {
+    color:#ad4;
+    font-size:11px;
+    font-weight:bold;
+}
+
+#test {
+    border: 1px solid black;
+    background-color: gray;
 }
