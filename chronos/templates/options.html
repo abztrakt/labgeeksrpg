@@ -4,16 +4,16 @@
     
     <div class="section">
         <h1><a id="clock_in_or_out" href="{% url Time %}">Clock IN or OUT</a></h1>
-        <h2>Click "Shift Details" to view your shifts in detail</h2>
+        <h2>Any hours worked are displayed on the calendar. Click on a day to view shifts in detail</h2>
     </div>
         <div id="calendar">
             <fieldset id="calendar_key">
                 <legend>Quick info:</legend>
-                <p>Pay period shifts:</p>
+                <p>Pay period totals:</p>
                 {% if weeks %}
                 <ul>
-                    <li><a href="{% url Personal-Report-Payperiod user year month 1 %}">First</a></li>
-                    <li><a href="{% url Personal-Report-Payperiod user year month 2 %}">Second</a></li>
+                    <li><a href="{% url Personal-Report-Payperiod user year month 1 %}">First: <strong>{{payperiod_totals.first}}</strong></a></li>
+                    <li><a href="{% url Personal-Report-Payperiod user year month 2 %}">Second: <strong>{{payperiod_totals.second}}</strong></a></li>
                 </ul>
                 {% else %}
                     <p>No shifts this month</p>
@@ -21,11 +21,11 @@
                
                 <hr class="separator"/>
                 
-                <p>Weekly shifts :</p>
-                {% if weeks %}
+                <p>Weekly totals:</p>
+                {% if weekly_totals %}
                     <ul>
-                    {% for week in weeks %}
-                        <li><a href="{% url Personal-Report-Weekly user year month week %}">Week {{week}}</a></li>
+                    {% for week in weekly_totals %}
+                        <li><a href="{% url Personal-Report-Weekly user year month week.week %}">Week {{week.week}}: <strong>{{week.total}}</strong></a></li>
                     {% endfor %}
                     </ul>
                 {% else %}
@@ -51,5 +51,4 @@
                 <a class="calendar_nav_link" href="{% url Personal-Report_Monthly user next_date.year next_date.month %}">Next month &#062;&#062;</a>
             </div>
         </div>   
-    <!--<h2>Please log in to see your shifts or to clock in</h2>-->
 {% endblock %}

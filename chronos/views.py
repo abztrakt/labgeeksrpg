@@ -170,14 +170,12 @@ def report(request,year=None,month=None,user=None):
         args['prev_date'] = date(year,month-1,1)
         args['next_date'] = date(year,month+1,1) 
 
-
-
     args['year'] = year
     args['month'] = month
     args['shifts'] = shifts 
     args['request'] = request    
+    
     return render_to_response('report.html', args)
-
 """
     The methods and views below deal with PERSONAL calendar information.
 """
@@ -226,6 +224,39 @@ def personal_report(request, user=None, year=None,month=None):
         #Its a regular month
         args['prev_date'] = date(year,month-1,1)
         args['next_date'] = date(year,month+1,1) 
+
+    args['payperiod_totals'] = {'first':0,'second':0}
+    weekly = {}
+    first_week = date(year,month,1).isocalendar()[1]
+
+    if first_week == 52 and month == 1:
+        first_week = 1
+
+    for shift in shifts:
+        if shift.outtime:
+            shift_date = shift.intime
+            length = float(shift.length())
+
+        #Keep track of pay period totals
+        if shift_date.day <= 15:
+            #1st pay period
+            args['payperiod_totals']['first'] += length
+        else:
+            #2nd pay period
+            args['payperiod_totals']['second'] += length
+
+        #Keep track of weekly totals
+        week_number = shift_date.isocalendar()[1] - first_week + 1
+        if week_number in weekly:
+            weekly[week_number] += length
+        else:
+            weekly[week_number] = length
+
+    #Sort the weekly totals
+    weekly = sorted(weekly.items())
+    args['weekly_totals'] = []
+    for i in range(0,len(weekly)):
+        args['weekly_totals'].append({'week':weekly[i][0],'total':weekly[i][1]})
 
     args['year'] = year
     args['month'] = month
