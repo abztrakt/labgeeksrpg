@@ -7,7 +7,8 @@ from django.template import RequestContext
 from labgeeksrpg.chronos.forms import ShiftForm
 from labgeeksrpg.chronos.models import Shift, Punchclock
 
-from labgeeksrpg.utils import ReportCalendar
+from labgeeksrpg.utils import ReportCalendar, TimesheetCalendar
+from django.contrib.auth.models import User
 from datetime import date
 from django.utils.safestring import mark_safe
 import re
@@ -17,7 +18,7 @@ def list_options(request):
     """
     return render_to_response('options.html', locals())
 
-def get_shifts(request,year,month,day=None,user=None,week=None,payperiod=None):
+def get_shifts(year,month,day=None,user=None,week=None,payperiod=None):
     """ This method is used to return specific shifts
         Since the calendar model is used, year and month both need to be given
         The day, user, week, and payperiod parameters are optional and only used for detailed shifts.
@@ -39,6 +40,10 @@ def get_shifts(request,year,month,day=None,user=None,week=None,payperiod=None):
         #Filter the shifts by the given week of the month (i.e. week=1 means grab shifts in 1st week of month)
         first_week = date(int(year),int(month),1).isocalendar()[1]
 
+        #TODO: fix this hack to get around isocaledar's first week of the year wierdness. See #98
+        if first_week == 52 and int(month) == 1:
+            first_week = 1
+
         weekly = {}
         for shift in shifts:
             shift_date = shift.intime
@@ -50,11 +55,11 @@ def get_shifts(request,year,month,day=None,user=None,week=None,payperiod=None):
                 weekly[week_number] = [shift]
         shifts = weekly[int(week)]
     elif payperiod:
-        #Filter the shifts by the given payperiod of the mont (i.e. payperiod=1 means grab shifts in 1st payperiod of month)
+        #Filter the shifts by the given payperiod of the month (i.e. payperiod=1 means grab shifts in 1st payperiod of month)
         payperiod_shifts = {'first':[],'second':[]}
         for shift in shifts:
             shift_date = shift.intime
-            if shift_date.day <= 15: 
+            if shift_date.day <= 15:
                 payperiod_shifts['first'].append(shift)
             else:
                 payperiod_shifts['second'].append(shift)
@@ -67,45 +72,38 @@ def get_shifts(request,year,month,day=None,user=None,week=None,payperiod=None):
     #Return the correct shift
     return shifts
 
-def get_calendar(target_date, shifts):
+def get_calendar(target_date,shifts,user):
     """ This method is used to return a calendar formed from the given date and shifts.
     """
 
-    args={}
     year = target_date.year
     month = target_date.month
-    
-    args['year'] = year
-    args['month'] = month
 
-    #Figure out the prev and next months
-    if target_date.month == 1:
-        #Its January
-        args['prev_date'] = date(year-1,12,1)
-        args['next_date'] = date(year, 2,1)
-    elif target_date.month == 12:
-        #Its December
-        args['prev_date'] = date(year, 11,1)
-        args['next_date'] = date(year+1,1,1)
-    else:
-        #Its a regular month
-        args['prev_date'] = date(year,month-1,1)
-        args['next_date'] = date(year,month+1,1)
-   
     #Find out how many of the shifts fit in each week of the month
     weekly = []
+    
     first_week = date(year,month,1).isocalendar()[1]
+
+    #TODO: fix this hack around isocalendars calculating first week of the year, see #98
+    if month == 1 and first_week == 52:
+        first_week = 1
+
     for shift in shifts:
         week_number = shift.intime.isocalendar()[1] - first_week + 1
         if week_number not in weekly:
             weekly.append(week_number)
     #Sort the weekly shifts
     weekly = sorted(weekly)
-    args['weeks'] = weekly
+    weeks = weekly
+
     #Create calendar.
-    args['calendar'] = mark_safe(ReportCalendar(shifts).formatmonth(year,month))
+    calendar = mark_safe(ReportCalendar(shifts,user=user).formatmonth(year,month))
 
     #Return the arguments
+    args = {
+        'weeks': weeks,
+        'calendar': calendar,
+    }
     return args
 
 """
@@ -123,7 +121,7 @@ def specific_report(request,year,month,day=None,user=None,week=None,payperiod=No
         return render_to_response('fail.html',locals())
 
     #Grab shifts
-    shifts = get_shifts(request,year,month,day,user,week,payperiod)
+    shifts = get_shifts(year,month,day,user,week,payperiod)
     
     if day:
         description = "Viewing shifts for %s." % (date(int(year),int(month),int(day)).strftime("%B %d, %Y"))
@@ -144,7 +142,7 @@ def report(request,year=None,month=None,user=None):
         reason = 'You do not have permission to visit this part of the page.'
 
         return render_to_response('fail.html',locals())
-
+    
     # Grab shifts
     if not year:
         year = date.today().year
@@ -154,10 +152,28 @@ def report(request,year=None,month=None,user=None):
     year = int(year)
     month = int(month)
     target_date = date(year,month,1)
-    shifts = get_shifts(request,year,month,None,user)
-    
+    shifts = get_shifts(year,month,None,user)
+   
     # Create calendar and calendar related items (such as next_date).
-    args = get_calendar(target_date, shifts)
+    args = get_calendar(target_date, shifts,user)
+    #Figure out the prev and next months
+    if month == 1:
+        #Its January
+        args['prev_date'] = date(year-1,12,1)
+        args['next_date'] = date(year, 2,1)
+    elif month == 12:
+        #Its December
+        args['prev_date'] = date(year, 11,1)
+        args['next_date'] = date(year+1,1,1)
+    else:
+        #Its a regular month
+        args['prev_date'] = date(year,month-1,1)
+        args['next_date'] = date(year,month+1,1) 
+
+
+
+    args['year'] = year
+    args['month'] = month
     args['shifts'] = shifts 
     args['request'] = request    
     return render_to_response('report.html', args)
@@ -166,35 +182,66 @@ def report(request,year=None,month=None,user=None):
     The methods and views below deal with PERSONAL calendar information.
 """
 @login_required
-def personal_report(request, year=None,month=None):
+def personal_report(request, user=None, year=None,month=None):
     """ Creates a personal report of all shifts for that user.
     """
+    args = {}
+    # Determine who the user is. This will return a calendar specific to that person.
+    if not user:
+        user = request.user
+    else:
+        user = User.objects.get(username=user)
 
+    # If the year and month are not given, assume it is the current year & month.
     if not year:
         year = date.today().year
+    else:
+        year = int(year)
     if not month:
         month = date.today().month
-    args = {}
-    args['request'] = request
+    else:
+        month = int(month)
+    
     if request.user.is_authenticated():
         #Grab user's shifts 
-        shifts = get_shifts(request,year,month,None,request.user)
+        shifts = get_shifts(year,month,None,user)
+
         #Create calendar
-        args = get_calendar(date(int(year),int(month),1),shifts)
+        args = get_calendar(date(int(year),int(month),1),shifts,user)
+        args['calendar'] = mark_safe(TimesheetCalendar(shifts,user).formatmonth(year,month))
         args['shifts'] = shifts
     else:
         args['shifts'] = [] 
+
+    #Figure out the prev and next months
+    if month == 1:
+        #Its January
+        args['prev_date'] = date(year-1,12,1)
+        args['next_date'] = date(year, 2,1)
+    elif month == 12:
+        #Its December
+        args['prev_date'] = date(year, 11,1)
+        args['next_date'] = date(year+1,1,1)
+    else:
+        #Its a regular month
+        args['prev_date'] = date(year,month-1,1)
+        args['next_date'] = date(year,month+1,1) 
+
+    args['year'] = year
+    args['month'] = month
+    args['user'] = user.username
     args['request'] = request
     return render_to_response('options.html', args)
 
 @login_required
-def personal_report_specific(request,year,month,day=None,week=None,payperiod=None):
+def personal_report_specific(request,user,year,month,day=None,week=None,payperiod=None):
     """ Creates a specific daily report for the user
     """
 
     #Grab shifts
-    user = request.user
-    shifts = get_shifts(request,year,month,day,user,week,payperiod)
+    #user = request.user
+    user = User.objects.get(username=user)
+    shifts = get_shifts(year,month,day,user,week,payperiod)
     
     if day:
         description = "Viewing shifts for %s." % (date(int(year),int(month),int(day)).strftime("%B %d, %Y"))

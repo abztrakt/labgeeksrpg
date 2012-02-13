@@ -171,7 +171,7 @@ def view_timesheet(request,name, target_date=None):
     for i in range(0,len(weekly)):
         args['weekly_totals'].append({'week':weekly[i][0],'total':weekly[i][1]})
 
-    cal = TimesheetCalendar(shifts,request,user).formatmonth(year,month)
+    cal = TimesheetCalendar(shifts,user).formatmonth(year,month)
     args['calendar'] = mark_safe(cal)
     args['request'] = request
     return render_to_response('timesheet.html',args)
