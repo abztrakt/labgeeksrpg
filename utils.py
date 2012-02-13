@@ -86,12 +86,7 @@ class ReportCalendar(TimesheetCalendar):
             if date.today() == date(self.year,self.month,day):
                 cssclass += ' today'
             if day in self.shifts:
-                #if not self.personal:
                 s += '<p><a href="/chronos/report/%s/%s/%s">Shift Details</a></p>' % (self.year,self.month,day)
-                    #s += '<p>Hello</p>'
-                #else:
-                    #s += '<p><a href="/chronos/%s/%s/%s/%s">Shift Details</a></p>' % (self.user,self.year,self.month,day)
-                    #s += '<p>World</p>'
 
                 return super(ReportCalendar,self).day_cell(cssclass,s)
             return super(ReportCalendar,self).day_cell(cssclass,s)

@@ -72,7 +72,6 @@ def get_shifts(year,month,day=None,user=None,week=None,payperiod=None):
     #Return the correct shifts
     return shifts
 
-
 def calc_shift_stats(shifts,year,month):
     '''
     This method returns various calculations regarding a collection of shifts in a given year and month.
@@ -141,6 +140,9 @@ def prev_and_next_dates(year,month):
     result = {'prev_date':prev_date,'next_date':next_date}
     return result
 
+"""
+    The methods and views below deal with OVERALL calendar information
+"""
 @login_required
 def staff_report(request,year,month,day=None,user=None,week=None,payperiod=None):
     '''
@@ -244,9 +246,7 @@ def personal_report(request, user=None, year=None,month=None):
     if request.user.is_authenticated():
         #Grab user's shifts 
         shifts = get_shifts(year,month,None,user)
-
-        #Create calendar
-        calendar = mark_safe(TimesheetCalendar(shifts,user).formatmonth(year,month))
+        calendar = mark_safe(TimesheetCalendar(shifts,user=user).formatmonth(year,month))
     else:
         shifts = None
         calendar = None
