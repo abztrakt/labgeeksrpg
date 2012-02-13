@@ -10,7 +10,7 @@
             <fieldset id="calendar_key">
                 <legend>Quick info:</legend>
                 <p>Pay period totals:</p>
-                {% if weeks %}
+                {% if weekly_totals %}
                 <ul>
                     <li><a href="{% url Personal-Report-Payperiod user year month 1 %}">First: <strong>{{payperiod_totals.first}}</strong></a></li>
                     <li><a href="{% url Personal-Report-Payperiod user year month 2 %}">Second: <strong>{{payperiod_totals.second}}</strong></a></li>
