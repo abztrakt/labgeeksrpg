@@ -409,11 +409,7 @@ May have to place in its own css file for easier future editing.
 }
 
 #user_name{
-<<<<<<< HEAD
-    font-size: 32px;
-=======
     font-size: 1.8em;
->>>>>>> master
 }
 
 /*

@@ -1,18 +1,17 @@
 from calendar import HTMLCalendar
 from datetime import date
 
-
 class TimesheetCalendar(HTMLCalendar):
     """ This class is used for displaying the timesheet in a calendar format
     """
     
-    def __init__(self,shifts,request=None,user=None):
+    def __init__(self,shifts,user=None):
         super(TimesheetCalendar,self).__init__()
         self.shifts = self.group_by_day(shifts)
         self.personal = self.is_personal(shifts)
-        if user or request:
+        if user:
             self.user = user
-            self.can_view_shifts = self.is_staff(request,user)
+            #self.can_view_shifts = self.is_staff(request,user)
         else:
             self.user = ''
 
@@ -33,10 +32,9 @@ class TimesheetCalendar(HTMLCalendar):
                 for shift in self.shifts[day]:
                     if shift.outtime:
                         total_hours += float(shift.length())
-                if self.can_view_shifts:
-                    body = '<p><a href="/people/%s/timesheet/%s/%s/%s">Total Hours: <strong class="hours">' % (self.user.username,self.year,self.month,day) + str(total_hours) + '</strong></a></p>'
-                else:
-                    body = '<p>Total Hours: <strong class="hours">' + str(total_hours) + '</strong></p>'
+                body = '<p><a href="/chronos/%s/%s/%s/%s">Total Hours: <strong class="hours">' % (self.user.username,self.year,self.month,day) + str(total_hours) + '</strong></a></p>'
+                #else:
+                #    body = '<p>Total Hours: <strong class="hours">' + str(total_hours) + '</strong></p>'
                 s += '%s' % (body)
                 return self.day_cell(cssclass, s)
             return self.day_cell(cssclass, s)
@@ -88,10 +86,13 @@ class ReportCalendar(TimesheetCalendar):
             if date.today() == date(self.year,self.month,day):
                 cssclass += ' today'
             if day in self.shifts:
-                if not self.personal:
-                    s += '<p><a href="/chronos/report/%s/%s/%s">Shift Details</a></p>' % (self.year,self.month,day)
-                else:
-                    s += '<p><a href="/chronos/%s/%s/%s">Shift Details</a></p>' % (self.year,self.month,day)
+                #if not self.personal:
+                s += '<p><a href="/chronos/report/%s/%s/%s">Shift Details</a></p>' % (self.year,self.month,day)
+                    #s += '<p>Hello</p>'
+                #else:
+                    #s += '<p><a href="/chronos/%s/%s/%s/%s">Shift Details</a></p>' % (self.user,self.year,self.month,day)
+                    #s += '<p>World</p>'
+
                 return super(ReportCalendar,self).day_cell(cssclass,s)
             return super(ReportCalendar,self).day_cell(cssclass,s)
         return super(ReportCalendar,self).day_cell('noday','&nbsp;')
