@@ -74,7 +74,9 @@ def get_shifts(year,month,day=None,user=None,week=None,payperiod=None):
 
 
 def calc_shift_stats(shifts,year,month):
-
+    '''
+    This method returns various calculations regarding a collection of shifts in a given year and month.
+    '''
     payperiod_totals = {'first':0,'second':0}
     weekly = {}
     first_week = date(year,month,1).isocalendar()[1]
@@ -110,31 +112,34 @@ def calc_shift_stats(shifts,year,month):
     for i in range(0,len(weeks)):
         weekly_totals.append({'week':weeks[i], 'total': weekly[weeks[i]]})
 
-    alpha = {
+    result = {
         'weeks': weeks,
         'weekly_totals': weekly_totals,
         'payperiod_totals': payperiod_totals,
     }
-def calc_weeks(shifts, year, month):
-    """
-    This method is used to calculate which weeks staff have worked in.
-    Returns a list of week numbers where a shift occurs.
-    Example: [1,2,4] means shifts occurred in weeks 1,2,4 of the month/year.
-    """
-    weekly = []
-    first_week = date(year,month,1).isocalendar()[1]
 
-    #TODO: fix this hack around isocalendars calculating first week of the year, see #98
-    if month == 1 and first_week == 52:
-        first_week = 1
+    return result
 
-    for shift in shifts:
-        week_number = shift.intime.isocalendar()[1] - first_week + 1
-        if week_number not in weekly:
-            weekly.append(week_number)
-    #Sort the weekly shifts
-    weekly = sorted(weekly)
-    return weekly
+def prev_and_next_dates(year,month):
+    '''
+    This method returns a previous and upcomming months from a given month and year.
+    '''
+    #Figure out the prev and next months
+    if month == 1:
+        #Its January
+        prev_date = date(year-1,12,1)
+        next_date = date(year, 2,1)
+    elif month == 12:
+        #Its December
+        prev_date = date(year, 11,1)
+        next_date = date(year+1,1,1)
+    else:
+        #Its a regular month
+        prev_date = date(year,month-1,1)
+        next_date = date(year,month+1,1) 
+
+    result = {'prev_date':prev_date,'next_date':next_date}
+    return result
 
 @login_required
 def staff_report(request,year,month,day=None,user=None,week=None,payperiod=None):
@@ -152,7 +157,6 @@ def staff_report(request,year,month,day=None,user=None,week=None,payperiod=None)
 
 @login_required
 def specific_report(request,user,year,month,day=None,week=None,payperiod=None):
-
     """ This view is used when viewing specific shifts in the given day. (Table form)
     """
     
@@ -195,22 +199,15 @@ def report(request,user=None,year=None,month=None):
     month = int(month)
     shifts = get_shifts(year,month,None,user)
    
+    # Calculate the previous and upcomming months.
+    prev_and_next = prev_and_next_dates(year,month)
+    prev_date = prev_and_next['prev_date']
+    next_date = prev_and_next['next_date']
+
+    # Create calendar and compute stats
     calendar = mark_safe(ReportCalendar(shifts,user=user).formatmonth(year,month))
-    weeks  = calc_weeks(shifts,year,month)
-    
-    #Figure out the prev and next months
-    if month == 1:
-        #Its January
-        prev_date = date(year-1,12,1)
-        next_date = date(year, 2,1)
-    elif month == 12:
-        #Its December
-        prev_date = date(year, 11,1)
-        next_date = date(year+1,1,1)
-    else:
-        #Its a regular month
-        prev_date = date(year,month-1,1)
-        next_date = date(year,month+1,1) 
+    stats = calc_shift_stats(shifts,year,month)
+    weeks = stats['weeks']
 
     args = {
         'request': request,
@@ -235,8 +232,6 @@ def personal_report(request, user=None, year=None,month=None):
     else:
         user = User.objects.get(username=user)
 
-    #return report(request,year,month,user)
-
     # If the year and month are not given, assume it is the current year & month.
     if not year:
         year = date.today().year
@@ -256,55 +251,15 @@ def personal_report(request, user=None, year=None,month=None):
         shifts = None
         calendar = None
 
-    #TODO test
-    calc_shift_stats(shifts,year,month)
+    # Calculate the previous and upcomming months.
+    prev_and_next = prev_and_next_dates(year,month)
+    prev_date = prev_and_next['prev_date']
+    next_date = prev_and_next['next_date']
 
-    #Figure out the prev and next months
-    if month == 1:
-        #Its January
-        prev_date= date(year-1,12,1)
-        next_date = date(year, 2,1)
-    elif month == 12:
-        #Its December
-        prev_date = date(year, 11,1)
-        next_date = date(year+1,1,1)
-    else:
-        #Its a regular month
-        prev_date = date(year,month-1,1)
-        next_date = date(year,month+1,1) 
-
-    payperiod_totals = {'first':0,'second':0}
-    weekly = {}
-    first_week = date(year,month,1).isocalendar()[1]
-
-    if first_week == 52 and month == 1:
-        first_week = 1
-
-    for shift in shifts:
-        if shift.outtime:
-            shift_date = shift.intime
-            length = float(shift.length())
-
-            #Keep track of pay period totals
-            if shift_date.day <= 15:
-                #1st pay period
-                payperiod_totals['first'] += length
-            else:
-                #2nd pay period
-                payperiod_totals['second'] += length
-
-            #Keep track of weekly totals
-            week_number = shift_date.isocalendar()[1] - first_week + 1
-            if week_number in weekly:
-                weekly[week_number] += length
-            else:
-                weekly[week_number] = length
-
-    #Sort the weekly totals
-    weekly = sorted(weekly.items())
-    weekly_totals = []
-    for i in range(0,len(weekly)):
-        weekly_totals.append({'week':weekly[i][0],'total':weekly[i][1]})
+    #Compute shift stats
+    stats = calc_shift_stats(shifts,year,month)
+    payperiod_totals = stats['payperiod_totals']
+    weekly_totals = stats['weekly_totals']
 
     args = {
         'request': request,
