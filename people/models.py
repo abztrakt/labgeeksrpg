@@ -57,6 +57,20 @@ class Title(models.Model):
     def __unicode__(self):
         return self.name
 
+class WageChangeReason(models.Model):
+    """ Defines why a wage was given
+    """
+    title = models.CharField(max_length=256)
+    description = models.TextField(null=True,blank=True)
+
+class WageHistory (models.Model):
+    """ Defines wage histories for users
+    """
+    effective_date = models.DateField()
+    user = models.ForeignKey(User, related_name='uwnetid')
+    wage = models.FloatField()
+    wage_change_reason = models.ForeignKey(WageChangeReason)
+
 class UserProfile(models.Model):
     """ Defines additional things we should know about users.
     """
