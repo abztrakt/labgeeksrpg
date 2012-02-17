@@ -77,16 +77,34 @@ class WageHistory (models.Model):
     def __unicode__(self):
         return '%s - $%s' % (self.user,self.wage)
 
-'''
 class PerformanceReview(models.Model):
     """ Defines a review form used on staff
+        Used a base class for any review model
     """
-    user = models.ForiegnKey(User)
+    user = models.ForeignKey(User,related_name='user_review')
     date = models.DateField()
-    reviewer = models.ForiegnKey(User)
+    comments = models.TextField(null=True,blank=True)
+    reviewer = models.ForeignKey(User)
     is_used_up = models.BooleanField()
     is_final = models.BooleanField()
-'''
+
+class UWLTReview(PerformanceReview):
+    """ A specific review model
+    """
+    teamwork = models.IntegerField(null=True,blank=True)
+    customer_service = models.IntegerField(null=True,blank=True)
+    dependability = models.IntegerField(null=True,blank=True)
+    integrity = models.IntegerField(null=True,blank=True)
+    communication = models.IntegerField(null=True,blank=True)
+    initiative = models.IntegerField(null=True,blank=True)
+    attitude = models.IntegerField(null=True,blank=True)
+    productivity = models.IntegerField(null=True,blank=True)
+    technical_knowledge = models.IntegerField(null=True,blank=True)
+    responsibility = models.IntegerField(null=True,blank=True)
+    policies = models.IntegerField(null=True,blank=True)
+    procedures = models.IntegerField(null=True,blank=True)
+    missed_shifts = models.IntegerField(null=True,blank=True)
+    tardies = models.IntegerField(null=True,blank=True)
 
 class UserProfile(models.Model):
     """ Defines additional things we should know about users.
