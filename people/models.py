@@ -77,6 +77,17 @@ class WageHistory (models.Model):
     def __unicode__(self):
         return '%s - $%s' % (self.user,self.wage)
 
+'''
+class PerformanceReview(models.Model):
+    """ Defines a review form used on staff
+    """
+    user = models.ForiegnKey(User)
+    date = models.DateField()
+    reviewer = models.ForiegnKey(User)
+    is_used_up = models.BooleanField()
+    is_final = models.BooleanField()
+'''
+
 class UserProfile(models.Model):
     """ Defines additional things we should know about users.
     """
@@ -96,7 +107,7 @@ class UserProfile(models.Model):
     phone = models.CharField(max_length=12, null=True,blank=True)
     alt_phone = models.CharField(max_length=12, null=True, blank=True)
     site_skin = models.CharField(max_length=256, null=True, blank=True)
-    wage = models.ForeignKey(WageHistory,null=True,blank=True)
+    wage = models.ManyToManyField(WageHistory,null=True,blank=True)
 
     def __unicode__(self):
         return "%s %s [%s]" % (self.user.first_name, self.user.last_name, self.user.username)
