@@ -67,7 +67,7 @@ class WageHistory (models.Model):
     """ Defines wage histories for users
     """
     effective_date = models.DateField()
-    user = models.ForeignKey(User, related_name='uwnetid')
+    user = models.ForeignKey(User)
     wage = models.FloatField()
     wage_change_reason = models.ForeignKey(WageChangeReason)
 

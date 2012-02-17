@@ -27,6 +27,9 @@ class TitleAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 admin.site.register(Title, TitleAdmin)
 
+admin.site.register(WageHistory)
+admin.site.register(WageChangeReason)
+
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'status', 'start_date', 'grad_date', 'supervisor', 'title', 'office',)
     search_fields = ('user', 'title', 'office', 'phone', 'alt_phone',)
