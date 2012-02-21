@@ -3,8 +3,23 @@
 {% block pageJS %}
 <script type="text/javascript">
     $(function() {
-            $('#id_grad_date').datepicker();
+            $('#id_date').datepicker();
+            // Javascript associated with tabs.
+            $(".tab_content").hide();
+            $("ul.tabs li:first").addClass("active").show(); //Activate first tab
+            $(".tab_content:first").show(); //Show first tab content
+
+            //On Click Event
+            $("ul.tabs li").click(function() {
+                $("ul.tabs li").removeClass("active"); //Remove any "active" class
+                $(this).addClass("active"); //Add "active" class to selected tab
+                $(".tab_content").hide(); //Hide all tab content
+                var activeTab = $(this).find("a").attr("href"); //Find the href attribute value to identify the active tab + content
+                $(activeTab).show();
+                return false;
+            });
     });
+
 </script>
 {% endblock %}
 
@@ -15,22 +30,47 @@
 </div>
 
 <hr class="separator"/>
-<div id="normal_box">
-    <div class="form_box">
-        <form action="" method='post' id="create_user_profile" enctype="multipart/form-data">{% csrf_token %}
-                
-            {% for field in form.visible_fields %}
-           
-            <div class="review_field">
-                <strong>{{field.label_tag}}</strong>
-                {{field}}
-            </div>
 
+<ul class="tabs">
+    <li><a href="#view"><span>View</span></a></li>
+    <li><a href="#create"><span>Create/edit</span></a></li>
+</ul>
+
+
+<div class="tab_container">
+    
+    <div id="view" class="tab_content">
+        <div class="form_box">
+        {% if reviews %}
+            {% for review in reviews %}
+                {{review}}
             {% endfor %}
 
-            <input type="submit" value="Save"/>
-            <input type="hidden" name="next" value="{{next}}"/>
-        </form>
+        {% else %}
+            <p>No Reviews</p>
+        {% endif %}
+        </div>
+    </div>
+
+    <div id="create" class="tab_content">
+        <div id="normal_box">
+            <div class="form_box">
+                <form action="" method='post' id="create_user_profile" enctype="multipart/form-data">{% csrf_token %}
+                        
+                    {% for field in form.visible_fields %}
+                   
+                    <div class="review_field">
+                        <strong>{{field.label_tag}}</strong>
+                        {{field}}
+                    </div>
+
+                    {% endfor %}
+
+                    <input type="submit" value="Save"/>
+                    <input type="hidden" name="next" value="{{next}}"/>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

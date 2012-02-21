@@ -112,6 +112,7 @@ def view_and_edit_reviews(request,name):
     args = {
         'request': request,
         'form': form,
+        'reviews': reviews,
         'this_user': request.user,
     }
 
