@@ -337,6 +337,22 @@ May have to place in its own css file for easier future editing.
     font-size: 1.8em;
 }
 
+.review_field {
+    margin: 2.5em 1em 1em;
+}
+
+.review_field ul{
+    display: block;
+}
+
+.review_field li{
+    float: left;
+    margin-right: 1em;
+}
+
+.review_field textarea{
+    display: block;
+}
 
 /*
 Calendar CSS

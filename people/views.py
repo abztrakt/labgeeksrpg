@@ -6,7 +6,7 @@ from django.core.context_processors import csrf
 from datetime import date
 
 from people.forms import *
-from people.models import UserProfile
+from people.models import *
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 @login_required
@@ -90,4 +90,30 @@ def create_user_profile(request,name):
         message += name + "."
 
     return render_to_response('create_profile.html',locals(),context_instance=RequestContext(request))
+
+@login_required
+def view_and_edit_reviews(request,name):
+
+    user = User.objects.get(username=name)
+    try:
+        reviews = UWLTReview.objects.filter(user=user)
+    except UWLTReview.DoesNotExist:
+        reviews = None
+
+    if request.method == 'POST':
+        form = CreateUWLTReviewForm(request.POST)#,instance=profile)
+        if form.is_valid:
+            pass
+        else:
+            pass
+    else:
+        form = CreateUWLTReviewForm()
+
+    args = {
+        'request': request,
+        'form': form,
+        'this_user': request.user,
+    }
+
+    return render_to_response('reviews.html', args, context_instance=RequestContext(request))
 

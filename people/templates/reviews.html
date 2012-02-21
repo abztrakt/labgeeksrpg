@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block pageJS %}
+<script type="text/javascript">
+    $(function() {
+            $('#id_grad_date').datepicker();
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="section">
+    <h1>Hello {{this_user}}.</h1>
+    <h2></h2>
+</div>
+
+<hr class="separator"/>
+<div id="normal_box">
+    <div class="form_box">
+        <form action="" method='post' id="create_user_profile" enctype="multipart/form-data">{% csrf_token %}
+                
+            {% for field in form.visible_fields %}
+           
+            <div class="review_field">
+                <strong>{{field.label_tag}}</strong>
+                {{field}}
+            </div>
+
+            {% endfor %}
+
+            <input type="submit" value="Save"/>
+            <input type="hidden" name="next" value="{{next}}"/>
+        </form>
+    </div>
+</div>
+{% endblock %}
