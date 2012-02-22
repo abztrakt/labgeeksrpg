@@ -355,6 +355,10 @@ May have to place in its own css file for easier future editing.
     display: block;
 }
 
+#view_reviews {
+    background: none repeat scroll 0 0 #F5F5F5;
+    border: 1px solid #E5E5E5;
+}
 
 /*
 Calendar CSS

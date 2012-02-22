@@ -1,0 +1,28 @@
+{% block view_reviews %}
+<div id="view_reviews" class="tab_content">
+    {% if reviews %}
+        {% for review in reviews %}
+            <div id="review_info">
+                <div id="review_heading">
+                    <div id="review_title">{{review.user}}</div>
+                    <div id="review_date">{{review.date}}</div>
+                </div>
+                <div id="review_details">
+                    <strong class="review_section">Scoring:</strong>
+                    <ul>
+                        {% for field, value in review.scores.iteritems %}
+                            <li><strong>{{field}}:</strong> {{value}}</li>
+                        {% endfor %}
+                    </ul>
+                    <strong class="review_section">Comments:</strong>
+                    <p>{{review.comments}}</p>
+                </div>
+            </div>
+        {%endfor %}
+
+    {% else %}
+        <p>No Reviews</p>
+    {% endif %}
+</div>
+
+{% endblock %}
