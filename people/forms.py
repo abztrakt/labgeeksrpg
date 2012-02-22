@@ -22,7 +22,16 @@ class CreateUserProfileForm(ModelForm):
         model = UserProfile
         fields = ('staff_photo','call_me_by','working_periods', 'grad_date','office','about_me','phone','alt_phone','site_skin')
 
-class CreateUWLTReviewForm(ModelForm):
+
+class CreatePerformanceReviewForm(ModelForm):
+    def save(self,*args,**kwargs):
+        inst = ModelForm.save(self,*args,**kwargs)
+        return inst
+
+    class Meta:
+        model = PerformanceReview
+        
+class CreateUWLTReviewForm(CreatePerformanceReviewForm):
 
     RANK_CHOICES = [(i,i) for i in range (0,6)]
 
@@ -42,7 +51,7 @@ class CreateUWLTReviewForm(ModelForm):
     #tardies = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES)
 
     def save(self,*args,**kwargs):
-        inst = ModelFOrm.save(self, *args, **kwargs)
+        inst = ModelForm.save(self, *args, **kwargs)
         return inst
 
     class Meta:
@@ -62,7 +71,6 @@ class CreateUWLTReviewForm(ModelForm):
             'policies',
             'procedures', 
             'comments',
-            'is_used_up',
             'is_final',
         )
-        exclude = ('FIELD','user','reviewer',)
+        exclude = ('user','reviewer',)
