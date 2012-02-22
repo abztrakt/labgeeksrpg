@@ -92,29 +92,60 @@ def create_user_profile(request,name):
     return render_to_response('create_profile.html',locals(),context_instance=RequestContext(request))
 
 @login_required
-def view_and_edit_reviews(request,name):
+def view_and_edit_reviews(request,user):
 
-    user = User.objects.get(username=name)
+    # Grab the user and any reviews they may have. 
+    user = User.objects.get(username=user)
+    this_user = request.user
     try:
         reviews = UWLTReview.objects.filter(user=user)
     except UWLTReview.DoesNotExist:
         reviews = None
 
     if request.method == 'POST':
-        form = CreateUWLTReviewForm(request.POST)#,instance=profile)
+        form = CreateUWLTReviewForm(request.POST)
         if form.is_valid:
-            pass
-        else:
-            pass
+            review = form.save(commit=False)
+            review.user = user
+            review.reviewer = this_user
+            review.is_used_up = False
+            review.is_final = False
+            review.save()
+            form.save_m2m()
     else:
         form = CreateUWLTReviewForm()
+
+    sorted_review_list = []
+    for review in reviews:
+
+        scores = {
+            'Teamwork': review.teamwork,
+            'Customer service': review.customer_service,
+            'Dependability': review.dependability,
+            'Integrity': review.integrity,
+            'Communication': review.communication,
+            'Initiative': review.initiative,
+            'Attitude': review.attitude,
+            'Productivity': review.productivity,
+            'Technical knowledge': review.technical_knowledge,
+            'Responsibility': review.responsibility,
+            'Policies': review.policies,
+            'Procedures': review.procedures,
+        }
+        comments = review.comments
+        date = review.date
+        sorted_review_list.append({'user':user, 'date':date, 'scores': scores, 'comments':comments})
+        
+
+    #import pdb; pdb.set_trace()
 
     args = {
         'request': request,
         'form': form,
-        'reviews': reviews,
-        'this_user': request.user,
+        'reviews': sorted_review_list,
+        'this_user': this_user,
+        'user': user,
     }
-
+    #import pdb; pdb.set_trace()
     return render_to_response('reviews.html', args, context_instance=RequestContext(request))
 

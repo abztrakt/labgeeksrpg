@@ -106,6 +106,9 @@ class UWLTReview(PerformanceReview):
     missed_shifts = models.IntegerField(null=True,blank=True)
     tardies = models.IntegerField(null=True,blank=True)
 
+    def get_fields(self):
+        return  [(field.name, field.value_to_string(self)) for field in UWLTReview._meta.fields]
+
 class UserProfile(models.Model):
     """ Defines additional things we should know about users.
     """

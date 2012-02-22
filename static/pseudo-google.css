@@ -79,7 +79,7 @@ thead {
 	background-color: #F5F5F5;
     border-bottom: 1px solid #E5E5E5;
 	font-size: 12pt;
-	padding-left: 1em;
+	padding: 1em;
     margin-bottom: 1em;
 }
 
@@ -213,7 +213,6 @@ form input[type="text"], form input[type="password"]{
 }
 
 ul{
-    padding: 1em;
     line-height: 17px;
     list-style: none outside none;
 }
@@ -339,10 +338,12 @@ May have to place in its own css file for easier future editing.
 
 .review_field {
     margin: 2.5em 1em 1em;
+    display: block;
 }
 
 .review_field ul{
     display: block;
+    padding: 1em;
 }
 
 .review_field li{
@@ -353,6 +354,7 @@ May have to place in its own css file for easier future editing.
 .review_field textarea{
     display: block;
 }
+
 
 /*
 Calendar CSS
@@ -658,27 +660,35 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     cursor: pointer;
 }
 
-#timeperiod_info{
+#timeperiod_info, #review_info{
     margin: 1em;
 }
 
 
-#timeperiod_heading{
+#timeperiod_heading, #review_heading{
     border-top: 1px solid #DD4B39;
     border-left: 10px solid #DD4B39;
     padding: 10px;
 }
 
-#timeperiod_title{
+#timeperiod_title, #review_title{
     text-align: left;
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 3px;
 }
 
-#timeperiod_details{
+.review_section{
+    text-align: left;
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+#timeperiod_details, #review_details{
     margin-left: 2em;
 }
+
 
 #timeperiod_info ul{
     margin: 0;
