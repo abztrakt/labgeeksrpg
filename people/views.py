@@ -135,9 +135,6 @@ def view_and_edit_reviews(request,user):
         comments = review.comments
         date = review.date
         sorted_review_list.append({'user':user, 'date':date, 'scores': scores, 'comments':comments})
-        
-
-    #import pdb; pdb.set_trace()
 
     args = {
         'request': request,

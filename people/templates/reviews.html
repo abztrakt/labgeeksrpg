@@ -44,7 +44,7 @@
     <div id="create_review" class="tab_content">
         <div id="normal_box">
             <div class="form_box">
-                <form action="" method='post' id="create_user_profile" enctype="multipart/form-data">{% csrf_token %}
+                <form action="" method='post' enctype="multipart/form-data">{% csrf_token %}
                         
                     <div class="review_field">
                         <strong>User:</strong> {{user}}
@@ -53,6 +53,7 @@
                     {% for field in form.visible_fields %}
                         <div class="review_field">
                             <strong>{{field.label_tag}}</strong>
+                            <p>{{field.help_text}}</p>
                             {{field}}
                         </div>
                     {% endfor %}

@@ -34,19 +34,33 @@ class CreatePerformanceReviewForm(ModelForm):
 class CreateUWLTReviewForm(CreatePerformanceReviewForm):
 
     RANK_CHOICES = [(i,i) for i in range (0,6)]
+    HELP_TEXT_CHOICES = {
+        'teamwork': 'Participates effectively in team efforts and encourages others. Treats people with fairness and respect. Carefully considers other points of view. Promotes collaboration amongst all student staff.',
+        'customer_service': 'Is professional in dealing with customers and satisfies their needs within the parameters of the service we provide.',
+        'dependability': 'Is responsible and punctual, has good attendance, and finds a substitute when unable to work.',
+        'integrity': 'Adheres to the UW principles and standards of conduct. Actively demonstrates commitment to UW computing policies. Honors commitments, earns trust.',
+        'communication':'Expresses thoughts clearly in a way others understand and accept.',
+        'initiative': 'Offers suggestions for new or better methods of operations. Looks for opertunities for self improvment.',
+        'attitude': 'Is enthusiastic, interested, dilligent, and courteous.',
+        'productivity':'Takes initiative to complete tasks and achieve goals. Plans and organizes work to improve output. Completes assigned projects by agreed completion date.',
+        'technical_knowledge': 'Has increased knowledge of hardware and/or software. Is up to date with the development of the UWTSC technical environment.',
+        'responsibility': 'Willingness to take on responsibility.',
+        'policies':'Knows and enforces UW, C&C and staff policies.',
+        'procedures':'Understands and follows departamental procedures.',
+    }
 
-    teamwork = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES)
-    customer_service = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES)
-    dependability = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES)
-    integrity = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES)
-    communication = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES)
-    initiative = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES)
-    attitude = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES)
-    productivity = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES)
-    technical_knowledge = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES)
-    responsibility = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES)
-    policies = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES)
-    procedures = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES)
+    teamwork = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text = HELP_TEXT_CHOICES['teamwork']) 
+    customer_service = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text = HELP_TEXT_CHOICES['customer_service'])
+    dependability = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text = HELP_TEXT_CHOICES['dependability'])
+    integrity = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text = HELP_TEXT_CHOICES['integrity'])
+    communication = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text = HELP_TEXT_CHOICES['communication'])
+    initiative = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text = HELP_TEXT_CHOICES['initiative'])
+    attitude = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text = HELP_TEXT_CHOICES['attitude'])
+    productivity = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text = HELP_TEXT_CHOICES['productivity'])
+    technical_knowledge = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text = HELP_TEXT_CHOICES['technical_knowledge'])
+    responsibility = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES,help_text = HELP_TEXT_CHOICES['responsibility'])
+    policies = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES,help_text = HELP_TEXT_CHOICES['policies'])
+    procedures = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES,help_text = HELP_TEXT_CHOICES['procedures'])
     #missed_shifts = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES)
     #tardies = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES)
 
