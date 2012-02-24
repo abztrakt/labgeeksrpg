@@ -33,7 +33,7 @@
 
 <ul class="tabs">
     <li><a href="#view_reviews"><span>View</span></a></li>
-    <li><a href="#create_review"><span>Create/edit</span></a></li>
+    <li><a href="#create_review"><span>Edit | Create</span></a></li>
 </ul>
 
 
@@ -47,6 +47,9 @@
                 <form action="" method='post' enctype="multipart/form-data">{% csrf_token %}
                         
                     <div class="review_field">
+                        {% if badge_photo %}
+                            <img src="{{badge_photo}}" alt="badge_photo" class="photo"/> 
+                        {% endif %}
                         <strong>User:</strong> {{user}}
                     </div>
 

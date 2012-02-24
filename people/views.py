@@ -96,6 +96,11 @@ def view_and_edit_reviews(request,user):
 
     # Grab the user and any reviews they may have. 
     user = User.objects.get(username=user)
+    try:
+        badge_photo = UserProfile.objects.get(user=user).bagde_photo._get_url()
+    except:
+        badge_photo = None
+
     this_user = request.user
     try:
         reviews = UWLTReview.objects.filter(user=user)
@@ -142,7 +147,7 @@ def view_and_edit_reviews(request,user):
         'reviews': sorted_review_list,
         'this_user': this_user,
         'user': user,
+        'badge_photo': badge_photo,
     }
-    #import pdb; pdb.set_trace()
     return render_to_response('reviews.html', args, context_instance=RequestContext(request))
 

@@ -275,7 +275,7 @@ May have to place in its own css file for easier future editing.
 }
 
 
-#user_profile img{
+#user_profile img, .photo{
     max-width: 17em;
     max-height: 17em;
     float: left;
