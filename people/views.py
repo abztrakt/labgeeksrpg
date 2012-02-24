@@ -96,6 +96,13 @@ def view_and_edit_reviews(request,user):
 
     # Grab the user and any reviews they may have. 
     user = User.objects.get(username=user)
+
+    if request.user.has_perm('UWLTReview.can_add'):
+        can_add_review = True
+    else:
+        can_add_review = False
+
+
     try:
         badge_photo = UserProfile.objects.get(user=user).bagde_photo._get_url()
     except:
@@ -148,6 +155,7 @@ def view_and_edit_reviews(request,user):
         'this_user': this_user,
         'user': user,
         'badge_photo': badge_photo,
+        'can_add_review': can_add_review,
     }
     return render_to_response('reviews.html', args, context_instance=RequestContext(request))
 
