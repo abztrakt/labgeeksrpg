@@ -47,6 +47,9 @@
         <div id="normal_box">
             <div class="form_box">
                 <form action="" method='post' enctype="multipart/form-data">{% csrf_token %}
+                    {% if recent_message %}
+                        <strong>{{recent_message}}</strong>
+                    {% endif %}
                         
                     <div class="review_field">
                         {% if badge_photo %}

@@ -116,22 +116,11 @@ def view_and_edit_reviews(request,user):
     except UWLTReview.DoesNotExist:
         reviews = None
 
-    if request.method == 'POST':
-        form = CreateUWLTReviewForm(request.POST)
-        if form.is_valid:
-            review = form.save(commit=False)
-            review.user = user
-            review.reviewer = this_user
-            review.is_used_up = False
-            review.is_final = False
-            review.save()
-            form.save_m2m()
-    else:
-        form = CreateUWLTReviewForm()
-
+    
     sorted_review_list = []
+    recent_review = None
     for review in reviews:
-
+        
         scores = {
             'Teamwork': review.teamwork,
             'Customer service': review.customer_service,
@@ -148,7 +137,26 @@ def view_and_edit_reviews(request,user):
         }
         comments = review.comments
         date = review.date
-        sorted_review_list.append({'user':user, 'date':date, 'scores': scores, 'comments':comments})
+        sorted_review_list.append({'user':user, 'date':review.date, 'scores': scores, 'comments':comments})
+        if review.reviewer == this_user:
+            recent_review = review
+
+    if request.method == 'POST':
+        form = CreateUWLTReviewForm(request.POST, instance=recent_review)
+        if form.is_valid:
+            review = form.save(commit=False)
+            review.user = user
+            review.reviewer = this_user
+            review.is_used_up = False
+            review.is_final = False
+            review.save()
+            form.save_m2m()
+    else:
+        form = CreateUWLTReviewForm(instance=recent_review)
+
+    recent_message = ''
+    if recent_review:
+        recent_message = 'Looks like you made a review for %s on %s. Saved entries have been filled out.' % (user,recent_review.date)
 
     args = {
         'request': request,
@@ -158,6 +166,7 @@ def view_and_edit_reviews(request,user):
         'user': user,
         'badge_photo': badge_photo,
         'can_add_review': can_add_review,
+        'recent_message': recent_message,
     }
     return render_to_response('reviews.html', args, context_instance=RequestContext(request))
 
