@@ -61,8 +61,6 @@ class CreateUWLTReviewForm(CreatePerformanceReviewForm):
     responsibility = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES,help_text = HELP_TEXT_CHOICES['responsibility'])
     policies = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES,help_text = HELP_TEXT_CHOICES['policies'])
     procedures = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES,help_text = HELP_TEXT_CHOICES['procedures'])
-    #missed_shifts = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES)
-    #tardies = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES)
 
     def save(self,*args,**kwargs):
         inst = ModelForm.save(self, *args, **kwargs)
@@ -85,6 +83,14 @@ class CreateUWLTReviewForm(CreatePerformanceReviewForm):
             'policies',
             'procedures', 
             'comments',
-            'is_final',
         )
         exclude = ('user','reviewer',)
+
+class CreateFinalUWLTReviewForm(CreateUWLTReviewForm):
+
+    missed_shifts = forms.IntegerField()
+    tardies = forms.IntegerField()
+    is_final = forms.BooleanField()
+    def __init__(self,*args,**kwargs):
+        super(CreateUWLTReviewForm,self).__init__(*args,**kwargs)
+        

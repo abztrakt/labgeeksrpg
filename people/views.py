@@ -97,14 +97,19 @@ def view_and_edit_reviews(request,user):
     # Grab the user and any reviews they may have. 
     user = User.objects.get(username=user)
     this_user = request.user
-
-    if this_user.has_perm('UWLTReview.can_add'):
+    if this_user.has_perm('people.add_uwltreview'):
         can_add_review = True
     else:
         can_add_review = False
-    
+
     if not can_add_review and this_user != user:
         return render_to_response('fail.html',locals(),context_instance=RequestContext(request))
+
+    # TODO: Try to not use the is_superuser permission, instead maybe use a group permission.
+    if this_user.is_superuser:
+        final_reviewer = True
+    else:
+        final_reviewer = False
 
     try:
         badge_photo = UserProfile.objects.get(user=user).bagde_photo._get_url()
@@ -116,7 +121,7 @@ def view_and_edit_reviews(request,user):
     except UWLTReview.DoesNotExist:
         reviews = None
 
-    
+    # Gather the data from the reviews and separate out fields.    
     sorted_review_list = []
     recent_review = None
     for review in reviews:
@@ -141,8 +146,14 @@ def view_and_edit_reviews(request,user):
         if review.reviewer == this_user:
             recent_review = review
 
+    # Handle the form submission and differentiate between the sub-reviewers and the final reviewer. 
     if request.method == 'POST':
-        form = CreateUWLTReviewForm(request.POST, instance=recent_review)
+
+        if final_reviewer:
+            form = CreateFinalUWLTReviewForm(request.POST, instance=recent_review)
+        else:
+            form = CreateUWLTReviewForm(request.POST, instance=recent_review)
+
         if form.is_valid:
             review = form.save(commit=False)
             review.user = user
@@ -152,8 +163,12 @@ def view_and_edit_reviews(request,user):
             review.save()
             form.save_m2m()
     else:
-        form = CreateUWLTReviewForm(instance=recent_review)
+        if final_reviewer:
+            form = CreateFinalUWLTReviewForm(request.POST, instance = recent_review)
+        else:
+            form = CreateUWLTReviewForm(instance=recent_review)
 
+    # Notify the user of a previous review.
     recent_message = ''
     if recent_review:
         recent_message = 'Looks like you made a review for %s on %s. Saved entries have been filled out.' % (user,recent_review.date)
