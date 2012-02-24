@@ -101,7 +101,9 @@ def view_and_edit_reviews(request,user):
         can_add_review = True
     else:
         can_add_review = False
-
+    
+    if not can_add_review and request.user.__str__() != user.username:
+        return render_to_response('fail.html',locals(),context_instance=RequestContext(request))
 
     try:
         badge_photo = UserProfile.objects.get(user=user).bagde_photo._get_url()
