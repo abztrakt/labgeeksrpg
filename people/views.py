@@ -96,13 +96,14 @@ def view_and_edit_reviews(request,user):
 
     # Grab the user and any reviews they may have. 
     user = User.objects.get(username=user)
+    this_user = request.user
 
-    if request.user.has_perm('UWLTReview.can_add'):
+    if this_user.has_perm('UWLTReview.can_add'):
         can_add_review = True
     else:
         can_add_review = False
     
-    if not can_add_review and request.user.__str__() != user.username:
+    if not can_add_review and this_user != user:
         return render_to_response('fail.html',locals(),context_instance=RequestContext(request))
 
     try:
@@ -110,7 +111,6 @@ def view_and_edit_reviews(request,user):
     except:
         badge_photo = None
 
-    this_user = request.user
     try:
         reviews = UWLTReview.objects.filter(user=user)
     except UWLTReview.DoesNotExist:
