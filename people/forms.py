@@ -69,7 +69,6 @@ class CreateUWLTReviewForm(CreatePerformanceReviewForm):
     class Meta:
         model = UWLTReview
         fields = (
-            'date',
             'teamwork',
             'customer_service',
             'dependability', 
@@ -84,7 +83,7 @@ class CreateUWLTReviewForm(CreatePerformanceReviewForm):
             'procedures', 
             'comments',
         )
-        exclude = ('user','reviewer',)
+        exclude = ('user','reviewer','date')
 
 class CreateFinalUWLTReviewForm(CreateUWLTReviewForm):
 

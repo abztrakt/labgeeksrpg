@@ -3,7 +3,7 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
-from datetime import date
+from datetime import datetime
 
 from people.forms import *
 from people.models import *
@@ -148,7 +148,7 @@ def view_and_edit_reviews(request,user):
 
     # Handle the form submission and differentiate between the sub-reviewers and the final reviewer. 
     if request.method == 'POST':
-
+        
         if final_reviewer:
             form = CreateFinalUWLTReviewForm(request.POST, instance=recent_review)
         else:
@@ -157,6 +157,7 @@ def view_and_edit_reviews(request,user):
         if form.is_valid:
             review = form.save(commit=False)
             review.user = user
+            review.date = datetime.now().date()
             review.reviewer = this_user
             review.is_used_up = False
             review.is_final = False
