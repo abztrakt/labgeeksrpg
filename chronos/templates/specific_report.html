@@ -17,12 +17,12 @@
 
     {% for shift in shifts %}
     <tr>
-        <td>{{ shift.person }} </td>
+        <td>{{ shift.person }}</td>
         <td>{{ shift.in_clock.location }}</td>
-        <td>{{ shift.intime }} </td>
-        <td>{{ shift.outtime}} </td>
-        <td>{{ shift.length }} </td>
-        <td>{{ shift.shiftnote}}</td>
+        <td>{{ shift.intime }}</td>
+        <td>{{ shift.outtime }}</td>
+        <td>{{ shift.length }}</td>
+        <td>{{ shift.shiftinnote }}<br />{{ shift.shiftoutnote }}</td>
 
     </tr>
     {% endfor %}
