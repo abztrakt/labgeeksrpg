@@ -116,47 +116,14 @@ def view_and_edit_reviews(request,user):
     except:
         badge_photo = None
 
+    # Handle the form submission and differentiate between the sub-reviewers and the final reviewer.
     try:
-        reviews = UWLTReview.objects.filter(user=user).order_by('-date')
-    except UWLTReview.DoesNotExist:
-        reviews = None
+        recent_review = UWLTReview.objects.filter(reviewer=this_user,user=user).order_by('-date')[0]
+    except:
+        recent_review = None
 
-    # Gather the data from the reviews and separate out fields.    
-    sorted_review_list = []
-    recent_review = None
-    review_stats = {}
-
-    for review in reviews:
-        scores = {
-            'teamwork': review.teamwork,
-            'customer service': review.customer_service,
-            'dependability': review.dependability,
-            'integrity': review.integrity,
-            'communication': review.communication,
-            'initiative': review.initiative,
-            'attitude': review.attitude,
-            'productivity': review.productivity,
-            'technical knowledge': review.technical_knowledge,
-            'responsibility': review.responsibility,
-            'policies': review.policies,
-            'procedures': review.procedures,
-        }
-        sorted_review_list.append({'user':user, 'date':review.date, 'scores': scores, 'comments':review.comments})
-        if review.reviewer == this_user and not recent_review:
-            recent_review = review
-
-        # Separate out the fields for the final reviewer to see.
-        if final_reviewer:
-            for key,value in scores.items():
-                stats = {'value': value, 'reviewer': review.reviewer}
-                if key in review_stats.keys():
-                    review_stats[key].append(stats)
-                else:
-                    review_stats[key] = [stats]
-
-    # Handle the form submission and differentiate between the sub-reviewers and the final reviewer. 
     if request.method == 'POST':
-        
+            
         if final_reviewer:
             form = CreateFinalUWLTReviewForm(request.POST, instance=recent_review)
         else:
@@ -176,6 +143,41 @@ def view_and_edit_reviews(request,user):
             form = CreateFinalUWLTReviewForm(instance=recent_review)
         else:
             form = CreateUWLTReviewForm(instance=recent_review)
+
+    try:
+        reviews = UWLTReview.objects.filter(user=user).order_by('-date')
+    except UWLTReview.DoesNotExist:
+        reviews = None
+
+    # Gather the data from the reviews and separate out fields.    
+    sorted_review_list = []
+    review_stats = {}
+
+    for review in reviews:
+        scores = {
+            'teamwork': review.teamwork,
+            'customer service': review.customer_service,
+            'dependability': review.dependability,
+            'integrity': review.integrity,
+            'communication': review.communication,
+            'initiative': review.initiative,
+            'attitude': review.attitude,
+            'productivity': review.productivity,
+            'technical knowledge': review.technical_knowledge,
+            'responsibility': review.responsibility,
+            'policies': review.policies,
+            'procedures': review.procedures,
+        }
+        sorted_review_list.append({'user':user, 'date':review.date, 'scores': scores, 'comments':review.comments})
+
+        # Separate out the fields for the final reviewer to see.
+        if final_reviewer:
+            for key,value in scores.items():
+                stats = {'value': value, 'reviewer': review.reviewer}
+                if key in review_stats.keys():
+                    review_stats[key].append(stats)
+                else:
+                    review_stats[key] = [stats]
 
     # Create a list of all of the review fields and append review stats along with them. The stats won't be appended if the review isn't a final one.
     form_fields = []
