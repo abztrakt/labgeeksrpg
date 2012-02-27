@@ -58,11 +58,20 @@
                         <strong>User:</strong> {{user}}
                     </div>
 
-                    {% for field in form.visible_fields %}
+                    {% for field in form_fields %}
                         <div class="review_field">
                             <strong>{{field.label_tag}}</strong>
                             <p>{{field.help_text}}</p>
-                            {{field}}
+                            {% if field.stats %}
+                            <p>Lead's other scores:</p>
+                                <ul class="other_scores">
+                                {% for stat in field.stats %}
+                                    <li>{{stat.value}} - {{stat.reviewer}}</li>
+                                {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {{field.field}}
+                            {%
                         </div>
                     {% endfor %}
 
