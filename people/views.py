@@ -118,7 +118,7 @@ def view_and_edit_reviews(request,user):
 
     # Handle the form submission and differentiate between the sub-reviewers and the final reviewer.
     try:
-        recent_review = UWLTReview.objects.filter(reviewer=this_user,user=user).order_by('-date')[0]
+        recent_review = UWLTReview.objects.filter(reviewer=this_user,user=user,is_final=False).order_by('-date')[0]
     except:
         recent_review = None
 
@@ -128,14 +128,15 @@ def view_and_edit_reviews(request,user):
             form = CreateFinalUWLTReviewForm(request.POST, instance=recent_review)
         else:
             form = CreateUWLTReviewForm(request.POST, instance=recent_review)
-            
         if form.is_valid():
             review = form.save(commit=False)
             review.user = user
             review.date = datetime.now().date()
             review.reviewer = this_user
             review.is_used_up = False
-            review.is_final = False
+            #review.missed_shifts = form.cleaned_data['missed_shifts']
+            #review.tardies = form.cleaned_data['tardies']
+            #review.is_final = form.cleaned_data['is_final']
             review.save()
             form.save_m2m()
     else:
@@ -168,7 +169,8 @@ def view_and_edit_reviews(request,user):
             'policies': review.policies,
             'procedures': review.procedures,
         }
-        sorted_review_list.append({'user':user, 'date':review.date, 'scores': scores, 'comments':review.comments})
+        if review.is_final:
+            sorted_review_list.append({'user':user, 'date':review.date, 'scores': scores, 'comments':review.comments})
 
         # Separate out the fields for the final reviewer to see.
         if final_reviewer:
@@ -214,6 +216,5 @@ def view_and_edit_reviews(request,user):
         'can_add_review': can_add_review,
         'recent_message': recent_message,
     }
-    #import pdb; pdb.set_trace()
     return render_to_response('reviews.html', args, context_instance=RequestContext(request))
 

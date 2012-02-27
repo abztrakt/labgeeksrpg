@@ -92,4 +92,23 @@ class CreateFinalUWLTReviewForm(CreateUWLTReviewForm):
     is_final = forms.BooleanField(required=False)
     def __init__(self,*args,**kwargs):
         super(CreateUWLTReviewForm,self).__init__(*args,**kwargs)
-        
+
+    class Meta(CreateUWLTReviewForm.Meta):
+         fields = (
+            'teamwork',
+            'customer_service',
+            'dependability', 
+            'integrity', 
+            'communication',
+            'initiative', 
+            'attitude', 
+            'productivity', 
+            'technical_knowledge', 
+            'responsibility',
+            'policies',
+            'procedures', 
+            'comments',
+            'missed_shifts',
+            'tardies',
+            'is_final',
+        )
