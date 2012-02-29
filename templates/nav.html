@@ -10,5 +10,6 @@
     {% if request.user.is_staff %}<li><a class="{% active_tab request "/admin"%}" href="/admin">Admin</a></li>{% endif %}
     {% if request.user.is_authenticated %}<li><a class="{% active_tab request "/logout" %}" href="/logout">Log-out</a></li>
     {% else %}<li><a class="{% active_tab request "/login" %}" href="/login">Log-in</a></li>{% endif %}
+    {# {% if request.user. %}<li><a class="{% active_tab request "people/{% user %}" %}" href="people/{% user %}"><img src="" /></a></li>{% endif %} #}
 </ul>
 </div>
