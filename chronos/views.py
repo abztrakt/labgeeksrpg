@@ -174,10 +174,15 @@ def specific_report(request,user,year,month,day=None,week=None,payperiod=None):
         #This should be a payperiod view
         description = "Viewing shifts in payperiod %d of %s." % (int(payperiod),date(int(year),int(month),1).strftime("%B, %Y"))
 
+    #Splits up shiftnotes into two separate variables if there are two to begin with
     for shift in shifts:
-        shiftnotes = shift.shiftnote.split("\n\n")
-        shift.shiftinnote = shiftnotes[0]
-        shift.shiftoutnote = shiftnotes[1]
+        if "\n\n" in shift.shiftnote:
+            shiftnotes = shift.shiftnote.split("\n\n")
+            shift.shiftinnote = shiftnotes[0]
+            shift.shiftoutnote = shiftnotes[1]
+        else:
+            shift.shiftinnote = shift.shiftnote
+            shift.shiftoutnote = ""
 
     return render_to_response('specific_report.html',locals())
 
