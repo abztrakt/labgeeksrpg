@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
 from datetime import datetime
-
+from django.http import HttpResponseRedirect
 from people.forms import *
 from people.models import *
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -118,7 +118,7 @@ def view_and_edit_reviews(request,user):
 
     # Handle the form submission and differentiate between the sub-reviewers and the final reviewer.
     try:
-        recent_review = UWLTReview.objects.filter(reviewer=this_user,user=user,is_final=False).order_by('-date')[0]
+        recent_review = UWLTReview.objects.filter(reviewer=this_user,user=user,is_final=False,is_used_up=False).order_by('-date')[0]
     except:
         recent_review = None
 
@@ -128,17 +128,26 @@ def view_and_edit_reviews(request,user):
             form = CreateFinalUWLTReviewForm(request.POST, instance=recent_review)
         else:
             form = CreateUWLTReviewForm(request.POST, instance=recent_review)
+        
         if form.is_valid():
             review = form.save(commit=False)
             review.user = user
             review.date = datetime.now().date()
             review.reviewer = this_user
             review.is_used_up = False
-            #review.missed_shifts = form.cleaned_data['missed_shifts']
-            #review.tardies = form.cleaned_data['tardies']
-            #review.is_final = form.cleaned_data['is_final']
+
+            # If the review is FINAL, mark the other reviews as used up and don't show use them for averaging the scores.
+            if 'is_final' in form.cleaned_data.keys() and form.cleaned_data['is_final']:
+                old_reviews = UWLTReview.objects.filter(user=user,is_final=False,is_used_up=False)
+                for old_review in old_reviews:
+                    old_review.is_used_up = True
+                    old_review.save()
+                review.is_used_up = False
+
             review.save()
             form.save_m2m()
+            recent_review = review
+            return HttpResponseRedirect('')
     else:
         if final_reviewer:
             form = CreateFinalUWLTReviewForm(instance=recent_review)
@@ -146,7 +155,7 @@ def view_and_edit_reviews(request,user):
             form = CreateUWLTReviewForm(instance=recent_review)
 
     try:
-        reviews = UWLTReview.objects.filter(user=user).order_by('-date')
+        reviews = UWLTReview.objects.filter(user=user,is_used_up=False).order_by('-date')
     except UWLTReview.DoesNotExist:
         reviews = None
 
@@ -173,7 +182,7 @@ def view_and_edit_reviews(request,user):
             sorted_review_list.append({'user':user, 'date':review.date, 'scores': scores, 'comments':review.comments})
 
         # Separate out the fields for the final reviewer to see.
-        if final_reviewer:
+        if final_reviewer and review.reviewer != this_user:
             for key,value in scores.items():
                 stats = {'value': value, 'reviewer': review.reviewer}
                 if key in review_stats.keys():
@@ -216,5 +225,6 @@ def view_and_edit_reviews(request,user):
         'can_add_review': can_add_review,
         'recent_message': recent_message,
     }
+    #import pdb; pdb.set_trace()
     return render_to_response('reviews.html', args, context_instance=RequestContext(request))
 
