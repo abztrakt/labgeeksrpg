@@ -163,6 +163,9 @@ def view_and_edit_reviews(request,user):
     sorted_review_list = []
     review_stats = {}
 
+    # Used for table viewing.
+    table_dict = {'user': user,'date': []}
+    table_scores = {}
     for review in reviews:
         scores = {
             'teamwork': review.teamwork,
@@ -181,6 +184,14 @@ def view_and_edit_reviews(request,user):
         if review.is_final:
             sorted_review_list.append({'user':user, 'date':review.date, 'scores': scores, 'comments':review.comments})
 
+        #Parse data for table viewing. Possibly make this the default way to view reviews.
+        for key,value in scores.items():
+            if key in table_scores.keys():
+                table_scores[key].append(value)
+            else:
+                table_scores[key] = [value]
+        table_dict['date'].append(review.date)
+
         # Separate out the fields for the final reviewer to see.
         if final_reviewer and review.reviewer != this_user:
             for key,value in scores.items():
@@ -189,6 +200,8 @@ def view_and_edit_reviews(request,user):
                     review_stats[key].append(stats)
                 else:
                     review_stats[key] = [stats]
+
+    table_dict['scores'] = table_scores
 
     # Create a list of all of the review fields and append review stats along with them. The stats won't be appended if the review isn't a final one.
     form_fields = []
@@ -217,6 +230,7 @@ def view_and_edit_reviews(request,user):
     # Return anything needed for the review form.
     args = {
         'request': request,
+        'table_dict': table_dict,
         'form_fields': form_fields,
         'reviews': sorted_review_list,
         'this_user': this_user,
@@ -225,6 +239,5 @@ def view_and_edit_reviews(request,user):
         'can_add_review': can_add_review,
         'recent_message': recent_message,
     }
-    #import pdb; pdb.set_trace()
     return render_to_response('reviews.html', args, context_instance=RequestContext(request))
 
