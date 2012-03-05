@@ -1,54 +1,38 @@
 {% block view_reviews %}
 <div id="view_reviews" class="tab_content">
     {% if reviews %}
-        <div id="review_info">
+        <p><strong>{{table_dict.user}}</strong></p>
+        <p><strong class="review_section">Scoring:</strong></p>
+        <table class="review_score_table">
+            <tr>
+                <td>Date:</td>
+                {% for info in table_dict.date %}
+                <td class="review_selector" title="{{info.id}}">{{info.date}}</td>
+                {% endfor %}
+            </tr>
+            {% for key,scores in table_dict.scores.items %}
+            <tr>
+                <td>{{key|capfirst}}:</td>
+                {% for score in scores %}
+                <td>{{score}}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+
+        <div id="review_info" class="hidden">
             <div id="review_heading">
-                <div id="review_title">{{table_dict.user}}</div>
+                <div id="review_title"></div>
+                <div id="review_date"></div>
             </div>
             <div id="review_details">
                 <strong class="review_section">Scoring:</strong>
-                <table class="review_score_table">
-                    <tr>
-                        <td>Date:</td>
-                        {% for date in table_dict.date %}
-                        <td>{{date}}</td>
-                        {% endfor %}
-                    </tr>
-                    {% for key,scores in table_dict.scores.items %}
-                    <tr>
-                        <td>{{key|capfirst}}:</td>
-                        {% for score in scores %}
-                        <td>{{score}}</td>
-                        {% endfor %}
-                    </tr>
-                    {% endfor %}
-
-                </table>
+                <ul id="review_scores">
+                </ul>
+                <strong class="review_section">Comments:</strong>
+                <p id="review_comments"></p>
             </div>
         </div>
-
-        <table>
-        
-        </table>
-
-        {% for review in reviews %}
-            <div id="review_info">
-                <div id="review_heading">
-                    <div id="review_title">{{review.user}}</div>
-                    <div id="review_date">{{review.date}}</div>
-                </div>
-                <div id="review_details">
-                    <strong class="review_section">Scoring:</strong>
-                    <ul>
-                        {% for field, value in review.scores.iteritems %}
-                            <li><strong>{{field}}:</strong> {{value}}</li>
-                        {% endfor %}
-                    </ul>
-                    <strong class="review_section">Comments:</strong>
-                    <p>{{review.comments}}</p>
-                </div>
-            </div>
-        {%endfor %}
 
     {% else %}
         <p>No Reviews</p>

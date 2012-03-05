@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
 from datetime import datetime
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
+import json
 from people.forms import *
 from people.models import *
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -164,7 +165,8 @@ def view_and_edit_reviews(request,user):
     review_stats = {}
 
     # Used for table viewing.
-    table_dict = {'user': user,'date': []}
+    table_dict = {'user': user}
+    table_date_info = []
     table_scores = {}
     for review in reviews:
         scores = {
@@ -190,7 +192,7 @@ def view_and_edit_reviews(request,user):
                 table_scores[key].append(value)
             else:
                 table_scores[key] = [value]
-        table_dict['date'].append(review.date)
+        table_date_info.append({'date':review.date,'id':review.id})
 
         # Separate out the fields for the final reviewer to see.
         if final_reviewer and review.reviewer != this_user:
@@ -202,6 +204,7 @@ def view_and_edit_reviews(request,user):
                     review_stats[key] = [stats]
 
     table_dict['scores'] = table_scores
+    table_dict['date'] = table_date_info
 
     # Create a list of all of the review fields and append review stats along with them. The stats won't be appended if the review isn't a final one.
     form_fields = []
@@ -241,3 +244,29 @@ def view_and_edit_reviews(request,user):
     }
     return render_to_response('reviews.html', args, context_instance=RequestContext(request))
 
+def view_review_data(request,user):
+    data = request.REQUEST.copy()
+    review_id = data.getlist('id')[0]
+    review = UWLTReview.objects.get(id=review_id)
+    scores = {
+            'Teamwork': review.teamwork,
+            'Customer service': review.customer_service,
+            'Dependability': review.dependability,
+            'Integrity': review.integrity,
+            'Communication': review.communication,
+            'Initiative': review.initiative,
+            'Attitude': review.attitude,
+            'Productivity': review.productivity,
+            'Technical knowledge': review.technical_knowledge,
+            'Responsibility': review.responsibility,
+            'Policies': review.policies,
+            'Procedures': review.procedures,
+        }
+    result = json.dumps({
+            'user': str(review.user),
+            'message': 'Hello',
+            'scores': scores,
+            'date': review.date.strftime('%b. %d, %Y'),
+            'comments': review.comments,
+        })   
+    return HttpResponse(result)
