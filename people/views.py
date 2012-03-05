@@ -161,13 +161,13 @@ def view_and_edit_reviews(request,user):
         reviews = None
 
     # Gather the data from the reviews and separate out fields.    
-    sorted_review_list = []
     review_stats = {}
 
     # Used for table viewing.
     table_dict = {'user': user}
     table_date_info = []
     table_scores = {}
+
     for review in reviews:
         scores = {
             'teamwork': review.teamwork,
@@ -183,25 +183,22 @@ def view_and_edit_reviews(request,user):
             'policies': review.policies,
             'procedures': review.procedures,
         }
-        if review.is_final:
-            sorted_review_list.append({'user':user, 'date':review.date, 'scores': scores, 'comments':review.comments})
 
-        #Parse data for table viewing. Possibly make this the default way to view reviews.
         for key,value in scores.items():
-            if key in table_scores.keys():
-                table_scores[key].append(value)
-            else:
-                table_scores[key] = [value]
-        table_date_info.append({'date':review.date,'id':review.id})
-
-        # Separate out the fields for the final reviewer to see.
-        if final_reviewer and review.reviewer != this_user:
-            for key,value in scores.items():
-                stats = {'value': value, 'reviewer': review.reviewer}
+            if review.is_final:
+                if key in table_scores.keys():
+                    table_scores[key].append(value)
+                else:
+                    table_scores[key] = [value]
+            elif final_reviewer and review.reviewer != this_user:
+                stats = {'value': value, 'reviewer':review.reviewer}
                 if key in review_stats.keys():
                     review_stats[key].append(stats)
                 else:
                     review_stats[key] = [stats]
+
+        if review.is_final:
+            table_date_info.append({'date':review.date,'id':review.id})
 
     table_dict['scores'] = table_scores
     table_dict['date'] = table_date_info
@@ -235,7 +232,6 @@ def view_and_edit_reviews(request,user):
         'request': request,
         'table_dict': table_dict,
         'form_fields': form_fields,
-        'reviews': sorted_review_list,
         'this_user': this_user,
         'user': user,
         'badge_photo': badge_photo,
