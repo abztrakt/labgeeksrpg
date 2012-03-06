@@ -98,7 +98,7 @@ def view_and_edit_reviews(request,user):
     # Grab the user and any reviews they may have. 
     user = User.objects.get(username=user)
     this_user = request.user
-    if this_user.has_perm('people.add_uwltreview'):
+    if this_user.has_perm('people.add_uwltreview') and this_user != user:
         can_add_review = True
     else:
         can_add_review = False
