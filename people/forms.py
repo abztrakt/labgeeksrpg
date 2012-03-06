@@ -87,9 +87,9 @@ class CreateUWLTReviewForm(CreatePerformanceReviewForm):
 
 class CreateFinalUWLTReviewForm(CreateUWLTReviewForm):
 
-    missed_shifts = forms.IntegerField(required=False)
-    tardies = forms.IntegerField(required=False)
-    is_final = forms.BooleanField(required=False)
+    missed_shifts = forms.IntegerField(required=False,help_text='Enter the number of shifts the user has missed.')
+    tardies = forms.IntegerField(required=False,help_text='Enter the number of shifts the user was late to.')
+    is_final = forms.BooleanField(required=False, help_text='CHECK THIS ONLY WHEN THE REVIEW IS READY TO BE FINALIZED.')
     def __init__(self,*args,**kwargs):
         super(CreateUWLTReviewForm,self).__init__(*args,**kwargs)
 
