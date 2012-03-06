@@ -216,6 +216,9 @@ def view_and_edit_reviews(request,user):
             name = ' '.join(str(x) for x in field.name.split('_'))
             if name in review_stats.keys():
                 stats = review_stats[name]
+                avg = sum(int(v['value']) for v in stats)/len(stats)
+                stats.append({'value':avg,'reviewer': 'AVERAGE'})
+
 
         field_info = {
             'label_tag': field.label_tag,
