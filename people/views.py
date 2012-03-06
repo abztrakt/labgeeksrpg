@@ -164,7 +164,12 @@ def view_and_edit_reviews(request,user):
     review_stats = {}
 
     # Used for table viewing.
-    table_dict = {'user': user}
+    table_dict = {}
+    if this_user == user:
+        table_dict['user'] = 'Your review scores:'
+    else:
+        table_dict['user'] = "%s's review scores:" % user.username
+
     table_date_info = []
     table_scores = {}
 

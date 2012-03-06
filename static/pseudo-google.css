@@ -165,7 +165,6 @@ textarea {
     background: none repeat scroll 0 0 #F5F5F5;
     padding: 20px 25px 15px;
     border: 1px solid #E5E5E5;
-    margin: 12px 0 0;
 }
 
 
@@ -357,10 +356,39 @@ May have to place in its own css file for easier future editing.
 
 .review_score_table{
     margin: 0;
+    border-color: #EFF2F6 #EFF2F6 #BFCCD9;
+    border-style: solid;
+    border-width: 1px 1px 2px;
+    border-collapse: collapse;
+    font-size: 1.1em;
 }
+
+.review_score_table thead {
+    font-weight: bold;
+    color: white;
+}
+
+.review_selector:hover {
+    color: yellow;
+
+}
+
+.review_score_table tbody td:first-child {
+    background: none repeat scroll 0 0 #DFE6EC;
+    border-bottom: 1px solid white;
+    color: #555555;
+    font-weight: bold;
+}
+
+.review_score_table tbody td {
+    border: 1px solid #DFE6EC;
+    padding: .5em;
+}
+
 #view_reviews {
     background: none repeat scroll 0 0 #F5F5F5;
     border: 1px solid #E5E5E5;
+    padding: 20px 25px 15px;
 }
 
 .review_other_scores p, .review_other_scores ul{
@@ -681,7 +709,7 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     visibility: visible;
 }
 
-.timeperiod_selector:hover {
+.timeperiod_selector:hover, .review_selector:hover {
     cursor: pointer;
 }
 

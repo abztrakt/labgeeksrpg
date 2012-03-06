@@ -1,23 +1,27 @@
 {% block view_reviews %}
 <div id="view_reviews" class="tab_content">
-    {% if table_dict %}
+    {% if table_dict.scores %}
         <p><strong class="review_section">{{table_dict.user}}</strong></p>
-        <p><strong class="review_section">Scoring:</strong></p>
+        <p>Select the date of the review to view its details.</p>
         <table class="review_score_table">
+            <thead>
             <tr>
-                <td>Date:</td>
+                <td>Date</td>
                 {% for info in table_dict.date %}
                 <td class="review_selector" title="{{info.id}}">{{info.date}}</td>
                 {% endfor %}
             </tr>
-            {% for key,scores in table_dict.scores.items %}
-            <tr>
-                <td>{{key|capfirst}}:</td>
-                {% for score in scores %}
-                <td>{{score}}</td>
+            </thead>
+            <tbody>
+                {% for key,scores in table_dict.scores.items %}
+                <tr>
+                    <td>{{key|capfirst}}</td>
+                    {% for score in scores %}
+                    <td>{{score}}</td>
+                    {% endfor %}
+                </tr>
                 {% endfor %}
-            </tr>
-            {% endfor %}
+            </tbody>
         </table>
 
         <div id="review_info" class="hidden">
