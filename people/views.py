@@ -14,6 +14,12 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 def list_all(request):
     """ List all users in the system. (Alphabetically, ignoring case)
     """
+    this_user = request.user
+    if this_user.has_perm('people.add_uwltreview'):
+        can_add_review = True
+    else:
+        can_add_review = False
+
     users = User.objects.filter(is_active=True).extra(select={'username_upper': 'upper(username)'}, order_by=['username_upper'])
     return render_to_response('list.html', locals(), context_instance=RequestContext(request))
 
@@ -29,6 +35,9 @@ def view_profile(request, name):
 
         if request.user.__str__() == name or request.user.is_superuser:
             edit = True
+
+        if request.user.__str__() == name or request.user.has_perm('people.add_uwltreview'):
+            can_view_review = True
 
         return render_to_response('profile.html', locals())
     else:

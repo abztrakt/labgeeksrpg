@@ -51,7 +51,7 @@ th.headerSortDown {
             <th><a href='#'>Title</a></th>
             <th></th>
             <th></th>
-            <th></th>
+            {% if can_add_review %}<th></th>{% endif %}
         </tr>
     </thead>
     <tbody>
@@ -63,7 +63,7 @@ th.headerSortDown {
             <td>{{ user.get_profile.title }}</td>
             <td><a href="{% url People-View_Profile user %}">Profile</a></td>
             <td><a href="{% url Personal-Timesheet user %}">Timesheet</a></td>
-            <td><a href="{% url People-View_Reviews user %}">Reviews</a></td>
+            {% if can_add_review%}<td><a href="{% url People-View_Reviews user %}">Reviews</a></td>{% endif %}
         </tr>
     {% endfor %}
     </tbody>
