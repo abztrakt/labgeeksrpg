@@ -703,7 +703,7 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
 }
 
 .hidden{
-    visibility: hidden;
+    display: none;
 }
 
 .visible {
