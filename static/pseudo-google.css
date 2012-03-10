@@ -406,6 +406,7 @@ May have to place in its own css file for easier future editing.
     box-shadow: 0 2px 3px rgba(20,20,20,0.5);
     border: 2px solid red;
     padding: 1em;
+    margin: 1em;
 }
 
 

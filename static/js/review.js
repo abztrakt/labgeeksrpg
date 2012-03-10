@@ -12,6 +12,14 @@ $(document).ready(function() {
     $(".review_selector").click(function() {
         getReviewData(this.title);
     });
+
+    $("#id_is_final").change(function() {
+        if ($(this).is(':checked')){
+            $("#is_final_message").removeClass("hidden").addClass("visible");
+        }else{
+            $("#is_final_message").removeClass("visible").addClass("hidden");
+        }
+    });
 });
 
 /*
