@@ -98,6 +98,15 @@ def create_user_profile(request,name):
         message += "yourself."
     else:
         message += name + "."
+    # The following code is used for displaying the user's call_me_by or first name.
+    try:
+        profile = UserProfile.objects.get(user=this_user)
+        if profile.call_me_by:
+            this_user = profile.call_me_by
+        else:
+            this_user = this_user.first_name
+    except:
+        this_user = user.first_name
 
     return render_to_response('create_profile.html',locals(),context_instance=RequestContext(request))
 
@@ -243,6 +252,16 @@ def view_and_edit_reviews(request,user):
     recent_message = ''
     if recent_review:
         recent_message = 'Looks like you made a review for %s on %s. Saved entries have been filled out.' % (user,recent_review.date)
+
+    # The following code is used for displaying the user's call_me_by or first name.
+    try:
+        profile = UserProfile.objects.get(user=this_user)
+        if profile.call_me_by:
+            this_user = profile.call_me_by
+        else:
+            this_user = this_user.first_name
+    except:
+        this_user = user.first_name
 
     # Return anything needed for the review form.
     args = {
