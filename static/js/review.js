@@ -40,26 +40,30 @@ Inserts the data into the page dynamically.
 function loadReviewData(data){
     data = JSON.parse(data);
 
-    var review_info = $("#review_info");
-    review_info.removeClass("hidden").addClass("visible");
+    return_status = data['return_status'];
+    
+    if (return_status){
+        var review_info = $("#review_info");
+        review_info.removeClass("hidden").addClass("visible");
 
-    var title = $("#review_title");
-    title.empty();
-    title.append(data['user']);
+        var title = $("#review_title");
+        title.empty();
+        title.append(data['user']);
 
-    var date = $("#review_date");
-    date.empty()
-    date.append(data['date']);
+        var date = $("#review_date");
+        date.empty()
+        date.append(data['date']);
 
-    score_list = $("#review_scores");
-    score_list.empty();
+        score_list = $("#review_scores");
+        score_list.empty();
 
-    for(key in data['scores']){
-        score_list.append("<li>" + key + ': ' + data['scores'][key] + "</li>");
+        for(key in data['scores']){
+            score_list.append("<li>" + key + ': ' + data['scores'][key] + "</li>");
+        }
+
+        comments_box = $("#review_comments");
+        comments_box.empty();
+        comments_box.append(data['comments']);
     }
-
-    comments_box = $("#review_comments");
-    comments_box.empty();
-    comments_box.append(data['comments']);
 }
 

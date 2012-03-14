@@ -277,28 +277,42 @@ def view_and_edit_reviews(request,user):
     return render_to_response('reviews.html', args, context_instance=RequestContext(request))
 
 def view_review_data(request,user):
+    user = User.objects.get(username=user)
+    this_user = request.user
     data = request.REQUEST.copy()
     review_id = data.getlist('id')[0]
     review = UWLTReview.objects.get(id=review_id)
-    scores = {
-            'Teamwork': review.teamwork,
-            'Customer service': review.customer_service,
-            'Dependability': review.dependability,
-            'Integrity': review.integrity,
-            'Communication': review.communication,
-            'Initiative': review.initiative,
-            'Attitude': review.attitude,
-            'Productivity': review.productivity,
-            'Technical knowledge': review.technical_knowledge,
-            'Responsibility': review.responsibility,
-            'Policies': review.policies,
-            'Procedures': review.procedures,
-        }
-    result = json.dumps({
-            'user': str(review.user),
-            'message': 'Hello',
-            'scores': scores,
-            'date': review.date.strftime('%b. %d, %Y'),
-            'comments': review.comments,
-        })   
-    return HttpResponse(result)
+    if this_user.has_perm('people.add_uwltreview') and this_user != user:
+        can_add_review = True
+    else:
+        can_add_review = False
+
+    if not can_add_review and this_user != review.user or not review.is_final:
+        result = json.dumps({
+                'return_status': False,
+                'message': 'You do not have permission to view this review.'
+            })
+        return HttpResponse(result)
+    else:
+        scores = {
+                'Teamwork': review.teamwork,
+                'Customer service': review.customer_service,
+                'Dependability': review.dependability,
+                'Integrity': review.integrity,
+                'Communication': review.communication,
+                'Initiative': review.initiative,
+                'Attitude': review.attitude,
+                'Productivity': review.productivity,
+                'Technical knowledge': review.technical_knowledge,
+                'Responsibility': review.responsibility,
+                'Policies': review.policies,
+                'Procedures': review.procedures,
+            }
+        result = json.dumps({
+                'return_status': True,
+                'user': str(review.user),
+                'scores': scores,
+                'date': review.date.strftime('%b. %d, %Y'),
+                'comments': review.comments,
+            })   
+        return HttpResponse(result)
