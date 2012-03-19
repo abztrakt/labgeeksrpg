@@ -241,6 +241,19 @@ ul{
     float: left;
 }
 
+.group_section{
+    margin: 1em;
+    padding: .5em;
+}
+.group_section .group_title{
+    font-size: 5px;
+    border-bottom: 1px solid black;
+    clear: left;
+}
+
+.group_section table{
+    margin: 1em 0 0;
+}
 
 /*
 Profile CSS

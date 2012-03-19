@@ -1,7 +1,7 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.core.context_processors import csrf
 from datetime import datetime
 from django.http import HttpResponseRedirect, HttpResponse
@@ -19,8 +19,28 @@ def list_all(request):
         can_add_review = True
     else:
         can_add_review = False
+    
+    #Separate out the list of users by their group association. 
+    groups = Group.objects.all()
+    group_list = []
+    for group in groups:
+        users = group.user_set.filter(is_active=True).extra(select={'username_upper': 'upper(username)'}, order_by=['username_upper'])
+        
+        data = {
+            'group_name': group.name,
+            'users': users,
+        }
+        
+        group_list.append(data)
 
-    users = User.objects.filter(is_active=True).extra(select={'username_upper': 'upper(username)'}, order_by=['username_upper'])
+    # Lastly, grab all users who don't belong to a group.
+    no_group = {
+        'group_name': 'Users with no groups associated with them.',
+        'users': User.objects.filter(groups=None)
+    }
+    if no_group['users']:
+        group_list.append(no_group)
+
     return render_to_response('list.html', locals(), context_instance=RequestContext(request))
 
 @login_required

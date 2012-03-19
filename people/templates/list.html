@@ -5,12 +5,12 @@
 <script type="text/javascript">
 $(document).ready(function() 
     { 
-        $("#people").tablesorter(
+        $(".people").tablesorter(
             {
                 cssAsc: 'headerSortUp',
                 cssDesc: 'headerSortDown',
                 cssHeader: 'header',
-                headers: { 4: { sorter: false}, 5: {sorter: false} },
+                headers: { 4: { sorter: false}, 5: {sorter: false}, 6: {sorter: false} },
             }
         ); 
     } 
@@ -42,32 +42,40 @@ th.headerSortDown {
         <h2>Below is the list of employees.</h2>
     </div>
     
-    <table id="people">
-    <thead>
-        <tr>
-            <th><a href='#'>First Name</a></th>
-            <th><a href='#'>Last Name</a></th>
-            <th><a href='#'>NetID</a></th>
-            <th><a href='#'>Title</a></th>
-            <th></th>
-            <th></th>
-            {% if can_add_review %}<th></th>{% endif %}
-        </tr>
-    </thead>
-    <tbody>
-    {% for user in users %}
-        <tr>
-            <td>{{ user.first_name }}</td>
-            <td>{{ user.last_name }}</td>
-            <td>{{ user }}</td>
-            <td>{{ user.get_profile.title }}</td>
-            <td><a href="{% url People-View_Profile user %}">Profile</a></td>
-            <td><a href="{% url Personal-Timesheet user %}">Timesheet</a></td>
-            {% if can_add_review%}<td><a href="{% url People-View_Reviews user %}">Reviews</a></td>{% endif %}
-        </tr>
+    {% for group in group_list %}
+    
+    <div class="group_section">
+        <div class="group_title">
+            <h2>{{group.group_name}}</h2>
+        </div>
+        <table class="people">
+            <thead>
+                <tr>
+                    <th><a href='#'>First Name</a></th>
+                    <th><a href='#'>Last Name</a></th>
+                    <th><a href='#'>NetID</a></th>
+                    <th><a href='#'>Title</a></th>
+                    <th></th>
+                    <th></th>
+                    {% if can_add_review %}<th></th>{% endif %}
+                </tr>
+            </thead>
+            <tbody>
+            {% for user in group.users %}
+                <tr>
+                    <td>{{ user.first_name }}</td>
+                    <td>{{ user.last_name }}</td>
+                    <td>{{ user }}</td>
+                    <td>{{ user.get_profile.title }}</td>
+                    <td><a href="{% url People-View_Profile user %}">Profile</a></td>
+                    <td><a href="{% url Personal-Timesheet user %}">Timesheet</a></td>
+                    {% if can_add_review%}<td><a href="{% url People-View_Reviews user %}">Reviews</a></td>{% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% endfor %}
-    </tbody>
-    </table>
-
+    
 
 {% endblock %}
