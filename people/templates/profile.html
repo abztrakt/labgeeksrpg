@@ -40,7 +40,9 @@ $(document).ready(function() {
                 {{ profile.user.last_name }} 
                 ({{ profile.user }})
             </p>
-            {% if edit %}<strong><a href="{% url People-Create_Profile profile.user %}">Click here to edit this profile</a></strong>{% endif %}
+            {% if edit %}<strong><a href="{% url People-Create_Profile profile.user %}">Edit profile</a></strong>{% endif %}
+            {% if edit and can_view_review %}<strong>|</strong>{% endif %}
+            {% if can_view_review %}<strong><a href="{% url People-View_Reviews profile.user %}">Reviews</a></strong>{% endif %}
         </div>
 
         <div id="work_status" class="profile_section" >

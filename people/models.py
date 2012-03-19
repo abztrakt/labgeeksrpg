@@ -57,6 +57,58 @@ class Title(models.Model):
     def __unicode__(self):
         return self.name
 
+class WageChangeReason(models.Model):
+    """ Defines why a wage was given
+    """
+    title = models.CharField(max_length=256)
+    description = models.TextField(null=True,blank=True)
+
+    def __unicode__(self):
+        return self.title
+
+class WageHistory (models.Model):
+    """ Defines wage histories for users
+    """
+    effective_date = models.DateField()
+    user = models.ForeignKey(User)
+    wage = models.FloatField()
+    wage_change_reason = models.ForeignKey(WageChangeReason)
+
+    def __unicode__(self):
+        return '%s - $%s' % (self.user,self.wage)
+
+class PerformanceReview(models.Model):
+    """ Defines a review form used on staff
+        Used a base class for any review model
+    """
+    user = models.ForeignKey(User,related_name='user_review')
+    date = models.DateField()
+    comments = models.TextField(null=True,blank=True)
+    reviewer = models.ForeignKey(User)
+    is_used_up = models.BooleanField()
+    is_final = models.BooleanField()
+
+class UWLTReview(PerformanceReview):
+    """ A specific review model
+    """
+    teamwork = models.IntegerField(null=True,blank=True)
+    customer_service = models.IntegerField(null=True,blank=True)
+    dependability = models.IntegerField(null=True,blank=True)
+    integrity = models.IntegerField(null=True,blank=True)
+    communication = models.IntegerField(null=True,blank=True)
+    initiative = models.IntegerField(null=True,blank=True)
+    attitude = models.IntegerField(null=True,blank=True)
+    productivity = models.IntegerField(null=True,blank=True)
+    technical_knowledge = models.IntegerField(null=True,blank=True)
+    responsibility = models.IntegerField(null=True,blank=True)
+    policies = models.IntegerField(null=True,blank=True)
+    procedures = models.IntegerField(null=True,blank=True)
+    missed_shifts = models.IntegerField(null=True,blank=True)
+    tardies = models.IntegerField(null=True,blank=True)
+
+    def get_fields(self):
+        return  [(field.name, field.value_to_string(self)) for field in UWLTReview._meta.fields]
+
 class UserProfile(models.Model):
     """ Defines additional things we should know about users.
     """
@@ -76,6 +128,7 @@ class UserProfile(models.Model):
     phone = models.CharField(max_length=12, null=True,blank=True)
     alt_phone = models.CharField(max_length=12, null=True, blank=True)
     site_skin = models.CharField(max_length=256, null=True, blank=True)
+    wage = models.ManyToManyField(WageHistory,null=True,blank=True)
 
     def __unicode__(self):
         return "%s %s [%s]" % (self.user.first_name, self.user.last_name, self.user.username)
