@@ -720,6 +720,7 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     float: left; width: 100%;
     background: #fff;
 }
+<<<<<<< Updated upstream
 
 ul.tabs {
     margin: 0;
@@ -784,12 +785,8 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     visibility: visible;
 }
 
-<<<<<<< HEAD
 
-.timeperiod_selector:hover {
-=======
 .timeperiod_selector:hover, .review_selector:hover {
->>>>>>> master
     cursor: pointer;
 }
 
