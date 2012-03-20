@@ -25,7 +25,7 @@ $(document).ready(function(){
         return false;
     });
 
-
+    /*
     $(".content").click(function(){
         $(this).empty();
         $(this).toggleClass("selected");
@@ -37,7 +37,7 @@ $(document).ready(function(){
             $(this).empty();
         }
     });
-
+    */
     getPeopleList();
 
     $(".add_person").change(function () {
@@ -49,6 +49,12 @@ $(document).ready(function(){
 
     })
     .change();
+
+    $("table").selectable({
+        filter: '.content',
+        stop: function() {
+        }
+    }); 
 
     /*
     $(".test").click(function(){

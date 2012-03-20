@@ -827,7 +827,7 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     margin-right: 3px;
 }
 
-#schedule .selected{
+#schedule .ui-selected{
     background-color: yellow;
 }
  
