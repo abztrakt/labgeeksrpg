@@ -50,9 +50,25 @@ $(document).ready(function(){
     })
     .change();
 
+    // Handle the selecting of columns.
     $("table").selectable({
         filter: '.content',
         stop: function() {
+            /*
+            $(".ui-selected", this).each(function(){
+                $(this).empty();
+                var time = $(this).parent().children()[0].innerHTML;
+                $(this).append(time);
+            });
+            */
+            var selected = $(".ui-selected", this);
+            var middleChild = $(selected.get(selected.size()/2));
+            middleChild.tooltip({
+                tip: '#tooltip',
+                position: 'center right',
+                offset: [0,15],
+            });
+            
         }
     }); 
 

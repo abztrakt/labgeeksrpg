@@ -835,6 +835,10 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     background-color: lightsteelblue;
 }
 
+#schedule .selected{
+    background-color: red;
+}
+
 /* trigger button */
 #download_now {
     /*background:transparent url(/img/home/download.png) no-repeat scroll 0 0;*/

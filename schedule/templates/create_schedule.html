@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block pageJS %}
+<script type="text/javascript" src="/static/js/jquery.tools.min.js"></script>
 <script type="text/javascript" src="/static/js/schedule.js"></script>
 {% endblock %}
 {% block content %}
@@ -32,6 +33,11 @@
         <input type="hidden" value="next" value="{{next}}"/>
     </form>
 </div>
+
+<div id="tooltip" class="tooltip">
+    Hello Michael.
+</div>
+
 
 <div id="schedule" class="{{schedule_class}}">
     <p id="test"></p>
