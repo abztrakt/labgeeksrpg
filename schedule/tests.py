@@ -6,8 +6,8 @@ from datetime import datetime
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from django.test.client import Client
-from labgeeksrpg.people import models as p_models
-from labgeeksrpg.people import views as p_views
+from labgeeksrpg.schedule import models as p_models
+from labgeeksrpg.schedule import views as p_views
 
 class StartTestCase(TestCase):
     """

@@ -11,10 +11,6 @@ class EmploymentStatusAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 admin.site.register(EmploymentStatus, EmploymentStatusAdmin)
 
-class TimePeriodAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug': ('name',)}
-admin.site.register(TimePeriod, TimePeriodAdmin)
-
 class WorkGroupAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 admin.site.register(WorkGroup, WorkGroupAdmin)
