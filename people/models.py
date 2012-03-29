@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import date
 from django.contrib.auth.models import User
+from schedule.models import TimePeriod as s_TimePeriod
 
 class EmploymentStatus(models.Model):
     """ Defines statuses that a Person could hold.
@@ -9,18 +10,6 @@ class EmploymentStatus(models.Model):
     slug = models.SlugField()
     description = models.TextField(blank=True)
 
-    def __unicode__(self):
-        return self.name
-
-class TimePeriod(models.Model):
-    """ Defines possible periods of time when a person could choose to work or choose not to work.
-    """
-    name = models.CharField(max_length=256)
-    slug = models.SlugField()
-    description = models.TextField(blank=True)
-    start_date = models.DateField(default=date.today())
-    end_date = models.DateField(default=date.today())
-    
     def __unicode__(self):
         return self.name
 
@@ -123,7 +112,7 @@ class UserProfile(models.Model):
     supervisor = models.ForeignKey(User, related_name='supervisor', null=True, blank=True)
     title = models.ForeignKey(Title, null=True, blank=True)
     office = models.CharField(max_length=256, null=True, blank=True, default='')
-    working_periods = models.ManyToManyField(TimePeriod, null=True, blank=True)
+    working_periods = models.ManyToManyField(s_TimePeriod, null=True, blank=True)
     about_me = models.TextField(null=True,blank=True)
     phone = models.CharField(max_length=12, null=True,blank=True)
     alt_phone = models.CharField(max_length=12, null=True, blank=True)
