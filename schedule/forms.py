@@ -3,10 +3,22 @@ from labgeeksrpg.schedule.models import TimePeriod
 from labgeeksrpg.people.models import UserProfile
 from labgeeksrpg.chronos.models import Location
 
-class SelectTimePeriodForm(forms.Form):
-    filter_choices = [['avail','Availability'],['prefs','Preferences']]
-    time_periods = forms.ChoiceField(choices=[(tp.name,tp.name) for tp in TimePeriod.objects.all()])
-    time_period_filter = forms.ChoiceField(required=True, label=False, widget=forms.RadioSelect(), choices=filter_choices)
+class SelectTimePeriodForm(forms.ModelForm):
+    working_periods = forms.ModelMultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        queryset=TimePeriod.objects.all(),
+        help_text='Please select the time periods in which you are available for work.' 
+    )
+
+
+    def save(self,*args,**kwargs):
+        inst = forms.ModelForm.save(self,*args,**kwargs)
+        return inst
+
+    class Meta:
+        model = UserProfile
+        fields = ('working_periods',)
 
 class CreateDailyScheduleForm(forms.Form):
     DAY_CHOICES = (

@@ -112,9 +112,21 @@ def view_shifts(request):
     return render_to_response('view_shifts.html', locals(),context_instance=RequestContext(request))
 
 def view_timeperiods(request):
+    user = request.user
+    try:
+        user_profile = UserProfile.objects.get(user=user)
+    except UserProfile.DoesNotExist:
+        return HttpResponseRedirect("/people/%s" % user.username)
+
     timeperiod_stats = []
     timeperiod_users = []
     timeperiods = TimePeriod.objects.all().order_by('start_date')
+    if request.method == 'POST':
+        form = SelectTimePeriodForm(request.POST,instance=user_profile)
+        if form.is_valid():
+            user_profile = form.save()
+    else:
+        form = SelectTimePeriodForm(instance=user_profile)
 
     for timeperiod in timeperiods:
         people = UserProfile.objects.filter(working_periods__name=timeperiod.name)
