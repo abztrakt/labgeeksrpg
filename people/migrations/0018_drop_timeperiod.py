@@ -1,34 +1,19 @@
 # encoding: utf-8
 import datetime
 from south.db import db
-from south.v2 import DataMigration
+from south.v2 import SchemaMigration
 from django.db import models
 
-class Migration(DataMigration):
+class Migration(SchemaMigration):
 
+    depends_on = (
+        ('schedule', '0003_auto__add_timeperiod'),
+    )
     def forwards(self, orm):
-        #"Write your forwards methods here."
-        for timeperiod in orm['people.timeperiod'].objects.all():
-            new_timeperiod = orm['schedule.timeperiod'](
-                name = timeperiod.name,
-                slug = timeperiod.slug,
-                description = timeperiod.description,
-                start_date = timeperiod.start_date,
-                end_date = timeperiod.end_date,
-            )
-            new_timeperiod.save()
+        pass
 
     def backwards(self, orm):
-        #"Write your backwards methods here."
-        for timeperiod in orm['schedule.timeperiod'].objects.all():
-            old_timeperiod = orm['people.timeperiod'](
-                name = timeperiod.name,
-                slug = timeperiod.slug,
-                description = timeperiod.description,
-                start_date = timeperiod.start_date,
-                end_date = timeperiod.end_date,
-            )
-            old_timeperiod.save()
+        pass        
 
     models = {
         'auth.group': {
@@ -59,12 +44,6 @@ class Migration(DataMigration):
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
-        },
-        'chronos.location': {
-            'Meta': {'object_name': 'Location'},
-            'active_users': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '256'})
         },
         'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
@@ -98,15 +77,6 @@ class Migration(DataMigration):
             'reviewer': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'user_review'", 'to': "orm['auth.User']"})
         },
-        'people.timeperiod': {
-            'Meta': {'object_name': 'TimePeriod'},
-            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'end_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 3, 29)'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'db_index': 'True'}),
-            'start_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 3, 29)'})
-        },
         'people.title': {
             'Meta': {'object_name': 'Title'},
             'description': ('django.db.models.fields.TextField', [], {}),
@@ -135,7 +105,7 @@ class Migration(DataMigration):
             'title': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['people.Title']", 'null': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'uwnetid'", 'unique': 'True', 'to': "orm['auth.User']"}),
             'wage': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['people.WageHistory']", 'null': 'True', 'blank': 'True'}),
-            'working_periods': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['people.TimePeriod']", 'null': 'True', 'blank': 'True'})
+            'working_periods': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['schedule.TimePeriod']", 'null': 'True', 'blank': 'True'})
         },
         'people.uwltreview': {
             'Meta': {'object_name': 'UWLTReview', '_ormbases': ['people.PerformanceReview']},
@@ -176,32 +146,15 @@ class Migration(DataMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'db_index': 'True'})
         },
-        'schedule.defaultshift': {
-            'Meta': {'object_name': 'DefaultShift'},
-            'day': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'in_time': ('django.db.models.fields.TimeField', [], {}),
-            'location': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['chronos.Location']"}),
-            'out_time': ('django.db.models.fields.TimeField', [], {}),
-            'person': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'})
-        },
         'schedule.timeperiod': {
             'Meta': {'object_name': 'TimePeriod'},
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'end_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 3, 29)'}),
+            'end_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 4, 3)'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'db_index': 'True'}),
-            'start_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 3, 29)'})
-        },
-        'schedule.workshift': {
-            'Meta': {'object_name': 'WorkShift'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'location': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['chronos.Location']"}),
-            'person': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),
-            'scheduled_in': ('django.db.models.fields.DateTimeField', [], {}),
-            'scheduled_out': ('django.db.models.fields.DateTimeField', [], {})
+            'start_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 4, 3)'})
         }
     }
 
-    complete_apps = ['people', 'schedule']
+    complete_apps = ['people']

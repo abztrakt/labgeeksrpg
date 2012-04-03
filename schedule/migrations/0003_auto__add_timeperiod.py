@@ -7,23 +7,14 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
-        # Adding model 'TimePeriod'
-        db.create_table('schedule_timeperiod', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=50, db_index=True)),
-            ('description', self.gf('django.db.models.fields.TextField')(blank=True)),
-            ('start_date', self.gf('django.db.models.fields.DateField')(default=datetime.date(2012, 3, 29))),
-            ('end_date', self.gf('django.db.models.fields.DateField')(default=datetime.date(2012, 3, 29))),
-        ))
-        db.send_create_signal('schedule', ['TimePeriod'])
-
+        #Move people.timeperiod to schedule.timeperiod
+        db.rename_table('people_timeperiod','schedule_timeperiod')
+        if not db.dry_run:
+            orm['contenttypes.contenttype'].objects.filter(app_label='people', model='timeperiod').update(app_label='specific')
 
     def backwards(self, orm):
-        
-        # Deleting model 'TimePeriod'
-        db.delete_table('schedule_timeperiod')
+        #Move schedule.timeperiod to people.timeperiod
+        db.rename_table('schedule_timeperiod','people_timeperiod')
 
 
     models = {
