@@ -10,9 +10,10 @@ Greyish: (65, 66, 71)
 /* Elements */
 
 body {
-    font-family: Helvetica,Arial,sans-serif;
+    font: 81.25%/1 Helvetica,Arial,sans-serif;
     background: rgba(75, 75, 75, 1);
     color: white;
+    margin: 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -23,18 +24,15 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
     font-size: 5em;
-    text-align: center;
 	color: rgb(119, 199, 247);
 }
 
 h2 {
     font-size: 4em;
-    text-align: center;
 }
 
 h3 {
     font-size: 3em;
-    text-align: center;
 }
 
 table {
@@ -42,8 +40,8 @@ table {
 }
 
 form {
-	text-align: center;
-	margin-top: 50px;
+    margin-top: 2em;
+    text-align: left;
 }
 
 th, td {
@@ -83,7 +81,46 @@ tr:first-child {
 .seps {
     font-size: 2em;
 }
+.active_tab{
+    border: 1px solid black;
+    border-bottom: none;
+    border-top: none;
+    background-color: #4B4B4B;
+}
 
+.nonactive_tab{
+    border: 1px solid #616D7E;
+    border-bottom: none;
+    border-top: none;
+}
+
+.nav a{
+    padding: 1em 1em .8em;
+}
+
+#navbar, #chronos_nav {
+	background-color: #616D7E;
+    border-bottom: 1px solid #616D7E;
+	font-size: 12pt;
+	padding-left: 1em;
+    margin-bottom: 1em;
+}
+
+.nav, #chronos_nav ul {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: .85em;
+}
+
+#chronos_nav {
+    background-color: #616D7E;
+    margin-top: 0;
+}
+
+.nav li, #chronos_nav ul li {
+    float: left;
+}
+/*
 #navbar, #chronos_nav {
 	background-color: rgba(200, 200, 200, .5);
 	font-size: 15pt;
@@ -111,7 +148,7 @@ tr:first-child {
 .nav li:first-child:before, #chronos_nav ul li:first-child:before {
     content: "";
 }
-
+*/
 .user_name, .bug_sug {
     color: rgba(252,138,69,1);
 }
@@ -125,10 +162,15 @@ tr:first-child {
 }
 
 #content {
-    margin: 1em;
+    padding: 0;
+    max-width: 1000px;
+    min-width: 780px;
+    margin: auto;
+    margin-bottom: 2em;
+    overflow: hidden;
 }
 #clock_in_or_out{
-    font-size: 4.6em;
+    font-size: 3em;
     color: #DD4B39;
 }
 
@@ -152,30 +194,28 @@ textarea {
 	
 }
 
-label {
-	font-size: 16pt;
-}
 
 /* Log-in CSS (used for dev purposes, but could be used for future log-in forms)*/
-#login_content{
-    padding: 0;
-    max-width: 1000px;
-    min-width: 780px;
-    height: 500px;
-    margin: auto;
-}
-
 #login_box{
     float: right;
     width: 335px;
 }
 
 #create_profile_box, .time_period_box{
-    width: 700px;
+    width: 650px;
     margin: auto;
 }
 
 .time_period_box td{
+    color: black;
+}
+
+.normal_box{
+    background: none repeat scroll 0 0 rgba(200, 200, 200, 0.5);
+    padding: 20px 25px 15px;
+    border: 1px solid #E5E5E5;
+    margin: 12px 0 0;
+    width: 650px;
     color: black;
 }
 
@@ -189,11 +229,6 @@ label {
 
 .form_box strong, .form_box p{
     color:black;
-}
-
-.form_box form{
-    margin-top: 2em;
-    text-align: left;
 }
 
 .form_box a{
@@ -214,18 +249,25 @@ form label strong{
     margin-bottom: 1em;
 }
 
-form input[type="text"], form input[type="password"]{
-    height: 32px;
-    border: 1px solid #C0C0C0;
-}
-
-#login_button{
+form input[type="submit"]{
     background-color: #4D90FE;
     color: #FFFFFF;
     border: 1px solid #3079ED;
     height: 32px;
     font-weight: bold;
+    padding: 0 8px;
+    width: 6em;
 }
+
+
+form input[type="text"], form input[type="password"]{
+    height: 32px;
+    border: 1px solid #C0C0C0;
+    padding-left: 8px;
+}
+
+
+
 
 .form_box h2{
     font-size: 16px;
@@ -245,7 +287,7 @@ form input[type="text"], form input[type="password"]{
     margin: 0.4em 0 0; 
 }
 
-#login_info ul{
+ul{
     padding: 1em;
     line-height: 17px;
     list-style: none outside none;
@@ -256,17 +298,21 @@ form input[type="text"], form input[type="password"]{
     margin: 3px 0 2em;
 }
 
-.greeting{
+.section{
     margin-bottom: 1.5em;
 }
 
 .section h1{
-    font-size: 35px;
+    font-size: 25px;
 }
 
 .section h2{
-    font-size: 25px;
+    font-size: 16px;
     margin: 0.4em 0 0;
+}
+
+#people {
+    float: left;
 }
 
 /*
@@ -350,7 +396,7 @@ May have to place in its own css file for easier future editing.
 }
 
 .profile_info_section h2{
-    font-size: 13px;
+    font-size: 15px;
     width: 382px;
     display: inline-block;
     text-align: left;
@@ -366,13 +412,14 @@ Calendar CSS
 */
 
 #calendar {
-    width: 75em;
+    width: 85em;
     margin: auto;
+    margin-top: 1em;
 }
 
 #calendar tr:first-child {
     background-color: #0D4F7F;
-    font-size: 3.0em;
+    font-size: 2.0em;
 }
 
 #calendar tr:nth-child(2) {
@@ -386,12 +433,11 @@ Calendar CSS
 
 #calendar .first{
     background-color: #384246;
-    border: .3em solid #387AA2;
 }
 
 #calendar .second{
     background-color: #0F3A55;
-    border: .3em solid #FFFFFF;
+    /*border: .3em solid #FFFFFF;*/
 }
 
 #calendar .first.filled{
@@ -403,33 +449,41 @@ Calendar CSS
 }
 
 #calendar .today{
-    border: .3em solid #B70C0C;
+    border: .2em solid #B70C0C;
 }
 
 #calendar .noday{
     background-color: white;
+    border: none;
+    border-top: 1px solid #DDDDDD;
 }
 
 #calendar th, #calendar td{
     padding: .5em;
-    border: .2em solid white;
-    height: 7em;
-    width: 7em;
+    border-left: 1px solid white;
+    border-top: 1px solid white;
+    height: 5em;
+    width: 5em;
     vertical-align: text-top;
 }
 
-#calendar strong{
-    font-size: 1.5em;
+
+.month{
+    margin: .55em 0 0;
 }
 
+#calendar p{
+    font-size: .9em;    
+}
 #calendar strong.hours{
     color:black;
 }
 
 #calendar_nav {
+
+    margin: 3em auto; 
     text-align: center;
-    margin-top: 2em;
-    margin-bottom: 3em;
+    width: 50%;
 }
 
 .calendar_nav_link{
@@ -441,12 +495,19 @@ Calendar CSS
 }
 
 #calendar_key{
+    padding: 15px;
+    border: 1px solid #E5E5E5;
+    margin: 0 12px 0;
     float: left;
     width: 12em;
 }
 
 #calendar_key p, #calendar_key legend{
     font-weight: bold;
+}
+
+#calendar_key p{
+    font-size: 11pt;
 }
 
 #calendar_key legend{
@@ -463,4 +524,143 @@ Calendar CSS
 .separator{
     height: .3em;
     background-color: white;
+}
+
+
+/*
+Schedule CSS 
+*/
+
+#schedule{
+    margin-top: 1em;
+}
+
+#schedule table{
+    border: 1px solid #DDDDDD;    
+    margin: 0;
+}
+
+#schedule td{
+    border-bottom: 1px solid #DDDDDD;
+    border-right: 1px solid #DDDDDD;
+}
+
+#schedule .filled{
+    background-color: #0F3A55;
+    border: 1px solid white;
+}
+
+#schedule .date{
+    height: 2em;
+    font-size: 2em;
+}
+
+#schedule .users{
+    font-size: 1em;
+}
+
+#schedule .time{
+    width: 5em;
+}
+
+#schedule .row{
+    height: 3em;
+}
+
+#schedule .content{
+    width: 10em;
+}
+
+#schedule .now{
+    border-left: 1px solid red;
+}
+
+#schedule_options{
+    margin: 2em;
+}
+
+#schedule_options a{
+    display: block;
+    border: 1px solid black;
+    padding: 1.5em;
+    color: black;
+    background-color: #F5F5F5;
+}
+
+#schedule_options a{
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    box-shadow: 0 2px 3px rgba(20,20,20,0.5);
+}
+
+#schedule_options li{
+    padding: 3px;
+    margin: 1em;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
+
+#schedule_options li:hover {
+    background-color: #46328C;
+}
+#schedule_options a:hover {
+    border: 1px solid #46328C;
+    text-decoration: none;
+}
+
+.option_title{
+    font-size: 20px;
+    float: left;
+    margin-right: 2em;
+    width: 5em;
+}
+
+.option_description{
+    font-size: 12px;
+    float: right;
+    margin-right: 2em;
+    width: 6em;
+}
+
+.hidden{
+    visibility: hidden;
+}
+
+.visible {
+    visibility: visible;
+}
+
+.timeperiod_selector:hover {
+    cursor: pointer;
+}
+#timeperiod_info{
+    margin: 1em;
+}
+
+#timeperiod_heading{
+    border-top: 1px solid #DD4B39;
+    border-left: 10px solid #DD4B39;
+    padding: 10px;
+}
+
+#timeperiod_title{
+    text-align: left;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+#timeperiod_details{
+    margin-left: 2em;
+}
+
+#timeperiod_info ul{
+    margin: 0;
+}
+
+#timeperiod_info strong{
+    float: left;
+    margin-right: 3px;
 }

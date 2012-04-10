@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 
+{% block pageJS %}
+<script type="text/javascript">
+    $(function(){
+        $('#id_day').datepicker();
+    });
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="section">
     <h1>Schedule</h1>
@@ -7,47 +15,68 @@
 </div>
 
 <hr class="separator"/>
+<div id="calendar">
+</div>
 <div class="form_box">
     <a href="/schedule/">Click here to go back</a>
     <form action="" method='post' id="schedule_chooser">{% csrf_token %}
-            <label class="input_label">
-            <strong>Select a day to view its schedule.</strong>
-            {{ form.day }}
-        </label>
+        <strong>Select Day</strong>
+        {{ form.day }}
 
-        <input type="submit" value="Submit"/>
-        <input type="hidden" value="next" value="{{next}}"/>
+        <br/><br/>
+        <strong>Select Location</strong>
+        {{ form.location }}
+        <input type="submit" value="Go!"/>
+        <!--
+        <input type="button" value="< Prev"/>
+        <input type="button" value="Next >" />
+        -->
 
     </form>
+</div>
 
 {% if shifts %}
-    <table>
-        <tbody>
-                <tr>
-                    <th>Person</th>
-                    <th>Day</th>
-                    <th>Scheduled in</th>
-                    <th>Scheduled out</th>
-                    <th>Location</th>
-                </tr>
-                {% for shift in shifts %}
-                <tr>
-                    <td>{{shift.person}}</td>
-                    <td>{{shift.day}}</td>
-                    <td>{{shift.scheduled_in}}</td>
-                    <td>{{shift.scheduled_out}}</td>
-                    <td>{{shift.location}}</td>
-                </tr>
-                {% endfor %}
-        </tbody>
+<div id="schedule">
+    <table> 
+        <tr class="date">
+            <th colspan="{{rowlength}}">{{day}}</th>
+        </tr>
+        <tr class="location">
+            <th colspan="{{rowlength}}">{{location}}</th>
+        </tr>
+        <tr class="users">
+            <th>Time</th>
+            {% for person in people %}
+                <th class="user">{{person}}</th>
+            {% endfor %}
+        </tr>
+
+        {% for shift in shifts %}
+        <tr class="{{shift.class}}">
+            <td class="time">{{shift.time}}</td>
+            {% for person in shift.people %}
+                {% if person %}
+                    <td class="content filled">{{person}}</td>
+                {% else %}
+                    <td class="content empty"></td>
+                {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
     </table>
 </div>
-{% else %}
 
-<div class="section">
-    <h2>{{message}}</h2>
-</div>
+    <!--
+    <input type="submit" value="Save!" id="save"/>
+    <input type="reset" value="Reset!"/>
+    -->
+
+{% else %}
+    <div class="section">
+        <h2>{{message}}</h2>
+    </div>
 {% endif %}
+
 
 
 {% endblock %}
