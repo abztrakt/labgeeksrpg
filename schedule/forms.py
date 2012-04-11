@@ -1,5 +1,6 @@
 from django import forms
-from labgeeksrpg.people.models import UserProfile, TimePeriod
+from labgeeksrpg.people.models import UserProfile
+from labgeeksrpg.schedule.models import TimePeriod
 from labgeeksrpg.chronos.models import Location
 
 class SelectTimePeriodForm(forms.Form):
