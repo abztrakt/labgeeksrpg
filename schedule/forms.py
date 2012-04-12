@@ -8,7 +8,7 @@ class SelectTimePeriodForm(forms.ModelForm):
     working_periods = forms.ModelMultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple,
-        queryset=TimePeriod.objects.all(),
+        queryset=TimePeriod.objects.all().order_by('start_date'),
         help_text='Please select the time periods in which you are available for work.' 
     )
 
