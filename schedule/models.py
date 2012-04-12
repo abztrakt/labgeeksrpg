@@ -21,8 +21,8 @@ class TimePeriod(models.Model):
     name = models.CharField(max_length=256)
     slug = models.SlugField()
     description = models.TextField(blank=True)
-    start_date = models.DateField(default=datetime.date.today())
-    end_date = models.DateField(default=datetime.date.today())
+    start_date = models.DateField(default=date.today())
+    end_date = models.DateField(default=date.today())
 
     def __unicode__(self):
         return self.name
