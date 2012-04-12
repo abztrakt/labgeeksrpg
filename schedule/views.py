@@ -128,6 +128,13 @@ def view_timeperiods(request):
     else:
         form = SelectTimePeriodForm(instance=user_profile)
 
+    if request.method == 'POST':
+        form = SelectTimePeriodForm(instance=user_profile)
+        
+    else:
+        form = SelectTimePeriodForm(instance=user_profile)
+
+
     for timeperiod in timeperiods:
         people = UserProfile.objects.filter(working_periods__name=timeperiod.name)
         data = {
