@@ -2,10 +2,12 @@ from django import forms
 from labgeeksrpg.people.models import UserProfile, TimePeriod
 from labgeeksrpg.chronos.models import Location
 
-class SelectTimePeriodForm(forms.Form):
-    filter_choices = [['avail','Availability'],['prefs','Preferences']]
-    time_periods = forms.ChoiceField(choices=[(tp.name,tp.name) for tp in TimePeriod.objects.all()])
-    time_period_filter = forms.ChoiceField(required=True, label=False, widget=forms.RadioSelect(), choices=filter_choices)
+class SelectTimePeriodForm(forms.ModelForm):
+    time_periods = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,choices=[(tp.name,tp.name) for tp in TimePeriod.objects.all()])
+
+    class Meta:
+        model = UserProfile
+        fields = ('time_periods',)
 
 class CreateDailyScheduleForm(forms.Form):
     DAY_CHOICES = (

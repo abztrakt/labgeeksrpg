@@ -5,3 +5,4 @@ from django.contrib.auth.models import User
 
 admin.site.register(DefaultShift)
 admin.site.register(WorkShift)
+admin.site.register(TimePeriod)
