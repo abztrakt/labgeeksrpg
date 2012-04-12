@@ -7,7 +7,6 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
         # Adding model 'TimePeriod'
         db.create_table('schedule_timeperiod', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -86,6 +85,11 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'db_index': 'True'}),
             'start_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 4, 11)'})
+            'end_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 3, 29)'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'db_index': 'True'}),
+            'start_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 3, 29)'})
         },
         'schedule.workshift': {
             'Meta': {'object_name': 'WorkShift'},

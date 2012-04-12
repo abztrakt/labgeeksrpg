@@ -2,6 +2,7 @@ from django.db import models
 from datetime import date
 from django.contrib.auth.models import User
 from schedule.models import TimePeriod as s_TimePeriod
+
 class EmploymentStatus(models.Model):
     """ Defines statuses that a Person could hold.
     """
@@ -21,14 +22,6 @@ class WorkGroup(models.Model):
 
     def __unicode__(self):
         return self.name
-class TimePeriod(models.Model):
-    """ Defines possible periods of time when a person could choose to work or choose not to work.
-    """
-    name = models.CharField(max_length=256)
-    slug = models.SlugField()
-    description = models.TextField(blank=True)
-    start_date = models.DateField(default=date.today())
-    end_date = models.DateField(default=date.today())
 
 class PayGrade(models.Model):
     """ A tier for a position which determines the wage.
