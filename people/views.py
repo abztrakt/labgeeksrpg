@@ -200,6 +200,7 @@ def view_and_edit_reviews(request,user):
 
     # Gather the data from the reviews and separate out fields.    
     review_stats = {}
+    comment_stats = []
 
     # Used for table viewing.
     table_dict = {}
@@ -239,6 +240,9 @@ def view_and_edit_reviews(request,user):
                     review_stats[key].append(stats)
                 else:
                     review_stats[key] = [stats]
+    
+        if final_reviewer and not review.is_final:
+            comment_stats.append({'reviewer': review.reviewer, 'value': review.comments})
 
         if review.is_final:
             table_date_info.append({'date':review.date,'id':review.id})
@@ -250,20 +254,25 @@ def view_and_edit_reviews(request,user):
     form_fields = []
     for field in form.visible_fields():
         stats = None
+        stats_text = ''
         if final_reviewer:
             name = ' '.join(str(x) for x in field.name.split('_'))
             if name in review_stats.keys():
+                stats_text = "Leads other scores:"
                 stats = review_stats[name]
                 avg = sum(int(v['value']) for v in stats)/len(stats)
                 stats.append({'value':avg,'reviewer': 'AVERAGE'})
-
+            if name == 'comments':
+                stats_text = "Leads other comments:"
+                stats = comment_stats
 
         field_info = {
             'label_tag': field.label_tag,
             'help_text': field.help_text,
             'field': field,
             'name': field.name,
-            'stats': stats
+            'stats': stats,
+            'stats_text': stats_text,
         }
 
         form_fields.append(field_info)

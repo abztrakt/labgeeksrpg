@@ -80,8 +80,18 @@
     </div>
 
     <div id="edit_timeperiod" class="tab_content">
-        <p>Hi Michael.</p>
-        {{ form}}
+        <div class="form_box">
+            <form action="" method='post' enctype="multipart/form-data">{% csrf_token %}
+                {% for field in form.visible_fields %}
+                    <label class="input_label">
+                        <strong>{{field.label_tag}}</strong>
+                        <p>{{field.help_text}}</p>
+                    </label>
+                    {{field}}
+                {% endfor %}
+                <input type="submit" value="Save" />
+            </form>
+        </div>
     </div>
 
 </div>

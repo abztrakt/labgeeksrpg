@@ -1,13 +1,24 @@
 from django import forms
-from labgeeksrpg.people.models import UserProfile, TimePeriod
+from labgeeksrpg.people.models import UserProfile
+from labgeeksrpg.schedule.models import TimePeriod
 from labgeeksrpg.chronos.models import Location
 
 class SelectTimePeriodForm(forms.ModelForm):
-    time_periods = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,choices=[(tp.name,tp.name) for tp in TimePeriod.objects.all()])
+
+    working_periods = forms.ModelMultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        queryset=TimePeriod.objects.all(),
+        help_text='Please select the time periods in which you are available for work.' 
+    )
+
+    def save(self,*args,**kwargs):
+        inst = forms.ModelForm.save(self,*args,**kwargs)
+        return inst
 
     class Meta:
         model = UserProfile
-        fields = ('time_periods',)
+        fields = ('working_periods',)
 
 class CreateDailyScheduleForm(forms.Form):
     DAY_CHOICES = (

@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
 from django.http import HttpResponse
-from people.models import UserProfile, TimePeriod
+from people.models import UserProfile
 from chronos.models import Location
 from schedule.models import *
 from schedule.forms import SelectTimePeriodForm, SelectDailyScheduleForm, CreateDailyScheduleForm
@@ -120,6 +120,19 @@ def view_timeperiods(request):
 
     timeperiod_stats = []
     timeperiods = TimePeriod.objects.all().order_by('start_date')
+    if request.method == 'POST':
+        form = SelectTimePeriodForm(request.POST,instance=user_profile)
+        if form.is_valid():
+            user_profile = form.save()
+    else:
+        form = SelectTimePeriodForm(instance=user_profile)
+
+    if request.method == 'POST':
+        form = SelectTimePeriodForm(instance=user_profile)
+        
+    else:
+        form = SelectTimePeriodForm(instance=user_profile)
+
 
     if request.method == 'POST':
         form = SelectTimePeriodForm(instance=user_profile)
