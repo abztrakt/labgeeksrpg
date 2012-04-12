@@ -771,10 +771,6 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     background: #fff;
 }
 
-.tab_content {
-    padding: 20px;
-    font-size: 1.2em;
-}
 
 .hidden{
     display: none;
