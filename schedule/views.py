@@ -3,16 +3,19 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.context_processors import csrf
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from people.models import UserProfile
 from chronos.models import Location
 from schedule.models import *
 from schedule.forms import SelectTimePeriodForm, SelectDailyScheduleForm, CreateDailyScheduleForm
 from django import forms
 import json
-#TODO: figure out exactly which of the libraries below are needed and don't import them all
-from datetime import date, datetime, time, timedelta
+from datetime import date, datetime, timedelta
+
 def list_options(request):
+    '''
+    Lists out the options regarding scheduling. Essentially a home page for the schedule app.
+    '''
 
     if not request.user.is_authenticated():
         message = 'Permission Denied'
@@ -47,7 +50,14 @@ def view_shifts(request):
         if form.is_valid():
             day = form.cleaned_data['day']
             location = form.cleaned_data['location']
-            data = WorkShift.objects.filter(scheduled_in__day=day.day,scheduled_in__month=day.month,scheduled_in__year=day.year,person__isnull=False,location__name=location).order_by('person__username')
+            data = WorkShift.objects.filter(
+                scheduled_in__day=day.day,
+                scheduled_in__month=day.month,
+                scheduled_in__year=day.year,
+                person__isnull=False,
+                location__name=location
+            ).order_by('person__username')
+
             if not data:
                 message = 'Nobody scheduled for %s' %  (day)
             else:
@@ -55,16 +65,6 @@ def view_shifts(request):
                 # TODO EDIT LATER
                 x_axis = []
                 y_axis = []
-
-                # x_axis
-                # maybe dont need this... for now.
-                '''
-                weekdays = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
-                starting = day - timedelta(days = day.weekday())
-                for i in range(0,7):
-                    x = {'day' : weekdays[i],'date':starting + timedelta(days = i)}
-                    x_axis.append(x)
-                '''
 
                 # y_axis - The time scale
                 counter = datetime(day.year,day.month,day.day,7,0)
@@ -112,6 +112,10 @@ def view_shifts(request):
     return render_to_response('view_shifts.html', locals(),context_instance=RequestContext(request))
 
 def view_timeperiods(request):
+    '''
+    This view returns a list of timeperiods and users who can work in those timeperiods.
+    This view also allows users to select which timeperiods they can work for.
+    '''
     user = request.user
     try:
         user_profile = UserProfile.objects.get(user=user)
@@ -126,20 +130,6 @@ def view_timeperiods(request):
             user_profile = form.save()
     else:
         form = SelectTimePeriodForm(instance=user_profile)
-
-    if request.method == 'POST':
-        form = SelectTimePeriodForm(instance=user_profile)
-        
-    else:
-        form = SelectTimePeriodForm(instance=user_profile)
-
-
-    if request.method == 'POST':
-        form = SelectTimePeriodForm(instance=user_profile)
-        
-    else:
-        form = SelectTimePeriodForm(instance=user_profile)
-
 
     for timeperiod in timeperiods:
         people = UserProfile.objects.filter(working_periods__name=timeperiod.name)
@@ -156,9 +146,11 @@ def view_timeperiods(request):
     return render_to_response('view_timeperiods.html',locals(),context_instance=RequestContext(request))
 
 def view_timeperiod_data(request):
+    '''
+    This method returns json data regarding timeperiods. 
+    '''
     data = request.REQUEST.copy()
     slug = data.getlist('name')[0]
-    
     
     timeperiod = TimePeriod.objects.get(slug=slug)
     people_list = UserProfile.objects.filter(working_periods__name=timeperiod.name)
@@ -174,7 +166,9 @@ def view_timeperiod_data(request):
     return HttpResponse(result)
 
 def view_people(request):
-    #TODO change it so that only active people are displayed.
+    '''
+    This method returns a list of all users in the system in json.
+    '''
     people_list = User.objects.all()
     people = [str(c.username) for c in people_list]
     result = json.dumps({
@@ -185,6 +179,10 @@ def view_people(request):
 
 
 def create_default_schedule(request):
+    '''
+    This view will allow users to create a schedule from scratch.
+    '''
+
     if request.method == 'POST':
         form = CreateDailyScheduleForm(request.POST)
         if form.is_valid():
@@ -193,7 +191,6 @@ def create_default_schedule(request):
             timeperiod = TimePeriod.objects.get(name=form.cleaned_data['timeperiods'])
             location = Location.objects.get(name=form.cleaned_data['location'])
 
-            # TODO add timeperiod with a default shift instead of looking up start date / end date.
             start_date = timeperiod.start_date
             end_date = timeperiod.end_date
             
@@ -213,7 +210,6 @@ def create_default_schedule(request):
                 shifts.append(data)
 
             schedule_class = "visible"
-            #import pdb; pdb.set_trace()
     else:
         schedule_class ="hidden"
         form = CreateDailyScheduleForm()
