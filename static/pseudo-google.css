@@ -102,6 +102,23 @@ thead {
     color: rgba(252,138,69,1);
 }
 
+img#pic {
+    height: 35px;
+}
+
+li#navpic {
+    margin-top: -10px;
+}
+
+li#navpic a {
+    margin: 0px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 1px;
+    padding-top: 27px;
+}
+
+
 /* IDs */
 
 #submit_button {
