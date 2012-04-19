@@ -2,7 +2,9 @@
 
 {% block pageJS %}
 <script type="text/javascript" src="/static/js/jquery.tools.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.ui.timepicker.js"></script>
 <script type="text/javascript" src="/static/js/schedule.js"></script>
+
 {% endblock %}
 {% block content %}
 <div class="section">
@@ -48,7 +50,41 @@
 
     </ul>
     <div class="tab_container">
+        {% for day in x_axis %}
+            <div id={{day}} class="tab_content">
+                <div class="day_header">{{day}}</div>
+                <div class="hours_toolbar">
+                    <form>
+                        <strong>Closing hours:</strong>
+                        <input class="closing_starting_hours time_input" type="text" />
+                        <input class="closing_ending_hours time_input" type="text" />
+                        <button class="add_closing_hours" type="button">Add closing hours</button>
 
+                    </form>
+                </div>
+                <div class="schedule_grid"> 
+                {% for time in y_axis %}
+                <div class="schedule_row">
+                    <div class="schedule_row_content">{{time}}</div>
+                    <div class="schedule_row_content"></div>
+                    <div class="schedule_row_content"></div>
+                    <div class="schedule_row_content"></div>
+                    <div class="schedule_row_content"></div>
+                    <div class="schedule_row_content"></div>
+                    <div class="schedule_row_content"></div>
+                    <div class="schedule_row_content"></div>
+                    <div class="schedule_row_content"></div>
+                    <div class="schedule_row_content"></div>
+                </div>
+                {% endfor %}
+                </div>
+            </div>
+
+        {% endfor %}
+
+
+
+        {% comment %}
         {% for shift in shifts %}
         <div id="{{shift.day}}" class="tab_content">
             <table>
@@ -73,6 +109,7 @@
             </table>
         </div>
         {% endfor %}
+        {% endcomment %}
     </div>
 
 </div>

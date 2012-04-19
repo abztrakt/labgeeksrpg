@@ -25,6 +25,17 @@ $(document).ready(function(){
         return false;
     });
 
+    // Use a timepicker widget to select the times in an input field.
+    $('.time_input').timepicker({
+            showPeriod: true,
+            amPmText: ['am', 'pm'],
+            minutes: {
+                starts: 0,
+                ends: 30,
+                interval: 30
+            }
+        });
+
     /*
     $(".content").click(function(){
         $(this).empty();
@@ -38,6 +49,10 @@ $(document).ready(function(){
         }
     });
     */
+
+    // Bind the addClosingHours method to the button.
+    $(".add_closing_hours").click(addClosingHours)
+
     getPeopleList();
 
     $(".add_person").change(function () {
@@ -72,15 +87,39 @@ $(document).ready(function(){
         }
     }); 
 
-    /*
-    $(".test").click(function(){
-        var str = $(this).text();
-        $("#Monday td").css("background","white");
-        $("#Monday td" + str).css("background","coral");
-
-    });
-    */
 });
+
+
+function addClosingHours(){
+    var startTime = $(this).parent().children(".closing_starting_hours")[0].value;
+    var endTime = $(this).parent().children(".closing_ending_hours")[0].value;
+    var schedule = $(this).parent().parent().parent().children(".schedule_grid")[0];
+
+    var startIndex = 0;
+    var endIndex = 0;
+
+    for (var i = 0; i < schedule.children.length; i++) { 
+        var schedule_row = schedule.children[i];
+        var schedule_row_time = schedule_row.children[0].innerHTML;
+
+        if (schedule_row_time == startTime){
+            startIndex = i;
+        }
+        
+        if (schedule_row_time == endTime){
+            endIndex = i;
+        }
+    }
+
+    for (var i = startIndex; i <= endIndex; i++){
+        var schedule_row = schedule.children[i];
+        for (var j = 1; j < schedule_row.children.length; j ++){
+                $(schedule_row.children[j]).addClass("closed_hours");
+                $(schedule_row.children[j]).html('closed');
+        }
+    }
+}
+
 
 function getPeopleList(){
     $.ajax({

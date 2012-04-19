@@ -566,6 +566,45 @@ Schedule CSS
     margin-top: 1em;
 }
 
+
+#schedule .day_header{
+    font-size: 2em;
+    background-color: #F5F5F5;
+    padding: 1em;
+    border-bottom: 1px solid #999999;
+}
+
+#schedule .schedule_row{
+    overflow:hidden;
+}
+
+#schedule .schedule_row_content{
+    border-bottom: 1px solid #DDDDDD;
+    border-right: 1px solid #DDDDDD;
+    height: 1.2em;
+    text-align: center;
+    width: 5em;
+    padding: 1em;
+    float: left;
+}
+
+#schedule .closed_hours{
+    background-color: black;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+    color: white;
+}
+
+#schedule .hours_toolbar{
+    padding: .5em;
+    border-bottom: 1px solid #999999;
+}
+
+#schedule .hours_toolbar input {
+    width: 6em;
+}
+
+/* Trying to get rid of some of the scheduling css */
 #schedule table{
     border: 1px solid #DDDDDD;    
     margin: 0;
@@ -602,9 +641,11 @@ Schedule CSS
     border: 1px solid red;
 }
 
+/*
 #schedule .time{
     width: 5em;
 }
+*/
 
 #schedule .content{
     width: 5em;
