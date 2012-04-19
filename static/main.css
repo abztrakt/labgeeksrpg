@@ -125,6 +125,23 @@ tr:first-child {
 .nav li, #chronos_nav ul li {
     float: left;
 }
+
+img#pic {
+    height: 35px; 
+}
+
+li#navpic {
+    margin-top: -10px;
+}
+
+li#navpic a {
+    margin: 0px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 1px;
+    padding-top: 27px;
+}
+
 /*
 #navbar, #chronos_nav {
 	background-color: rgba(200, 200, 200, .5);

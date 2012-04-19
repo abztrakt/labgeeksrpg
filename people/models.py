@@ -119,5 +119,18 @@ class UserProfile(models.Model):
     site_skin = models.CharField(max_length=256, null=True, blank=True)
     wage = models.ManyToManyField(WageHistory,null=True,blank=True)
 
+    def get_photo(self):
+        if self.staff_photo and self.badge_photo:
+            photo = self.staff_photo.url
+        elif self.staff_photo and not self.badge_photo:
+            photo = self.staff_photo.url
+        elif not self.staff_photo and self.badge_photo:
+            photo = self.badge_photo.url
+        elif not self.staff_photo and not self.badge_photo:
+            photo = "/static/img/stock_photo.jpg"
+        else:
+            photo = "/static/img/stock_photo.jpg"
+        return photo
+
     def __unicode__(self):
         return "%s %s [%s]" % (self.user.first_name, self.user.last_name, self.user.username)
