@@ -11,7 +11,8 @@ from labgeeksrpg.utils import ReportCalendar, TimesheetCalendar
 from django.contrib.auth.models import User
 from datetime import date
 from django.utils.safestring import mark_safe
-import re
+
+from people.models import UserProfile
 
 def list_options(request):
     """ Lists the options that users can get to when using chronos.
@@ -71,7 +72,6 @@ def get_shifts(year,month,day=None,user=None,week=None,payperiod=None):
 
     #Return the correct shifts
     return shifts
-
 
 def calc_shift_stats(shifts,year,month):
     '''
@@ -141,6 +141,9 @@ def prev_and_next_dates(year,month):
     result = {'prev_date':prev_date,'next_date':next_date}
     return result
 
+"""
+    The methods and views below deal with OVERALL calendar information
+"""
 @login_required
 def staff_report(request,year,month,day=None,user=None,week=None,payperiod=None):
     '''
@@ -164,7 +167,7 @@ def specific_report(request,user,year,month,day=None,week=None,payperiod=None):
     if user:
         user = User.objects.get(username=user)
 
-    shifts = get_shifts(year,month,day,user,week,payperiod)
+    all_shifts = get_shifts(year,month,day,user,week,payperiod)
     
     if day:
         description = "Viewing shifts for %s." % (date(int(year),int(month),int(day)).strftime("%B %d, %Y"))
@@ -174,8 +177,9 @@ def specific_report(request,user,year,month,day=None,week=None,payperiod=None):
         #This should be a payperiod view
         description = "Viewing shifts in payperiod %d of %s." % (int(payperiod),date(int(year),int(month),1).strftime("%B, %Y"))
 
-    #Splits up shiftnotes into two separate variables if there are two to begin with
-    for shift in shifts:
+    # The following code is used for displaying the user's call_me_by or first name.
+    shifts = []
+    for shift in all_shifts:
         if "\n\n" in shift.shiftnote:
             shiftnotes = shift.shiftnote.split("\n\n")
             shift.shiftinnote = shiftnotes[0]
@@ -183,6 +187,28 @@ def specific_report(request,user,year,month,day=None,week=None,payperiod=None):
         else:
             shift.shiftinnote = shift.shiftnote
             shift.shiftoutnote = ""
+
+        user = User.objects.get(username=shift.person)
+        try:
+            profile = UserProfile.objects.get(user = user)
+            
+            if profile.call_me_by:
+                user = profile.call_me_by
+            else:
+                user = user.first_name
+        except UserProfile.DoesNotExist:
+            user = user.first_name
+
+        data = {
+            'person': user,
+            'location': shift.in_clock.location,
+            'intime': shift.intime,
+            'outtime' : shift.outtime,
+            'length': shift.length,
+            'shiftinnote': shift.shiftinnote,
+            'shiftoutnote': shift.shiftoutnote,
+        }
+        shifts.append(data)
 
     return render_to_response('specific_report.html',locals())
 
@@ -254,9 +280,7 @@ def personal_report(request, user=None, year=None,month=None):
     if request.user.is_authenticated():
         #Grab user's shifts 
         shifts = get_shifts(year,month,None,user)
-
-        #Create calendar
-        calendar = mark_safe(TimesheetCalendar(shifts,user).formatmonth(year,month))
+        calendar = mark_safe(TimesheetCalendar(shifts,user=user).formatmonth(year,month))
     else:
         shifts = None
         calendar = None
@@ -359,6 +383,19 @@ def time(request):
         in_or_out = 'IN'
         if user in location.active_users.all():
             in_or_out = 'OUT'
+        
+    # The following code is used for displaying the user's call_me_by or first name.
+    user = User.objects.get(username=user)
+    try:
+        profile = UserProfile.objects.get(user = user)
+        
+        if profile.call_me_by:
+            user = profile.call_me_by
+        else:
+            user = user.first_name
+    except UserProfile.DoesNotExist:
+        user = user.first_name
+
     return render_to_response('time.html', locals(), context_instance=RequestContext(request))
 
 def fail(request):
@@ -385,4 +422,17 @@ def success(request):
     at_time = request.GET['at_time']
     location = request.GET['location']
     user = request.GET['user']
+
+    # The following code is used for displaying the user's call_me_by or first name.
+    user = User.objects.get(username=user)
+    try:
+        profile = UserProfile.objects.get(user = user)
+        
+        if profile.call_me_by:
+            user = profile.call_me_by
+        else:
+            user = user.first_name
+    except UserProfile.DoesNotExist:
+        user = user.first_name
+
     return render_to_response('success.html', locals())
