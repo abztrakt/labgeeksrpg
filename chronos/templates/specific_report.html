@@ -1,31 +1,68 @@
 {% extends 'base.html' %}
 
+{% block pageJS %}
+<script type="text/javascript" src="/static/js/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() 
+    { 
+        $("#report").tablesorter(
+            {
+                cssAsc: 'headerSortUp',
+                cssDesc: 'headerSortDown',
+                cssHeader: 'header',
+                headers: { 6: { sorter: false}, 7: {sorter: false} },
+            }
+        ); 
+    } 
+);
+</script>
+{% endblock %}
+
+{% block pageCSS %}
+<style type='text/css'>
+th.header {
+    background-image: url('/static/img/bg.gif');
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-position: center left;
+    padding-left: 20px;
+}
+th.headerSortUp {
+    background-image: url('/static/img/asc.gif');
+}
+th.headerSortDown {
+    background-image: url('/static/img/desc.gif');
+}
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="section">
     <h1>Specific Report</h1>
     <h2>{{ description }}</h2>
 </div>
-<table class="regular_table report_results">
-    <tr>
-        <th>Name</th>
-        <th>Punch Clock Locale</th>
-        <th>In time</th>
-        <th>Out time</th>
-        <th>Hours Worked</th>
-        <th>Note</th>
-    </tr>
-
+<table id="report" class="regular_table report_results">
+    <thead>
+        <tr>
+            <th><a href="#">Name</a></th>
+            <th><a href="#">Punch Clock Locale</a></th>
+            <th><a href="#">In time</a></th>
+            <th><a href="#">Out time</a></th>
+            <th><a href="#">Hours Worked</a></th>
+            <th><a href="#">Note</a></th>
+        </tr>
+    </thead>
+    <tbody>
     {% for shift in shifts %}
-    <tr>
-        <td>{{ shift.person}}</td>
-        <td>{{ shift.location }}</td>
-        <td>{{ shift.intime }} </td>
-        <td>{{ shift.outtime}} </td>
-        <td>{{ shift.length }} </td>
-        <td>{{ shift.shiftnote}}</td>
-
-    </tr>
+        <tr>
+            <td>{{ shift.person }}</td>
+            <td>{{ shift.in_clock.location }}</td>
+            <td>{{ shift.intime }}</td>
+            <td>{{ shift.outtime }}</td>
+            <td>{{ shift.length }}</td>
+            <td>{{ shift.shiftinnote }}<br />{{ shift.shiftoutnote }}</td>
+        </tr>
     {% endfor %}
-
+    </tbody>
 </table>
 {% endblock %}
