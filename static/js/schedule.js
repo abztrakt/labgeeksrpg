@@ -50,8 +50,9 @@ $(document).ready(function(){
     });
     */
 
-    // Bind the addClosingHours method to the button.
-    $(".add_closing_hours").click(addClosingHours)
+    // Bind the modifyClosingHours method to the buttons.
+    $(".add_closing_hours").bind("click",true,modifyClosingHours);
+    $(".remove_closing_hours").bind("click",false,modifyClosingHours);
 
     getPeopleList();
 
@@ -90,10 +91,12 @@ $(document).ready(function(){
 });
 
 
-function addClosingHours(){
+function modifyClosingHours(event){
+
     var startTime = $(this).parent().children(".closing_starting_hours")[0].value;
     var endTime = $(this).parent().children(".closing_ending_hours")[0].value;
     var schedule = $(this).parent().parent().parent().children(".schedule_grid")[0];
+    var isAdding = event.data;
 
     var startIndex = 0;
     var endIndex = 0;
@@ -114,8 +117,13 @@ function addClosingHours(){
     for (var i = startIndex; i <= endIndex; i++){
         var schedule_row = schedule.children[i];
         for (var j = 1; j < schedule_row.children.length; j ++){
-                $(schedule_row.children[j]).addClass("closed_hours");
-                $(schedule_row.children[j]).html('closed');
+                if (isAdding){
+                    $(schedule_row.children[j]).addClass("closed_hours");
+                    $(schedule_row.children[j]).html('closed');
+                }else{
+                    $(schedule_row.children[j]).removeClass("closed_hours");
+                    $(schedule_row.children[j]).empty();
+                }
         }
     }
 }
