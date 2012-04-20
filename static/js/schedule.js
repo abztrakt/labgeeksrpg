@@ -54,17 +54,9 @@ $(document).ready(function(){
     $(".add_closing_hours").bind("click",true,modifyClosingHours);
     $(".remove_closing_hours").bind("click",false,modifyClosingHours);
 
-    getPeopleList();
 
-    $(".add_person").change(function () {
-        $(this).parent().text($(this).val());
-
-        var table = $(this).parent("table");
-        var date = $(table).find(".date th");
-        $("#test").append(table.innerHTML);
-
-    })
-    .change();
+    // Bind the save method to the save button.
+    $("#save_hours").bind("click",saveClosingHours);
 
     // Handle the selecting of columns.
     $("table").selectable({
@@ -95,6 +87,10 @@ function modifyClosingHours(event){
 
     var startTime = $(this).parent().children(".closing_starting_hours")[0].value;
     var endTime = $(this).parent().children(".closing_ending_hours")[0].value;
+
+    var startTimeSplit = timeDict(startTime);
+    var endTimeSplit = timeDict(endTime);
+
     var schedule = $(this).parent().parent().parent().children(".schedule_grid")[0];
     var isAdding = event.data;
 
@@ -119,7 +115,7 @@ function modifyClosingHours(event){
         for (var j = 1; j < schedule_row.children.length; j ++){
                 if (isAdding){
                     $(schedule_row.children[j]).addClass("closed_hours");
-                    $(schedule_row.children[j]).html('closed');
+                    $(schedule_row.children[j]).html("closed");
                 }else{
                     $(schedule_row.children[j]).removeClass("closed_hours");
                     $(schedule_row.children[j]).empty();
@@ -128,6 +124,43 @@ function modifyClosingHours(event){
     }
 }
 
+function saveClosingHours(event){
+    var schedule_days = $(".tab_container").children();
+    var closing_hours = {};
+
+    for (var i = 0; i < schedule_days.length; i++){
+        var schedule_box = $(schedule_days[i]);
+        var day = schedule_box.attr("id");
+        closing_hours[day] = [];
+        var grid = $(schedule_box.children(".schedule_grid")[0]).children();
+        for (var j = 0; j < grid.length; j++){
+            var row = $(grid[j]);
+            var time = row.children()[0].innerHTML;
+            if (row.children(".closed_hours").length > 0){
+                closing_hours[day].push(time);
+            }
+        }
+    }
+    
+}
+
+
+/*
+Takes a string representing a time and returns a time dictionary.
+@param time := "hh:mm am/pm"
+@return timeSplit := [hh,mm,am/pm]
+*/
+function timeDict(time){
+    var timeSplit = {};
+    var hourSplit = time.split(":");
+    var minuteSplit = hourSplit[1].split(" ");
+    timeSplit = {
+        'hour': hourSplit[0],
+        'minutes': minuteSplit[0],
+        'period': minuteSplit[1]
+    }
+    return timeSplit;
+}
 
 function getPeopleList(){
     $.ajax({

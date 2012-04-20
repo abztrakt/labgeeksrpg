@@ -39,10 +39,13 @@
 <div id="tooltip" class="tooltip">
     Hello Michael.
 </div>
-
+<div>
+    <form>
+        <button id="save_hours" type="button">Save</button>
+    </form>
+</div>
 
 <div id="schedule" class="{{schedule_class}}">
-    <p id="test"></p>
     <ul class="tabs">
         {% for day in x_axis %}
             <li><a href="#{{day}}"><span>{{day}}</span></a></li>
