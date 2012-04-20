@@ -7,6 +7,52 @@ This file deals with the schedule itself. Allows users to interact with the sche
 /* 
 Loads the page with events.
 */
+
+
+$(document).ajaxSend(function(event, xhr, settings) {
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    function sameOrigin(url) {
+        // url could be relative or scheme relative or absolute
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        // Allow absolute or scheme relative URLs to same origin
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            // or any other URL that isn't scheme relative or absolute i.e relative.
+            !(/^(\/\/|http:|https:).*/.test(url));
+    }
+    function safeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    }
+});
+
+
+
+
+
+
+
+
 $(document).ready(function(){
     // Javascript associated with tabs.
     $(".tab_content").hide();
@@ -127,10 +173,10 @@ function modifyClosingHours(event){
 function saveClosingHours(event){
     var schedule_days = $(".tab_container").children();
     var closing_hours = {};
-
+    closing_hours['csrfmiddlewaretoken'] = $('input[name=csrfmiddlewaretoken]').val();
     for (var i = 0; i < schedule_days.length; i++){
         var schedule_box = $(schedule_days[i]);
-        var day = schedule_box.attr("id");
+        var day = schedule_box.attr("id").toString();
         closing_hours[day] = [];
         var grid = $(schedule_box.children(".schedule_grid")[0]).children();
         for (var j = 0; j < grid.length; j++){
@@ -141,7 +187,14 @@ function saveClosingHours(event){
             }
         }
     }
-    
+
+    $.ajax({
+        "type"      : 'POST',
+        "url"       : "/schedule/create/closing/",
+        "data"      : $.param(closing_hours, true), 
+        "error"     : function(){},
+        "success"   : function(){}
+    });
 }
 
 

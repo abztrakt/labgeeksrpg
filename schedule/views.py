@@ -182,7 +182,6 @@ def create_default_schedule(request):
     '''
     This view will allow users to create a schedule from scratch.
     '''
-
     if request.method == 'POST':
         form = CreateDailyScheduleForm(request.POST)
         if form.is_valid():
@@ -215,6 +214,14 @@ def create_default_schedule(request):
         form = CreateDailyScheduleForm()
     
     return render_to_response('create_schedule.html', locals(), context_instance=RequestContext(request))
+
+def save_closing_hours(request):
+    '''
+    This method is used to process an ajax request and save the closed hours in the schedule app.
+    '''
+    data = request.POST.copy()
+
+    return HttpResponse()
 
 def view_preferences(request,form):
     pass
