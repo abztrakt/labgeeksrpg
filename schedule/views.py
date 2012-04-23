@@ -199,7 +199,7 @@ def create_default_schedule(request):
             # y_axis - The time scale
             counter = datetime(1,1,1,7,0)
             
-            while counter.hour != 1:
+            while counter.hour != 0:
                 y_axis.append(counter.time().strftime('%I:%M %p').lower())
                 counter += timedelta(minutes=30)
             
@@ -221,7 +221,52 @@ def save_closing_hours(request):
     '''
     data = request.POST.copy()
 
+    # Redundant, to say the least.
+    closing_hours = {
+        'Monday': data.getlist('Monday'),
+        'Tuesday': data.getlist('Tuesday'),
+        'Wednesday': data.getlist('Wednesday'),
+        'Thursday': data.getlist('Thursday'),
+        'Friday': data.getlist('Friday'),
+        'Saturday': data.getlist('Saturday'),
+        'Sunday': data.getlist('Sunday'),
+    }
+    location = data.getlist('location')
+
+    # Try with monday first..
+    monday = closing_hours['Monday']
+    
+    time_ranges = return_time_ranges(monday)
+
     return HttpResponse()
+
+def return_time_ranges(hours_list):
+    # TIME FORMATTING:
+    time_format = '%I:%M %p'
+    time_ranges = []
+
+    in_time = None
+    out_time = None
+    
+    for hour in hours_list:
+        current = datetime.strptime(hour,time_format)
+
+        if not in_time and not out_time:
+            in_time = current
+            out_time = current
+        elif (current - out_time).seconds / 60 == 30:
+            out_time = current
+        else:
+            time_range = {'in_time': in_time, 'out_time': out_time}
+            time_ranges.append(time_range)
+            in_time = current
+            out_time = current
+
+    time_range = {'in_time': in_time, 'out_time': out_time}
+    time_ranges.append(time_range)
+
+    return time_ranges
+
 
 def view_preferences(request,form):
     pass
