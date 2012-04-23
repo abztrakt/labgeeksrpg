@@ -237,26 +237,23 @@ def save_closing_hours(request):
     location = Location.objects.get(name=loc)
     timeperiod = TimePeriod.objects.get(name=tp)
 
-    ClosedHour.objects.filter(location=location, timeperiod=timeperiod, day='Monday').delete()
-    
-    # Try with monday first..
-    monday = closing_hours['Monday']
-    
-    time_ranges = return_time_ranges(monday)
+    for day, hours_list in closing_hours.iteritems():
+        ClosedHour.objects.filter(location=location, timeperiod=timeperiod, day=day).delete()
 
-    for time_range in time_ranges:
+        if len(hours_list) > 0:
+            time_ranges = return_time_ranges(hours_list)
 
-        day = 'Monday'
-        in_time = time_range['in_time'].time()
-        out_time = time_range['out_time'].time()
-        
-        closed_hour = ClosedHour.objects.create(
-            day = day,  
-            in_time = in_time,
-            out_time = out_time,
-            location = location,
-            timeperiod = timeperiod,
-        )
+            for time_range in time_ranges:
+                in_time = time_range['in_time'].time()
+                out_time = time_range['out_time'].time()
+
+                closed_hour = ClosedHour.objects.create(
+                    day = day,  
+                    in_time = in_time,
+                    out_time = out_time,
+                    location = location,
+                    timeperiod = timeperiod,
+                )
 
     return HttpResponse()
 
