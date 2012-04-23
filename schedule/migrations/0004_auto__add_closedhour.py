@@ -15,6 +15,7 @@ class Migration(SchemaMigration):
             ('in_time', self.gf('django.db.models.fields.TimeField')()),
             ('out_time', self.gf('django.db.models.fields.TimeField')()),
             ('location', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['chronos.Location'])),
+            ('timeperiod', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.TimePeriod'])),
         ))
         db.send_create_signal('schedule', ['ClosedHour'])
 
@@ -74,7 +75,8 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'in_time': ('django.db.models.fields.TimeField', [], {}),
             'location': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['chronos.Location']"}),
-            'out_time': ('django.db.models.fields.TimeField', [], {})
+            'out_time': ('django.db.models.fields.TimeField', [], {}),
+            'timeperiod': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['schedule.TimePeriod']"})
         },
         'schedule.defaultshift': {
             'Meta': {'object_name': 'DefaultShift'},
@@ -88,11 +90,11 @@ class Migration(SchemaMigration):
         'schedule.timeperiod': {
             'Meta': {'object_name': 'TimePeriod'},
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'end_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 4, 20)'}),
+            'end_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 4, 23)'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'db_index': 'True'}),
-            'start_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 4, 20)'})
+            'start_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 4, 23)'})
         },
         'schedule.workshift': {
             'Meta': {'object_name': 'WorkShift'},

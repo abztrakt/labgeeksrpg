@@ -69,6 +69,7 @@ class ClosedHour(models.Model):
     in_time = models.TimeField()
     out_time = models.TimeField()
     location = models.ForeignKey(Location)
+    timeperiod = models.ForeignKey(TimePeriod)
 
     def __unicode__(self):
         return "[%s] %s-%s @%s" % (self.day,self.in_time,self.out_time, self.location)
