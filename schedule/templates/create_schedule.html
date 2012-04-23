@@ -88,34 +88,6 @@
 
         {% endfor %}
 
-
-
-        {% comment %}
-        {% for shift in shifts %}
-        <div id="{{shift.day}}" class="tab_content">
-            <table>
-                <tr class="date">
-                    <th colspan="2">{{shift.day}}</th>
-                </tr>
-                <tr class="location">
-                    <th colspan="2">{{location}}</th>
-                </tr>
-                <tr class="users">
-                    <th>Time</th>
-                    <th><select class="add_person"></select></th>
-                </tr>
-                {% for time in y_axis %}
-
-                <tr class="row">
-                    <td class="time">{{time}}</td>
-                    <td class="content empty"></td>
-                </tr>
-                {% endfor %}
-
-            </table>
-        </div>
-        {% endfor %}
-        {% endcomment %}
     </div>
 
 </div>
