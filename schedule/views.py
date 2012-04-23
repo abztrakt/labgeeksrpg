@@ -231,13 +231,33 @@ def save_closing_hours(request):
         'Saturday': data.getlist('Saturday'),
         'Sunday': data.getlist('Sunday'),
     }
-    location = data.getlist('location')[0]
-    timeperiod = data.getlist('timeperiod')[0]
+    loc = data.getlist('location')[0]
+    tp = data.getlist('timeperiod')[0]
+
+    location = Location.objects.get(name=loc)
+    timeperiod = TimePeriod.objects.get(name=tp)
+
+    ClosedHour.objects.filter(location=location, timeperiod=timeperiod, day='Monday').delete()
+    
     # Try with monday first..
     monday = closing_hours['Monday']
     
     time_ranges = return_time_ranges(monday)
-    import pdb; pdb.set_trace()
+
+    for time_range in time_ranges:
+
+        day = 'Monday'
+        in_time = time_range['in_time'].time()
+        out_time = time_range['out_time'].time()
+        
+        closed_hour = ClosedHour.objects.create(
+            day = day,  
+            in_time = in_time,
+            out_time = out_time,
+            location = location,
+            timeperiod = timeperiod,
+        )
+
     return HttpResponse()
 
 def return_time_ranges(hours_list):
