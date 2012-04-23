@@ -189,11 +189,9 @@ def create_default_schedule(request):
             # Grab the data from the form
             timeperiod = TimePeriod.objects.get(name=form.cleaned_data['timeperiods'])
             location = Location.objects.get(name=form.cleaned_data['location'])
-
-            start_date = timeperiod.start_date
-            end_date = timeperiod.end_date
             
             x_axis = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+            days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
             y_axis = []
 
             # y_axis - The time scale
@@ -202,11 +200,57 @@ def create_default_schedule(request):
             while counter.hour != 0:
                 y_axis.append(counter.time().strftime('%I:%M %p').lower())
                 counter += timedelta(minutes=30)
-            
-            shifts = []
-            for day in x_axis:
-                data = {'day': day,'shifts':y_axis,'location':location}
-                shifts.append(data)
+        
+            # Create a schedule dictionary to hold the data.
+            schedule = []
+
+            # Grab the closed hours
+            closing_hours = ClosedHour.objects.filter(location=location, timeperiod=timeperiod)
+            time_ranges = {
+                'Monday': [],
+                'Tuesday': [],
+                'Wednesday': [],
+                'Thursday': [],
+                'Friday': [],
+                'Saturday': [],
+                'Sunday': [],
+            }
+
+            # Find out which hours were closing hours
+            for closing_hour in closing_hours:
+                day = closing_hour.day
+                in_time = closing_hour.in_time
+                out_time = closing_hour.out_time
+                hours = []
+
+                current = datetime(1,1,1,in_time.hour,in_time.minute)
+
+                while current.time() != out_time:
+                    hours.append(current.time())
+                    current += timedelta(minutes=30)
+                hours.append(current.time())
+
+                time_ranges[day] += hours
+        
+
+            # Now append append the hours to each day in the schedule.
+            for day in days:
+                time_range = time_ranges[day]
+                times = []
+                counter = datetime(1,1,1,7,0)
+
+                while counter.hour != 0:
+                    if counter.time() in time_range:
+                        closed = True
+                    else:
+                        closed = False
+                    times.append({'time': counter.time().strftime('%I:%M %p').lower(), 'closed': closed})
+
+                    counter += timedelta(minutes=30)
+                schedule.append({'times': times, 'day': day})
+
+            # TODO: For now, create an arbitrary size for the schedule. Consider changing it in the future.
+            schedule_length = [0]*10
 
             schedule_class = "visible"
     else:

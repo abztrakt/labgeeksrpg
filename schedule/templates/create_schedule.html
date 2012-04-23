@@ -55,9 +55,12 @@
 
     </ul>
     <div class="tab_container">
-        {% for day in x_axis %}
-            <div id={{day}} class="tab_content">
-                <div class="day_header">{{day}}</div>
+
+        {% comment %}
+        {% endcomment %}
+        {% for grid in schedule %}
+            <div id={{grid.day}} class="tab_content">
+                <div class="day_header">{{grid.day}}</div>
                 <div class="hours_toolbar">
                     <form>
                         <strong>Closing hours:</strong>
@@ -68,23 +71,18 @@
                     </form>
                 </div>
                 <div class="schedule_grid"> 
-                {% for time in y_axis %}
+                {% for times in grid.times %}
                 <div class="schedule_row">
-                    <div class="schedule_row_content">{{time}}</div>
-                    <div class="schedule_row_content"></div>
-                    <div class="schedule_row_content"></div>
-                    <div class="schedule_row_content"></div>
-                    <div class="schedule_row_content"></div>
-                    <div class="schedule_row_content"></div>
-                    <div class="schedule_row_content"></div>
-                    <div class="schedule_row_content"></div>
-                    <div class="schedule_row_content"></div>
-                    <div class="schedule_row_content"></div>
-                    <div class="schedule_row_content"></div>
+                    <div class="schedule_row_content">{{times.time}}</div>
+
+                    {% for i in schedule_length  %}
+                    <div class="schedule_row_content {% if times.closed %}closed_hours{% endif %}">{% if times.closed %}closed{% endif %}</div>
+                    {% endfor %}
                 </div>
                 {% endfor %}
                 </div>
             </div>
+
 
         {% endfor %}
 
