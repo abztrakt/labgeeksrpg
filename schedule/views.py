@@ -231,13 +231,13 @@ def save_closing_hours(request):
         'Saturday': data.getlist('Saturday'),
         'Sunday': data.getlist('Sunday'),
     }
-    location = data.getlist('location')
-
+    location = data.getlist('location')[0]
+    timeperiod = data.getlist('timeperiod')[0]
     # Try with monday first..
     monday = closing_hours['Monday']
     
     time_ranges = return_time_ranges(monday)
-
+    import pdb; pdb.set_trace()
     return HttpResponse()
 
 def return_time_ranges(hours_list):

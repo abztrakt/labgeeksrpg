@@ -174,8 +174,8 @@ function saveClosingHours(event){
     var schedule_days = $(".tab_container").children();
     var closing_hours = {};
     closing_hours['csrfmiddlewaretoken'] = $('input[name=csrfmiddlewaretoken]').val();
+    closing_hours['timeperiod'] = $('.timeperiod')[0].innerHTML; 
     closing_hours['location'] = $('.location')[0].innerHTML;    
-    
     for (var i = 0; i < schedule_days.length; i++){
         var schedule_box = $(schedule_days[i]);
         var day = schedule_box.attr("id").toString();
