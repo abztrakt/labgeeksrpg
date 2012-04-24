@@ -190,17 +190,8 @@ def create_default_schedule(request):
             timeperiod = TimePeriod.objects.get(name=form.cleaned_data['timeperiods'])
             location = Location.objects.get(name=form.cleaned_data['location'])
             
-            x_axis = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
             days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
-            y_axis = []
 
-            # y_axis - The time scale
-            counter = datetime(1,1,1,7,0)
-            
-            while counter.hour != 0:
-                y_axis.append(counter.time().strftime('%I:%M %p').lower())
-                counter += timedelta(minutes=30)
-        
             # Create a schedule dictionary to hold the data.
             schedule = []
 
@@ -232,7 +223,6 @@ def create_default_schedule(request):
 
                 time_ranges[day] += hours
         
-
             # Now append append the hours to each day in the schedule.
             for day in days:
                 time_range = time_ranges[day]

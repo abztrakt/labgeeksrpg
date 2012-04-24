@@ -49,15 +49,13 @@
     <div class="timeperiod">{{timeperiod}}</div>
     <div class="location">{{location}}</div>
     <ul class="tabs">
-        {% for day in x_axis %}
+        {% for day in days %}
             <li><a href="#{{day}}"><span>{{day}}</span></a></li>
         {% endfor %}
 
     </ul>
     <div class="tab_container">
 
-        {% comment %}
-        {% endcomment %}
         {% for grid in schedule %}
             <div id={{grid.day}} class="tab_content">
                 <div class="day_header">{{grid.day}}</div>
