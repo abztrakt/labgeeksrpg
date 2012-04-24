@@ -604,6 +604,20 @@ Schedule CSS
     width: 6em;
 }
 
+.schedule_toolbar .timeperiod, .schedule_toolbar .location{
+}
+
+.schedule_toolbar form button{
+    background-color: #D14836;
+    color: #FFFFFF;
+    border: 1px solid transparent;
+    height: 32px;
+    font-weight: bold;
+    padding: 0 8px;
+    width: 6em;
+}
+
+
 /* Trying to get rid of some of the scheduling css */
 #schedule table{
     border: 1px solid #DDDDDD;    
