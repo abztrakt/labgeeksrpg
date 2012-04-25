@@ -40,21 +40,25 @@
     Hello Michael.
 </div>
 
-<div class="schedule_toolbar">
-    <form>
-        <p>
-            <strong>Location:</strong>
-            <span class="timeperiod">{{timeperiod}}</span>
-        </p>
-        <p>
-            <strong>Time Period:</strong>
-            <span class="location">{{location}}</span>
-        </p>
-        <button id="save_hours" type="button">Save</button>
-    </form>
-</div>
-
 <div id="schedule" class="{{schedule_class}}">
+
+    <div class="schedule_toolbar">
+        <form>
+            <p>
+                <strong>Time Period:</strong>
+                <span class="timeperiod">{{timeperiod}}</span>
+            </p>
+            <p>
+                <strong>Location:</strong>
+                <span class="location">{{location}}</span>
+            </p>
+            <button id="save_hours" type="button">Save</button>
+        </form>
+    </div>
+
+    <div class="schedule_status hidden">
+    </div>
+
     <ul class="tabs">
         {% for day in days %}
             <li><a href="#{{day}}"><span>{{day}}</span></a></li>

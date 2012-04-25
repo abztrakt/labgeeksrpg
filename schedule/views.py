@@ -255,7 +255,6 @@ def save_closing_hours(request):
     '''
     data = request.POST.copy()
 
-    # Redundant, to say the least.
     closing_hours = {
         'Monday': data.getlist('Monday'),
         'Tuesday': data.getlist('Tuesday'),
@@ -270,7 +269,7 @@ def save_closing_hours(request):
 
     location = Location.objects.get(name=loc)
     timeperiod = TimePeriod.objects.get(name=tp)
-
+    result = {}
     for day, hours_list in closing_hours.iteritems():
         ClosedHour.objects.filter(location=location, timeperiod=timeperiod, day=day).delete()
 
@@ -289,7 +288,16 @@ def save_closing_hours(request):
                     timeperiod = timeperiod,
                 )
 
-    return HttpResponse()
+                string_time = {'in_time': time_range['in_time_string'], 'out_time': time_range['out_time_string']}
+
+                try:
+                    result[day].append(string_time)
+                except:
+                    result[day] = [string_time]
+
+    result = json.dumps(result)
+
+    return HttpResponse(result)
 
 def return_time_ranges(hours_list):
     # TIME FORMATTING:
@@ -308,12 +316,12 @@ def return_time_ranges(hours_list):
         elif (current - out_time).seconds / 60 == 30:
             out_time = current
         else:
-            time_range = {'in_time': in_time, 'out_time': out_time}
+            time_range = {'in_time': in_time, 'out_time': out_time, 'in_time_string':in_time.strftime('%I:%M %p').lower(),'out_time_string': out_time.strftime('%I:%M %p').lower()}
             time_ranges.append(time_range)
             in_time = current
             out_time = current
 
-    time_range = {'in_time': in_time, 'out_time': out_time}
+    time_range = {'in_time': in_time, 'out_time': out_time, 'in_time_string':in_time.strftime('%I:%M %p').lower(),'out_time_string': out_time.strftime('%I:%M %p').lower()}
     time_ranges.append(time_range)
 
     return time_ranges

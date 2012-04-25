@@ -604,7 +604,8 @@ Schedule CSS
     width: 6em;
 }
 
-.schedule_toolbar .timeperiod, .schedule_toolbar .location{
+.schedule_toolbar form{
+    margin-top: 1em;
 }
 
 .schedule_toolbar form button{
@@ -617,6 +618,18 @@ Schedule CSS
     width: 6em;
 }
 
+.schedule_status {
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 4px;
+    box-shadow: 0 2px 3px rgba(20,20,20,0.5);
+    border: 2px solid #339900;
+    background-color: #c8ffad;
+    padding: 1em;
+    margin: 1em;
+    height: 15em;
+    overflow: auto;
+}
 
 /* Trying to get rid of some of the scheduling css */
 #schedule table{

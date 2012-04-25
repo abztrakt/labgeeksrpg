@@ -8,51 +8,6 @@ This file deals with the schedule itself. Allows users to interact with the sche
 Loads the page with events.
 */
 
-
-$(document).ajaxSend(function(event, xhr, settings) {
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie != '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = jQuery.trim(cookies[i]);
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-    function sameOrigin(url) {
-        // url could be relative or scheme relative or absolute
-        var host = document.location.host; // host + port
-        var protocol = document.location.protocol;
-        var sr_origin = '//' + host;
-        var origin = protocol + sr_origin;
-        // Allow absolute or scheme relative URLs to same origin
-        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
-            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
-            // or any other URL that isn't scheme relative or absolute i.e relative.
-            !(/^(\/\/|http:|https:).*/.test(url));
-    }
-    function safeMethod(method) {
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
-
-    if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
-        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-    }
-});
-
-
-
-
-
-
-
-
 $(document).ready(function(){
     // Javascript associated with tabs.
     $(".tab_content").hide();
@@ -81,20 +36,6 @@ $(document).ready(function(){
                 interval: 30
             }
         });
-
-    /*
-    $(".content").click(function(){
-        $(this).empty();
-        $(this).toggleClass("selected");
-        
-        if ($(this).hasClass("selected")){
-            var time = $(this).parent().children()[0].innerHTML;
-            $(this).append(time);
-        }else{
-            $(this).empty();
-        }
-    });
-    */
 
     // Bind the modifyClosingHours method to the buttons.
     $(".add_closing_hours").bind("click",true,modifyClosingHours);
@@ -195,10 +136,39 @@ function saveClosingHours(event){
         "url"       : "/schedule/create/closing/",
         "data"      : $.param(closing_hours, true), 
         "error"     : function(){},
-        "success"   : function(){}
+        "success"   : function(data){updateStatus(data)}
     });
 
 }
+
+function updateStatus(data){
+    var data = JSON.parse(data);
+
+    var schedule_status = $(".schedule_status");
+    schedule_status.empty()
+
+    schedule_status.append("<p>Closing Hours:</p>");
+    var days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
+    for (var day in days){
+        var hours = data[days[day]];
+
+        if (hours != undefined){
+            schedule_status.append("<p>" +days[day]+ "</p>");
+            schedule_status.append("<ul>");
+            for (var hour in hours){
+                var in_time = hours[hour]['in_time'];
+                var out_time = hours[hour]['out_time']; 
+                schedule_status.append("<li>" + in_time + "-" + out_time + "</li>");
+            }
+            schedule_status.append("</ul>");
+        }
+
+    }
+
+    schedule_status.show("fold");
+}
+
 
 
 /*
