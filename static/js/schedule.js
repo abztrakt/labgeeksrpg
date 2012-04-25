@@ -37,6 +37,8 @@ $(document).ready(function(){
             }
         });
 
+    getPeopleList();
+
     // Bind the modifyClosingHours method to the buttons.
     $(".add_closing_hours").bind("click",true,modifyClosingHours);
     $(".remove_closing_hours").bind("click",false,modifyClosingHours);
@@ -201,7 +203,6 @@ function populatePeopleList(data){
 
     data = JSON.parse(data);
     var peopleList = $(".add_person")
-    peopleList.append("<option> Add a person? </option>"); 
     if (data['people'].length != 0){
         for (var i = 0; i < data['people'].length; i++){
             peopleList.append("<option>" + data['people'][i] + "</option>");

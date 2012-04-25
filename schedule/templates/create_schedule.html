@@ -72,11 +72,22 @@
                 <div class="day_header">{{grid.day}}</div>
                 <div class="hours_toolbar">
                     <form>
-                        <strong>Closing hours:</strong>
-                        <input class="closing_starting_hours time_input" type="text" />
-                        <input class="closing_ending_hours time_input" type="text" />
-                        <button class="add_closing_hours" type="button">Add closing hours</button>
-                        <button class="remove_closing_hours" type="button">Remove closing hours</button>
+                        <div>
+                            <strong>Closing hours:</strong>
+                            <input class="closing_starting_hours time_input" type="text" />
+                            <input class="closing_ending_hours time_input" type="text" />
+                            <button class="add_closing_hours" type="button">Add closing hours</button>
+                            <button class="remove_closing_hours" type="button">Remove closing hours</button>
+                        </div>
+
+                        <div>
+                            <strong>Employee hours:</strong>
+                            <select class="add_person"></select>
+                            <input class="employee_starting_hours time_input" type="text" />
+                            <input class="employee_ending_hours time_input" type="text" />
+                            <button class="add_employee_hours" type="button">Add employee hours</button>
+                            <button class="remove_employee_hours" type="button">Remove employee hours</button>
+                        </div>
                     </form>
                 </div>
                 <div class="schedule_grid"> 
