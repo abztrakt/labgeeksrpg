@@ -43,6 +43,9 @@ $(document).ready(function(){
     $(".add_closing_hours").bind("click",true,modifyClosingHours);
     $(".remove_closing_hours").bind("click",false,modifyClosingHours);
 
+    // Bind the modifySavingHours method to the buttons.
+    $(".add_employee_hours").bind("click",true,modifyEmployeeHours);
+    $(".remove_employee_hours").bind("click",false,modifyEmployeeHours);
 
     // Bind the save method to the save button.
     $("#save_hours").bind("click",saveClosingHours);
@@ -72,6 +75,57 @@ $(document).ready(function(){
 });
 
 
+function modifyEmployeeHours(event){
+    var startTime = $(this).parent().children(".employee_starting_hours")[0].value;
+    var endTime = $(this).parent().children(".employee_ending_hours")[0].value;
+    var user = $(this).parent().children(".add_person")[0].value;
+
+    var startTimeSplit = timeDict(startTime);
+    var endTimeSplit = timeDict(endTime);
+
+    var schedule = $(this).parent().parent().parent().parent().children(".schedule_grid")[0];
+    var isAdding = event.data;
+
+    var startIndex = 0;
+    var endIndex = 0;
+    
+    for (var i = 0; i < schedule.children.length; i++) { 
+        var schedule_row = schedule.children[i];
+        var schedule_row_time = schedule_row.children[0].innerHTML;
+
+        if (schedule_row_time == startTime){
+            startIndex = i;
+        }
+        
+        if (schedule_row_time == endTime){
+            endIndex = i;
+        }
+    }
+    
+    var index = null;
+    var schedule_row = schedule.children[startIndex];
+    for (var i = 1; i < schedule_row.children.length; i ++){
+        var element = $(schedule_row.children[i]);
+        if (element.is(":empty") || element.text() == user){
+            index = i;
+            break; 
+        }
+    }
+
+    if (index != null){
+        for (var i = startIndex; i <= endIndex; i++){
+            var schedule_row = $(schedule.children[i]);
+            var element = $(schedule_row.children()[index]);
+            
+            if (isAdding){
+                element.html(user);
+            } else{
+                element.empty()
+            }
+        }
+    }
+}
+
 function modifyClosingHours(event){
 
     var startTime = $(this).parent().children(".closing_starting_hours")[0].value;
@@ -80,7 +134,7 @@ function modifyClosingHours(event){
     var startTimeSplit = timeDict(startTime);
     var endTimeSplit = timeDict(endTime);
 
-    var schedule = $(this).parent().parent().parent().children(".schedule_grid")[0];
+    var schedule = $(this).parent().parent().parent().parent().children(".schedule_grid")[0];
     var isAdding = event.data;
 
     var startIndex = 0;

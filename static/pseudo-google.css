@@ -604,7 +604,11 @@ Schedule CSS
     width: 6em;
 }
 
-.schedule_toolbar form{
+#schedule .hours_toolbar div{
+    margin-bottom: 1em;
+}
+
+.schedule_toolbar form, .hours_toolbar form{
     margin-top: 1em;
 }
 
