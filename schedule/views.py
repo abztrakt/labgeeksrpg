@@ -197,7 +197,18 @@ def create_default_schedule(request):
 
             # Grab the closed hours
             closing_hours = ClosedHour.objects.filter(location=location, timeperiod=timeperiod)
-            time_ranges = {
+            default_shifts = DefaultShift.objects.filter(location=location, timeperiod=timeperiod);
+            closing_ranges = {
+                'Monday': [],
+                'Tuesday': [],
+                'Wednesday': [],
+                'Thursday': [],
+                'Friday': [],
+                'Saturday': [],
+                'Sunday': [],
+            }
+
+            shift_ranges = {
                 'Monday': [],
                 'Tuesday': [],
                 'Wednesday': [],
@@ -221,26 +232,53 @@ def create_default_schedule(request):
                     current += timedelta(minutes=30)
                 hours.append(current.time())
 
-                time_ranges[day] += hours
+                closing_ranges[day] += hours
+
+            for shift in default_shifts:
+                day = shift.day
+                in_time = shift.in_time
+                out_time = shift.out_time
+                hours = []
+
+                current = datetime(1,1,1,in_time.hour,in_time.minute)
+
+                while current.time() != out_time:
+                    hours.append(current.time())
+                    current += timedelta(minutes=30)
+                hours.append(current.time())
+
+                shift_ranges[day].append({'hours': hours, 'user': shift.person.username})
+
+            # TODO: For now, create an arbitrary size for the schedule. Consider changing it in the future.
+            schedule_length = [0]*10
         
             # Now append append the hours to each day in the schedule.
             for day in days:
-                time_range = time_ranges[day]
+                closing_range = closing_ranges[day]
+                shift_range = shift_ranges[day] 
                 times = []
                 counter = datetime(1,1,1,7,0)
 
                 while counter.hour != 0:
-                    if counter.time() in time_range:
-                        closed = True
+                    row = []
+                     
+                    if counter.time() in closing_range:
+                        for i in range(len(schedule_length)):
+                            row.append({'class': 'closed_hours', 'user': 'closed'})
                     else:
-                        closed = False
-                    times.append({'time': counter.time().strftime('%I:%M %p').lower(), 'closed': closed})
+                        count = 0
+                        for shift in shift_range:
 
+                            if counter.time() in shift['hours']:
+                                count += 1
+                                row.append({'class':None, 'user': shift['user']})
+
+                        for i in range(len(schedule_length)-count):
+                            row.append({'class': None, 'user': None})
+
+                    times.append({'time': counter.time().strftime('%I:%M %p').lower(), 'row': row})
                     counter += timedelta(minutes=30)
                 schedule.append({'times': times, 'day': day})
-
-            # TODO: For now, create an arbitrary size for the schedule. Consider changing it in the future.
-            schedule_length = [0]*10
 
             schedule_class = "visible"
     else:
@@ -275,12 +313,14 @@ def save_hours(request):
     location = Location.objects.get(name=loc)
     timeperiod = TimePeriod.objects.get(name=tp)
 
-    # Delete all of the shifts in this timeperiod and location and repopulate them.
-    DefaultShift.objects.filter(location=location, timeperiod=timeperiod).delete()
-    ClosedHour.objects.filter(location=location, timeperiod=timeperiod).delete()
-
     result = {}
+
     for day, hours_list in hours.iteritems():
+
+        if user:
+            DefaultShift.objects.filter(location=location, timeperiod=timeperiod, day=day, person=user).delete()
+        else:
+            ClosedHour.objects.filter(location=location, timeperiod=timeperiod, day=day).delete()
 
         if len(hours_list) > 0:
             time_ranges = return_time_ranges(hours_list)
@@ -298,6 +338,7 @@ def save_hours(request):
                         location = location,
                         timeperiod = timeperiod,
                     )
+                    name = user.username
                 else:
                     closed_hour = ClosedHour.objects.create(
                         day = day,  
@@ -306,8 +347,9 @@ def save_hours(request):
                         location = location,
                         timeperiod = timeperiod,
                     )
+                    name = None
                 
-                string_time = {'in_time': time_range['in_time_string'], 'out_time': time_range['out_time_string']}
+                string_time = {'user': name, 'in_time': time_range['in_time_string'], 'out_time': time_range['out_time_string']}
 
                 try:
                     result[day].append(string_time)

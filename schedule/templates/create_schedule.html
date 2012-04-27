@@ -95,8 +95,8 @@
                 <div class="schedule_row">
                     <div class="schedule_row_content">{{times.time}}</div>
 
-                    {% for i in schedule_length  %}
-                    <div class="schedule_row_content {% if times.closed %}closed_hours{% endif %}">{% if times.closed %}closed{% endif %}</div>
+                    {% for elem in times.row  %}
+                        <div class="schedule_row_content {{elem.class}}">{% if elem.user %}{{elem.user}}{% endif %}</div>
                     {% endfor %}
                 </div>
                 {% endfor %}
