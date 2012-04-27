@@ -50,6 +50,28 @@ def view_shifts(request):
         if form.is_valid():
             day = form.cleaned_data['day']
             location = form.cleaned_data['location']
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             data = WorkShift.objects.filter(
                 scheduled_in__day=day.day,
                 scheduled_in__month=day.month,
@@ -291,6 +313,12 @@ def create_default_schedule(request):
                 schedule.append({'times': times, 'day': day})
 
             schedule_class = "visible"
+
+            # Determine if the user can edit the schedule.
+            if request.user.has_perm('schedule.add_defaultshift'):
+                can_edit_schedule = True
+            else:
+                can_edit_scehdule = False
     else:
 
         # There is no schedule to display.

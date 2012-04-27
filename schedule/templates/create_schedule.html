@@ -36,23 +36,25 @@
 </div>
 
 <div id="schedule" class="{{schedule_class}}">
+        <div class="schedule_toolbar">
+            <form>
+                <p>
+                    <strong>Time Period:</strong>
+                    <span class="timeperiod">{{timeperiod}}</span>
+                </p>
+                <p>
+                    <strong>Location:</strong>
+                    <span class="location">{{location}}</span>
+                </p>
 
-    <div class="schedule_toolbar">
-        <form>
-            <p>
-                <strong>Time Period:</strong>
-                <span class="timeperiod">{{timeperiod}}</span>
-            </p>
-            <p>
-                <strong>Location:</strong>
-                <span class="location">{{location}}</span>
-            </p>
-            <button id="save_hours" type="button">Save</button>
-        </form>
-    </div>
+                {% if can_edit_schedule %}
+                    <button id="save_hours" type="button">Save</button>
+                {% endif %}
+            </form>
+        </div>
 
-    <div class="schedule_status hidden">
-    </div>
+        <div class="schedule_status hidden">
+        </div>
 
     <ul class="tabs">
         {% for day in days %}
@@ -65,26 +67,28 @@
         {% for grid in schedule %}
             <div id={{grid.day}} class="tab_content">
                 <div class="day_header">{{grid.day}}</div>
-                <div class="hours_toolbar">
-                    <form>
-                        <div>
-                            <strong>Closing hours:</strong>
-                            <input class="closing_starting_hours time_input" type="text" />
-                            <input class="closing_ending_hours time_input" type="text" />
-                            <button class="add_closing_hours" type="button">Add closing hours</button>
-                            <button class="remove_closing_hours" type="button">Remove closing hours</button>
-                        </div>
+                {% if can_edit_schedule %}
+                    <div class="hours_toolbar">
+                        <form>
+                            <div>
+                                <strong>Closing hours:</strong>
+                                <input class="closing_starting_hours time_input" type="text" />
+                                <input class="closing_ending_hours time_input" type="text" />
+                                <button class="add_closing_hours" type="button">Add closing hours</button>
+                                <button class="remove_closing_hours" type="button">Remove closing hours</button>
+                            </div>
 
-                        <div>
-                            <strong>Employee hours:</strong>
-                            <select class="add_person"></select>
-                            <input class="employee_starting_hours time_input" type="text" />
-                            <input class="employee_ending_hours time_input" type="text" />
-                            <button class="add_employee_hours" type="button">Add employee hours</button>
-                            <button class="remove_employee_hours" type="button">Remove employee hours</button>
-                        </div>
-                    </form>
-                </div>
+                            <div>
+                                <strong>Employee hours:</strong>
+                                <select class="add_person"></select>
+                                <input class="employee_starting_hours time_input" type="text" />
+                                <input class="employee_ending_hours time_input" type="text" />
+                                <button class="add_employee_hours" type="button">Add employee hours</button>
+                                <button class="remove_employee_hours" type="button">Remove employee hours</button>
+                            </div>
+                        </form>
+                    </div>
+                {% endif %}
                 <div class="schedule_grid"> 
                     {% for times in grid.times %}
                         <div class="schedule_row">
