@@ -210,7 +210,7 @@ function saveHours(event){
                 "url"       : "/schedule/create/save/",
                 "data"      : $.param(value, true), 
                 "error"     : function(){},
-                "success"   : function(data){updateStatus(data)}
+                "success"   : function(data){}
             });
         }
     }
@@ -220,17 +220,21 @@ function saveHours(event){
         "url"       : "/schedule/create/save/",
         "data"      : $.param(closing_hours, true), 
         "error"     : function(){},
-        "success"   : function(data){updateStatus(data)}
+        "success"   : function(data){}
     });
+
+    var schedule_status = $(".schedule_status");
+    schedule_status.empty()
+    schedule_status.append("<p>Hours saved!</p>");
+    schedule_status.show("fold");
 }
 
 function updateStatus(data){
     var data = JSON.parse(data);
 
     var schedule_status = $(".schedule_status");
-    schedule_status.empty()
 
-    schedule_status.append("<p>Closing Hours:</p>");
+    schedule_status.append("<p>Employee Hours:</p>");
     var days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
     for (var day in days){
