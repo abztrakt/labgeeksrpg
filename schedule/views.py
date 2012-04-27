@@ -195,7 +195,7 @@ def create_default_schedule(request):
             # Create a schedule dictionary to hold the data.
             schedule = []
 
-            # Grab the closed hours
+            # Grab the closed hours and default shifts used in a timeperiod.
             closing_hours = ClosedHour.objects.filter(location=location, timeperiod=timeperiod)
             default_shifts = DefaultShift.objects.filter(location=location, timeperiod=timeperiod);
             closing_ranges = {
@@ -218,6 +218,7 @@ def create_default_schedule(request):
                 'Sunday': [],
             }
 
+            # TODO: Form a less redundant way of doing the hour ranges.
             # Find out which hours were closing hours
             for closing_hour in closing_hours:
                 day = closing_hour.day
@@ -234,6 +235,7 @@ def create_default_schedule(request):
 
                 closing_ranges[day] += hours
 
+            # Find out which hours were shift hours.
             for shift in default_shifts:
                 day = shift.day
                 in_time = shift.in_time
@@ -258,14 +260,17 @@ def create_default_schedule(request):
                 shift_range = shift_ranges[day] 
                 times = []
                 counter = datetime(1,1,1,7,0)
-
+    
+                # Loop through the time and start appending the rows to each time.
                 while counter.hour != 0:
                     row = []
                      
                     if counter.time() in closing_range:
+                        # Fill in the closing hours
                         for i in range(len(schedule_length)):
                             row.append({'class': 'closed_hours', 'user': 'closed'})
                     else:
+                        # Fill in the shift hours.
                         count = 0
                         for shift in shift_range:
 
@@ -275,13 +280,20 @@ def create_default_schedule(request):
 
                         for i in range(len(schedule_length)-count):
                             row.append({'class': None, 'user': None})
-
+                    
+                    # Append the row and time
                     times.append({'time': counter.time().strftime('%I:%M %p').lower(), 'row': row})
+
+                    # Increment by 30 minutes
                     counter += timedelta(minutes=30)
+
+                # Append the time row to the schedule.
                 schedule.append({'times': times, 'day': day})
 
             schedule_class = "visible"
     else:
+
+        # There is no schedule to display.
         schedule_class ="hidden"
         form = CreateDailyScheduleForm()
     
@@ -313,10 +325,13 @@ def save_hours(request):
     location = Location.objects.get(name=loc)
     timeperiod = TimePeriod.objects.get(name=tp)
 
+    # Save the results in to a dictionary.
     result = {}
 
+    # Loop through the hours that are going to be saved.
     for day, hours_list in hours.iteritems():
 
+        # TODO: Figure out how to delete correct shifts. As of now, this will be only delete a user's shift who appears on the schedule.
         if user:
             DefaultShift.objects.filter(location=location, timeperiod=timeperiod, day=day, person=user).delete()
         else:
@@ -329,6 +344,7 @@ def save_hours(request):
                 in_time = time_range['in_time'].time()
                 out_time = time_range['out_time'].time()
 
+                # Save the hours, depending on which type of hours they are.
                 if user:
                     employee_hour = DefaultShift.objects.create(
                         person = user,
@@ -349,6 +365,7 @@ def save_hours(request):
                     )
                     name = None
                 
+                # Append the data in a string format for Json.
                 string_time = {'user': name, 'in_time': time_range['in_time_string'], 'out_time': time_range['out_time_string']}
 
                 try:
@@ -356,10 +373,16 @@ def save_hours(request):
                 except:
                     result[day] = [string_time]
 
+    # Return the results and let the ajax call handle this data.
     result = json.dumps(result)
     return HttpResponse(result)
 
 def return_time_ranges(hours_list):
+    '''
+    This method will return a hour ranges from a list of hours.
+    e.g. hours_list = [9:00,9:30,10:00,1:00,1:30,2:00] will return [{'in_time': 9:00, 'out_time':10:00} {'in_time': 1:00, 'out_time': 2:00}]
+    '''
+
     # TIME FORMATTING:
     time_format = '%I:%M %p'
     time_ranges = []

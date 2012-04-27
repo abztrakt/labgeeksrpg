@@ -52,8 +52,11 @@ $(document).ready(function(){
 
 });
 
-
+/*
+Adds and removes an employee's hours from the schedule. 
+*/
 function modifyEmployeeHours(event){
+    // Grab the appropriate data
     var startTime = $(this).parent().children(".employee_starting_hours")[0].value;
     var endTime = $(this).parent().children(".employee_ending_hours")[0].value;
     var user = $(this).parent().children(".add_person")[0].value;
@@ -67,6 +70,7 @@ function modifyEmployeeHours(event){
     var startIndex = 0;
     var endIndex = 0;
     
+    // Find out the starting hour and ending hour of each shift.
     for (var i = 0; i < schedule.children.length; i++) { 
         var schedule_row = schedule.children[i];
         var schedule_row_time = schedule_row.children[0].innerHTML;
@@ -80,6 +84,7 @@ function modifyEmployeeHours(event){
         }
     }
     
+    // Figure out which place in the row the user's name should be.
     var index = null;
     var schedule_row = schedule.children[startIndex];
     for (var i = 1; i < schedule_row.children.length; i ++){
@@ -90,6 +95,7 @@ function modifyEmployeeHours(event){
         }
     }
 
+    // Add or remove the closed hour status.
     if (index != null){
         for (var i = startIndex; i <= endIndex; i++){
             var schedule_row = $(schedule.children[i]);
@@ -104,8 +110,12 @@ function modifyEmployeeHours(event){
     }
 }
 
+/*
+Adds and removes the closing hours to the schedule. 
+*/
 function modifyClosingHours(event){
 
+    // Grab the appropriate data
     var startTime = $(this).parent().children(".closing_starting_hours")[0].value;
     var endTime = $(this).parent().children(".closing_ending_hours")[0].value;
 
@@ -118,6 +128,7 @@ function modifyClosingHours(event){
     var startIndex = 0;
     var endIndex = 0;
 
+    // Find out the starting hour and ending hour of each shift.
     for (var i = 0; i < schedule.children.length; i++) { 
         var schedule_row = schedule.children[i];
         var schedule_row_time = schedule_row.children[0].innerHTML;
@@ -131,6 +142,7 @@ function modifyClosingHours(event){
         }
     }
 
+    // Add or remove the closed hour status.
     for (var i = startIndex; i <= endIndex; i++){
         var schedule_row = schedule.children[i];
         for (var j = 1; j < schedule_row.children.length; j ++){
@@ -145,6 +157,10 @@ function modifyClosingHours(event){
     }
 }
 
+
+/*
+Saves all of the hours on the schedule via Ajax.
+*/
 function saveHours(event){
     var schedule_days = $(".tab_container").children();
     var closing_hours = {};
@@ -159,6 +175,7 @@ function saveHours(event){
 
     var users = {};
 
+    // Loop through all days and rows of the schedule and keep track of which hours were assigned.
     for (var i = 0; i < schedule_days.length; i++){
         var schedule_box = $(schedule_days[i]);
         var day = schedule_box.attr("id").toString();
@@ -197,6 +214,7 @@ function saveHours(event){
         }
     }
 
+    // Loop through all of the user's hours and save them to the database.
     for (var key in users){
         if (users.hasOwnProperty(key)){
             var value = users[key];
@@ -215,6 +233,7 @@ function saveHours(event){
         }
     }
 
+    // Save the closing hours.
     $.ajax({
         "type"      : 'POST',
         "url"       : "/schedule/create/save/",
@@ -223,12 +242,18 @@ function saveHours(event){
         "success"   : function(data){}
     });
 
+    // Update the status.
     var schedule_status = $(".schedule_status");
     schedule_status.empty()
     schedule_status.append("<p>Hours saved!</p>");
     schedule_status.show("fold");
 }
 
+
+/*
+TODO: Implement this to handle closed and assigned employee shifts.
+Updates the '.schedule_status' div to display back information on the saved shifts.
+*/
 function updateStatus(data){
     var data = JSON.parse(data);
 
@@ -273,6 +298,11 @@ function timeDict(time){
     return timeSplit;
 }
 
+
+/*
+Performs an ajax call to return the list of users in the system.
+*/
+
 function getPeopleList(){
     $.ajax({
         "url"       : "/schedule/people/",
@@ -282,6 +312,9 @@ function getPeopleList(){
     });
 }
 
+/*
+Populates a select tag with the list of people in the system.
+*/
 function populatePeopleList(data){
 
     data = JSON.parse(data);
