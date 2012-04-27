@@ -48,7 +48,7 @@ $(document).ready(function(){
     $(".remove_employee_hours").bind("click",false,modifyEmployeeHours);
 
     // Bind the save method to the save button.
-    $("#save_hours").bind("click",saveClosingHours);
+    $("#save_hours").bind("click",saveHours);
 
     // Handle the selecting of columns.
     $("table").selectable({
@@ -156,45 +156,94 @@ function modifyClosingHours(event){
     for (var i = startIndex; i <= endIndex; i++){
         var schedule_row = schedule.children[i];
         for (var j = 1; j < schedule_row.children.length; j ++){
-                if (isAdding){
-                    $(schedule_row.children[j]).addClass("closed_hours");
-                    $(schedule_row.children[j]).html("closed");
-                }else{
-                    $(schedule_row.children[j]).removeClass("closed_hours");
-                    $(schedule_row.children[j]).empty();
-                }
+            if (isAdding){
+                $(schedule_row.children[j]).addClass("closed_hours");
+                $(schedule_row.children[j]).html("closed");
+            }else{
+                $(schedule_row.children[j]).removeClass("closed_hours");
+                $(schedule_row.children[j]).empty();
+            }
         }
     }
 }
 
-function saveClosingHours(event){
+function saveHours(event){
     var schedule_days = $(".tab_container").children();
     var closing_hours = {};
-    closing_hours['csrfmiddlewaretoken'] = $('input[name=csrfmiddlewaretoken]').val();
-    closing_hours['timeperiod'] = $('.timeperiod')[0].innerHTML; 
-    closing_hours['location'] = $('.location')[0].innerHTML;    
+    
+    var csrf = $('input[name=csrfmiddlewaretoken]').val(); 
+    var tp = $('.timeperiod')[0].innerHTML; 
+    var loc = $('.location')[0].innerHTML;
+
+    closing_hours['csrfmiddlewaretoken'] = csrf;
+    closing_hours['timeperiod'] = tp; 
+    closing_hours['location'] = loc;
+
+    var users = {};
+
     for (var i = 0; i < schedule_days.length; i++){
         var schedule_box = $(schedule_days[i]);
         var day = schedule_box.attr("id").toString();
         closing_hours[day] = [];
         var grid = $(schedule_box.children(".schedule_grid")[0]).children();
+
         for (var j = 0; j < grid.length; j++){
             var row = $(grid[j]);
             var time = row.children()[0].innerHTML;
             if (row.children(".closed_hours").length > 0){
-                closing_hours[day].push(time);
+                closing_hours[day].push(time); 
+            }else{
+
+                for (var k = 1; k < row.children().length; k++){
+                    var element = $(row.children()[k]);
+                    if (!element.is(":empty") && element.text() != 'closed'){
+                        var user = element.text(); 
+                        try{
+                            users[user][day].push(time);
+                        }catch(err){      
+                            users[user] = {
+                                'Monday': [],
+                                'Tuesday': [],
+                                'Wednesday': [],
+                                'Thursday':[],
+                                'Wednesday':[],
+                                'Friday': [],
+                                'Saturday': [],
+                                'Sunday': [],
+                            }
+                            users[user][day].push(time);
+                        }
+                    } 
+                }
             }
+        }
+    }
+
+    for (var key in users){
+        if (users.hasOwnProperty(key)){
+            var value = users[key];
+            value['user'] = key;
+            value['csrfmiddlewaretoken'] = csrf;
+            value['timeperiod'] = tp; 
+            value['location'] = loc;
+
+            $.ajax({
+                "type"      : 'POST',
+                "url"       : "/schedule/create/save/",
+                "data"      : $.param(value, true), 
+                "error"     : function(){},
+                "success"   : function(data){updateStatus(data)}
+            });
         }
     }
 
     $.ajax({
         "type"      : 'POST',
-        "url"       : "/schedule/create/closing/",
+        "url"       : "/schedule/create/save/",
         "data"      : $.param(closing_hours, true), 
         "error"     : function(){},
         "success"   : function(data){updateStatus(data)}
     });
-
 }
 
 function updateStatus(data){
@@ -224,8 +273,6 @@ function updateStatus(data){
 
     schedule_status.show("fold");
 }
-
-
 
 /*
 Takes a string representing a time and returns a time dictionary.

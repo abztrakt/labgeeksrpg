@@ -46,6 +46,7 @@ class DefaultShift(models.Model):
     in_time = models.TimeField()
     out_time = models.TimeField()
     location = models.ForeignKey(Location)
+    timeperiod = models.ForeignKey(TimePeriod, default=TimePeriod.objects.get(id=1), null=True, blank=True)
 
     def __unicode__(self):
         if self.person:

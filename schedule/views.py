@@ -254,8 +254,7 @@ def save_closing_hours(request):
     This method is used to process an ajax request and save the closed hours in the schedule app.
     '''
     data = request.POST.copy()
-
-    closing_hours = {
+    hours = {
         'Monday': data.getlist('Monday'),
         'Tuesday': data.getlist('Tuesday'),
         'Wednesday': data.getlist('Wednesday'),
@@ -264,14 +263,26 @@ def save_closing_hours(request):
         'Saturday': data.getlist('Saturday'),
         'Sunday': data.getlist('Sunday'),
     }
+    username = data.getlist('user')
     loc = data.getlist('location')[0]
     tp = data.getlist('timeperiod')[0]
+
+    if username:
+        user = User.objects.get(username=username[0]) 
+    else:
+        user = None
 
     location = Location.objects.get(name=loc)
     timeperiod = TimePeriod.objects.get(name=tp)
     result = {}
-    for day, hours_list in closing_hours.iteritems():
-        ClosedHour.objects.filter(location=location, timeperiod=timeperiod, day=day).delete()
+    closed = []
+    employee = []
+    for day, hours_list in hours.iteritems():
+        
+        if user:
+            DefaultShift.objects.filter(location=location, timeperiod=timeperiod, day=day).delete()
+        else:
+            ClosedHour.objects.filter(location=location, timeperiod=timeperiod, day=day).delete()
 
         if len(hours_list) > 0:
             time_ranges = return_time_ranges(hours_list)
@@ -280,14 +291,26 @@ def save_closing_hours(request):
                 in_time = time_range['in_time'].time()
                 out_time = time_range['out_time'].time()
 
-                closed_hour = ClosedHour.objects.create(
-                    day = day,  
-                    in_time = in_time,
-                    out_time = out_time,
-                    location = location,
-                    timeperiod = timeperiod,
-                )
-
+                if user:
+                    employee_hour = DefaultShift.objects.create(
+                        user = user,
+                        day = day,  
+                        in_time = in_time,
+                        out_time = out_time,
+                        location = location,
+                        timeperiod = timeperiod,
+                    )
+                    employee.append(employee_hour)
+                else:
+                    closed_hour = ClosedHour.objects.create(
+                        day = day,  
+                        in_time = in_time,
+                        out_time = out_time,
+                        location = location,
+                        timeperiod = timeperiod,
+                    )
+                    closed.append(closed_hour)
+                
                 string_time = {'in_time': time_range['in_time_string'], 'out_time': time_range['out_time_string']}
 
                 try:
@@ -296,7 +319,7 @@ def save_closing_hours(request):
                     result[day] = [string_time]
 
     result = json.dumps(result)
-
+    import pdb; pdb.set_trace()
     return HttpResponse(result)
 
 def return_time_ranges(hours_list):
