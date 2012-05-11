@@ -23,18 +23,3 @@ class Skill(models.Model):
     def __unicode__(self):
         return self.name
 
-class Review(models.Model):
-    date = models.DateField()
-    user = models.ForeignKey(User, related_name="review_user")
-    title = models.CharField(max_length=256)
-    manager = models.ForeignKey(User, related_name="review_manager")
-    wage = models.FloatField()
-    notes = models.TextField()
-
-    def save(self, *args, **kwargs):
-        self.wage = self.user.get_profile().title.pay_grade.wage
-        self.title = "%s" % self.user.get_profile().title
-        super(Review, self).save(*args, **kwargs)
-
-    def __unicode__(self):
-        return "%s on %s" % (self.user, self.date) 

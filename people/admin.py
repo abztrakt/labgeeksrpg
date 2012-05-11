@@ -11,10 +11,6 @@ class EmploymentStatusAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 admin.site.register(EmploymentStatus, EmploymentStatusAdmin)
 
-class TimePeriodAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug': ('name',)}
-admin.site.register(TimePeriod, TimePeriodAdmin)
-
 class WorkGroupAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 admin.site.register(WorkGroup, WorkGroupAdmin)
@@ -26,6 +22,9 @@ admin.site.register(PayGrade, PayGradeAdmin)
 class TitleAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 admin.site.register(Title, TitleAdmin)
+
+admin.site.register(WageHistory)
+admin.site.register(WageChangeReason)
 
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'status', 'start_date', 'grad_date', 'supervisor', 'title', 'office',)

@@ -79,7 +79,7 @@ thead {
 	background-color: #F5F5F5;
     border-bottom: 1px solid #E5E5E5;
 	font-size: 12pt;
-	padding-left: 1em;
+	padding: 1em;
     margin-bottom: 1em;
 }
 
@@ -182,7 +182,6 @@ textarea {
     background: none repeat scroll 0 0 #F5F5F5;
     padding: 20px 25px 15px;
     border: 1px solid #E5E5E5;
-    margin: 12px 0 0;
 }
 
 
@@ -193,6 +192,11 @@ textarea {
 form .input_label{
     margin: 0 0 1.5em;
     display: block;
+}
+
+.input_label{
+    display: block;
+    margin: 0 0 1.5em;
 }
 
 form label strong{
@@ -230,7 +234,6 @@ form input[type="text"], form input[type="password"]{
 }
 
 ul{
-    padding: 1em;
     line-height: 17px;
     list-style: none outside none;
 }
@@ -260,6 +263,19 @@ ul{
     float: left;
 }
 
+.group_section{
+    margin: 1em;
+    padding: .5em;
+}
+.group_section .group_title{
+    font-size: 5px;
+    border-bottom: 1px solid black;
+    clear: left;
+}
+
+.group_section table{
+    margin: 1em 0 0;
+}
 
 /*
 Profile CSS
@@ -293,7 +309,7 @@ May have to place in its own css file for easier future editing.
 }
 
 
-#user_profile img{
+#user_profile img, .photo{
     max-width: 17em;
     max-height: 17em;
     float: left;
@@ -352,6 +368,80 @@ May have to place in its own css file for easier future editing.
 
 #user_name{
     font-size: 1.8em;
+}
+
+.review_field {
+    margin: 2.5em 1em 1em;
+    display: block;
+}
+
+.review_field ul{
+    display: block;
+    padding: 1em;
+}
+
+.review_field li{
+    float: left;
+    margin-right: 1em;
+}
+
+.review_field textarea{
+    display: block;
+}
+
+.review_score_table{
+    margin: 0;
+    border-color: #EFF2F6 #EFF2F6 #BFCCD9;
+    border-style: solid;
+    border-width: 1px 1px 2px;
+    border-collapse: collapse;
+    font-size: 1.1em;
+}
+
+.review_score_table thead {
+    font-weight: bold;
+    color: white;
+}
+
+.review_selector:hover {
+    color: yellow;
+
+}
+
+.review_score_table tbody td:first-child {
+    background: none repeat scroll 0 0 #DFE6EC;
+    border-bottom: 1px solid white;
+    color: #555555;
+    font-weight: bold;
+}
+
+.review_score_table tbody td {
+    border: 1px solid #DFE6EC;
+    padding: .5em;
+}
+
+#view_reviews {
+    background: none repeat scroll 0 0 #F5F5F5;
+    border: 1px solid #E5E5E5;
+    padding: 20px 25px 15px;
+}
+
+.review_other_scores p, .review_other_scores ul{
+    margin: 0;
+}
+
+.review_other_scores li{
+    float: none;
+}
+
+.urgent_message {
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    box-shadow: 0 2px 3px rgba(20,20,20,0.5);
+    border: 2px solid red;
+    padding: 1em;
+    margin: 1em;
 }
 
 
@@ -524,16 +614,17 @@ Schedule CSS
     border: 1px solid #DDDDDD;
 }
 
+.selected {
+    background-color: red;
+    border: 1px solid red;
+}
+
 #schedule .time{
     width: 5em;
 }
 
-#schedule .row{
-    height: 3em;
-}
-
 #schedule .content{
-    width: 10em;
+    width: 5em;
 }
 
 #schedule .now{
@@ -597,40 +688,148 @@ Schedule CSS
     margin-right: 2em;
     width: 6em;
 }
+ul.tabs {
+    margin: 0;
+    padding: 0;
+    float: left;
+    list-style: none;
+    height: 32px; /*--Set height of tabs--*/
+    border-bottom: 1px solid #999;
+    border-left: 1px solid #999;
+    width: 100%;
+}
+ul.tabs li {
+    float: left;
+    margin: 0;
+    padding: 0;
+    height: 31px; /*--Subtract 1px from the height of the unordered list--*/
+    line-height: 31px; /*--Vertically aligns the text within the tab--*/
+    border: 1px solid #999;
+    border-left: none;
+    margin-bottom: -1px; /*--Pull the list item down 1px--*/
+    overflow: hidden;
+    position: relative;
+    background: #e0e0e0;
+}
+ul.tabs li a {
+    text-decoration: none;
+    color: #000;
+    display: block;
+    font-size: 1.2em;
+    padding: 0 20px;
+    border: 1px solid #fff; /*--Gives the bevel look with a 1px white border inside the list item--*/
+    outline: none;
+}
+ul.tabs li a:hover {
+    background: #ccc;
+}
+
+html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that the active tab does not listen to the hover properties--*/
+    background: #fff;
+    border-bottom: 1px solid #fff; /*--Makes the active tab look like it's connected with its content--*/
+}
+
+.tab_container {
+    border: 1px solid #999;
+    border-top: none;
+    overflow: hidden;
+    clear: both;
+    float: left; width: 100%;
+    background: #fff;
+}
+
+ul.tabs {
+    margin: 0;
+    padding: 0;
+    float: left;
+    list-style: none;
+    height: 32px; /*--Set height of tabs--*/
+    border-bottom: 1px solid #999;
+    border-left: 1px solid #999;
+    width: 100%;
+}
+ul.tabs li {
+    float: left;
+    margin: 0;
+    padding: 0;
+    height: 31px; /*--Subtract 1px from the height of the unordered list--*/
+    line-height: 31px; /*--Vertically aligns the text within the tab--*/
+    border: 1px solid #999;
+    border-left: none;
+    margin-bottom: -1px; /*--Pull the list item down 1px--*/
+    overflow: hidden;
+    position: relative;
+    background: #e0e0e0;
+}
+ul.tabs li a {
+    text-decoration: none;
+    color: #000;
+    display: block;
+    font-size: 1.2em;
+    padding: 0 20px;
+    border: 1px solid #fff; /*--Gives the bevel look with a 1px white border inside the list item--*/
+    outline: none;
+}
+ul.tabs li a:hover {
+    background: #ccc;
+}
+
+html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that the active tab does not listen to the hover properties--*/
+    background: #fff;
+    border-bottom: 1px solid #fff; /*--Makes the active tab look like it's connected with its content--*/
+}
+
+.tab_container {
+    border: 1px solid #999;
+    border-top: none;
+    overflow: hidden;
+    clear: both;
+    float: left; width: 100%;
+    background: #fff;
+}
+
 
 .hidden{
-    visibility: hidden;
+    display: none;
 }
 
 .visible {
     visibility: visible;
 }
 
-.timeperiod_selector:hover {
+
+.timeperiod_selector:hover, .review_selector:hover {
     cursor: pointer;
 }
 
-#timeperiod_info{
+#timeperiod_info, #review_info{
     margin: 1em;
 }
 
-
-#timeperiod_heading{
+#timeperiod_heading, #review_heading{
     border-top: 1px solid #DD4B39;
     border-left: 10px solid #DD4B39;
     padding: 10px;
 }
 
-#timeperiod_title{
+#timeperiod_title, #review_title{
     text-align: left;
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 3px;
 }
 
-#timeperiod_details{
+.review_section{
+    text-align: left;
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+#timeperiod_details, #review_details{
     margin-left: 2em;
 }
+
 
 #timeperiod_info ul{
     margin: 0;
@@ -639,4 +838,66 @@ Schedule CSS
 #timeperiod_info strong{
     float: left;
     margin-right: 3px;
+}
+
+#schedule .ui-selected{
+    background-color: yellow;
+}
+ 
+#schedule .ui-selecting{
+    background-color: lightsteelblue;
+}
+
+#schedule .selected{
+    background-color: red;
+}
+
+/* trigger button */
+#download_now {
+    /*background:transparent url(/img/home/download.png) no-repeat scroll 0 0;*/
+    display:block;
+    height:44px;
+    margin-bottom:30px;
+    overflow:hidden;
+    width:159px;
+    cursor:pointer;
+}
+
+/* mouseover state */
+#download_now:hover {
+background-position:0 -44px ;       
+}
+
+/* clicked state */
+#download_now:focus {
+    background-position:0 -88px;
+}
+
+/* tooltip styling */
+.tooltip {
+    display:none;
+    background-color: #585858;
+    border: 2px solid #DDDDDD;
+    height:163px;
+    padding:40px 30px 10px 30px;
+    width:310px;
+    font-size:11px;
+    color:#fff;
+}
+
+/* a .label element inside tooltip */
+.tooltip .label {
+    color:yellow;
+    width:35px;
+}
+
+.tooltip a {
+    color:#ad4;
+    font-size:11px;
+    font-weight:bold;
+}
+
+#test {
+    border: 1px solid black;
+    background-color: gray;
 }

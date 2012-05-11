@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block pageJS %}
+<script type="text/javascript" src="/static/js/jquery.tools.min.js"></script>
+<script type="text/javascript" src="/static/js/schedule.js"></script>
+{% endblock %}
 {% block content %}
 <div class="section">
     <h1>Schedule</h1>
@@ -9,62 +13,70 @@
 
 <hr class="separator"/>
 
-<div class="time_period_box">
-    <div class="form_box">
-        <a href="/schedule/">Click here to go back</a>
-        <form action="" method="post" id="create_daily_schedule">{% csrf_token %}
-            <label class="input_label">
-                <strong>1. Create default shifts in admin for a base schedule</strong>
-                <strong>2. Select a day to create a schedule from.</strong>
-                {{ form.day }}
-            </label>
+<div class="form_box">
+    <a href="/schedule/">Click here to go back</a>
 
-            <input type="submit" value="Submit"/>
-            <input type="hidden" value="next" value="{{next}}"/>
-   </div>
+    <form action="" method="post" id="create_daily_schedule">{% csrf_token %}
+        <label class="input_label">
+            <strong>These are default shifts that will be used during the timeperiod. They will help build a base schedule.</strong>
+        </label>
+        
+        <label class="input_label">
+            <strong>Select a timeperiod</strong>
+            {{ form.timeperiods }}
+        </label>
+
+        <strong>Select location</strong>
+        {{ form.location }}
+
+        <input type="submit" value="Submit"/>
+        <input type="hidden" value="next" value="{{next}}"/>
+    </form>
 </div>
 
-{% if day_defaults %}
-    <table>
-        <tbody>
-                <tr>
-                    <th>Person</th>
-                    <th>Day</th>
-                    <th>Scheduled in</th>
-                    <th>Scheduled out</th>
-                    <th>Location</th>
+<div id="tooltip" class="tooltip">
+    Hello Michael.
+</div>
+
+
+<div id="schedule" class="{{schedule_class}}">
+    <p id="test"></p>
+    <ul class="tabs">
+        {% for day in x_axis %}
+            <li><a href="#{{day}}"><span>{{day}}</span></a></li>
+        {% endfor %}
+
+    </ul>
+    <div class="tab_container">
+
+        {% for shift in shifts %}
+        <div id="{{shift.day}}" class="tab_content">
+            <table>
+                <tr class="date">
+                    <th colspan="2">{{shift.day}}</th>
                 </tr>
-                {% for shift in day_defaults %}
-                <tr>
-                    <td>{{shift.person}}</td>
-                    <td>{{shift.day}}</td>
-                    <td>{{shift.in_time}}</td>
-                    <td>{{shift.out_time}}</td>
-                    <td>{{shift.location}}</td>
+                <tr class="location">
+                    <th colspan="2">{{location}}</th>
+                </tr>
+                <tr class="users">
+                    <th>Time</th>
+                    <th><select class="add_person"></select></th>
+                </tr>
+                {% for time in y_axis %}
+
+                <tr class="row">
+                    <td class="time">{{time}}</td>
+                    <td class="content empty"></td>
                 </tr>
                 {% endfor %}
-        </tbody>
-    </table>
 
-    <table>
-        <tbody>
-                <tr>
-                    <th>{{day}}</th>
-                </tr>
-                {% for shift in day_defaults %}
-                <tr>
-                    <td>{{shift.person}}</td>
-                    <td>{{shift.day}}</td>
-                    <td>{{shift.in_time}}</td>
-                    <td>{{shift.out_time}}</td>
-                    <td>{{shift.location}}</td>
-                </tr>
-                {% endfor %}
-        </tbody>
-    </table>
+            </table>
+        </div>
+        {% endfor %}
+    </div>
 
-{% else %}
-
+</div>
+{% if message %}
 
 <div class="section">
     <h2>{{message}}</h2>

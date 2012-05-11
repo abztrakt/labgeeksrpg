@@ -1,7 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import User
 from labgeeksrpg.chronos.models import Location
-import datetime
+from datetime import date
+
+class TimePeriod(models.Model):
+    """ Defines possible periods of time when a person could choose to work or choose not to work.
+    """
+    name = models.CharField(max_length=256)
+    slug = models.SlugField()
+    description = models.TextField(blank=True)
+    start_date = models.DateField(default=date.today())
+    end_date = models.DateField(default=date.today())
+    
+    def __unicode__(self):
+        return self.name
 
 class WorkShift(models.Model):
     """ These are shifts that people are expected to work for. 
