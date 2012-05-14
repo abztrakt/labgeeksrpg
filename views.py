@@ -5,7 +5,7 @@ from django.template import RequestContext
 from labgeeksrpg.forms import LoginForm
 
 def hello(request):
-    """ The root view of the site. Just static for now, but loater we can return useful information for logged in users.
+    """ The root view of the site. Just static for now, but later we can return useful information for logged in users.
     """
     return render_to_response('hello.html', locals())
 
