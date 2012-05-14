@@ -81,19 +81,33 @@ class UWLTReview(PerformanceReview):
     """ A specific review model
     """
     teamwork = models.IntegerField(null=True,blank=True)
+    teamwork_comments = models.TextField(null=True,blank=True)
     customer_service = models.IntegerField(null=True,blank=True)
+    customer_service_comments = models.TextField(null=True,blank=True)
     dependability = models.IntegerField(null=True,blank=True)
+    dependability_comments = models.TextField(null=True,blank=True)
     integrity = models.IntegerField(null=True,blank=True)
+    integrity_comments = models.TextField(null=True,blank=True)
     communication = models.IntegerField(null=True,blank=True)
+    communication_comments = models.TextField(null=True,blank=True)
     initiative = models.IntegerField(null=True,blank=True)
+    initiative_comments = models.TextField(null=True,blank=True)
     attitude = models.IntegerField(null=True,blank=True)
+    attitude_comments = models.TextField(null=True,blank=True)
     productivity = models.IntegerField(null=True,blank=True)
+    productivity_comments = models.TextField(null=True,blank=True)
     technical_knowledge = models.IntegerField(null=True,blank=True)
+    technical_knowledge_comments = models.TextField(null=True,blank=True)
     responsibility = models.IntegerField(null=True,blank=True)
+    responsibility_comments = models.TextField(null=True,blank=True)
     policies = models.IntegerField(null=True,blank=True)
+    policies_comments = models.TextField(null=True,blank=True)
     procedures = models.IntegerField(null=True,blank=True)
+    procedures_comments = models.TextField(null=True,blank=True)
     missed_shifts = models.IntegerField(null=True,blank=True)
+    missed_shifts_comments = models.TextField(null=True,blank=True)
     tardies = models.IntegerField(null=True,blank=True)
+    tardies_comments = models.TextField(null=True,blank=True)
 
     def get_fields(self):
         return  [(field.name, field.value_to_string(self)) for field in UWLTReview._meta.fields]
