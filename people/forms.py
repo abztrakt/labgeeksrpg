@@ -33,7 +33,7 @@ class CreatePerformanceReviewForm(ModelForm):
         
 class CreateUWLTReviewForm(CreatePerformanceReviewForm):
 
-    RANK_CHOICES = [(0,'N/A')] + [(i,i) for i in range (1,6)]
+    RANK_CHOICES = [(0,'N/A')] + [(i,i) for i in range (1,5)] + [(5,'5 (best)')]
     HELP_TEXT_CHOICES = {
         'teamwork': 'Participates effectively in team efforts and encourages others. Treats people with fairness and respect. Carefully considers other points of view. Promotes collaboration amongst all student staff.',
         'customer_service': 'Is professional in dealing with customers and satisfies their needs within the parameters of the service we provide.',
