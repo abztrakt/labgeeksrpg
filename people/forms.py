@@ -70,17 +70,29 @@ class CreateUWLTReviewForm(CreatePerformanceReviewForm):
         model = UWLTReview
         fields = (
             'teamwork',
+            'teamwork_comments',
             'customer_service',
+            'customer_service_comments',
             'dependability', 
+            'dependability_comments', 
             'integrity', 
+            'integrity_comments', 
             'communication',
+            'communication_comments',
             'initiative', 
+            'initiative_comments', 
             'attitude', 
+            'attitude_comments', 
             'productivity', 
+            'productivity_comments', 
             'technical_knowledge', 
+            'technical_knowledge_comments', 
             'responsibility',
+            'responsibility_comments',
             'policies',
+            'policies_comments',
             'procedures', 
+            'procedures_comments', 
             'comments',
         )
         exclude = ('user','reviewer','date')
@@ -90,25 +102,40 @@ class CreateFinalUWLTReviewForm(CreateUWLTReviewForm):
     missed_shifts = forms.IntegerField(required=False,help_text='Enter the number of shifts the user has missed.')
     tardies = forms.IntegerField(required=False,help_text='Enter the number of shifts the user was late to.')
     is_final = forms.BooleanField(required=False, help_text='CHECK THIS ONLY WHEN THE REVIEW IS READY TO BE FINALIZED.')
+
     def __init__(self,*args,**kwargs):
         super(CreateUWLTReviewForm,self).__init__(*args,**kwargs)
 
     class Meta(CreateUWLTReviewForm.Meta):
          fields = (
             'teamwork',
+            'teamwork_comments',
             'customer_service',
+            'customer_service_comments',
             'dependability', 
+            'dependability_comments', 
             'integrity', 
+            'integrity_comments', 
             'communication',
+            'communication_comments',
             'initiative', 
+            'initiative_comments', 
             'attitude', 
+            'attitude_comments', 
             'productivity', 
+            'productivity_comments', 
             'technical_knowledge', 
+            'technical_knowledge_comments', 
             'responsibility',
+            'responsibility_comments',
             'policies',
+            'policies_comments',
             'procedures', 
+            'procedures_comments', 
             'comments',
             'missed_shifts',
+            'missed_shifts_comments',
             'tardies',
+            'tardies_comments',
             'is_final',
         )
