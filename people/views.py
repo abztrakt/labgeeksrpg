@@ -337,30 +337,25 @@ def view_review_data(request,user):
                 'Policies': review.policies,
                 'Procedures': review.procedures,
             }
-        #messy as hell, but necessary for now
-        all_comments = "Overall: %s.  Teamwork: %s.  Customer service: %s.  Dependability: %s.  Integrity: %s.  Communication: %s.  Initiative: %s.  Attitude: %s.  Productivity: %s.  Technical knowledge: %s.  Responsibility: %s.  Policies: %s.  Proceedures: %s." % (review.comments, review.teamwork_comments, review.customer_service_comments, review.dependability_comments, review.integrity_comments, review.communication_comments, review.initiative_comments, review.attitude_comments, review.productivity_comments, review.technical_knowledge_comments, review.responsibility_comments, review.policies_comments, review.procedures_comments)
-       # Change to this when the wierd parsing is figured out.  We want it to behave
-       # and be printed to html like scores
-       # all_comments = {
-       #         'Overall': review.comments,
-       #         'Teamwork': review.teamwork_comments,
-       #         'Customer service': review.customer_service_comments,
-       #         'Dependability': review.dependability_comments,
-       #         'Integrity': review.integrity_comments,
-       #         'Communication': review.communication_comments,
-       #         'Initiative': review.initiative_comments,
-       #         'Attitude': review.attitude_comments,
-       #         'Productivity': review.productivity_comments,
-       #         'Technical knowledge': review.technical_knowledge_comments,
-       #         'Responsibility': review.responsibility_comments,
-       #         'Policies': review.policies_comments,
-       #         'Procedures': review.procedures_comments,
-       #     }
+        score_comments = {
+                'Teamwork(' + `review.teamwork` + ')': review.teamwork_comments,
+                'Customer service(' + `review.customer_service` + ')': review.customer_service_comments,
+                'Dependability(' + `review.dependability` + ')': review.dependability_comments,
+                'Integrity(' + `review.integrity` + ')': review.integrity_comments,
+                'Communication(' + `review.communication` + ')': review.communication_comments,
+                'Initiative(' + `review.initiative` + ')': review.initiative_comments,
+                'Attitude(' + `review.attitude` + ')': review.attitude_comments,
+                'Productivity(' + `review.productivity` + ')': review.productivity_comments,
+                'Technical knowledge(' + `review.technical_knowledge` + ')': review.technical_knowledge_comments,
+                'Responsibility(' + `review.responsibility` + ')': review.responsibility_comments,
+                'Policies(' + `review.policies` + ')': review.policies_comments,
+                'Procedures(' + `review.procedures` + ')': review.procedures_comments,
+            }
         result = json.dumps({
                 'return_status': True,
                 'user': str(review.user),
-                'scores': scores,
-                'date': review.date.strftime('%b. %d, %Y'),
-                'comments': str(all_comments),
+                'scores': score_comments,
+                'date': review.date.strftime('%b %d, %Y'),
+                'comments': review.comments,
             })   
         return HttpResponse(result)
