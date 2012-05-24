@@ -61,9 +61,14 @@ function loadReviewData(data){
             score_list.append("<li>" + key + ': ' + data['scores'][key] + "</li>");
         }
 
-        comments_box = $("#review_comments");
-        comments_box.empty();
-        comments_box.append(data['comments']);
+        comments_list = $("#review_comments");
+        comments_list.empty();
+        comments_list.append("<li><strong>Overall: " + data['overall'] + "</strong></li>");
+
+        for(key in data['scores']){
+            comments_list.append("<li>" + key + ': ' + data['comments'][key] + "</li>");
+        }
+
     }
 }
 

@@ -337,25 +337,26 @@ def view_review_data(request,user):
                 'Policies': review.policies,
                 'Procedures': review.procedures,
             }
-        score_comments = {
-                'Teamwork(' + `review.teamwork` + ')': review.teamwork_comments,
-                'Customer service(' + `review.customer_service` + ')': review.customer_service_comments,
-                'Dependability(' + `review.dependability` + ')': review.dependability_comments,
-                'Integrity(' + `review.integrity` + ')': review.integrity_comments,
-                'Communication(' + `review.communication` + ')': review.communication_comments,
-                'Initiative(' + `review.initiative` + ')': review.initiative_comments,
-                'Attitude(' + `review.attitude` + ')': review.attitude_comments,
-                'Productivity(' + `review.productivity` + ')': review.productivity_comments,
-                'Technical knowledge(' + `review.technical_knowledge` + ')': review.technical_knowledge_comments,
-                'Responsibility(' + `review.responsibility` + ')': review.responsibility_comments,
-                'Policies(' + `review.policies` + ')': review.policies_comments,
-                'Procedures(' + `review.procedures` + ')': review.procedures_comments,
+        comments = {
+                'Teamwork': review.teamwork_comments,
+                'Customer service': review.customer_service_comments,
+                'Dependability': review.dependability_comments,
+                'Integrity': review.integrity_comments,
+                'Communication': review.communication_comments,
+                'Initiative': review.initiative_comments,
+                'Attitude': review.attitude_comments,
+                'Productivity': review.productivity_comments,
+                'Technical knowledge': review.technical_knowledge_comments,
+                'Responsibility': review.responsibility_comments,
+                'Policies': review.policies_comments,
+                'Procedures': review.procedures_comments,
             }
         result = json.dumps({
                 'return_status': True,
                 'user': str(review.user),
-                'scores': score_comments,
+                'scores': scores,
                 'date': review.date.strftime('%b %d, %Y'),
-                'comments': review.comments,
+                'comments': comments,
+                'overall': review.comments
             })   
         return HttpResponse(result)
