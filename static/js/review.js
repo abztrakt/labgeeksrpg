@@ -56,9 +56,19 @@ function loadReviewData(data){
 
         score_list = $("#review_scores");
         score_list.empty();
+        var inline = [
+            ' (N/A)',
+            ' (unsatisfactory)',
+            ' (needs work)',
+            ' (satisfactory)',
+            ' (very good)',
+            ' (exemplary)'
+        ];
+        var intscore;
 
         for(key in data['scores']){
-            score_list.append("<li>" + key + ': ' + data['scores'][key] + "</li>");
+            intscore = parseInt(data['scores'][key]);
+            score_list.append("<li>" + key + ': ' + data['scores'][key] + inline[intscore] + "</li>");
         }
 
         comments_list = $("#review_comments");
