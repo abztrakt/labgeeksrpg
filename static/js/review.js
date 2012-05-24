@@ -65,10 +65,24 @@ function loadReviewData(data){
             ' (exemplary)'
         ];
         var intscore;
+        var tooltips = {
+            'Teamwork': 'Participates effectively in team efforts and encourages others. Treats people with fairness and respect. Carefully considers other points of view. Promotes collaboration amongst all student staff.',
+            'Customer Service': 'Is professional in dealing with customers and satisfies their needs within the parameters of the service we provide.',
+            'Dependability': 'Is responsible and punctual, has good attendance, and finds a substitute when unable to work.',
+            'Integrity': 'Adheres to the UW principles and standards of conduct. Actively demonstrates commitment to UW computing policies. Honors commitments, earns trust.',
+            'Communication': 'Expresses thoughts clearly in a way others understand and accept.',
+            'Initiative': 'Offers suggestions for new or better methods of operations. Looks for opportunities for self improvment.',
+            'Attitude': 'Is enthusiastic, interested, dilligent, and courteous.',
+            'Productivity': 'Takes initiative to complete tasks and achieve goals. Plans and organizes work to improve output. Completes assigned projects by agreed completion date.',
+            'Technical Knowledge': 'Has increased knowledge of hardware and/or software. Is up to date with the development of the UWTSC technical environment.',
+            'Responsibility': 'Willingness to take on responsibility.',
+            'Policies': 'Knows and enforces UW, C&C and staff policies.',
+            'Procedures': 'Understands and follows departamental procedures.'
+        };
 
         for(key in data['scores']){
             intscore = parseInt(data['scores'][key]);
-            score_list.append("<li>" + key + ': ' + data['scores'][key] + inline[intscore] + "</li>");
+            score_list.append('<li title="' + tooltips[key] + '">' + key + ': ' + data['scores'][key] + inline[intscore] + "</li>");
         }
 
         comments_list = $("#review_comments");
@@ -76,9 +90,8 @@ function loadReviewData(data){
         comments_list.append("<li><strong>Overall: " + data['overall'] + "</strong></li>");
 
         for(key in data['scores']){
-            comments_list.append("<li>" + key + ': ' + data['comments'][key] + "</li>");
+            comments_list.append('<li title="' + tooltips[key] + '">' + key + ': ' + data['comments'][key] + "</li>");
         }
 
     }
 }
-
