@@ -2,13 +2,12 @@
 <div id="view_reviews" class="tab_content">
     {% if table_dict.scores %}
         <p><strong class="review_section">{{table_dict.user}}</strong></p>
-        <p>Select the date of the review to view its details.</p>
         <table class="review_score_table">
             <thead>
             <tr>
                 <td>Date</td>
                 {% for info in table_dict.date %}
-                <td class="review_selector" title="{{info.id}}">{{info.date}}</td>
+                <td class="review_selector" title="view details for this review" id="{{info.id}}">{{info.date}}</td>
                 {% endfor %}
             </tr>
             </thead>
@@ -22,6 +21,13 @@
                 </tr>
                 {% endfor %}
             </tbody>
+            <thead>
+            <tr>
+                <td></td>
+                {% for info in table_dict.date %}
+                <td class="review_selector" id="{{info.id}}">Details</td>
+                {% endfor %}
+            </tr>
         </table>
 
         <div id="review_info" class="hidden">

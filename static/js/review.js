@@ -10,7 +10,7 @@ Loads the page with events.
 */
 $(document).ready(function() {
     $(".review_selector").click(function() {
-        getReviewData(this.title);
+        getReviewData(this.id);
     });
 
     $("#id_is_final").change(function() {
