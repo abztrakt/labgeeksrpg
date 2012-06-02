@@ -227,11 +227,8 @@ def view_and_edit_reviews(request,user):
             'policies': review.policies,
             'procedures': review.procedures,
         }
-
-        total = sum(dict.values(scores)) * 1.0
-        average = "%.2f" % (total / len(scores))
+        average = UWLTReview.get_average(review, scores)
         scores['Average'] = average
-
 
         for key,value in scores.items():
             if review.is_final:
@@ -342,9 +339,7 @@ def view_review_data(request,user):
                 'Policies': review.policies,
                 'Procedures': review.procedures,
             }
-
-        total = sum(dict.values(scores)) * 1.0
-        average = "%.2f" % (total / len(scores))
+        average = UWLTReview.get_average(review, scores)
         scores['Average'] = average
 
         result = json.dumps({
