@@ -98,6 +98,11 @@ class UWLTReview(PerformanceReview):
     def get_fields(self):
         return  [(field.name, field.value_to_string(self)) for field in UWLTReview._meta.fields]
 
+    def get_average(self, scores):
+        total = sum(dict.values(scores)) * 1.0
+        average = "%.2f" % (total / len(scores))
+        return average
+
 class UserProfile(models.Model):
     """ Defines additional things we should know about users.
     """
