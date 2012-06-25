@@ -356,6 +356,11 @@ def view_review_data(request, user):
             'Policies': review.policies_comments,
             'Procedures': review.procedures_comments,
         }
+
+        total = sum(dict.values(scores)) * 1.0
+        average = "%.2f" % (total / len(scores))
+        scores['Average'] = average
+
         result = json.dumps({
             'return_status': True,
             'user': str(review.user),

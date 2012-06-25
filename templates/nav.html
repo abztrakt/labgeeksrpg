@@ -17,5 +17,10 @@
     <li id="profilelink" class="rightsidenav"><a href="/people/{{ request.user }}">Profile</a></li>
     <li id="navpic" class="rightsidenav"><a href="/people/{{ request.user }}"><img id="pic" src="/static/img/stock_photo.jpg" alt="Profile Page" /></a></li>
     {% endif %}{%endif %}
+    {% if request.user.is_authenticated %}<li><a class="{% active_tab request "/logout" %}" href="/logout">Log-out</a></li>
+    {% else %}<li><a class="{% active_tab request "/login" %}" href="/login">Log-in</a></li>{% endif %}
+    {% if request.user.is_authenticated %}<li id="navpic"><a href="/people/{{ request.user }}"><img id="pic" src="{{ request.user.get_profile.get_photo }}" alt="Profile Page" /></a></li>
+    {% else %}{% if request.user.is_authenticated %}<li id="navpic"><a href="/people/{{ request.user }}"><img id="pic" src="/static/img/stock_photo.jpg" alt="Profile Page" /></a></li>{% endif %}
+    {% endif %}
 </ul>
 </div>
