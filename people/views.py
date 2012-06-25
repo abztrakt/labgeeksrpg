@@ -149,8 +149,7 @@ def view_and_edit_reviews(request, user):
         # raise Http403 (for django 1.4)
         return render_to_response('403.html', locals(), context_instance=RequestContext(request))
 
-    # TODO: Try to not use the is_superuser permission, instead maybe use a group permission.
-    if this_user.is_superuser:
+    if this_user.has_perm('people.finalize_uwltreview'):
         final_reviewer = True
     else:
         final_reviewer = False

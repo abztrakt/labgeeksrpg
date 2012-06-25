@@ -32,11 +32,13 @@ class PeopleTestCase(TestCase):
         self.dawg.save()
         self.manager = User.objects.create_user('Manager', 'dawgm@test.com', 'pass')
         ct = ContentType.objects.get_for_model(UWLTReview)
-        permission = Permission.objects.get(content_type=ct, codename='add_uwltreview')
-        self.manager.user_permissions.add(permission)
+        addreview = Permission.objects.get(content_type=ct, codename='add_uwltreview')
+        finalize = Permission.objects.get(content_type=ct, codename='finalize_uwltreview')
+        self.manager.user_permissions.add(addreview)
         self.manager.save()
         self.bigboss = User.objects.create_user('BigBoss', 'dawgb@test.com', 'pass')
-        self.bigboss.is_superuser = True
+        self.bigboss.user_permissions.add(addreview)
+        self.bigboss.user_permissions.add(finalize)
         self.bigboss.save()
         d = datetime.date.today()
         self.dawgreview = UWLTReview.objects.create(user=self.dawg, date=d, reviewer=self.manager)
@@ -58,9 +60,13 @@ class PeopleTestCase(TestCase):
         resp2 = c.get('/people/Dawg/review/#view_reviews')
         self.assertEqual(resp2.status_code, 200)
         resp3 = c.get('/people/Manager/review/#view_reviews')
-        self.assertEqual(resp3.status_code, 200)  # change to 403 when we get django 1.4
+        self.assertContains(resp3, "security hole")  # change to 403 when we get django 1.4
         resp4 = c.get('/people/Manager/#profile')
         self.assertEqual(resp4.status_code, 200)  # access to created profiles
+        resp5 = c.get('/people/Dawg/review/info/?id=1')
+        self.assertEqual(resp5.status_code, 200)  # access to his own json review I guess
+        resp6 = c.get('/people/Manager/review/info/?id=2')
+        self.assertContains(resp6, "You do not have permission")  # no access to others jsons
         c.logout()
 
     def testManagerPermissions(self):
@@ -81,7 +87,8 @@ class PeopleTestCase(TestCase):
         resp4 = c.get('/people/Dawg/#profile')
         self.assertEqual(resp4.status_code, 200)
         resp5 = c.get('/people/BigBoss/review/#view_reviews')
-        self.assertEqual(resp5.status_code, 200)  # change to 403 upon django 1.4 update
+        self.assertEqual(resp5.status_code, 200)
+        # possibly unwanted behavior:  as is, add_review gives power to review anyone, including your boss
         c.logout()
 
     def testBigBossPermissions(self):
