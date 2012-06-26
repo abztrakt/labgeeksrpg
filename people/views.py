@@ -10,7 +10,6 @@ from people.forms import *
 from people.models import *
 from django.core.files.uploadedfile import SimpleUploadedFile
 # next line unnecessary after upgrade to django 1.4
-from people.middleware import Http403
 
 
 @login_required
