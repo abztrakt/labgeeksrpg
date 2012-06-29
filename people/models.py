@@ -73,6 +73,32 @@ class WageHistory (models.Model):
         return '%s - $%s' % (self.user, self.wage)
 
 
+class UWLTReviewWeights(models.Model):
+    """weights for UWLTreview weighted average
+    """
+
+    class Meta:
+        verbose_name = "UWLT review weight"
+
+    name = models.CharField(max_length=64)
+    effective_date = models.DateField(default=date.today, blank=True)
+    teamwork_multiplier = models.FloatField(default=1)
+    customer_service_multiplier = models.FloatField(default=1)
+    dependability_multiplier = models.FloatField(default=1)
+    integrity_multiplier = models.FloatField(default=1)
+    communication_multiplier = models.FloatField(default=1)
+    initiative_multiplier = models.FloatField(default=1)
+    attitude_multiplier = models.FloatField(default=1)
+    productivity_multiplier = models.FloatField(default=1)
+    technical_knowledge_multiplier = models.FloatField(default=1)
+    responsibility_multiplier = models.FloatField(default=1)
+    policies_multiplier = models.FloatField(default=1)
+    procedures_multiplier = models.FloatField(default=1)
+
+    def __unicode__(self):
+        return self.name
+
+
 class PerformanceReview(models.Model):
     """ Defines a review form used on staff
         Used a base class for any review model
@@ -93,6 +119,7 @@ class UWLTReview(PerformanceReview):
         permissions = (
             ("finalize_uwltreview", "Can finalize UWLT Review"),
         )
+        verbose_name = "assigned weights for UWLT review"  # only displays in admin view
 
     teamwork = models.IntegerField(null=True, blank=True)
     teamwork_comments = models.TextField(null=True, blank=True)
@@ -122,6 +149,7 @@ class UWLTReview(PerformanceReview):
     missed_shifts_comments = models.TextField(null=True, blank=True)
     tardies = models.IntegerField(null=True, blank=True)
     tardies_comments = models.TextField(null=True, blank=True)
+    weights = models.ForeignKey(UWLTReviewWeights, null=True, blank=True)
 
     def get_fields(self):
         return  [(field.name, field.value_to_string(self)) for field in UWLTReview._meta.fields]

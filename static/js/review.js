@@ -84,14 +84,14 @@ function loadReviewData(data){
             intscore = parseInt(data['scores'][key]);
             score_list.append('<li title="' + tooltips[key] + '">' + key + ': ' + data['scores'][key] + inline[intscore] + "</li>");
         }
+        score_list.append("<li><strong>Weighted Average: " + data['weighted'] + "</strong></li>");
 
         comments_list = $("#review_comments");
         comments_list.empty();
-        comments_list.append("<li><strong>Overall: " + data['overall'] + "</strong></li>");
-
         for(key in data['scores']){
             comments_list.append('<li title="' + tooltips[key] + '">' + key + ': ' + data['comments'][key] + "</li>");
         }
+        comments_list.append("<li><strong>Overall: " + data['overall'] + "</strong></li>");
 
     }
 }

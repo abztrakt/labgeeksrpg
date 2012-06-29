@@ -16,10 +16,16 @@
                 <tr>
                     <td>{{key|capfirst}}</td>
                     {% for score in scores %}
-                    <td>{{score}}</td>
+                        <td>{{score}}</td>
                     {% endfor %}
                 </tr>
                 {% endfor %}
+                <tr>
+                    <td>Weighted Average</td>
+                    {% for weight in weights %}
+                        <td>{{weight}}</td>
+                    {% endfor %}
+                </tr>
             </tbody>
             <thead>
             <tr>

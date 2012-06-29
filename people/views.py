@@ -9,7 +9,6 @@ import json
 from people.forms import *
 from people.models import *
 from django.core.files.uploadedfile import SimpleUploadedFile
-# next line unnecessary after upgrade to django 1.4
 
 
 @login_required
@@ -214,23 +213,11 @@ def view_and_edit_reviews(request, user):
 
     table_date_info = []
     table_scores = {}
+    weights = []
 
     for review in reviews:
-        scores = {
-            'teamwork': review.teamwork,
-            'customer service': review.customer_service,
-            'dependability': review.dependability,
-            'integrity': review.integrity,
-            'communication': review.communication,
-            'initiative': review.initiative,
-            'attitude': review.attitude,
-            'productivity': review.productivity,
-            'technical knowledge': review.technical_knowledge,
-            'responsibility': review.responsibility,
-            'policies': review.policies,
-            'procedures': review.procedures,
-        }
-
+        scores = get_scores(review)
+        weights.append(weight_review(review))
         for key, value in scores.items():
             if review.is_final:
                 if key in table_scores.keys():
@@ -299,6 +286,7 @@ def view_and_edit_reviews(request, user):
     args = {
         'request': request,
         'table_dict': table_dict,
+        'weights': weights,
         'form_fields': form_fields,
         'this_user': this_user,
         'user': user,
@@ -327,20 +315,7 @@ def view_review_data(request, user):
         })
         return HttpResponse(result)
     else:
-        scores = {
-            'Teamwork': review.teamwork,
-            'Customer Service': review.customer_service,
-            'Dependability': review.dependability,
-            'Integrity': review.integrity,
-            'Communication': review.communication,
-            'Initiative': review.initiative,
-            'Attitude': review.attitude,
-            'Productivity': review.productivity,
-            'Technical Knowledge': review.technical_knowledge,
-            'Responsibility': review.responsibility,
-            'Policies': review.policies,
-            'Procedures': review.procedures,
-        }
+        scores = get_scores(review)
         comments = {
             'Teamwork': review.teamwork_comments,
             'Customer Service': review.customer_service_comments,
@@ -355,7 +330,7 @@ def view_review_data(request, user):
             'Policies': review.policies_comments,
             'Procedures': review.procedures_comments,
         }
-
+        weighted = weight_review(review)
         total = sum(dict.values(scores)) * 1.0
         average = "%.2f" % (total / len(scores))
         scores['Average'] = average
@@ -364,8 +339,53 @@ def view_review_data(request, user):
             'return_status': True,
             'user': str(review.user),
             'scores': scores,
+            'weighted': weighted,
             'date': review.date.strftime('%b %d, %Y'),
             'comments': comments,
             'overall': review.comments
         })
         return HttpResponse(result)
+
+
+def weight_review(review):
+    """
+    takes a review and returns the weighted average
+    """
+    if review.weights:
+        t = review.weights.teamwork_multiplier
+        cs = review.weights.customer_service_multiplier
+        d = review.weights.dependability_multiplier
+        i = review.weights.integrity_multiplier
+        c = review.weights.communication_multiplier
+        ini = review.weights.initiative_multiplier
+        a = review.weights.attitude_multiplier
+        p = review.weights.productivity_multiplier
+        tk = review.weights.technical_knowledge_multiplier
+        r = review.weights.responsibility_multiplier
+        po = review.weights.policies_multiplier
+        pr = review.weights.procedures_multiplier
+        numerator = t * review.teamwork + cs * review.customer_service + d * review.dependability + i * review.integrity + c * review.communication + ini * review.initiative + a * review.attitude + p * review.productivity + tk * review.technical_knowledge + r * review.responsibility + po * review.policies + pr * review.procedures
+        denominator = t + cs + d + i + c + ini + a + p + tk + r + po + pr
+        return round((numerator / denominator), 2)
+
+    return "N/A"
+
+
+def get_scores(review):
+    """
+    Takes a review and returns the scores as a dictionary
+    """
+    return {
+        'Teamwork': review.teamwork,
+        'Customer Service': review.customer_service,
+        'Dependability': review.dependability,
+        'Integrity': review.integrity,
+        'Communication': review.communication,
+        'Initiative': review.initiative,
+        'Attitude': review.attitude,
+        'Productivity': review.productivity,
+        'Technical Knowledge': review.technical_knowledge,
+        'Responsibility': review.responsibility,
+        'Policies': review.policies,
+        'Procedures': review.procedures,
+    }
