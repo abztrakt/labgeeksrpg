@@ -214,10 +214,13 @@ def view_and_edit_reviews(request, user):
     table_date_info = []
     table_scores = {}
     weights = []
+    averages = []
 
     for review in reviews:
         scores = get_scores(review)
         weights.append(weight_review(review))
+        total = sum(dict.values(scores)) * 1.0
+        averages.append("%.2f" % (total / len(scores)))
         for key, value in scores.items():
             if review.is_final:
                 if key in table_scores.keys():
@@ -287,6 +290,7 @@ def view_and_edit_reviews(request, user):
         'request': request,
         'table_dict': table_dict,
         'weights': weights,
+        'averages': averages,
         'form_fields': form_fields,
         'this_user': this_user,
         'user': user,
@@ -333,13 +337,13 @@ def view_review_data(request, user):
         weighted = weight_review(review)
         total = sum(dict.values(scores)) * 1.0
         average = "%.2f" % (total / len(scores))
-        scores['Average'] = average
 
         result = json.dumps({
             'return_status': True,
             'user': str(review.user),
             'scores': scores,
             'weighted': weighted,
+            'average': average,
             'date': review.date.strftime('%b %d, %Y'),
             'comments': comments,
             'overall': review.comments
