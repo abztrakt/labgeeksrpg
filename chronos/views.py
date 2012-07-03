@@ -199,6 +199,15 @@ def specific_report(request,user,year,month,day=None,week=None,payperiod=None):
         except UserProfile.DoesNotExist:
             user = user.first_name
 
+        #Splits up shiftnotes into two separate variables if there are two to begin with
+        if "\n\n" in shift.shiftnote:
+            shiftnotes = shift.shiftnote.split("\n\n")
+            shift.shiftinnote = shiftnotes[0]
+            shift.shiftoutnote = shiftnotes[1]
+        else:
+            shift.shiftinnote = shift.shiftnote
+            shift.shiftoutnote = ""
+
         data = {
             'person': user,
             'location': shift.in_clock.location,

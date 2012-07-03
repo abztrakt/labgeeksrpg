@@ -2,13 +2,14 @@
 
 {% block pageJS %}
 <script type="text/javascript" src="/static/js/jquery.tools.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.ui.timepicker.js"></script>
 <script type="text/javascript" src="/static/js/schedule.js"></script>
+
 {% endblock %}
 {% block content %}
 <div class="section">
     <h1>Schedule</h1>
     <h2>Create a schedule!</h2>
-
 </div>
 
 <hr class="separator"/>
@@ -34,45 +35,76 @@
     </form>
 </div>
 
-<div id="tooltip" class="tooltip">
-    Hello Michael.
-</div>
-
-
 <div id="schedule" class="{{schedule_class}}">
-    <p id="test"></p>
+        <div class="schedule_toolbar">
+            <form>
+                <p>
+                    <strong>Time Period:</strong>
+                    <span class="timeperiod">{{timeperiod}}</span>
+                </p>
+                <p>
+                    <strong>Location:</strong>
+                    <span class="location">{{location}}</span>
+                </p>
+
+                {% if can_edit_schedule %}
+                    <button id="save_hours" type="button">Save</button>
+                {% endif %}
+            </form>
+        </div>
+
+        <div class="schedule_status hidden">
+        </div>
+
     <ul class="tabs">
-        {% for day in x_axis %}
+        {% for day in days %}
             <li><a href="#{{day}}"><span>{{day}}</span></a></li>
         {% endfor %}
 
     </ul>
     <div class="tab_container">
 
-        {% for shift in shifts %}
-        <div id="{{shift.day}}" class="tab_content">
-            <table>
-                <tr class="date">
-                    <th colspan="2">{{shift.day}}</th>
-                </tr>
-                <tr class="location">
-                    <th colspan="2">{{location}}</th>
-                </tr>
-                <tr class="users">
-                    <th>Time</th>
-                    <th><select class="add_person"></select></th>
-                </tr>
-                {% for time in y_axis %}
+        {% for grid in schedule %}
+            <div id={{grid.day}} class="tab_content">
+                <div class="day_header">{{grid.day}}</div>
+                {% if can_edit_schedule %}
+                    <div class="hours_toolbar">
+                        <form>
+                            <div>
+                                <strong>Closing hours:</strong>
+                                <input class="closing_starting_hours time_input" type="text" />
+                                <input class="closing_ending_hours time_input" type="text" />
+                                <button class="add_closing_hours" type="button">Add closing hours</button>
+                                <button class="remove_closing_hours" type="button">Remove closing hours</button>
+                            </div>
 
-                <tr class="row">
-                    <td class="time">{{time}}</td>
-                    <td class="content empty"></td>
-                </tr>
-                {% endfor %}
+                            <div>
+                                <strong>Employee hours:</strong>
+                                <select class="add_person"></select>
+                                <input class="employee_starting_hours time_input" type="text" />
+                                <input class="employee_ending_hours time_input" type="text" />
+                                <button class="add_employee_hours" type="button">Add employee hours</button>
+                                <button class="remove_employee_hours" type="button">Remove employee hours</button>
+                            </div>
+                        </form>
+                    </div>
+                {% endif %}
+                <div class="schedule_grid"> 
+                    {% for times in grid.times %}
+                        <div class="schedule_row">
+                            <div class="schedule_row_content">{{times.time}}</div>
 
-            </table>
-        </div>
+                            {% for elem in times.row  %}
+                                <div class="schedule_row_content {{elem.class}}">{% if elem.user %}{{elem.user}}{% endif %}</div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+
         {% endfor %}
+
     </div>
 
 </div>
