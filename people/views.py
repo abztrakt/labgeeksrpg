@@ -198,8 +198,7 @@ def view_wage_history(request, user):
         'wage_changes': wage_changes,
         'user': user_name,
     }
-
-    return render_to_response('wage_history.html', args, context_instance=RequestContext(request))
+    return render_to_response('wage_history.html', args)
 
 
 @login_required
