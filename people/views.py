@@ -154,9 +154,12 @@ def view_wage_history(request, user):
 
     try:
         histories = WageHistory.objects.filter(user=user).order_by('-effective_date')
-        has_history = True
     except WageHistory.DoesNotExist:
         histories = None
+
+    has_history = True
+
+    if len(histories) == 0:
         has_history = False
 
     wages = []
