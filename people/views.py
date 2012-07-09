@@ -53,9 +53,10 @@ def view_profile(request, name):
         #User has already created a user profile.
         profile = UserProfile.objects.get(user=this_user)
 
-        if request.user.__str__() == name or request.user.is_superuser:
+        if request.user.__str__() == name or request.user.has_perm('people.change_userprofile'):
             edit = True
-
+        if request.user.__str__() == name or request.user.has_perm('people.view_wagehistory'):
+            can_view_wage_history = True
         if request.user.__str__() == name or request.user.has_perm('people.add_uwltreview'):
             can_view_review = True
 
@@ -70,12 +71,18 @@ def create_user_profile(request, name):
     """ This view is called when creating or editing a user profile to the system.
         Allows the user to edit and display certain things about their information.
     """
+    if request.user.__str__() == name or request.user.has_perm('people.change_userprofile'):
+        can_edit = True
+    else:
+        can_edit = False
+
+    if request.user.__str__() == name or request.user.has_perm('people.add_userprofile'):
+        can_add = True
+    else:
+        can_add = False
+
     c = {}
     c.update(csrf(request))
-
-    if request.user.__str__() != name and not request.user.is_superuser:
-        # Don't allow editing of other people's profiles.
-        return render_to_response('not_your_profile.html', locals(), context_instance=RequestContext(request))
 
     #Grab the user that the name belongs to and check to see if they have an existing profile.
     user = User.objects.get(username=name)
@@ -83,6 +90,10 @@ def create_user_profile(request, name):
         profile = UserProfile.objects.get(user=user)
     except UserProfile.DoesNotExist:
         profile = None
+
+    if (not can_edit and profile) or (not can_add and not profile):
+        # Don't allow editing or adding of other people's profiles unless permission assigned
+        return render_to_response('not_your_profile.html', locals(), context_instance=RequestContext(request))
 
     if request.method == 'POST':
         form = CreateUserProfileForm(request.POST, request.FILES, instance=profile)
@@ -130,6 +141,62 @@ def create_user_profile(request, name):
         this_user = user.first_name
 
     return render_to_response('create_profile.html', locals(), context_instance=RequestContext(request))
+
+
+@login_required
+def view_wage_history(request, user):
+
+    user = User.objects.get(username=user)
+    this_user = request.user
+
+    if this_user != user and not this_user.has_perm('people.view_wagehistory'):
+        return render_to_response('403.html', locals(), context_instance=RequestContext(request))
+
+    try:
+        histories = WageHistory.objects.filter(user=user).order_by('-effective_date')
+        has_history = True
+    except WageHistory.DoesNotExist:
+        histories = None
+        has_history = False
+
+    wages = []
+    dates = []
+    reasons = []
+    wage_changes = []
+    description = []
+
+    try:
+        profile = UserProfile.objects.get(user=user)
+        if profile.call_me_by:
+            user_name = profile.call_me_by + ' ' + user.last_name
+        else:
+            user_name = user.first_name + ' ' + user.last_name
+    except:
+        user_name = user.first_name + ' ' + user.last_name
+
+    for history in histories:
+        wages.append(history.wage)
+        dates.append(history.effective_date)
+        reasons.append(history.wage_change_reason)
+        description.append(history.wage_change_reason.description)
+
+    for i in range(len(wages)):
+        holder = {
+            'date': dates[i],
+            'wage': wages[i],
+            'reason': reasons[i],
+            'desc': description[i],
+        }
+        wage_changes.append(holder)
+
+    args = {
+        'request': request,
+        'has_history': has_history,
+        'wage_changes': wage_changes,
+        'user': user_name,
+    }
+
+    return render_to_response('wage_history.html', args, context_instance=RequestContext(request))
 
 
 @login_required

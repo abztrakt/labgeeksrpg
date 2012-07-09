@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% load wage_history_extras %}
+
+{% block content %}
+{% if has_history %}
+<h3>Wage History for {{user}}</h3>
+
+{% for wage_change in wage_changes %}
+<div class="wagehistory">
+    <p><strong>Date: </strong>{{wage_change.date }}</p>
+    <p><strong>Wage: </strong>{{wage_change.wage}}</p>
+    <p><strong>Reason: </strong>{{wage_change.reason}} - {{wage_change.desc}}</p>
+</div>
+{% endfor %}
+{% else %}
+<div class="wagehistory">
+    <p>no wage history</p>
+</div>
+{% endif %}
+
+{% endblock %}
