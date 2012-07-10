@@ -228,6 +228,11 @@ def view_and_edit_reviews(request,user):
             'procedures': review.procedures,
         }
 
+        total = sum(dict.values(scores)) * 1.0
+        average = "%.2f" % (total / len(scores))
+        scores['Average'] = average
+
+
         for key,value in scores.items():
             if review.is_final:
                 if key in table_scores.keys():
@@ -337,6 +342,11 @@ def view_review_data(request,user):
                 'Policies': review.policies,
                 'Procedures': review.procedures,
             }
+
+        total = sum(dict.values(scores)) * 1.0
+        average = "%.2f" % (total / len(scores))
+        scores['Average'] = average
+
         result = json.dumps({
                 'return_status': True,
                 'user': str(review.user),
