@@ -203,7 +203,6 @@ def view_wage_history(request, user):
 
 @login_required
 def view_and_edit_reviews(request, user):
-
     # Grab the user and any reviews they may have.
     user = User.objects.get(username=user)
     this_user = request.user
