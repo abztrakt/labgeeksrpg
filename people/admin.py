@@ -7,31 +7,55 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django import forms
 
+
 class EmploymentStatusAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
+
 admin.site.register(EmploymentStatus, EmploymentStatusAdmin)
+
 
 class WorkGroupAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
+
 admin.site.register(WorkGroup, WorkGroupAdmin)
+
 
 class PayGradeAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
+
 admin.site.register(PayGrade, PayGradeAdmin)
+
 
 class TitleAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
-admin.site.register(Title, TitleAdmin)
 
+admin.site.register(Title, TitleAdmin)
 admin.site.register(WageHistory)
 admin.site.register(WageChangeReason)
+
+
+class UWLTReviewWeightsAdmin(admin.ModelAdmin):
+    list_display = ('name', 'effective_date',)
+
+admin.site.register(UWLTReviewWeights, UWLTReviewWeightsAdmin)
+
+
+class UWLTReviewAdmin(admin.ModelAdmin):
+    list_display = ('date', 'user',)
+    fields = ('weights',)
+
+    def has_add_permission(self, request):
+        return False
+
+admin.site.register(UWLTReview, UWLTReviewAdmin)
+
 
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'status', 'start_date', 'grad_date', 'supervisor', 'title', 'office',)
     search_fields = ('user', 'title', 'office', 'phone', 'alt_phone',)
     list_filter = ('status', 'start_date', 'grad_date', 'title', 'office',)
     actions = ['change_title', 'change_supervisor']
-    
+
     class ModifyTitleForm(forms.Form):
         """ The form used by the change_location admin action.
         """
@@ -56,7 +80,7 @@ class UserProfileAdmin(admin.ModelAdmin):
 
             items_updated = 0
             for i in queryset:
-                i.title = title 
+                i.title = title
                 i.save()
                 items_updated += 1
 
@@ -73,10 +97,9 @@ class UserProfileAdmin(admin.ModelAdmin):
             form = self.ModifyTitleForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
 
         selected_action = 'change_title'
-        return render_to_response('admin/mod_title.html', {'mod_title_form': form, 'selected_action': selected_action}, 
-            context_instance=RequestContext(request, {'title': 'Change Title',}))
+        return render_to_response('admin/mod_title.html', {'mod_title_form': form, 'selected_action': selected_action}, context_instance=RequestContext(request, {'title': 'Change Title', }))
     change_title.short_description = "Change title for selected people"
-    
+
     def change_supervisor(self, request, queryset):
         if 'submit' in request.POST:
             form = self.ModifySupervisorForm(request.POST)
@@ -106,8 +129,7 @@ class UserProfileAdmin(admin.ModelAdmin):
             form = self.ModifySupervisorForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
 
         selected_action = 'change_supervisor'
-        return render_to_response('admin/mod_supervisor.html', {'mod_supervisor_form': form, 'selected_action': selected_action}, 
-            context_instance=RequestContext(request, {'title': 'Change Supervisor',}))
+        return render_to_response('admin/mod_supervisor.html', {'mod_supervisor_form': form, 'selected_action': selected_action}, context_instance=RequestContext(request, {'title': 'Change Supervisor', }))
     change_supervisor.short_description = "Change supervisor for selected people"
 admin.site.register(UserProfile, UserProfileAdmin)
 
