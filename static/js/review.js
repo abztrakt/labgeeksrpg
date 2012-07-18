@@ -84,6 +84,7 @@ function loadReviewData(data){
             intscore = parseInt(data['scores'][key]);
             score_list.append('<li title="' + tooltips[key] + '">' + key + ': ' + data['scores'][key] + inline[intscore] + "</li>");
         }
+        score_list.append("<li><strong>Average: " + data['average'] + "</strong></li>");
         score_list.append("<li><strong>Weighted Average: " + data['weighted'] + "</strong></li>");
 
         comments_list = $("#review_comments");

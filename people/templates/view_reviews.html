@@ -21,6 +21,12 @@
                 </tr>
                 {% endfor %}
                 <tr>
+                    <td>Average</td>
+                    {% for average in averages %}
+                        <td>{{average}}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
                     <td>Weighted Average</td>
                     {% for weight in weights %}
                         <td>{{weight}}</td>

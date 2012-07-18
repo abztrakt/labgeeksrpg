@@ -64,6 +64,11 @@ class WageChangeReason(models.Model):
 class WageHistory (models.Model):
     """ Defines wage histories for users
     """
+    class Meta:
+        permissions = (
+            ("view_wagehistory", "Can view wage history for users"),
+        )
+
     effective_date = models.DateField()
     user = models.ForeignKey(User)
     wage = models.FloatField()
@@ -119,7 +124,7 @@ class UWLTReview(PerformanceReview):
         permissions = (
             ("finalize_uwltreview", "Can finalize UWLT Review"),
         )
-        verbose_name = "assigned weights for UWLT review"  # only displays in admin view
+        verbose_name = "UWLT review"
 
     teamwork = models.IntegerField(null=True, blank=True)
     teamwork_comments = models.TextField(null=True, blank=True)

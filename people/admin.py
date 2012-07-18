@@ -41,7 +41,7 @@ admin.site.register(UWLTReviewWeights, UWLTReviewWeightsAdmin)
 
 
 class UWLTReviewAdmin(admin.ModelAdmin):
-    list_display = ('date', 'user',)
+    list_display = ('date', 'user', 'weights',)
     fields = ('weights',)
 
     def has_add_permission(self, request):
