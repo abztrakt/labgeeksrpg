@@ -10,7 +10,12 @@ def hello(request):
     Created a dashboard page.
     """
     if request.user.is_authenticated():
-        return render_to_response('dashboard.html', locals())
+        locations = request.user.location_set.all()
+        args = {
+            'request': request,
+            'locations': locations
+        }
+        return render_to_response('dashboard.html', args)
     else:
         return render_to_response('hello.html', locals())
 
