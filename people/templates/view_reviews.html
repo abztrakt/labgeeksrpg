@@ -2,13 +2,12 @@
 <div id="view_reviews" class="tab_content">
     {% if table_dict.scores %}
         <p><strong class="review_section">{{table_dict.user}}</strong></p>
-        <p>Select the date of the review to view its details.</p>
         <table class="review_score_table">
             <thead>
             <tr>
                 <td>Date</td>
                 {% for info in table_dict.date %}
-                <td class="review_selector" title="{{info.id}}">{{info.date}}</td>
+                <td class="review_selector" title="view details for this review" id="{{info.id}}">{{info.date}}</td>
                 {% endfor %}
             </tr>
             </thead>
@@ -17,11 +16,30 @@
                 <tr>
                     <td>{{key|capfirst}}</td>
                     {% for score in scores %}
-                    <td>{{score}}</td>
+                        <td>{{score}}</td>
                     {% endfor %}
                 </tr>
                 {% endfor %}
+                <tr>
+                    <td>Average</td>
+                    {% for average in averages %}
+                        <td>{{average}}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>Weighted Average</td>
+                    {% for weight in weights %}
+                        <td>{{weight}}</td>
+                    {% endfor %}
+                </tr>
             </tbody>
+            <thead>
+            <tr>
+                <td></td>
+                {% for info in table_dict.date %}
+                <td class="review_selector" id="{{info.id}}">Details</td>
+                {% endfor %}
+            </tr>
         </table>
 
         <div id="review_info" class="hidden">
@@ -30,11 +48,10 @@
                 <div id="review_date"></div>
             </div>
             <div id="review_details">
-                <strong class="review_section">Scoring:</strong>
-                <ul id="review_scores">
-                </ul>
+                <strong class="review_section">Scores:</strong>
+                <ul id="review_scores"></ul>
                 <strong class="review_section">Comments:</strong>
-                <p id="review_comments"></p>
+                <ul id="review_comments"></ul>
             </div>
         </div>
 
