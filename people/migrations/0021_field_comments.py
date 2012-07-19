@@ -4,12 +4,12 @@ from south.db import db
 from south.v2 import DataMigration
 from django.db import models
 
+
 class Migration(DataMigration):
 
     def forwards(self, orm):
         pass
         "Write your forwards methods here."
-
 
     def backwards(self, orm):
         for review in orm.UWLTReview.objects.all():
