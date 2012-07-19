@@ -1,0 +1,12 @@
+<html>
+	<head>
+		<title>{{page_name}} - Editing</title>
+	</head>
+	<body>
+		<h1>Editing {{page_name}}</h1>
+		<form method="post" action="/wiki/{{page_name}}/edit/">{% csrf_token %}
+			<textarea name="content" rows="20" cols="60">{{content}}</textarea><br/>
+			<input type="submit" value="Save Page"/>
+		</form>
+	</body>
+</html>
