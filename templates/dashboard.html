@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div id="login_info">
+        <div class="section">
+            <h1>Hello {{request.user}}</h1>
+            <h2>Greetings.</h2>
+        </div>
+        <p>Welcome to Labgeeks, a staff and work shift management site.</p>
+        <h2>This is the dashboard!</h2>
+        {% if locations %}
+            {% for location in locations %}
+                <p>You are clocked in at {{location.name}}</p>
+            {% endfor %}
+        {% else %}
+            <p>You are not clocked in.</p>
+        {% endif %}
+    </div>
+{% endblock %}

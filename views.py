@@ -4,10 +4,20 @@ from django.shortcuts import render_to_response, HttpResponseRedirect
 from django.template import RequestContext
 from labgeeksrpg.forms import LoginForm
 
+
 def hello(request):
-    """ The root view of the site. Just static for now, but loater we can return useful information for logged in users.
+    """ The root view of the site. Just static for now, but later we can return useful information for logged in users.
+    Created a dashboard page.
     """
-    return render_to_response('hello.html', locals())
+    if request.user.is_authenticated():
+        locations = request.user.location_set.all()
+        args = {
+            'request': request,
+            'locations': locations
+        }
+        return render_to_response('dashboard.html', args)
+    else:
+        return render_to_response('hello.html', locals())
 
 
 def labgeeks_login(request):
@@ -16,13 +26,12 @@ def labgeeks_login(request):
     # Get a token to protect from cross-site request forgery
     c = {}
     c.update(csrf(request))
-    
     if request.user.is_authenticated():
         try:
             return HttpResponseRedirect(request.GET['next'])
         except:
             return HttpResponseRedirect('/')
-    elif request.method == 'POST': 
+    elif request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
             username = request.POST['username']
@@ -34,7 +43,8 @@ def labgeeks_login(request):
                     try:
                         return HttpResponseRedirect(request.GET['next'])
                     except:
-                        return HttpResponseRedirect('/success')
+                        #Redirects to the dashboard.
+                        return HttpResponseRedirect('/')
                 else:
                     # Return a disabled account error
                     return HttpResponseRedirect('/inactive/')
@@ -42,17 +52,20 @@ def labgeeks_login(request):
         form = LoginForm()
 
     return render_to_response('login.html', locals(), context_instance=RequestContext(request))
-    
+
+
 def labgeeks_logout(request):
     """ Manually log a user out.
     """
     logout(request)
     return HttpResponseRedirect('/')
 
+
 def inactive(request):
     """ Return if a user's account has been disabled.
     """
     return render_to_response('inactive.html', locals())
+
 
 def success(request):
     """ If the user just logs in, we should redirect them to this view unless there is a 'next' GET var.

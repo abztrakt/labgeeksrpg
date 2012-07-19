@@ -10,6 +10,7 @@ from people.forms import *
 from people.models import *
 from django.core.files.uploadedfile import SimpleUploadedFile
 
+
 @login_required
 def list_all(request):
     """ List all users in the system. (Alphabetically, ignoring case)
@@ -19,18 +20,16 @@ def list_all(request):
         can_add_review = True
     else:
         can_add_review = False
-    
-    #Separate out the list of users by their group association. 
+
+    #Separate out the list of users by their group association.
     groups = Group.objects.all()
     group_list = []
     for group in groups:
         users = group.user_set.filter(is_active=True).extra(select={'username_upper': 'upper(username)'}, order_by=['username_upper'])
-        
         data = {
             'group_name': group.name,
             'users': users,
         }
-        
         group_list.append(data)
 
     # Lastly, grab all users who don't belong to a group.
@@ -43,38 +42,47 @@ def list_all(request):
 
     return render_to_response('list.html', locals(), context_instance=RequestContext(request))
 
+
 @login_required
 def view_profile(request, name):
     """ Show a user profile.
     """
 
     this_user = User.objects.get(username=name)
-    if UserProfile.objects.filter(user=this_user): 
+    if UserProfile.objects.filter(user=this_user):
         #User has already created a user profile.
         profile = UserProfile.objects.get(user=this_user)
 
-        if request.user.__str__() == name or request.user.is_superuser:
+        if request.user.__str__() == name or request.user.has_perm('people.change_userprofile'):
             edit = True
-
+        if request.user.__str__() == name or request.user.has_perm('people.view_wagehistory'):
+            can_view_wage_history = True
         if request.user.__str__() == name or request.user.has_perm('people.add_uwltreview'):
             can_view_review = True
 
         return render_to_response('profile.html', locals())
     else:
         #User HAS NOT created a user profile, allow them to create one.
-        return create_user_profile(request,name)
+        return create_user_profile(request, name)
+
 
 @login_required
-def create_user_profile(request,name):
+def create_user_profile(request, name):
     """ This view is called when creating or editing a user profile to the system.
         Allows the user to edit and display certain things about their information.
     """
+    if request.user.__str__() == name or request.user.has_perm('people.change_userprofile'):
+        can_edit = True
+    else:
+        can_edit = False
+
+    if request.user.__str__() == name or request.user.has_perm('people.add_userprofile'):
+        can_add = True
+    else:
+        can_add = False
+
     c = {}
     c.update(csrf(request))
-
-    if request.user.__str__() != name and not request.user.is_superuser:
-        # Don't allow editing of other people's profiles.
-        return render_to_response('not_your_profile.html',locals(),context_instance=RequestContext(request))
 
     #Grab the user that the name belongs to and check to see if they have an existing profile.
     user = User.objects.get(username=name)
@@ -83,8 +91,12 @@ def create_user_profile(request,name):
     except UserProfile.DoesNotExist:
         profile = None
 
+    if (not can_edit and profile) or (not can_add and not profile):
+        # Don't allow editing or adding of other people's profiles unless permission assigned
+        return render_to_response('not_your_profile.html', locals(), context_instance=RequestContext(request))
+
     if request.method == 'POST':
-        form = CreateUserProfileForm(request.POST,request.FILES,instance=profile)
+        form = CreateUserProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             if profile:
                 # Update the user profile
@@ -103,7 +115,7 @@ def create_user_profile(request,name):
             # Allow editing right after creating/editing a profile.
             edit = True
             # View the profile
-            return render_to_response('profile.html',locals(),context_instance=RequestContext(request))
+            return render_to_response('profile.html', locals(), context_instance=RequestContext(request))
     else:
         form = CreateUserProfileForm(instance=profile)
 
@@ -128,12 +140,70 @@ def create_user_profile(request,name):
     except:
         this_user = user.first_name
 
-    return render_to_response('create_profile.html',locals(),context_instance=RequestContext(request))
+    return render_to_response('create_profile.html', locals(), context_instance=RequestContext(request))
+
 
 @login_required
-def view_and_edit_reviews(request,user):
+def view_wage_history(request, user):
 
-    # Grab the user and any reviews they may have. 
+    user = User.objects.get(username=user)
+    this_user = request.user
+
+    if this_user != user and not this_user.has_perm('people.view_wagehistory'):
+        return render_to_response('403.html', locals(), context_instance=RequestContext(request))
+
+    try:
+        histories = WageHistory.objects.filter(user=user).order_by('-effective_date')
+    except WageHistory.DoesNotExist:
+        histories = None
+
+    has_history = True
+
+    if len(histories) == 0:
+        has_history = False
+
+    wages = []
+    dates = []
+    reasons = []
+    wage_changes = []
+    description = []
+
+    try:
+        profile = UserProfile.objects.get(user=user)
+        if profile.call_me_by:
+            user_name = profile.call_me_by + ' ' + user.last_name
+        else:
+            user_name = user.first_name + ' ' + user.last_name
+    except:
+        user_name = user.first_name + ' ' + user.last_name
+
+    for history in histories:
+        wages.append(history.wage)
+        dates.append(history.effective_date)
+        reasons.append(history.wage_change_reason)
+        description.append(history.wage_change_reason.description)
+
+    for i in range(len(wages)):
+        holder = {
+            'date': dates[i],
+            'wage': wages[i],
+            'reason': reasons[i],
+            'desc': description[i],
+        }
+        wage_changes.append(holder)
+
+    args = {
+        'request': request,
+        'has_history': has_history,
+        'wage_changes': wage_changes,
+        'user': user_name,
+    }
+    return render_to_response('wage_history.html', args)
+
+
+@login_required
+def view_and_edit_reviews(request, user):
+    # Grab the user and any reviews they may have.
     user = User.objects.get(username=user)
     this_user = request.user
     if this_user.has_perm('people.add_uwltreview') and this_user != user:
@@ -142,10 +212,10 @@ def view_and_edit_reviews(request,user):
         can_add_review = False
 
     if not can_add_review and this_user != user:
-        return render_to_response('fail.html',locals(),context_instance=RequestContext(request))
+        # raise Http403 (for django 1.4)
+        return render_to_response('403.html', locals(), context_instance=RequestContext(request))
 
-    # TODO: Try to not use the is_superuser permission, instead maybe use a group permission.
-    if this_user.is_superuser:
+    if this_user.has_perm('people.finalize_uwltreview'):
         final_reviewer = True
     else:
         final_reviewer = False
@@ -157,17 +227,17 @@ def view_and_edit_reviews(request,user):
 
     # Handle the form submission and differentiate between the sub-reviewers and the final reviewer.
     try:
-        recent_review = UWLTReview.objects.filter(reviewer=this_user,user=user,is_final=False,is_used_up=False).order_by('-date')[0]
+        recent_review = UWLTReview.objects.filter(reviewer=this_user, user=user, is_final=False, is_used_up=False).order_by('-date')[0]
     except:
         recent_review = None
 
     if request.method == 'POST':
-            
+
         if final_reviewer:
             form = CreateFinalUWLTReviewForm(request.POST, instance=recent_review)
         else:
             form = CreateUWLTReviewForm(request.POST, instance=recent_review)
-        
+
         if form.is_valid():
             review = form.save(commit=False)
             review.user = user
@@ -177,7 +247,7 @@ def view_and_edit_reviews(request,user):
 
             # If the review is FINAL, mark the other reviews as used up and don't show use them for averaging the scores.
             if 'is_final' in form.cleaned_data.keys() and form.cleaned_data['is_final']:
-                old_reviews = UWLTReview.objects.filter(user=user,is_final=False,is_used_up=False)
+                old_reviews = UWLTReview.objects.filter(user=user, is_final=False, is_used_up=False)
                 for old_review in old_reviews:
                     old_review.is_used_up = True
                     old_review.save()
@@ -194,11 +264,11 @@ def view_and_edit_reviews(request,user):
             form = CreateUWLTReviewForm(instance=recent_review)
 
     try:
-        reviews = UWLTReview.objects.filter(user=user,is_used_up=False).order_by('-date')
+        reviews = UWLTReview.objects.filter(user=user, is_used_up=False).order_by('-date')
     except UWLTReview.DoesNotExist:
         reviews = None
 
-    # Gather the data from the reviews and separate out fields.    
+    # Gather the data from the reviews and separate out fields.
     review_stats = {}
     comment_stats = []
 
@@ -211,46 +281,32 @@ def view_and_edit_reviews(request,user):
 
     table_date_info = []
     table_scores = {}
+    weights = []
+    averages = []
 
     for review in reviews:
-        scores = {
-            'teamwork': review.teamwork,
-            'customer service': review.customer_service,
-            'dependability': review.dependability,
-            'integrity': review.integrity,
-            'communication': review.communication,
-            'initiative': review.initiative,
-            'attitude': review.attitude,
-            'productivity': review.productivity,
-            'technical knowledge': review.technical_knowledge,
-            'responsibility': review.responsibility,
-            'policies': review.policies,
-            'procedures': review.procedures,
-        }
-
+        scores = get_scores(review)
+        weights.append(weight_review(review))
         total = sum(dict.values(scores)) * 1.0
-        average = "%.2f" % (total / len(scores))
-        scores['Average'] = average
-
-
-        for key,value in scores.items():
+        averages.append("%.2f" % (total / len(scores)))
+        for key, value in scores.items():
             if review.is_final:
                 if key in table_scores.keys():
                     table_scores[key].append(value)
                 else:
                     table_scores[key] = [value]
             elif final_reviewer and review.reviewer != this_user:
-                stats = {'value': value, 'reviewer':review.reviewer}
+                stats = {'value': value, 'reviewer': review.reviewer}
                 if key in review_stats.keys():
                     review_stats[key].append(stats)
                 else:
                     review_stats[key] = [stats]
-    
+
         if final_reviewer and not review.is_final:
             comment_stats.append({'reviewer': review.reviewer, 'value': review.comments})
 
         if review.is_final:
-            table_date_info.append({'date':review.date,'id':review.id})
+            table_date_info.append({'date': review.date, 'id': review.id})
 
     table_dict['scores'] = table_scores
     table_dict['date'] = table_date_info
@@ -265,8 +321,8 @@ def view_and_edit_reviews(request,user):
             if name in review_stats.keys():
                 stats_text = "Leads other scores:"
                 stats = review_stats[name]
-                avg = sum(int(v['value']) for v in stats)/len(stats)
-                stats.append({'value':avg,'reviewer': 'AVERAGE'})
+                avg = sum(int(v['value']) for v in stats) / len(stats)
+                stats.append({'value': avg, 'reviewer': 'AVERAGE'})
             if name == 'comments':
                 stats_text = "Leads other comments:"
                 stats = comment_stats
@@ -285,7 +341,7 @@ def view_and_edit_reviews(request,user):
     # Notify the user of a previous review.
     recent_message = ''
     if recent_review:
-        recent_message = 'Looks like you made a review for %s on %s. Saved entries have been filled out.' % (user,recent_review.date)
+        recent_message = 'Looks like you made a review for %s on %s. Saved entries have been filled out.' % (user, recent_review.date)
 
     # The following code is used for displaying the user's call_me_by or first name.
     try:
@@ -301,6 +357,8 @@ def view_and_edit_reviews(request,user):
     args = {
         'request': request,
         'table_dict': table_dict,
+        'weights': weights,
+        'averages': averages,
         'form_fields': form_fields,
         'this_user': this_user,
         'user': user,
@@ -310,7 +368,8 @@ def view_and_edit_reviews(request,user):
     }
     return render_to_response('reviews.html', args, context_instance=RequestContext(request))
 
-def view_review_data(request,user):
+
+def view_review_data(request, user):
     user = User.objects.get(username=user)
     this_user = request.user
     data = request.REQUEST.copy()
@@ -323,35 +382,82 @@ def view_review_data(request,user):
 
     if not can_add_review and this_user != review.user or not review.is_final:
         result = json.dumps({
-                'return_status': False,
-                'message': 'You do not have permission to view this review.'
-            })
+            'return_status': False,
+            'message': 'You do not have permission to view this review.'
+        })
         return HttpResponse(result)
     else:
-        scores = {
-                'Teamwork': review.teamwork,
-                'Customer service': review.customer_service,
-                'Dependability': review.dependability,
-                'Integrity': review.integrity,
-                'Communication': review.communication,
-                'Initiative': review.initiative,
-                'Attitude': review.attitude,
-                'Productivity': review.productivity,
-                'Technical knowledge': review.technical_knowledge,
-                'Responsibility': review.responsibility,
-                'Policies': review.policies,
-                'Procedures': review.procedures,
-            }
-
+        scores = get_scores(review)
+        comments = {
+            'Teamwork': review.teamwork_comments,
+            'Customer Service': review.customer_service_comments,
+            'Dependability': review.dependability_comments,
+            'Integrity': review.integrity_comments,
+            'Communication': review.communication_comments,
+            'Initiative': review.initiative_comments,
+            'Attitude': review.attitude_comments,
+            'Productivity': review.productivity_comments,
+            'Technical Knowledge': review.technical_knowledge_comments,
+            'Responsibility': review.responsibility_comments,
+            'Policies': review.policies_comments,
+            'Procedures': review.procedures_comments,
+        }
+        weighted = weight_review(review)
         total = sum(dict.values(scores)) * 1.0
         average = "%.2f" % (total / len(scores))
-        scores['Average'] = average
 
         result = json.dumps({
-                'return_status': True,
-                'user': str(review.user),
-                'scores': scores,
-                'date': review.date.strftime('%b. %d, %Y'),
-                'comments': review.comments,
-            })   
+            'return_status': True,
+            'user': str(review.user),
+            'scores': scores,
+            'weighted': weighted,
+            'average': average,
+            'date': review.date.strftime('%b %d, %Y'),
+            'comments': comments,
+            'overall': review.comments
+        })
         return HttpResponse(result)
+
+
+def weight_review(review):
+    """
+    takes a review and returns the weighted average
+    """
+    if review.weights:
+        t = review.weights.teamwork_multiplier
+        cs = review.weights.customer_service_multiplier
+        d = review.weights.dependability_multiplier
+        i = review.weights.integrity_multiplier
+        c = review.weights.communication_multiplier
+        ini = review.weights.initiative_multiplier
+        a = review.weights.attitude_multiplier
+        p = review.weights.productivity_multiplier
+        tk = review.weights.technical_knowledge_multiplier
+        r = review.weights.responsibility_multiplier
+        po = review.weights.policies_multiplier
+        pr = review.weights.procedures_multiplier
+        numerator = t * review.teamwork + cs * review.customer_service + d * review.dependability + i * review.integrity + c * review.communication + ini * review.initiative + a * review.attitude + p * review.productivity + tk * review.technical_knowledge + r * review.responsibility + po * review.policies + pr * review.procedures
+        denominator = t + cs + d + i + c + ini + a + p + tk + r + po + pr
+        return round((numerator / denominator), 2)
+
+    return "N/A"
+
+
+def get_scores(review):
+    """
+    Takes a review and returns the scores as a dictionary
+    """
+    return {
+        'Teamwork': review.teamwork,
+        'Customer Service': review.customer_service,
+        'Dependability': review.dependability,
+        'Integrity': review.integrity,
+        'Communication': review.communication,
+        'Initiative': review.initiative,
+        'Attitude': review.attitude,
+        'Productivity': review.productivity,
+        'Technical Knowledge': review.technical_knowledge,
+        'Responsibility': review.responsibility,
+        'Policies': review.policies,
+        'Procedures': review.procedures,
+    }
