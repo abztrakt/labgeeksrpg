@@ -583,52 +583,72 @@ Schedule CSS
     margin-top: 1em;
 }
 
-#schedule table{
-    border: 1px solid #DDDDDD;    
-    margin: 0;
-}
 
-#schedule td{
-    border-bottom: 1px solid #DDDDDD;
-    border-right: 1px solid #DDDDDD;
-}
-
-#schedule .filled{
-    background-color: #DDDDDD;
-    border: 1px solid white;
-}
-
-#schedule .date{
-    height: 2em;
+#schedule .day_header{
     font-size: 2em;
     background-color: #F5F5F5;
+    padding: 1em;
+    border-bottom: 1px solid #999999;
 }
 
-#schedule .user{
-    border-left: 1px solid white;
+#schedule .schedule_row{
+    overflow:hidden;
 }
 
-#schedule .users{
-    font-size: 1em;
-    background-color: #DDDDDD;
-    border: 1px solid #DDDDDD;
+#schedule .schedule_row_content{
+    border-bottom: 1px solid #DDDDDD;
+    border-right: 1px solid #DDDDDD;
+    height: 1.2em;
+    text-align: center;
+    width: 4.9em;
+    padding: 1em;
+    float: left;
 }
 
-.selected {
-    background-color: red;
-    border: 1px solid red;
+#schedule .closed_hours{
+    background-color: black;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+    color: white;
 }
 
-#schedule .time{
-    width: 5em;
+#schedule .hours_toolbar{
+    padding: .5em;
+    border-bottom: 1px solid #999999;
 }
 
-#schedule .content{
-    width: 5em;
+#schedule .hours_toolbar input {
+    width: 6em;
 }
 
-#schedule .now{
-    border-left: 1px solid red;
+#schedule .hours_toolbar div{
+    margin-bottom: 1em;
+}
+
+.schedule_toolbar form, .hours_toolbar form{
+    margin-top: 1em;
+}
+
+.schedule_toolbar form button{
+    background-color: #D14836;
+    color: #FFFFFF;
+    border: 1px solid transparent;
+    height: 32px;
+    font-weight: bold;
+    padding: 0 8px;
+    width: 6em;
+}
+
+.schedule_status {
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 4px;
+    box-shadow: 0 2px 3px rgba(20,20,20,0.5);
+    border: 2px solid #339900;
+    background-color: #c8ffad;
+    padding: 1em;
+    margin: 1em;
+    overflow: auto;
 }
 
 #schedule_options{
@@ -687,55 +707,6 @@ Schedule CSS
     float: right;
     margin-right: 2em;
     width: 6em;
-}
-ul.tabs {
-    margin: 0;
-    padding: 0;
-    float: left;
-    list-style: none;
-    height: 32px; /*--Set height of tabs--*/
-    border-bottom: 1px solid #999;
-    border-left: 1px solid #999;
-    width: 100%;
-}
-ul.tabs li {
-    float: left;
-    margin: 0;
-    padding: 0;
-    height: 31px; /*--Subtract 1px from the height of the unordered list--*/
-    line-height: 31px; /*--Vertically aligns the text within the tab--*/
-    border: 1px solid #999;
-    border-left: none;
-    margin-bottom: -1px; /*--Pull the list item down 1px--*/
-    overflow: hidden;
-    position: relative;
-    background: #e0e0e0;
-}
-ul.tabs li a {
-    text-decoration: none;
-    color: #000;
-    display: block;
-    font-size: 1.2em;
-    padding: 0 20px;
-    border: 1px solid #fff; /*--Gives the bevel look with a 1px white border inside the list item--*/
-    outline: none;
-}
-ul.tabs li a:hover {
-    background: #ccc;
-}
-
-html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that the active tab does not listen to the hover properties--*/
-    background: #fff;
-    border-bottom: 1px solid #fff; /*--Makes the active tab look like it's connected with its content--*/
-}
-
-.tab_container {
-    border: 1px solid #999;
-    border-top: none;
-    overflow: hidden;
-    clear: both;
-    float: left; width: 100%;
-    background: #F5F5F5;
 }
 
 ul.tabs {
@@ -838,66 +809,4 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
 #timeperiod_info strong{
     float: left;
     margin-right: 3px;
-}
-
-#schedule .ui-selected{
-    background-color: yellow;
-}
- 
-#schedule .ui-selecting{
-    background-color: lightsteelblue;
-}
-
-#schedule .selected{
-    background-color: red;
-}
-
-/* trigger button */
-#download_now {
-    /*background:transparent url(/img/home/download.png) no-repeat scroll 0 0;*/
-    display:block;
-    height:44px;
-    margin-bottom:30px;
-    overflow:hidden;
-    width:159px;
-    cursor:pointer;
-}
-
-/* mouseover state */
-#download_now:hover {
-background-position:0 -44px ;       
-}
-
-/* clicked state */
-#download_now:focus {
-    background-position:0 -88px;
-}
-
-/* tooltip styling */
-.tooltip {
-    display:none;
-    background-color: #585858;
-    border: 2px solid #DDDDDD;
-    height:163px;
-    padding:40px 30px 10px 30px;
-    width:310px;
-    font-size:11px;
-    color:#fff;
-}
-
-/* a .label element inside tooltip */
-.tooltip .label {
-    color:yellow;
-    width:35px;
-}
-
-.tooltip a {
-    color:#ad4;
-    font-size:11px;
-    font-weight:bold;
-}
-
-#test {
-    border: 1px solid black;
-    background-color: gray;
 }

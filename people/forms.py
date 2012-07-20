@@ -35,7 +35,7 @@ class CreatePerformanceReviewForm(ModelForm):
 
 class CreateUWLTReviewForm(CreatePerformanceReviewForm):
 
-    RANK_CHOICES = [(0, 'N/A')] + [(i, i) for i in range(1, 5)] + [(5, '5 (best)')]
+    RANK_CHOICES = [(0, '0 (worst)')] + [(i, i) for i in range(1, 5)] + [(5, '5 (best)')]
     HELP_TEXT_CHOICES = {
         'teamwork': 'Participates effectively in team efforts and encourages others. Treats people with fairness and respect. Carefully considers other points of view. Promotes collaboration amongst all student staff.',
         'customer_service': 'Is professional in dealing with customers and satisfies their needs within the parameters of the service we provide.',
@@ -102,10 +102,14 @@ class CreateUWLTReviewForm(CreatePerformanceReviewForm):
 
 class CreateFinalUWLTReviewForm(CreateUWLTReviewForm):
     WEIGHTS = UWLTReviewWeights.objects.all().order_by('effective_date').reverse()
+
     missed_shifts = forms.IntegerField(required=False, help_text='Enter the number of shifts the user has missed.')
     tardies = forms.IntegerField(required=False, help_text='Enter the number of shifts the user was late to.')
     is_final = forms.BooleanField(required=False, help_text='CHECK THIS ONLY WHEN THE REVIEW IS READY TO BE FINALIZED.')
-    weights = forms.ModelChoiceField(required=False, queryset=WEIGHTS, help_text="Choose a set of weights for this review", initial=WEIGHTS[0])
+    if WEIGHTS:
+        weights = forms.ModelChoiceField(required=False, queryset=WEIGHTS, help_text="Choose a set of weights for this review", initial=WEIGHTS[0])
+    else:
+        weights = forms.ModelChoiceField(required=False, queryset=WEIGHTS, help_text="No weights for reviews created yet")
 
     def __init__(self, *args, **kwargs):
         super(CreateUWLTReviewForm, self).__init__(*args, **kwargs)
