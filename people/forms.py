@@ -13,7 +13,6 @@ class CreateUserProfileForm(ModelForm):
                 if infile.endswith(".css"):
                     css_choices.append((infile, infile))
         return css_choices
-
     site_skin = forms.ChoiceField(choices=get_css_files())
 
     def save(self, *args, **kwargs):
@@ -102,7 +101,6 @@ class CreateUWLTReviewForm(CreatePerformanceReviewForm):
 
 
 class CreateFinalUWLTReviewForm(CreateUWLTReviewForm):
-
     WEIGHTS = UWLTReviewWeights.objects.all().order_by('effective_date').reverse()
     missed_shifts = forms.IntegerField(required=False, help_text='Enter the number of shifts the user has missed.')
     tardies = forms.IntegerField(required=False, help_text='Enter the number of shifts the user was late to.')

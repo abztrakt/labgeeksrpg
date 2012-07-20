@@ -252,7 +252,7 @@ textarea {
 .form_box{
     background: none repeat scroll 0 0 #F5F5F5;
     padding: 20px 25px 15px;
-    border: 1px solid #E5E5E5;
+    border: 1px;
     color: black;
 }
 
@@ -773,10 +773,8 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     overflow: hidden;
     clear: both;
     float: left; width: 100%;
-    background: #fff;
+    background: #BABABA;
 }
-
-
 
 .hidden{
     visibility: hidden;
@@ -823,4 +821,8 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
 #timeperiod_info strong{
     float: left;
     margin-right: 3px;
+}
+
+#edit_timeperiod .form_box {
+    background-color: #BABABA;
 }

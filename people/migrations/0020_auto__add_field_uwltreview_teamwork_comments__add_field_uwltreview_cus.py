@@ -4,10 +4,11 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
+
         # Adding field 'UWLTReview.teamwork_comments'
         db.add_column('people_uwltreview', 'teamwork_comments', self.gf('django.db.models.fields.TextField')(null=True, blank=True), keep_default=False)
 
@@ -50,9 +51,8 @@ class Migration(SchemaMigration):
         # Adding field 'UWLTReview.tardies_comments'
         db.add_column('people_uwltreview', 'tardies_comments', self.gf('django.db.models.fields.TextField')(null=True, blank=True), keep_default=False)
 
-
     def backwards(self, orm):
-        
+
         # Deleting field 'UWLTReview.teamwork_comments'
         db.delete_column('people_uwltreview', 'teamwork_comments')
 
@@ -94,7 +94,6 @@ class Migration(SchemaMigration):
 
         # Deleting field 'UWLTReview.tardies_comments'
         db.delete_column('people_uwltreview', 'tardies_comments')
-
 
     models = {
         'auth.group': {
