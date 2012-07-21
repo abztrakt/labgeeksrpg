@@ -1,0 +1,10 @@
+<h1>Wiki home</h1>
+{% if pages %}
+<ul>Pages
+    {% for page in pages %}
+    <li>{{page}}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>no pages made yet</p>
+{% endif %}
