@@ -14,16 +14,14 @@
         {% else %}
             <p>You are not clocked in.</p>
         {% endif %}
-        <h2>Your shifts for today are:</h2>
         {% if today_past_shifts or today_future_shifts %}
+        <h2>Your shifts for today are:</h2>
             {%for shift in today_past_shifts%}
                 <span class='past_shifts'><p>From {{shift.scheduled_in.time}} to {{shift.scheduled_out.time}} at {{shift.location}}</p></span>
             {% endfor %}
             {%for shift in today_future_shifts%}
                 <span><p>From {{shift.scheduled_in.time}} to {{shift.scheduled_out.time}} at {{shift.location}}</p></span>
             {% endfor %}
-        {% else %}
-            </p>No shifts today</p>
         {% endif %}
     </div>
 {% endblock %}
