@@ -5,7 +5,6 @@ import os
 
 
 class CreateUserProfileForm(ModelForm):
-
     def get_css_files():
         css_choices = []
         path = 'static/'
@@ -19,8 +18,7 @@ class CreateUserProfileForm(ModelForm):
         inst = ModelForm.save(self, *args, **kwargs)
         return inst
 
-
-class Meta:
+    class Meta:
         model = UserProfile
         fields = ('staff_photo', 'call_me_by', 'working_periods', 'grad_date', 'office', 'about_me', 'phone', 'alt_phone', 'site_skin')
 
@@ -30,8 +28,7 @@ class CreatePerformanceReviewForm(ModelForm):
         inst = ModelForm.save(self, *args, **kwargs)
         return inst
 
-
-class Meta:
+    class Meta:
         model = PerformanceReview
 
 
