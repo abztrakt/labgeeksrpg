@@ -87,9 +87,3 @@ def inactive(request):
     """ Return if a user's account has been disabled.
     """
     return render_to_response('inactive.html', locals())
-
-
-def success(request):
-    """ If the user just logs in, we should redirect them to this view unless there is a 'next' GET var.
-    """
-    return render_to_response('login_success.html', locals())
