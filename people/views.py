@@ -286,9 +286,11 @@ def view_and_edit_reviews(request, user):
 
     for review in reviews:
         scores = get_scores(review)
-        weights.append(weight_review(review))
-        total = sum(dict.values(scores)) * 1.0
-        averages.append("%.2f" % (total / len(scores)))
+        comments = get_comments(review)
+        if review.is_final:
+            weights.append(weight_review(review))
+            total = sum(dict.values(scores)) * 1.0
+            averages.append("%.2f" % (total / len(scores)))
         for key, value in scores.items():
             if review.is_final:
                 if key in table_scores.keys():
@@ -296,7 +298,7 @@ def view_and_edit_reviews(request, user):
                 else:
                     table_scores[key] = [value]
             elif final_reviewer and review.reviewer != this_user:
-                stats = {'value': value, 'reviewer': review.reviewer}
+                stats = {'value': value, 'reviewer': review.reviewer, 'comments': comments[key]}
                 if key in review_stats.keys():
                     review_stats[key].append(stats)
                 else:
@@ -317,12 +319,12 @@ def view_and_edit_reviews(request, user):
         stats = None
         stats_text = ''
         if final_reviewer:
-            name = ' '.join(str(x) for x in field.name.split('_'))
+            name = (' '.join(str(x) for x in field.name.split('_'))).title()
             if name in review_stats.keys():
                 stats_text = "Leads other scores:"
                 stats = review_stats[name]
                 avg = sum(int(v['value']) for v in stats) / len(stats)
-                stats.append({'value': avg, 'reviewer': 'AVERAGE'})
+                stats.append({'value': avg, 'reviewer': 'AVERAGE', 'comments': ''})
             if name == 'comments':
                 stats_text = "Leads other comments:"
                 stats = comment_stats
@@ -388,20 +390,7 @@ def view_review_data(request, user):
         return HttpResponse(result)
     else:
         scores = get_scores(review)
-        comments = {
-            'Teamwork': review.teamwork_comments,
-            'Customer Service': review.customer_service_comments,
-            'Dependability': review.dependability_comments,
-            'Integrity': review.integrity_comments,
-            'Communication': review.communication_comments,
-            'Initiative': review.initiative_comments,
-            'Attitude': review.attitude_comments,
-            'Productivity': review.productivity_comments,
-            'Technical Knowledge': review.technical_knowledge_comments,
-            'Responsibility': review.responsibility_comments,
-            'Policies': review.policies_comments,
-            'Procedures': review.procedures_comments,
-        }
+        comments = get_comments(review)
         weighted = weight_review(review)
         total = sum(dict.values(scores)) * 1.0
         average = "%.2f" % (total / len(scores))
@@ -460,4 +449,22 @@ def get_scores(review):
         'Responsibility': review.responsibility,
         'Policies': review.policies,
         'Procedures': review.procedures,
+    }
+
+
+def get_comments(review):
+
+    return {
+        'Teamwork': review.teamwork_comments,
+        'Customer Service': review.customer_service_comments,
+        'Dependability': review.dependability_comments,
+        'Integrity': review.integrity_comments,
+        'Communication': review.communication_comments,
+        'Initiative': review.initiative_comments,
+        'Attitude': review.attitude_comments,
+        'Productivity': review.productivity_comments,
+        'Technical Knowledge': review.technical_knowledge_comments,
+        'Responsibility': review.responsibility_comments,
+        'Policies': review.policies_comments,
+        'Procedures': review.procedures_comments,
     }
