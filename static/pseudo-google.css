@@ -708,8 +708,7 @@ Schedule CSS
     margin-right: 2em;
     width: 6em;
 }
-<<<<<<< HEAD
-=======
+
 ul.tabs {
     margin: 0;
     padding: 0;
@@ -759,7 +758,6 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     float: left; width: 100%;
     background: #F5F5F5;
 }
->>>>>>> 3bace2695bcb9b44cc7e58d36ec24060a90cba82
 
 ul.tabs {
     margin: 0;
