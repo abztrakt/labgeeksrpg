@@ -3,17 +3,22 @@ from django.core.context_processors import csrf
 from django.shortcuts import render_to_response, HttpResponseRedirect
 from django.template import RequestContext
 from labgeeksrpg.forms import LoginForm
-
+from datetime import date
+from labgeeksrpg.labgeeksrpg_config.models import Notification
 
 def hello(request):
     """ The root view of the site. Just static for now, but later we can return useful information for logged in users.
     Created a dashboard page.
     """
+    #when a user is logged-in correctly
     if request.user.is_authenticated():
         locations = request.user.location_set.all()
+        notifications = Notification.objects.all() 
+        #to temp
         args = {
             'request': request,
-            'locations': locations
+            'locations': locations,
+            'notifications': notifications,
         }
         return render_to_response('dashboard.html', args)
     else:

@@ -8,6 +8,13 @@
         </div>
         <p>Welcome to Labgeeks, a staff and work shift management site.</p>
         <h2>This is the dashboard!</h2>
+        {% if notifications %}
+            {% for notification in notifications %}
+                <p> {{notification.title}} </p>
+                <p> Posted On {{notification.date}} </p>
+                <p> {{notification.content}} </p>
+            {% endfor %}
+        {% endif %}
         {% if locations %}
             {% for location in locations %}
                 <p>You are clocked in at {{location.name}}</p>
