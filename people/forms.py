@@ -5,7 +5,6 @@ import os
 
 
 class CreateUserProfileForm(ModelForm):
-
     def get_css_files():
         css_choices = []
         path = 'static/'

@@ -826,3 +826,7 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
 #edit_timeperiod .form_box {
     background-color: #BABABA;
 }
+
+.past_shifts p{
+    color: rgb(150,150,150);
+}

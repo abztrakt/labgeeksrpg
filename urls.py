@@ -7,11 +7,10 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-                       #(r'^accounts/login/$', 'django.contrib.auth.views.login'),
+                       # (r'^accounts/login/$', 'django.contrib.auth.views.login'),
                        (r'^login/$', 'labgeeksrpg.views.labgeeks_login'),
                        (r'^logout/$', 'labgeeksrpg.views.labgeeks_logout'),
                        (r'^inactive/$', 'labgeeksrpg.views.inactive'),
-                       (r'^success/$', 'labgeeksrpg.views.success'),
                        # Example:
                        # (r'^labgeeksrpg/', include('labgeeksrpg.foo.urls')),
                        (r'^chronos/', include('labgeeksrpg.chronos.urls')),

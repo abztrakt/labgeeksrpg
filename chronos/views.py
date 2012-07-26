@@ -293,7 +293,6 @@ def personal_report(request, user=None, year=None, month=None):
 
     year = int(year)
     month = int(month)
-
     if request.user.is_authenticated():
         #Grab user's shifts
         shifts = get_shifts(year, month, None, user)
@@ -376,10 +375,10 @@ def time(request):
                 # Setting the success variable that users will see on success page
                 success = "OUT"
                 at_time = oldshift.outtime
-                at_time = at_time.strftime('%Y-%m-%d, %I:%M %p').replace(' 0', ' ')  # get rid of zeros on the hour
-
+                #get rid of zeros on the hour
+                at_time = at_time.strftime('%Y-%m-%d, %I:%M %p').replace(' 0', ' ')
             else:
-                # if shift.person  location.active_staff
+                #if shift.person  location.active_staff
                 if this_shift.intime is None:
                     this_shift.intime = datetime.now()
                 this_shift.in_clock = punchclock
@@ -387,11 +386,11 @@ def time(request):
                 this_shift.save()
                 # After successful shift save, add person to active_staff in appropriate Location
                 location.active_users.add(this_shift.person)
-
                 #Setting the success variable that users will see on the success page
                 success = "IN"
                 at_time = this_shift.intime
-                at_time = at_time.strftime('%Y-%m-%d, %I:%M %p').replace(' 0', ' ')  # get rid of zeros on the hour
+                #get rid of zeros on the hour
+                at_time = at_time.strftime('%Y-%m-%d, %I:%M %p').replace(' 0', ' ')
 
             return HttpResponseRedirect("success/?success=%s&at_time=%s&location=%s&user=%s" % (success, at_time, location, this_shift.person))
 
@@ -406,7 +405,6 @@ def time(request):
     user = User.objects.get(username=user)
     try:
         profile = UserProfile.objects.get(user=user)
-
         if profile.call_me_by:
             user = profile.call_me_by
         else:
@@ -447,7 +445,6 @@ def success(request):
     user = User.objects.get(username=user)
     try:
         profile = UserProfile.objects.get(user=user)
-
         if profile.call_me_by:
             user = profile.call_me_by
         else:
