@@ -830,3 +830,12 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
 .past_shifts p{
     color: rgb(150,150,150);
 }
+
+.tooltips{
+    font-style: italic;
+    color: rgb(75,75,75);
+}
+
+#review_scores_comments p, .tooltips {
+    margin-left: 30px;
+}

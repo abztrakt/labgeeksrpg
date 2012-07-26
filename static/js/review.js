@@ -41,7 +41,6 @@ function loadReviewData(data){
     data = JSON.parse(data);
 
     return_status = data['return_status'];
-    
     if (return_status){
         var review_info = $("#review_info");
         review_info.removeClass("hidden").addClass("visible");
@@ -54,8 +53,8 @@ function loadReviewData(data){
         date.empty()
         date.append(data['date']);
 
-        score_list = $("#review_scores");
-        score_list.empty();
+        review_list = $("#review_scores_comments");
+        review_list.empty();
         var inline = [
             ' (N/A)',
             ' (unsatisfactory)',
@@ -82,17 +81,11 @@ function loadReviewData(data){
 
         for(key in data['scores']){
             intscore = parseInt(data['scores'][key]);
-            score_list.append('<li title="' + tooltips[key] + '">' + key + ': ' + data['scores'][key] + inline[intscore] + "</li>");
+            review_list.append("<li>" + key + ': ' + data['scores'][key] + inline[intscore] + '<br/><span class="tooltips">'+ tooltips[key] + "</span><p>" + data['comments'][key] + "</p></li>");
         }
-        score_list.append("<li><strong>Average: " + data['average'] + "</strong></li>");
-        score_list.append("<li><strong>Weighted Average: " + data['weighted'] + "</strong></li>");
-
-        comments_list = $("#review_comments");
-        comments_list.empty();
-        for(key in data['scores']){
-            comments_list.append('<li title="' + tooltips[key] + '">' + key + ': ' + data['comments'][key] + "</li>");
-        }
-        comments_list.append("<li><strong>Overall: " + data['overall'] + "</strong></li>");
+        review_list.append("<li><strong>Average: " + data['average'] + "</strong></li>");
+        review_list.append("<li><strong>Weighted Average: " + data['weighted'] + "</strong></li>");
+        review_list.append("<li><strong>Overall: <p>" + data['overall'] + "</p></strong></li>");
 
     }
 }
