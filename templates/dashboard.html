@@ -3,17 +3,25 @@
 {% block content %}
     <div id="login_info">
         <div class="section">
-            <h1>Hello {{request.user}}</h1>
-            <h2>Greetings.</h2>
+            <h1>Dashboard</h1>
+            <h2>Hello {{request.user.first_name}}</h2>
         </div>
         <p>Welcome to Labgeeks, a staff and work shift management site.</p>
-        <h2>This is the dashboard!</h2>
         {% if locations %}
             {% for location in locations %}
-                <p>You are clocked in at {{location.name}}</p>
+                <p>You are clocked in at {{location.name}} at {{clockin_time}}</p>
             {% endfor %}
         {% else %}
             <p>You are not clocked in.</p>
+        {% endif %}
+        {% if today_past_shifts or today_future_shifts %}
+        <h2>Your shifts for today are:</h2>
+            {%for shift in today_past_shifts%}
+                <span class='past_shifts'><p>From {{shift.scheduled_in.time}} to {{shift.scheduled_out.time}} at {{shift.location}}</p></span>
+            {% endfor %}
+            {%for shift in today_future_shifts%}
+                <span><p>From {{shift.scheduled_in.time}} to {{shift.scheduled_out.time}} at {{shift.location}}</p></span>
+            {% endfor %}
         {% endif %}
     </div>
 {% endblock %}

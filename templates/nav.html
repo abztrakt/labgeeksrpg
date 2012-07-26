@@ -2,6 +2,7 @@
 
 <div id="navbar">
 <ul class="nav">
+    {% if request.user.is_authenticated %}<li><a class="{% active_tab request "/" %}" href="/">Home</a></li>{% endif %}
     {% if request.user.is_authenticated %}<li><a class="{% active_tab request "/chronos" %}" href="/chronos">Chronos</a></li>{% endif %}
     {% if request.user.is_staff %}<li><a class="{% active_tab request "/schedule" %}" href="/schedule">Schedule</a></li>{% endif %}
     {% if request.user.is_staff %}<li><a class="{% active_tab request "/chronos/report" %}"href="/chronos/report">Reports</a>{% endif %}

@@ -5,7 +5,6 @@ import os
 
 
 class CreateUserProfileForm(ModelForm):
-
     def get_css_files():
         css_choices = []
         path = 'static/'
@@ -19,8 +18,7 @@ class CreateUserProfileForm(ModelForm):
         inst = ModelForm.save(self, *args, **kwargs)
         return inst
 
-
-class Meta:
+    class Meta:
         model = UserProfile
         fields = ('staff_photo', 'call_me_by', 'working_periods', 'grad_date', 'office', 'about_me', 'phone', 'alt_phone', 'site_skin')
 
@@ -30,13 +28,12 @@ class CreatePerformanceReviewForm(ModelForm):
         inst = ModelForm.save(self, *args, **kwargs)
         return inst
 
-
-class Meta:
+    class Meta:
         model = PerformanceReview
 
 
 class CreateUWLTReviewForm(CreatePerformanceReviewForm):
-    RANK_CHOICES = [(0, 'N/A')] + [(i, i) for i in range(1, 5)] + [(5, '5 (best)')]
+    RANK_CHOICES = [(0, '0 (worst)')] + [(i, i) for i in range(1, 5)] + [(5, '5 (best)')]
     HELP_TEXT_CHOICES = {
         'teamwork': 'Participates effectively in team efforts and encourages others. Treats people with fairness and respect. Carefully considers other points of view. Promotes collaboration amongst all student staff.',
         'customer_service': 'Is professional in dealing with customers and satisfies their needs within the parameters of the service we provide.',
@@ -102,9 +99,15 @@ class CreateUWLTReviewForm(CreatePerformanceReviewForm):
 
 
 class CreateFinalUWLTReviewForm(CreateUWLTReviewForm):
+    WEIGHTS = UWLTReviewWeights.objects.all().order_by('effective_date').reverse()
+
     missed_shifts = forms.IntegerField(required=False, help_text='Enter the number of shifts the user has missed.')
     tardies = forms.IntegerField(required=False, help_text='Enter the number of shifts the user was late to.')
     is_final = forms.BooleanField(required=False, help_text='CHECK THIS ONLY WHEN THE REVIEW IS READY TO BE FINALIZED.')
+    if WEIGHTS:
+        weights = forms.ModelChoiceField(required=False, queryset=WEIGHTS, help_text="Choose a set of weights for this review", initial=WEIGHTS[0])
+    else:
+        weights = forms.ModelChoiceField(required=False, queryset=WEIGHTS, help_text="No weights for reviews created yet")
 
     def __init__(self, *args, **kwargs):
         super(CreateUWLTReviewForm, self).__init__(*args, **kwargs)
