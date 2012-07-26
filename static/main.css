@@ -53,12 +53,14 @@ th {
 }
 
 tr:nth-child(even) {background: rgba(70,50,140,.1);}
-tr:nth-child(odd) { background: rgba(70,50,140,.75); color: snow;}
+tr:nth-child(odd) {background: rgba(70,50,140,.75); color: snow;}
 
-tr:first-child { 
-    color: white; 
+tr:first-child {
+    color: white;
     background-color: rgba(70,50,140,1) ;
 }
+
+.timeperiod_selector, #timeperiod_info {color: black;}
 
 .ui-datepicker-calendar tbody tr,
 .ui-datepicker-calendar thead tr {
