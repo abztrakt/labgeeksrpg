@@ -280,9 +280,12 @@ def create_default_schedule(request):
             for day in days:
                 closing_range = closing_ranges[day]
                 shift_range = shift_ranges[day] 
+               # import pdb; pdb.set_trace()
                 times = []
                 counter = datetime(1,1,1,7,0)
-    
+
+               # import pdb; pdb.set_trace()
+
                 # Loop through the time and start appending the rows to each time.
                 while counter.hour != 0:
                     row = []
@@ -302,9 +305,13 @@ def create_default_schedule(request):
 
                         for i in range(len(schedule_length)-count):
                             row.append({'class': None, 'user': None})
+
                     
+                    # import pdb; pdb.set_trace()
                     # Append the row and time
                     times.append({'time': counter.time().strftime('%I:%M %p').lower(), 'row': row})
+                    
+                    # import pdb; pdb.set_trace()
 
                     # Increment by 30 minutes
                     counter += timedelta(minutes=30)
@@ -319,6 +326,7 @@ def create_default_schedule(request):
                 can_edit_schedule = True
             else:
                 can_edit_scehdule = False
+            
     else:
 
         # There is no schedule to display.
