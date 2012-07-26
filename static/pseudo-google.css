@@ -735,7 +735,7 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     overflow: hidden;
     clear: both;
     float: left; width: 100%;
-    background: #fff;
+    background: #F5F5F5;
 }
 
 ul.tabs {
@@ -785,7 +785,7 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     overflow: hidden;
     clear: both;
     float: left; width: 100%;
-    background: #fff;
+    background: #F5F5F5;
 }
 
 

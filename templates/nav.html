@@ -2,17 +2,21 @@
 
 <div id="navbar">
 <ul class="nav">
+    {% if request.user.is_authenticated %}<li><a class="{% active_tab request "/" %}" href="/">Home</a></li>{% endif %}
     {% if request.user.is_authenticated %}<li><a class="{% active_tab request "/chronos" %}" href="/chronos">Chronos</a></li>{% endif %}
     {% if request.user.is_staff %}<li><a class="{% active_tab request "/schedule" %}" href="/schedule">Schedule</a></li>{% endif %}
     {% if request.user.is_staff %}<li><a class="{% active_tab request "/chronos/report" %}"href="/chronos/report">Reports</a>{% endif %}
     {% if request.user.is_authenticated %}<li><a class="{% active_tab request "/people" %}" href="/people">People</a></li>{% endif %}
     <!--<li><a class="bug_sug" href="http://trac.eplt.washington.edu/labgeeks4/newticket">Bugs + Feedback</a></li>-->
     {% if request.user.is_staff %}<li><a class="{% active_tab request "/admin"%}" href="/admin">Admin</a></li>{% endif %}
-    {% if request.user.is_authenticated %}<li><a class="{% active_tab request "/logout" %}" href="/logout">Log-out</a></li>
-    {% else %}<li><a class="{% active_tab request "/login" %}" href="/login">Log-in</a></li>{% endif %}
-    {% if request.user.is_authenticated %}<li id="navpic"><a href="/people/{{ request.user }}"><img id="pic" src="{{ request.user.get_profile.get_photo }}" alt="Profile Page" /></a></li>
-    {% else %}{% if request.user.is_authenticated %}<li id="navpic"><a href="/people/{{ request.user }}"><img id="pic" src="/static/img/stock_photo.jpg" alt="Profile Page" /></a></li>{% endif %}
-    {% endif %}
-
+    {% if request.user.is_authenticated %}<li class="rightsidenav"><a class="{% active_tab request "/logout" %}" href="/logout">Log Out</a></li>
+    {% else %}<li class="rightsidenav"><a class="{% active_tab request "/login" %}" href="/login">Log In</a></li>{% endif %}
+{% if request.user.get_profile %}
+    <li id="profilelink" class="rightsidenav"><a class="{% active_tab request "/people/{{ request.user}}" %}" href="/people/{{ request.user }}">Profile</a></li>
+    <li class="rightsidenav" id="navpic"><a class="{% active_tab request "/people/{{ request.user }}" %}" href="/people/{{ request.user }}"><img id="pic" src="{{ request.user.get_profile.get_photo }}" alt="Profile Page" /></a></li>
+    {% else %}{% if request.user.is_authenticated %}
+    <li id="profilelink" class="rightsidenav"><a href="/people/{{ request.user }}">Profile</a></li>
+    <li id="navpic" class="rightsidenav"><a href="/people/{{ request.user }}"><img id="pic" src="/static/img/stock_photo.jpg" alt="Profile Page" /></a></li>
+    {% endif %}{%endif %}
 </ul>
 </div>
