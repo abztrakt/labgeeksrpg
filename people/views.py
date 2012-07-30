@@ -231,10 +231,27 @@ def view_and_edit_reviews(request, user):
     except:
         recent_review = None
 
+    wage_history_holder = WageHistory.objects.filter(user=user).order_by('effective_date').reverse()
+
+    if wage_history_holder:
+        last_wage_history = wage_history_holder[0]
+    else:
+        last_wage_history = None
+
+    if last_wage_history:
+        last_wage = last_wage_history.wage
+        last_wage_string = str(last_wage)
+    else:
+        last_wage_string = 'none'
+        last_wage = None
+
+    last_wage_history_help = "Enter an updated wage for " + user.__unicode__() + " (last wage: " + last_wage_string + ")"
+
     if request.method == 'POST':
 
         if final_reviewer:
             form = CreateFinalUWLTReviewForm(request.POST, instance=recent_review)
+            form2 = UpdateWageHistoryForm(request.POST, user=user)
         else:
             form = CreateUWLTReviewForm(request.POST, instance=recent_review)
 
@@ -244,6 +261,16 @@ def view_and_edit_reviews(request, user):
             review.date = datetime.now().date()
             review.reviewer = this_user
             review.is_used_up = False
+
+        if form2.is_valid():
+            wage_history = form2.save(commit=False)
+            wage_history.user = user
+            wage_history.effective_date = datetime.now().date()
+            if last_wage_history:
+                if last_wage != wage_history.wage and wage_history.wage is not None:
+                    wage_history.save()
+            elif wage_history.wage is not None:
+                wage_history.save()
 
             # If the review is FINAL, mark the other reviews as used up and don't show use them for averaging the scores.
             if 'is_final' in form.cleaned_data.keys() and form.cleaned_data['is_final']:
@@ -260,6 +287,7 @@ def view_and_edit_reviews(request, user):
     else:
         if final_reviewer:
             form = CreateFinalUWLTReviewForm(instance=recent_review)
+            form2 = UpdateWageHistoryForm(instance=last_wage_history, user=user)
         else:
             form = CreateUWLTReviewForm(instance=recent_review)
 
@@ -340,6 +368,18 @@ def view_and_edit_reviews(request, user):
 
         form_fields.append(field_info)
 
+    form2_fields = []
+    for field in form2.visible_fields():
+        # wage help text/previous wage not showing up for some reason, so this is my stopgap answer
+        if field.name == "wage":
+            field.help_text = last_wage_history_help
+        field_info = {
+            'label_tag': field.label_tag,
+            'help_text': field.help_text,
+            'field': field,
+        }
+        form2_fields.append(field_info)
+
     # Notify the user of a previous review.
     recent_message = ''
     if recent_review:
@@ -362,6 +402,7 @@ def view_and_edit_reviews(request, user):
         'weights': weights,
         'averages': averages,
         'form_fields': form_fields,
+        'form2_fields': form2_fields,
         'this_user': this_user,
         'user': user,
         'badge_photo': badge_photo,

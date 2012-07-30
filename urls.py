@@ -17,13 +17,16 @@ urlpatterns = patterns('',
                        (r'^people/', include('labgeeksrpg.people.urls')),
                        (r'^schedule/', include('labgeeksrpg.schedule.urls')),
                        (r'^$', 'labgeeksrpg.views.hello'),
-
                        # Uncomment the admin/doc line below and add 'django.contrib.admindocs'
                        # to INSTALLED_APPS to enable admin documentation:
                        # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
+
                        # Uncomment the next line to enable the admin:
-                       (r'^admin/', include(admin.site.urls)),)
+                       (r'^admin/', include(admin.site.urls)),
+                       )
 
 # only serve static files through the django server if debug is enabled. Only for development instances.
 if settings.DEBUG:
-    urlpatterns += patterns('', (r'^uploads/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),)
+    urlpatterns += patterns('',
+                            (r'^uploads/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+                            )
