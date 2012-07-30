@@ -7,17 +7,15 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-                       #(r'^accounts/login/$', 'django.contrib.auth.views.login'),
+                       # (r'^accounts/login/$', 'django.contrib.auth.views.login'),
                        (r'^login/$', 'labgeeksrpg.views.labgeeks_login'),
                        (r'^logout/$', 'labgeeksrpg.views.labgeeks_logout'),
                        (r'^inactive/$', 'labgeeksrpg.views.inactive'),
-                       (r'^success/$', 'labgeeksrpg.views.success'),
                        # Example:
                        # (r'^labgeeksrpg/', include('labgeeksrpg.foo.urls')),
                        (r'^chronos/', include('labgeeksrpg.chronos.urls')),
                        (r'^people/', include('labgeeksrpg.people.urls')),
                        (r'^schedule/', include('labgeeksrpg.schedule.urls')),
-                       (r'^wiki/', include('labgeeksrpg.wiki.urls')),
                        (r'^$', 'labgeeksrpg.views.hello'),
                        # Uncomment the admin/doc line below and add 'django.contrib.admindocs'
                        # to INSTALLED_APPS to enable admin documentation:

@@ -85,6 +85,13 @@
                     <strong>The 'Is final' field has been checked.</strong>
                     <p>This review is ready to be finalized. Once saved, this review will be available to the user.</p>
                     <p>Please review your scores and comments before saving.</p>
+                    {% for field in form2_fields %}
+                    <div class='review_field'>
+                        <strong>{{field.label_tag}}</strong>
+                        <p>{{field.help_text}}</p>
+                        {{field.field}}
+                    </div>
+                    {% endfor %}
                 </div>
 
                 <input type="submit" value="Save"/>

@@ -160,7 +160,6 @@ def staff_report(request, year, month, day=None, user=None, week=None, payperiod
         reason = 'You do not have permission to visit this part of the page.'
 
         return render_to_response('fail.html', locals())
-
     return specific_report(request, user, year, month, day, week, payperiod)
 
 
@@ -168,13 +167,11 @@ def staff_report(request, year, month, day=None, user=None, week=None, payperiod
 def specific_report(request, user, year, month, day=None, week=None, payperiod=None):
     """ This view is used when viewing specific shifts in the given day. (Table form)
     """
-
     #Grab shifts
     if user:
         user = User.objects.get(username=user)
 
     all_shifts = get_shifts(year, month, day, user, week, payperiod)
-
     if day:
         description = "Viewing shifts for %s." % (date(int(year), int(month), int(day)).strftime("%B %d, %Y"))
     elif week:
@@ -290,7 +287,6 @@ def personal_report(request, user=None, year=None, month=None):
         year = date.today().year
     if not month:
         month = date.today().month
-
     year = int(year)
     month = int(month)
 
@@ -388,7 +384,7 @@ def time(request):
                 # After successful shift save, add person to active_staff in appropriate Location
                 location.active_users.add(this_shift.person)
 
-                #Setting the success variable that users will see on the success page
+                # Setting the success variable that users will see on the success page
                 success = "IN"
                 at_time = this_shift.intime
                 at_time = at_time.strftime('%Y-%m-%d, %I:%M %p').replace(' 0', ' ')  # get rid of zeros on the hour
@@ -406,7 +402,6 @@ def time(request):
     user = User.objects.get(username=user)
     try:
         profile = UserProfile.objects.get(user=user)
-
         if profile.call_me_by:
             user = profile.call_me_by
         else:
@@ -447,7 +442,6 @@ def success(request):
     user = User.objects.get(username=user)
     try:
         profile = UserProfile.objects.get(user=user)
-
         if profile.call_me_by:
             user = profile.call_me_by
         else:
