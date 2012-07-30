@@ -7,6 +7,13 @@
             <h2>Hello {{request.user.first_name}}</h2>
         </div>
         <p>Welcome to Labgeeks, a staff and work shift management site.</p>
+        {% if notifications %}
+            {% for notification in notifications %}
+                <p> {{notification.title}} </p>
+                <p> Posted On {{notification.date}} </p>
+                <p> {{notification.content}} </p>
+            {% endfor %}
+        {% endif %}
         {% if locations %}
             {% for location in locations %}
                 <p>You are clocked in at {{location.name}} at {{clockin_time}}</p>
