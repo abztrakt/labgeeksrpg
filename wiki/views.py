@@ -3,8 +3,11 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
 from django.core.context_processors import csrf
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 
+@login_required
 def view_page(request, page_name):
     try:
         page = Page.objects.get(name=page_name)
@@ -14,6 +17,7 @@ def view_page(request, page_name):
     return render_to_response("view.html", {"page_name": page_name, "content": content})
 
 
+@login_required
 def edit_page(request, page_name):
     try:
         page = Page.objects.get(name=page_name)
@@ -34,6 +38,7 @@ def edit_page(request, page_name):
     return render_to_response("edit.html", locals(), context_instance=RequestContext(request))
 
 
+@login_required
 def wiki_home(request):
     try:
         PAGES = Page.objects.all()
