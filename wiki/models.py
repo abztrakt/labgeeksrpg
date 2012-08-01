@@ -15,11 +15,11 @@ class Page(models.Model):
 
 
 class RevisionHistory(models.Model):
-    before = models.TextField()
     after = models.TextField()
     page = models.ForeignKey(Page)
     user = models.ForeignKey(User)
     date = models.DateField()
+    notes = models.CharField(null=True, max_length='200')
 
     def __unicode__(self):
         return "%s - %s on %s" (self.page, self.user, self.date)

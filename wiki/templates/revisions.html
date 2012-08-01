@@ -1,23 +1,27 @@
+{% extends 'base.html' %}
+
 {% load markup %}
-<html>
-    <body>
-        {% if revision_history %}
-        <h2>Revision History for {{page_name}}</h2>
-        {% for revision in revision_history %}
-        <div class='revision_history'>
-            <p>revision by {{revision.user}} on {{revision.date}}</p>
-             <div class='revision_before'>
-                <h3>original content</h3>
-                {{revision.original_text|markdown}}
-            </div>
-            <div class='revision_after'>
-                <h3>post-revision content</h3>
-                {{revision.revised_text|markdown}}
-            </div>
+{% block content %}
+{% if revision_history %}
+<h2>Revision History for /{{name}}/</h2>
+{% for revision in revision_history %}
+<div class='revision_history'>
+    <h3>revision by {{revision.user}} on {{revision.date}}</h3>
+    <p><strong>{{revision.notes}}</strong></p>
+    <div>
+        <div class='revision_diff'>
+            <p><strong>Changes (diff)</strong></p>
+            {{revision.diff|markdown}}
         </div>
-        {% endfor %}
-        {% else %}
-        <h2>No revision history for {{page_name}}</h2>
-        {% endif %}
-    </body>
-</html>
+        <div class='revision_after'>
+            <p><strong>post-revision content</strong></p>
+            {{revision.revised_text|markdown}}
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<h2>No revision history for {{page_name}}</h2>
+{% endif %}
+{% endblock %}
+
