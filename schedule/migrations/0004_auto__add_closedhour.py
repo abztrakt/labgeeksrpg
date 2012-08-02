@@ -4,11 +4,10 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
-
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-
+        
         # Adding model 'ClosedHour'
         db.create_table('schedule_closedhour', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -20,10 +19,12 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('schedule', ['ClosedHour'])
 
-    def backwards(self, orm):
 
+    def backwards(self, orm):
+        
         # Deleting model 'ClosedHour'
         db.delete_table('schedule_closedhour')
+
 
     models = {
         'auth.group': {
