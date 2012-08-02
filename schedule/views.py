@@ -50,28 +50,6 @@ def view_shifts(request):
         if form.is_valid():
             day = form.cleaned_data['day']
             location = form.cleaned_data['location']
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             data = WorkShift.objects.filter(
                 scheduled_in__day=day.day,
                 scheduled_in__month=day.month,
@@ -204,6 +182,7 @@ def create_default_schedule(request):
     '''
     This view will allow users to create a schedule from scratch.
     '''
+    
     if request.method == 'POST':
         form = CreateDailyScheduleForm(request.POST)
         if form.is_valid():
@@ -259,20 +238,20 @@ def create_default_schedule(request):
 
             # Find out which hours were shift hours.
             for shift in default_shifts:
-                day = shift.day
-                in_time = shift.in_time
-                out_time = shift.out_time
-                hours = []
+                #currently does nothing if there is no person set to the shift
+                if shift.person:
+                    day = shift.day
+                    in_time = shift.in_time
+                    out_time = shift.out_time
+                    hours = []
 
-                current = datetime(1,1,1,in_time.hour,in_time.minute)
+                    current = datetime(1,1,1,in_time.hour,in_time.minute)
 
-                while current.time() != out_time:
-                    hours.append(current.time())
-                    current += timedelta(minutes=30)
-                hours.append(current.time())
-
-                shift_ranges[day].append({'hours': hours, 'user': shift.person.username})
-
+                    while current.time() != out_time:
+                        hours.append(current.time())
+                        current += timedelta(minutes=30)
+                    
+                    shift_ranges[day].append({'hours': hours, 'user': shift.person.username})
             # TODO: For now, create an arbitrary size for the schedule. Consider changing it in the future.
             schedule_length = [0]*10
         
@@ -281,7 +260,7 @@ def create_default_schedule(request):
                 closing_range = closing_ranges[day]
                 shift_range = shift_ranges[day] 
                 times = []
-                counter = datetime(1,1,1,7,0)
+                counter = datetime(1,1,1,7,45)
     
                 # Loop through the time and start appending the rows to each time.
                 while counter.hour != 0:
@@ -344,36 +323,86 @@ def save_hours(request):
     username = data.getlist('user')
     loc = data.getlist('location')[0]
     tp = data.getlist('timeperiod')[0]
-
-    if username:
-        user = User.objects.get(username=username[0]) 
-    else:
-        user = None
-
+    
+    
     location = Location.objects.get(name=loc)
     timeperiod = TimePeriod.objects.get(name=tp)
-
+    tmpdsdate=timeperiod.start_date
+    mondays=[]
+    tuesdays=[]
+    wednesdays=[]
+    thursdays=[]
+    fridays=[]
+    saturdays=[]
+    sundays=[]
+    days=[mondays,tuesdays,wednesdays,thursdays,fridays,saturdays,sundays]
+    try:
+        tmpdedate1=timeperiod.end_date.replace(day=timeperiod.end_date.day+1)
+    except:
+        if timeperiod.end_date.month ==12:
+            tmpdedate1=date(timeperiod.end_date.year+1, 1, 1)
+        else:
+            tmpdedate1=timeperiod.end_date.replace(month=timeperiod.end_date.month+1, day=1)
+    while tmpdsdate != tmpdedate1:
+        days[tmpdsdate.weekday()].append(tmpdsdate)
+        try:
+            tmpdsdate=tmpdsdate.replace(day=tmpdsdate.day+1)
+        except:
+            if tmpdsdate.month ==12:
+                tmpdsdate=date(tmpdsdate.year+1, 1, 1)
+            else:
+                tmpdsdate=tmpdsdate.replace(month=tmpdsdate.month+1, day=1)
     # Save the results in to a dictionary.
+    if username:
+        user = User.objects.get(username=username[0]) 
+        WorkShift.objects.filter(person=user, location=location).delete()
+    else:
+        user = None
     result = {}
 
     # Loop through the hours that are going to be saved.
     for day, hours_list in hours.iteritems():
 
         # TODO: Figure out how to delete correct shifts. As of now, this will be only delete a user's shift who appears on the schedule.
+        
         if user:
+            
             DefaultShift.objects.filter(location=location, timeperiod=timeperiod, day=day, person=user).delete()
+            
         else:
             ClosedHour.objects.filter(location=location, timeperiod=timeperiod, day=day).delete()
 
         if len(hours_list) > 0:
             time_ranges = return_time_ranges(hours_list)
-
             for time_range in time_ranges:
                 in_time = time_range['in_time'].time()
                 out_time = time_range['out_time'].time()
-
+                if out_time.minute == 30:
+                    out_time = out_time.replace(hour=out_time.hour+1, minute=0)
+                elif out_time.minute == 0:
+                    out_time = out_time.replace(minute=30)
+                
+                    
                 # Save the hours, depending on which type of hours they are.
                 if user:
+                    week=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+                    ind=week.index(day)
+                    shift_days=days[week.index(day)]
+                    for day1 in shift_days:
+                        in_time1=in_time
+                        while in_time1 != out_time:
+                            time_in=datetime(day1.year, day1.month, day1.day, in_time1.hour, in_time1.minute)    
+                            if in_time1.minute == 30:
+                                in_time1 = in_time1.replace(hour=in_time1.hour+1, minute=0)
+                            elif in_time1.minute == 0:
+                                in_time1 = in_time1.replace(minute=30)
+                            time_out=datetime(day1.year, day1.month, day1.day, in_time1.hour, in_time1.minute)
+                            employee_work_hour=WorkShift.objects.create(
+                                person=user,
+                                scheduled_in=time_in,
+                                scheduled_out=time_out,
+                                location=location,
+                            )
                     employee_hour = DefaultShift.objects.create(
                         person = user,
                         day = day,  

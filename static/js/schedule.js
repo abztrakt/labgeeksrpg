@@ -34,8 +34,8 @@ $(document).ready(function(){
             showPeriod: true,
             amPmText: ['am', 'pm'],
             minutes: {
-                starts: 0,
-                ends: 30,
+                starts: 15,
+                ends: 45,
                 interval: 30
             }
         });
