@@ -8,7 +8,18 @@ class Page(models.Model):
     name = models.CharField(max_length='25')
     content = models.TextField()
     author = models.ForeignKey(User, null=True, blank=True)
-    date = models.DateField(default=date.today, null=True)
+    date = models.DateField(null=True)
 
     def __unicode__(self):
         return self.name
+
+
+class RevisionHistory(models.Model):
+    after = models.TextField()
+    page = models.ForeignKey(Page)
+    user = models.ForeignKey(User)
+    date = models.DateField()
+    notes = models.CharField(null=True, max_length='200')
+
+    def __unicode__(self):
+        return "%s - %s on %s: %s" % (self.page, self.user, self.date, self.notes)
