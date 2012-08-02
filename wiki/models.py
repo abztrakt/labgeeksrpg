@@ -19,7 +19,7 @@ class RevisionHistory(models.Model):
     page = models.ForeignKey(Page)
     user = models.ForeignKey(User)
     date = models.DateField()
-    notes = models.CharField(null=True, max_length='200')
+    notes = models.CharField(null=True, max_length='260')
 
     def __unicode__(self):
         return "%s - %s on %s: %s" % (self.page, self.user, self.date, self.notes)

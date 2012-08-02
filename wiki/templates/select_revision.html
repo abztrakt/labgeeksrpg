@@ -13,8 +13,8 @@
 </div>
 <p><strong>Publish this revision?</strong></p>
 <form action="/wiki/{{page_name}}/edit/" method='post'>{% csrf_token %}
-    <input type='text' name='content' style='display:none' value='{{revision.content}}'/>
-    <input type='text' name='notes' style='display:none' value='rolled back to revision by {{revision.user}} on {{revision.date}}'/>
+    <textarea style='display:none' rows='20' cols='100' name='content'>{{revision.content}}</textarea>
+    <input type='text' name='notes' style='display:none' value='rolled back to revision by {{revision.user}} on {{revision.date}}: {{revision.notes}}'/>
     <input type='submit' value='Yes'/>
 </form>
 <form action="/wiki/{{page_name}}" method='get'>{% csrf_token %}
