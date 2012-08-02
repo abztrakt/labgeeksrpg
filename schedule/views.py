@@ -282,7 +282,7 @@ def create_default_schedule(request):
                 shift_range = shift_ranges[day] 
                # import pdb; pdb.set_trace()
                 times = []
-                counter = datetime(1,1,1,7,0)
+                counter = datetime(1,1,1,7,45)
 
                # import pdb; pdb.set_trace()
 
