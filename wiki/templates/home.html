@@ -2,9 +2,9 @@
 {% block content %}
 <h1>Wiki home</h1>
 {% if pages %}
-<ul>Pages
+<ul><strong>Pages</strong>
     {% for page in pages %}
-    <li>{{page}}</li>
+    <li><a href="/wiki/{{page}}/">{{page}}</a></li>
     {% endfor %}
 </ul>
 {% else %}

@@ -17,7 +17,7 @@ def view_page(request, page_name):
         return render_to_response("create.html", {"page_name": page_name, "request": request, })
     content = page.content
     try:
-        REVISIONS = RevisionHistory.objects.filter(page=page).order_by('date').reverse()
+        REVISIONS = RevisionHistory.objects.filter(page=page).order_by('date')
         last_revision = REVISIONS[len(REVISIONS) - 1]
     except:
         last_revision = None
@@ -62,6 +62,8 @@ def wiki_home(request):
 
 @login_required
 def revision_history(request, page_name):
+    c = {}
+    c.update(csrf(request))
     try:
         page = Page.objects.get(name=page_name)
     except Page.DoesNotExist:
@@ -75,10 +77,7 @@ def revision_history(request, page_name):
             diff = dmp.diff_main(last_rev, revision.after)
             dmp.diff_cleanupSemantic(diff)
             diff_html = dmp.diff_prettyHtml(diff)
-            diff_markdown = diff_html.replace("&para;<br>", "\n")
-            diff_markdown = diff_markdown.replace("&lt;", "<")
-            diff_markdown = diff_markdown.replace("&gt;", ">")
-            diff_markdown = diff_markdown.replace("#ffe6e6;", "red")
+            diff_markdown = diff_html.replace("#ffe6e6;", "red")
             diff_markdown = diff_markdown.replace("#e6ffe6;", "green")
             holder = {
                 'date': revision.date,
@@ -86,6 +85,7 @@ def revision_history(request, page_name):
                 'user': revision.user,
                 'diff': diff_markdown,
                 'revised_text': revision.after,
+                'id': revision.id,
             }
             revision_history.append(holder)
             last_rev = revision.after
@@ -97,4 +97,27 @@ def revision_history(request, page_name):
         'revision_history': revision_history_ordered,
         'request': request,
     }
-    return render_to_response('revisions.html', args)
+    return render_to_response('revisions.html', args, context_instance=RequestContext(request))
+
+
+@login_required
+def select_revision(request, page_name):
+    c = {}
+    c.update(csrf(request))
+    if request.method == "POST":
+        revision_id = request.POST["id"]
+        revision_object = RevisionHistory.objects.get(id=revision_id)
+        revision = {
+            'user': revision_object.user,
+            'content': revision_object.after,
+            'notes': revision_object.notes,
+            'date': revision_object.date,
+        }
+    else:
+        revision = None
+    args = {
+        'page_name': page_name,
+        'revision': revision,
+        'request': request,
+    }
+    return render_to_response('select_revision.html', args, context_instance=RequestContext(request))
