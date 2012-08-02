@@ -377,10 +377,10 @@ def save_hours(request):
             for time_range in time_ranges:
                 in_time = time_range['in_time'].time()
                 out_time = time_range['out_time'].time()
-                if out_time.minute == 30:
-                    out_time = out_time.replace(hour=out_time.hour+1, minute=0)
+                if out_time.minute == 45:
+                    out_time = out_time.replace(hour=out_time.hour+1, minute=15)
                 elif out_time.minute == 0:
-                    out_time = out_time.replace(minute=30)
+                    out_time = out_time.replace(minute=45)
                 
                     
                 # Save the hours, depending on which type of hours they are.
@@ -392,10 +392,10 @@ def save_hours(request):
                         in_time1=in_time
                         while in_time1 != out_time:
                             time_in=datetime(day1.year, day1.month, day1.day, in_time1.hour, in_time1.minute)    
-                            if in_time1.minute == 30:
-                                in_time1 = in_time1.replace(hour=in_time1.hour+1, minute=0)
-                            elif in_time1.minute == 0:
-                                in_time1 = in_time1.replace(minute=30)
+                            if in_time1.minute == 45:
+                                in_time1 = in_time1.replace(hour=in_time1.hour+1, minute=15)
+                            elif in_time1.minute == 15:
+                                in_time1 = in_time1.replace(minute=45)
                             time_out=datetime(day1.year, day1.month, day1.day, in_time1.hour, in_time1.minute)
                             employee_work_hour=WorkShift.objects.create(
                                 person=user,
