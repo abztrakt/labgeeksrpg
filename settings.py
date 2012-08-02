@@ -142,6 +142,7 @@ INSTALLED_APPS = (
     'django.contrib.flatpages',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'haystack',
     'labgeeksrpg.chronos',
     'labgeeksrpg.people',
     'labgeeksrpg.wiki',
@@ -151,6 +152,10 @@ INSTALLED_APPS = (
     'django.contrib.markup',
     #'debug_toolbar',
 )
+
+HAYSTACK_SITECONF = 'labgeeksrpg.search_sites'
+HAYSTACK_SEARCH_ENGINE = 'whoosh'
+HAYSTACK_WHOOSH_PATH = 'labgeeksrpg/whoosh_index'
 
 LOGIN_URL = '/login/'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True

@@ -18,6 +18,7 @@ urlpatterns = patterns('',
                        (r'^schedule/', include('labgeeksrpg.schedule.urls')),
                        (r'^wiki/', include('labgeeksrpg.wiki.urls')),
                        (r'^$', 'labgeeksrpg.views.hello'),
+                       (r'^search/', include('haystack.urls')),
                        # Uncomment the admin/doc line below and add 'django.contrib.admindocs'
                        # to INSTALLED_APPS to enable admin documentation:
                        # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
