@@ -14,9 +14,14 @@ def view_page(request, page_name):
     try:
         page = Page.objects.get(name=page_name)
     except Page.DoesNotExist:
-        return render_to_response("create.html", {"page_name": page_name})
+        return render_to_response("create.html", {"page_name": page_name, "request": request, })
     content = page.content
-    return render_to_response("view.html", {"page_name": page_name, "content": content, 'request': request, })
+    try:
+        REVISIONS = RevisionHistory.objects.filter(page=page).order_by('date').reverse()
+        last_revision = REVISIONS[len(REVISIONS) - 1]
+    except:
+        last_revision = None
+    return render_to_response("view.html", {"page_name": page_name, "content": content, 'request': request, "last_revision": last_revision, })
 
 
 @login_required
@@ -26,6 +31,7 @@ def edit_page(request, page_name):
         content = page.content
     except Page.DoesNotExist:
         content = ""
+        page = None
     user = request.user
     c = {}
     c.update(csrf(request))
@@ -51,7 +57,7 @@ def wiki_home(request):
         PAGES = Page.objects.all()
     except:
         PAGES = None
-    return render_to_response('home.html', {'pages': PAGES})
+    return render_to_response('home.html', {'pages': PAGES, 'request': request, })
 
 
 @login_required
@@ -83,9 +89,12 @@ def revision_history(request, page_name):
             }
             revision_history.append(holder)
             last_rev = revision.after
+    revision_history_ordered = []
+    for revision in reversed(revision_history):
+        revision_history_ordered.append(revision)
     args = {
         'name': page_name,
-        'revision_history': revision_history,
+        'revision_history': revision_history_ordered,
         'request': request,
     }
     return render_to_response('revisions.html', args)

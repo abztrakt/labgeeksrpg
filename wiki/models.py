@@ -22,4 +22,4 @@ class RevisionHistory(models.Model):
     notes = models.CharField(null=True, max_length='200')
 
     def __unicode__(self):
-        return "%s - %s on %s" (self.page, self.user, self.date)
+        return "%s - %s on %s: %s" % (self.page, self.user, self.date, self.notes)

@@ -3,7 +3,7 @@
 {% load markup %}
 {% block content %}
 {% if revision_history %}
-<h2>Revision History for /{{name}}/</h2>
+<h2>Revision History for /{{name}}</h2>
 {% for revision in revision_history %}
 <div class='revision_history'>
     <h3>revision by {{revision.user}} on {{revision.date}}</h3>

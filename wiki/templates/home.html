@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
 <h1>Wiki home</h1>
 {% if pages %}
 <ul>Pages
@@ -8,3 +10,4 @@
 {% else %}
 <p>no pages made yet</p>
 {% endif %}
+{% endblock %}
