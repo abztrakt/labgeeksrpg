@@ -7,20 +7,23 @@ This file deals with the schedule itself. Allows users to interact with the sche
 /* 
 Loads the page with events.
 */
-
+var Day;
+var users={};
 $(document).ready(function(){
     // Javascript associated with tabs.
     $(".tab_content").hide();
     $("ul.tabs li:first").addClass("active").show(); //Activate first tab
     $(".tab_content:first").show(); //Show first tab content
-
+    if ($(".tab_content:first")[0]) {
+        Day=$(".tab_content:first")[0].id
+    }
     //On Click Event
     $("ul.tabs li").click(function() {
 
         $("ul.tabs li").removeClass("active"); //Remove any "active" class
         $(this).addClass("active"); //Add "active" class to selected tab
         $(".tab_content").hide(); //Hide all tab content
-
+        Day=$(this).children().children()[0].innerHTML
         var activeTab = $(this).find("a").attr("href"); //Find the href attribute value to identify the active tab + content
         $(activeTab).show(); 
         return false;
@@ -46,12 +49,67 @@ $(document).ready(function(){
     // Bind the modifySavingHours method to the buttons.
     $(".add_employee_hours").bind("click",true,modifyEmployeeHours);
     $(".remove_employee_hours").bind("click",false,modifyEmployeeHours);
-
+    
     // Bind the save method to the save button.
+    $
     $("#save_hours").bind("click",saveHours);
-
+    if ($("#schedule").hasClass('visible')) {
+       getDefaultShiftData(); 
+        
+    }
 });
 
+
+function getDefaultShiftData() {
+    var schedule_days = $(".tab_container").children();
+    var closing_hours = {};
+    
+    var csrf = $('input[name=csrfmiddlewaretoken]').val(); 
+    var tp = $('.timeperiod')[0].innerHTML; 
+    var loc = $('.location')[0].innerHTML;
+
+    closing_hours['csrfmiddlewaretoken'] = csrf;
+    closing_hours['timeperiod'] = tp; 
+    closing_hours['location'] = loc;
+
+    // Loop through all days and rows of the schedule and keep track of which hours were assigned.
+    for (var i = 0; i < schedule_days.length; i++){
+        var schedule_box = $(schedule_days[i]);
+        var day = schedule_box.attr("id").toString();
+        closing_hours[day] = [];
+        var grid = $(schedule_box.children(".schedule_grid")[0]).children();
+
+        for (var j = 0; j < grid.length; j++){
+            var row = $(grid[j]);
+            var time = row.children()[0].innerHTML;
+            if (row.children(".closed_hours").length > 0){
+                closing_hours[day].push(time); 
+            }else{
+                for (var k = 1; k < row.children().length; k++){
+                    var element = $(row.children()[k]);
+                    if (!element.is(":empty") && element.text() != 'closed'){
+                        var user = element.text(); 
+                        try{
+                            users[user][day].push(time);
+                        }catch(err){      
+                            users[user] = {
+                                'Monday': [],
+                                'Tuesday': [],
+                                'Wednesday': [],
+                                'Thursday':[],
+                                'Wednesday':[],
+                                'Friday': [],
+                                'Saturday': [],
+                                'Sunday': [],
+                            }
+                            users[user][day].push(time);
+                        }
+                    } 
+                }
+            }
+        }
+    }
+}
 /*
 Adds and removes an employee's hours from the schedule. 
 */
@@ -67,8 +125,8 @@ function modifyEmployeeHours(event){
     var schedule = $(this).parent().parent().parent().parent().children(".schedule_grid")[0];
     var isAdding = event.data;
 
-    var startIndex = 0;
-    var endIndex = 0;
+    var startIndex = schedule.children.length+1;
+    var endIndex = schedule.children.length+1;
     
     // Find out the starting hour and ending hour of each shift.
     for (var i = 0; i < schedule.children.length; i++) { 
@@ -78,9 +136,28 @@ function modifyEmployeeHours(event){
         if (schedule_row_time == startTime){
             startIndex = i;
         }
-        
         if (schedule_row_time == endTime){
-            endIndex = i;
+            endIndex = i-1;
+            break;
+        }
+        if (i >= startIndex){
+            try{
+                users[user][Day].push(schedule_row_time);
+                users[user][Day].sort()
+            }catch(err){      
+                users[user] = {
+                    'Monday': [],
+                    'Tuesday': [],
+                    'Wednesday': [],
+                    'Thursday':[],
+                    'Wednesday':[],
+                    'Friday': [],
+                    'Saturday': [],
+                    'Sunday': [],
+                }
+                users[user][Day].push(schedule_row_time);
+                users[user][Day].sort()
+            } 
         }
     }
     
@@ -96,7 +173,7 @@ function modifyEmployeeHours(event){
     }
 
     // Add or remove the closed hour status.
-    if (index != null){
+    if (index != null && startIndex != schedule.children.length+1){
         for (var i = startIndex; i <= endIndex; i++){
             var schedule_row = $(schedule.children[i]);
             var element = $(schedule_row.children()[index]);
@@ -138,7 +215,7 @@ function modifyClosingHours(event){
         }
         
         if (schedule_row_time == endTime){
-            endIndex = i;
+            endIndex = i-1;
         }
     }
 
@@ -172,47 +249,6 @@ function saveHours(event){
     closing_hours['csrfmiddlewaretoken'] = csrf;
     closing_hours['timeperiod'] = tp; 
     closing_hours['location'] = loc;
-
-    var users = {};
-
-    // Loop through all days and rows of the schedule and keep track of which hours were assigned.
-    for (var i = 0; i < schedule_days.length; i++){
-        var schedule_box = $(schedule_days[i]);
-        var day = schedule_box.attr("id").toString();
-        closing_hours[day] = [];
-        var grid = $(schedule_box.children(".schedule_grid")[0]).children();
-
-        for (var j = 0; j < grid.length; j++){
-            var row = $(grid[j]);
-            var time = row.children()[0].innerHTML;
-            if (row.children(".closed_hours").length > 0){
-                closing_hours[day].push(time); 
-            }else{
-
-                for (var k = 1; k < row.children().length; k++){
-                    var element = $(row.children()[k]);
-                    if (!element.is(":empty") && element.text() != 'closed'){
-                        var user = element.text(); 
-                        try{
-                            users[user][day].push(time);
-                        }catch(err){      
-                            users[user] = {
-                                'Monday': [],
-                                'Tuesday': [],
-                                'Wednesday': [],
-                                'Thursday':[],
-                                'Wednesday':[],
-                                'Friday': [],
-                                'Saturday': [],
-                                'Sunday': [],
-                            }
-                            users[user][day].push(time);
-                        }
-                    } 
-                }
-            }
-        }
-    }
 
     // Loop through all of the user's hours and save them to the database.
     for (var key in users){
