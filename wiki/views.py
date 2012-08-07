@@ -52,6 +52,15 @@ def edit_page(request, page_name):
 
 
 @login_required
+def goto_page(request):
+    if request.method == "GET":
+        page_name = request.GET['page_name']
+        if page_name != ('' or None):
+            return HttpResponseRedirect("/wiki/" + page_name + '/')
+    return HttpResponseRedirect('/wiki/')
+
+
+@login_required
 def wiki_home(request):
     try:
         PAGES = Page.objects.all()

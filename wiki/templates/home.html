@@ -10,4 +10,8 @@
 {% else %}
 <p>no pages made yet</p>
 {% endif %}
+<form method='get' action='/wiki/goto_page/'>
+    <input type='text' name='page_name' />
+    <input type='submit' value='Go To Page' />
+</form>
 {% endblock %}
