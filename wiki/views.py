@@ -29,9 +29,11 @@ def edit_page(request, page_name):
     try:
         page = Page.objects.get(name=page_name)
         content = page.content
+        revision_message = ''
     except Page.DoesNotExist:
         content = ""
         page = None
+        revision_message = 'initial page creation'
     user = request.user
     c = {}
     c.update(csrf(request))
