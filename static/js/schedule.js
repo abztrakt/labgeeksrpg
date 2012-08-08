@@ -32,7 +32,7 @@ $(document).ready(function(){
     // Use a timepicker widget to select the times in an input field.
     $('.time_input').timepicker({
             showPeriod: true,
-            defaultTime: ':12',
+            defaultTime: ':45',
             amPmText: ['am', 'pm'],
             onHourShow: OnHourShowCallback, 
             rows: 2,
