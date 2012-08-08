@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from labgeeksrpg.chronos import models as c_models
 from labgeeksrpg.chronos import views as c_views
 
+
 class StartTestCase(TestCase):
     """
     Create models for the test cases. Make sure all test cases inherit from this class so that they have models.
@@ -16,9 +17,9 @@ class StartTestCase(TestCase):
     def setUp(self):
 
         #Create users and set permissions
-        self.ryu = User.objects.create(username='Ryu',password='hadouken',email='ryu@streetfighter.com')
-        self.ken = User.objects.create(username='Ken',password='shoryuken',email='ken@streetfighter.com')
-        self.akuma = User.objects.create(username='Akuma',password='shun goku satsu', email='akuma@streetfighter.com')
+        self.ryu = User.objects.create(username='Ryu', password='hadouken', email='ryu@streetfighter.com')
+        self.ken = User.objects.create(username='Ken', password='shoryuken', email='ken@streetfighter.com')
+        self.akuma = User.objects.create(username='Akuma', password='shun goku satsu', email='akuma@streetfighter.com')
 
         # Ryu can do anything an admin can do.
         self.ryu.is_active = True
@@ -46,10 +47,9 @@ class StartTestCase(TestCase):
         self.ip3 = '111.222.33.44'
 
         #Punch clocks, where people can clock in.
-        self.pc1 = c_models.Punchclock.objects.create(name='Rooftop',location=self.loc1,ip_address=self.ip1)
-        self.pc2 = c_models.Punchclock.objects.create(name='Harbor',location=self.loc2,ip_address=self.ip2)
-        self.pc3 = c_models.Punchclock.objects.create(name='Temple',location=self.loc3,ip_address=self.ip3)
-        
+        self.pc1 = c_models.Punchclock.objects.create(name='Rooftop', location=self.loc1, ip_address=self.ip1)
+        self.pc2 = c_models.Punchclock.objects.create(name='Harbor', location=self.loc2, ip_address=self.ip2)
+        self.pc3 = c_models.Punchclock.objects.create(name='Temple', location=self.loc3, ip_address=self.ip3)
         #Imitate a HTMLrequest object
         self.request = self.client
 
@@ -63,6 +63,7 @@ class StartTestCase(TestCase):
         self.pc1.save()
         self.pc2.save()
         self.pc3.save()
+
 
 class ModelsTestCase(StartTestCase):
     """
@@ -80,24 +81,26 @@ class ModelsTestCase(StartTestCase):
         self.assertNotEqual(self.pc2.location, 'Japan')
         self.assertIsNotNone(c_models.Punchclock.objects.get(name='Rooftop'))
 
+
 class ClockInClockOutTestCase(StartTestCase):
     """
-    Test if users are properly clocking in and out. 
+    Test if users are properly clocking in and out.
     """
     def test_clockin(self):
-        #self.request.method = 'POST' 
+        #self.request.method = 'POST'
         pass
 
+
 class ShiftsTestCase(StartTestCase):
-    
+
     """
     Test shifts. Make sure we are grabbing the right ones. Either create shifts or use ones from the db.
     """
     def setUp(self):
-        super(ShiftsTestCase,self).setUp()
+        super(ShiftsTestCase, self).setUp()
         person = self.ryu
-        intime = datetime(2011,1,1,8,0)
-        shift = c_models.Shift(person=person,intime=intime)
+        intime = datetime(2011, 1, 1, 8, 0)
+        shift = c_models.Shift(person=person, intime=intime)
         shift.save()
 
     def test_get_correct_shifts(self):
@@ -108,5 +111,5 @@ class ShiftsTestCase(StartTestCase):
         week = 1
         payperiod = 1
 
-        self.assertIsNotNone(c_views.get_shifts(self.request, year, month, day,user,week,payperiod))
-        self.assertIsNotNone(c_views.get_shifts(self.request, year, month, None, None, None, None))
+        self.assertIsNotNone(c_views.get_shifts(year, month, day, user, week, payperiod))
+        self.assertIsNotNone(c_views.get_shifts(year, month, None, None, None, None))
