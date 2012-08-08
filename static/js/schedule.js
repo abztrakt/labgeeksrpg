@@ -32,13 +32,23 @@ $(document).ready(function(){
     // Use a timepicker widget to select the times in an input field.
     $('.time_input').timepicker({
             showPeriod: true,
+            defaultTime: ':12',
             amPmText: ['am', 'pm'],
+            onHourShow: OnHourShowCallback, 
+            rows: 2,
             minutes: {
                 starts: 15,
                 ends: 45,
                 interval: 30
             }
         });
+
+    function OnHourShowCallback(hour) {
+        if (hour < 7 ) {
+            return false;
+        }
+        return true;
+    }
 
     getPeopleList();
 
