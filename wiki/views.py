@@ -101,7 +101,9 @@ def revision_history(request, page_name):
     revision_history_ordered = []
     for revision in reversed(revision_history):
         revision_history_ordered.append(revision)
+    current_revision = revision_history_ordered.pop(0)
     args = {
+        'current_revision': current_revision,
         'name': page_name,
         'revision_history': revision_history_ordered,
         'request': request,

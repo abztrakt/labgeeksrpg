@@ -2,11 +2,26 @@
 
 {% load markup %}
 {% block content %}
-{% if revision_history %}
 <h2>Revision History for /{{name}}</h2>
+{% if current_revision %}
+<div class='revision_history'>
+    <h3>Current revision by {{current_revision.user}} on {{current_revision.date}}</h3>
+    <p><strong>{{current_revision.notes}}</strong></p>
+    <div>
+        <div class='revision_diff'>
+            <p><strong>Changes (diff)</strong></p>
+            {{current_revision.diff|markdown}}
+        </div>
+        <div class='revision_after'>
+            <p><strong>current content</strong></p>
+            {{current_revision.revised_text|markdown}}
+        </div>
+    </div>
+</div>
+{% if revision_history %}
 {% for revision in revision_history %}
 <div class='revision_history'>
-    <h3>revision by {{revision.user}} on {{revision.date}}</h3>
+    <h3>past revision by {{revision.user}} on {{revision.date}}</h3>
     <p><strong>{{revision.notes}}</strong></p>
     <div>
         <div class='revision_diff'>
@@ -24,7 +39,8 @@
     </div>
 </div>
 {% endfor %}
+{% endif %}
 {% else %}
-<h2>No revision history for {{name}}</h2>
+<h3>No revision history for {{name}}</h3>
 {% endif %}
 {% endblock %}
