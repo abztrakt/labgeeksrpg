@@ -302,6 +302,13 @@ function saveHours(event){
     schedule_status.empty()
     schedule_status.append("<p>Hours saved!</p>");
     schedule_status.show("fold");
+    setTimeout(hideStatus, 5000);
+}
+
+function hideStatus() {
+    var schedule_status = $(".schedule_status"); 
+    schedule_status.empty();
+    schedule_status.hide("fold");
 }
 
 
