@@ -22,10 +22,11 @@
 
             {% for result in page.object_list %}
                 <p>
-                    <a href="/wiki/{{result.object.name}}/">{{ result.object.name }}</a>
+                    <a href="/wiki/{{result.object.name}}/" target="_blank">{{ result.object.name }}</a>
                 </p>
             {% empty %}
                 <p>No results found</p>
+                <div>{{ suggestion }}</div>
             {% endfor %}
 
             {% if page.has_previous or page.has_next %}
@@ -36,7 +37,7 @@
                 </div>
             {% endif %}
         {% else %}
-            {# Show some example queries to run, maybe query syntex, something else? #}
+            {# Show some example queries to run, maybe query syntax, something else? #}
         {% endif %}
     </form>
 </body>
