@@ -151,23 +151,32 @@ function modifyEmployeeHours(event){
             break;
         }
         if (i >= startIndex){
-            try{
-                users[user][Day].push(schedule_row_time);
-                users[user][Day].sort()
-            }catch(err){      
-                users[user] = {
-                    'Monday': [],
-                    'Tuesday': [],
-                    'Wednesday': [],
-                    'Thursday':[],
-                    'Wednesday':[],
-                    'Friday': [],
-                    'Saturday': [],
-                    'Sunday': [],
-                }
-                users[user][Day].push(schedule_row_time);
-                users[user][Day].sort()
-            } 
+            if (isAdding) {
+                    try{
+                        if (users[user][Day].indexOf(schedule_row_time) == -1) {         
+                            users[user][Day].push(schedule_row_time);
+                            users[user][Day].sort(function(a,b){return a-b});
+                        }
+                    }catch(err){      
+                        users[user] = {
+                            'Monday': [],
+                            'Tuesday': [],
+                            'Wednesday': [],
+                            'Thursday':[],
+                            'Wednesday':[],
+                            'Friday': [],
+                            'Saturday': [],
+                            'Sunday': [],
+                        }
+                        if (users[user][Day].indexOf(schedule_row_time) == -1) {
+                            users[user][Day].push(schedule_row_time);
+                            users[user][Day].sort();
+                        }
+                    }
+            }else {
+                index = users[user][Day].indexOf(schedule_row_time);
+                users[user][Day].splice(index, 1);
+            }
         }
     }
     
@@ -191,7 +200,7 @@ function modifyEmployeeHours(event){
             if (isAdding){
                 element.html(user);
             } else{
-                element.empty()
+                element.empty();
             }
         }
     }
