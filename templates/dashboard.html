@@ -7,6 +7,20 @@
             <h2>Hello {{request.user.first_name}}</h2>
         </div>
         <p>Welcome to Labgeeks, a staff and work shift management site.</p>
+
+        {% if locations %}
+            {% for location in locations %}
+                <h2>You are clocked in at {{location.name}} at {{clockin_time}}</h2>
+            {% endfor %}
+        {% else %}
+            <h2>You are not clocked in.</h2>
+        {% endif %}
+
+        <form method="post" action="">
+            <table id="notification_form">{{form}}</table>
+            <input type="submit" value="Submit"/>
+        </form>
+
         {% if notifications %}
             {% for notification in notifications %}
                 <p> {{notification.title}} </p>
@@ -14,15 +28,9 @@
                 <p> {{notification.content}} </p>
             {% endfor %}
         {% endif %}
-        {% if locations %}
-            {% for location in locations %}
-                <p>You are clocked in at {{location.name}} at {{clockin_time}}</p>
-            {% endfor %}
-        {% else %}
-            <p>You are not clocked in.</p>
-        {% endif %}
+
         {% if today_past_shifts or today_future_shifts %}
-        <h2>Your shifts for today are:</h2>
+            <h2>Your shifts for today are:</h2>
             {%for shift in today_past_shifts%}
                 <span class='past_shifts'><p>From {{shift.scheduled_in.time}} to {{shift.scheduled_out.time}} at {{shift.location}}</p></span>
             {% endfor %}

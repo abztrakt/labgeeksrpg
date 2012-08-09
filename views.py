@@ -5,6 +5,8 @@ from django.template import RequestContext
 from labgeeksrpg.forms import LoginForm
 import datetime
 from labgeeksrpg.labgeeksrpg_config.models import Notification
+from labgeeksrpg.labgeeksrpg_config.forms import NotificationForm
+
 
 def hello(request):
     """ The root view of the site. Just static for now, but later we can return useful information for logged in users.
@@ -18,8 +20,11 @@ def hello(request):
         if locations:
             clockin_time = shifts[len(shifts) - 1].intime
 
+        form = NotificationForm(request.POST)
+        #new_notification = form.save()
+
         workshifts = request.user.workshift_set.all()
-        notifications = Notification.objects.all() 
+        notifications = Notification.objects.all()
         today_past_shifts = []
         today_future_shifts = []
         for shift in workshifts:
@@ -36,6 +41,7 @@ def hello(request):
             'request': request,
             'locations': locations,
             'clockin_time': clockin_time,
+            'form': form,
             'today_past_shifts': today_past_shifts,
             'today_future_shifts': today_future_shifts,
             'notifications': notifications,
