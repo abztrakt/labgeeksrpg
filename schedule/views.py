@@ -259,7 +259,6 @@ def create_default_schedule(request):
             for day in days:
                 closing_range = closing_ranges[day]
                 shift_range = shift_ranges[day] 
-               # import pdb; pdb.set_trace()
                 times = []
                 counter = datetime(1,1,1,7,45)
     
@@ -284,11 +283,9 @@ def create_default_schedule(request):
                             row.append({'class': None, 'user': None})
 
                     
-                    # import pdb; pdb.set_trace()
                     # Append the row and time
                     times.append({'time': counter.time().strftime('%I:%M %p').lower(), 'row': row})
                     
-                    # import pdb; pdb.set_trace()
 
                     # Increment by 30 minutes
                     counter += timedelta(minutes=30)
@@ -384,10 +381,7 @@ def save_hours(request):
                 in_time = time_range['in_time'].time()
                 out_time = time_range['out_time'].time()
                 
-                if out_time.minute == 45:
-                    out_time = out_time.replace(hour=out_time.hour+1, minute=15)
-                elif out_time.minute == 15:
-                    out_time = out_time.replace(minute=45)
+                
                 
                     
                 # Save the hours, depending on which type of hours they are.
@@ -454,20 +448,35 @@ def return_time_ranges(hours_list):
     in_time = None
     out_time = None
     
+    hours_list1 = []
     for hour in hours_list:
-        current = datetime.strptime(hour,time_format)
-
+        hour = datetime.strptime(hour, time_format)
+        hours_list1.append(hour)
+    hours_list1.sort()
+    for hour in hours_list1:
+        #current = datetime.strptime(hour,time_format)
+        current = hour
         if not in_time and not out_time:
             in_time = current
             out_time = current
-        elif (current - out_time).seconds / 60 == 30:
-            out_time = current
+            if out_time.minute == 45:
+                out_time = out_time.replace(hour=out_time.hour+1, minute=15)
+            elif out_time.minute == 15:
+                out_time = out_time.replace(minute=45)
+        elif (current == out_time):
+            if out_time.minute == 45:
+                out_time = out_time.replace(hour=out_time.hour+1, minute=15)
+            elif out_time.minute == 15:
+                out_time = out_time.replace(minute=45)
         else:
             time_range = {'in_time': in_time, 'out_time': out_time, 'in_time_string':in_time.strftime('%I:%M %p').lower(),'out_time_string': out_time.strftime('%I:%M %p').lower()}
             time_ranges.append(time_range)
             in_time = current
             out_time = current
-
+            if out_time.minute == 45:
+                out_time = out_time.replace(hour=out_time.hour+1, minute=15)
+            elif out_time.minute == 15:
+                out_time = out_time.replace(minute=45)
     time_range = {'in_time': in_time, 'out_time': out_time, 'in_time_string':in_time.strftime('%I:%M %p').lower(),'out_time_string': out_time.strftime('%I:%M %p').lower()}
     time_ranges.append(time_range)
 
