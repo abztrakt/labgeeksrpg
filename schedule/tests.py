@@ -19,7 +19,8 @@ class StartTestCase(TestCase):
     def setUp(self):
 
         #Create users
-        self.user1 = User.objects.create(username='user1', email='user1@uw.edu', password='123')
+        self.user1 = User.objects.create(username='user1', email='user1@uw.edu')
+        self.user1.set_password('123')
         self.user2 = User.objects.create(username='user2')
         self.user1.save()
         self.user2.save()
@@ -62,5 +63,5 @@ class TimePeriodTestCase(StartTestCase):
         self.client.login(username='user1', password='123')
         response = self.client.post('/schedule/timeperiods/', {'user': 'user1', 'timeperiods': 'timeperiod1'})
         timeperiods = p_models.TimePeriod.objects.all()
-        self.assertTrue(request.context['timeperiods'][0] in timeperiods)
+        self.assertTrue(response.context['timeperiods'][0] in timeperiods)
         self.assertEqual(self.user_profile1.working_periods.all(), response.context['timeperiods'])
