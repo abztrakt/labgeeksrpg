@@ -383,9 +383,10 @@ def save_hours(request):
             for time_range in time_ranges:
                 in_time = time_range['in_time'].time()
                 out_time = time_range['out_time'].time()
+                
                 if out_time.minute == 45:
                     out_time = out_time.replace(hour=out_time.hour+1, minute=15)
-                elif out_time.minute == 0:
+                elif out_time.minute == 15:
                     out_time = out_time.replace(minute=45)
                 
                     
