@@ -148,6 +148,7 @@ INSTALLED_APPS = (
     'labgeeksrpg.wiki',
     'labgeeksrpg.labgeeksrpg_config',
     'labgeeksrpg.schedule',
+    'labgeeksrpg.knowledgebase',
     'south',
     'django.contrib.markup',
     #'debug_toolbar',

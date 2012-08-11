@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load markup %}
+{% block content %}
+<h1>{{issue_name}}</h1>
+<strong>created by {{author}} on {{date}}:</strong>
+<div>
+    {{content|markdown}}
+</div>
+<hr />
+{% if chosen_resolution %}
+<strong>Best solution as chosen by leads:</strong>
+<div>
+    {{chosen_resolution|markdown}}
+    <p>submitted by {{chosen_resolution.user}} on {{chosen_resolution.date}}</p>
+</div>
+{% else %}
+{% if resolutions %}
+<strong>no best solution chosen yet</strong>
+{% endif %}
+{% endif %}
+{% if resolutions %}
+</hr>
+<p><strong>other solutions:</strong></p>
+{% for resolution in resolutions %}
+<div>
+    {{resolution|markdown}}
+    <p>submitted by {{resolution.user}} on {{resolution.date}}</p>
+</div>
+{% endfor %}
+{% endif %}
+{% endblock %}
