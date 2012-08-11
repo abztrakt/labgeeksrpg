@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 class Page(models.Model):
     """basic Page model for the wiki"""
-    name = models.CharField(max_length='25')
+    name = models.CharField(max_length='30')
     content = models.TextField()
     author = models.ForeignKey(User, null=True, blank=True)
     date = models.DateField(null=True)
