@@ -1,7 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from labgeeksrpg.chronos.models import Location
 from datetime import date
+
 
 class TimePeriod(models.Model):
     """ Defines possible periods of time when a person could choose to work or choose not to work.
@@ -75,3 +76,23 @@ class ClosedHour(models.Model):
     def __unicode__(self):
         return "[%s] %s-%s @%s" % (self.day,self.in_time,self.out_time, self.location)
 
+class ShiftType(models.Model):
+    '''defines a type of schedule for a location and timeperiod, and time of day. 
+    Also defines what groups of people are allowed to work in this time
+    '''
+    DAY_CHOICES = (
+        ('Sunday', 'Sunday'),
+        ('Monday', 'Monday'),
+        ('Tuesday', 'Tuesday'),
+        ('Wednesday', 'Wednesday'),
+        ('Thursday', 'Thursday'),
+        ('Friday', 'Friday'),
+        ('Saturday', 'Saturday'),
+    )
+    location = models.ForeignKey(Location)
+    timeperiod = models.ForeignKey(TimePeriod)
+    allowed_groups = models.ManyToManyField(Group)
+    day = models.CharField(max_length=256, choices=DAY_CHOICES)
+    in_time = models.TimeField()
+    out_time = models.TimeField()
+    name = models.CharField(max_length=256)
