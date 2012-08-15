@@ -20,11 +20,34 @@ def hello(request):
         if locations:
             clockin_time = shifts[len(shifts) - 1].intime
 
-        form = NotificationForm(request.POST)
-        #new_notification = form.save()
+        notifications = Notification.objects.all()
+        events = []
+        alerts = []
+        for noti in notifications:
+            if noti.due_date:
+                events.append(noti)
+            else:
+                alerts.append(noti)
+        events.sort(key=lambda x: x.due_date)
+
+        c = {}
+        c.update(csrf(request))
+
+        can_Add = False
+        if request.user.has_perm('labgeeksrpg_config.add_notification'):
+            can_Add = True
+
+        if request.method == 'POST':
+            form = NotificationForm(request.POST)
+            if form.is_valid():
+                notification = form.save(commit=False)
+                notification.user = request.user
+                notification.save()
+                return HttpResponseRedirect('/')
+        else:
+            form = NotificationForm()
 
         workshifts = request.user.workshift_set.all()
-        notifications = Notification.objects.all()
         today_past_shifts = []
         today_future_shifts = []
         for shift in workshifts:
@@ -41,12 +64,13 @@ def hello(request):
             'request': request,
             'locations': locations,
             'clockin_time': clockin_time,
-            'form': form,
             'today_past_shifts': today_past_shifts,
             'today_future_shifts': today_future_shifts,
-            'notifications': notifications,
+            'events': events,
+            'alerts': alerts,
+            'can_Add': can_Add,
         }
-        return render_to_response('dashboard.html', args)
+        return render_to_response('dashboard.html', locals(), context_instance=RequestContext(request))
     else:
         return render_to_response('hello.html', locals())
 
