@@ -143,5 +143,38 @@ class CreateFinalUWLTReviewForm(CreateUWLTReviewForm):
             'missed_shifts_comments',
             'tardies',
             'tardies_comments',
+            'weights',
             'is_final',
+        )
+
+
+class UpdateWageHistoryForm(ModelForm):
+    WH_REASONS = WageChangeReason.objects.all()
+    if not WH_REASONS:
+        default_wage_change_reason = WageChangeReason.objects.create(title='Promotion')
+        default_wage_change_reason.save()
+        WH_REASONS.append(default_wage_change_reason)
+
+    wage_change_reason = forms.ModelChoiceField(required=True, queryset=WH_REASONS, help_text="Choose a reason for this wage change (not recorded if no wage change)", initial=WH_REASONS[0])
+
+    def __init__(self, *args, **kwargs):
+        # successfully passes user to the form
+        user = kwargs.pop('user')
+        LATEST_WH = WageHistory.objects.filter(user=user).order_by('effective_date').reverse()
+        super(UpdateWageHistoryForm, self).__init__(*args, **kwargs)
+        # python uses the following correctly, but help_text doesn't make it to the view for some reason.
+        if LATEST_WH:
+            wage = forms.FloatField(required=True, help_text="Enter the updated wage for this user", initial=LATEST_WH[0].wage)
+        else:
+            wage = forms.FloatField(required=True, help_text="Enter the wage for this user")
+
+    def save(self, *args, **kwargs):
+        inst = ModelForm.save(self, *args, **kwargs)
+        return inst
+
+    class Meta:
+        model = WageHistory
+        fields = (
+            'wage',
+            'wage_change_reason',
         )

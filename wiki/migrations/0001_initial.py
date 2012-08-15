@@ -9,13 +9,20 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
 
-        # Adding field 'DefaultShift.timeperiod'
-        db.add_column('schedule_defaultshift', 'timeperiod', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.TimePeriod'], null=True, blank=True), keep_default=False)
+        # Adding model 'Page'
+        db.create_table('wiki_page', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length='25')),
+            ('content', self.gf('django.db.models.fields.TextField')()),
+            ('author', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True)),
+            ('date', self.gf('django.db.models.fields.DateField')(default=datetime.date.today, null=True)),
+        ))
+        db.send_create_signal('wiki', ['Page'])
 
     def backwards(self, orm):
 
-        # Deleting field 'DefaultShift.timeperiod'
-        db.delete_column('schedule_defaultshift', 'timeperiod_id')
+        # Deleting model 'Page'
+        db.delete_table('wiki_page')
 
     models = {
         'auth.group': {
@@ -47,12 +54,6 @@ class Migration(SchemaMigration):
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
-        'chronos.location': {
-            'Meta': {'object_name': 'Location'},
-            'active_users': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '256'})
-        },
         'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
             'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
@@ -60,42 +61,14 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'schedule.closedhour': {
-            'Meta': {'object_name': 'ClosedHour'},
-            'day': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+        'wiki.page': {
+            'Meta': {'object_name': 'Page'},
+            'author': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),
+            'content': ('django.db.models.fields.TextField', [], {}),
+            'date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date.today', 'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'in_time': ('django.db.models.fields.TimeField', [], {}),
-            'location': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['chronos.Location']"}),
-            'out_time': ('django.db.models.fields.TimeField', [], {}),
-            'timeperiod': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['schedule.TimePeriod']"})
-        },
-        'schedule.defaultshift': {
-            'Meta': {'object_name': 'DefaultShift'},
-            'day': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'in_time': ('django.db.models.fields.TimeField', [], {}),
-            'location': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['chronos.Location']"}),
-            'out_time': ('django.db.models.fields.TimeField', [], {}),
-            'person': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),
-            'timeperiod': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['schedule.TimePeriod']", 'null': 'True', 'blank': 'True'})
-        },
-        'schedule.timeperiod': {
-            'Meta': {'object_name': 'TimePeriod'},
-            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'end_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 4, 27)'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'db_index': 'True'}),
-            'start_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 4, 27)'})
-        },
-        'schedule.workshift': {
-            'Meta': {'object_name': 'WorkShift'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'location': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['chronos.Location']"}),
-            'person': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),
-            'scheduled_in': ('django.db.models.fields.DateTimeField', [], {}),
-            'scheduled_out': ('django.db.models.fields.DateTimeField', [], {})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': "'25'"})
         }
     }
 
-    complete_apps = ['schedule']
+    complete_apps = ['wiki']

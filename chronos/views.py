@@ -146,7 +146,6 @@ def prev_and_next_dates(year, month):
 
     result = {'prev_date': prev_date, 'next_date': next_date}
     return result
-
 """
     The methods and views below deal with OVERALL calendar information
 """
@@ -268,7 +267,7 @@ def report(request, user=None, year=None, month=None):
         'calendar': calendar,
         'prev_date': prev_date,
         'next_date': next_date,
-        'weeks': weeks
+        'weeks': weeks,
     }
 
     return render_to_response('report.html', args)
@@ -372,25 +371,25 @@ def time(request):
                 oldshift.out_clock = punchclock
                 oldshift.save()
                 location.active_users.remove(request.user)
-                #Setting the success variable that users will see on success page
+                # Setting the success variable that users will see on success page
                 success = "OUT"
                 at_time = oldshift.outtime
-                #get rid of zeros on the hour
-                at_time = at_time.strftime('%Y-%m-%d, %I:%M %p').replace(' 0', ' ')
+                at_time = at_time.strftime('%Y-%m-%d, %I:%M %p').replace(' 0', ' ')  # get rid of zeros on the hour
+
             else:
-                #if shift.person  location.active_staff
+                # if shift.person  location.active_staff
                 if this_shift.intime is None:
                     this_shift.intime = datetime.now()
                 this_shift.in_clock = punchclock
-                #On success, save the shift
+                # On success, save the shift
                 this_shift.save()
-                #After successful shift save, add person to active_staff in appropriate Location
+                # After successful shift save, add person to active_staff in appropriate Location
                 location.active_users.add(this_shift.person)
-                #Setting the success variable that users will see on the success page
+
+                # Setting the success variable that users will see on the success page
                 success = "IN"
                 at_time = this_shift.intime
-                #get rid of zeros on the hour
-                at_time = at_time.strftime('%Y-%m-%d, %I:%M %p').replace(' 0', ' ')
+                at_time = at_time.strftime('%Y-%m-%d, %I:%M %p').replace(' 0', ' ')  # get rid of zeros on the hour
 
             return HttpResponseRedirect("success/?success=%s&at_time=%s&location=%s&user=%s" % (success, at_time, location, this_shift.person))
 
