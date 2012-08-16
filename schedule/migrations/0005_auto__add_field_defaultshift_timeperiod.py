@@ -4,18 +4,19 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
-
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-
+        
         # Adding field 'DefaultShift.timeperiod'
         db.add_column('schedule_defaultshift', 'timeperiod', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.TimePeriod'], null=True, blank=True), keep_default=False)
 
-    def backwards(self, orm):
 
+    def backwards(self, orm):
+        
         # Deleting field 'DefaultShift.timeperiod'
         db.delete_column('schedule_defaultshift', 'timeperiod_id')
+
 
     models = {
         'auth.group': {
