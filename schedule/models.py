@@ -12,12 +12,13 @@ class TimePeriod(models.Model):
     description = models.TextField(blank=True)
     start_date = models.DateField(default=date.today())
     end_date = models.DateField(default=date.today())
-    
+
     def __unicode__(self):
         return self.name
 
+
 class WorkShift(models.Model):
-    """ These are shifts that people are expected to work for. 
+    """ These are shifts that people are expected to work for.
     """
     person = models.ForeignKey(User, null=True, blank=True)
     scheduled_in = models.DateTimeField()
@@ -30,16 +31,18 @@ class WorkShift(models.Model):
         else:
             person_string = "Open Shift"
 
-        return "%s: [%s] %s-%s @%s" % (person_string,self.scheduled_in.date(),self.scheduled_in.time(),self.scheduled_out.time(), self.location)
+        return "%s: [%s] %s-%s @%s" % (person_string, self.scheduled_in.date(), self.scheduled_in.time(), self.scheduled_out.time(), self.location)
+
 
 class ShiftType(models.Model):
-    '''defines a type of schedule for a location and timeperiod, and time of day. 
+    '''defines a type of schedule for a location and timeperiod, and time of day.
     Also defines what groups of people are allowed to work in this time
     '''
     location = models.ForeignKey(Location)
     timeperiod = models.ForeignKey(TimePeriod)
     allowed_groups = models.ManyToManyField(Group)
     name = models.CharField(max_length=256)
+
 
 class DefaultShift(models.Model):
     DAY_CHOICES = (
@@ -57,13 +60,36 @@ class DefaultShift(models.Model):
     out_time = models.TimeField()
     location = models.ForeignKey(Location)
     timeperiod = models.ForeignKey(TimePeriod, null=True, blank=True)
+
     def __unicode__(self):
         if self.person:
             person_string = self.person
         else:
             person_string = "Open Shift"
 
-        return "%s: [%s] %s-%s @%s" % (person_string,self.day,self.in_time,self.out_time, self.location)
+        return "%s: [%s] %s-%s @%s" % (person_string, self.day, self.in_time, self.out_time, self.location)
+
+
+class BaseShift(models.Model):
+    '''this is a base shift designed to outline the hours and rules that a schedule should follow.
+    default and work shifts should only be created for a location/timeperiod during times a base shift has set
+    '''
+    DAY_CHOICES = (
+        ('Sunday', 'Sunday'),
+        ('Monday', 'Monday'),
+        ('Tuesday', 'Tuesday'),
+        ('Wednesday', 'Wednesday'),
+        ('Thursday', 'Thursday'),
+        ('Friday', 'Friday'),
+        ('Saturday', 'Saturday'),
+    )
+    day = models.CharField(max_length=256, choices=DAY_CHOICES)
+    in_time = models.TimeField()
+    out_time = models.TimeField()
+    location = models.ForeignKey(Location)
+    timeperiod = models.ForeignKey(TimePeriod, null=True, blank=True)
+    shift_type = models.ForeignKey(ShiftType, null=True, blank=True)
+
 
 class ClosedHour(models.Model):
     DAY_CHOICES = (
@@ -82,6 +108,4 @@ class ClosedHour(models.Model):
     timeperiod = models.ForeignKey(TimePeriod)
 
     def __unicode__(self):
-        return "[%s] %s-%s @%s" % (self.day,self.in_time,self.out_time, self.location)
-
-
+        return "[%s] %s-%s @%s" % (self.day, self.in_time, self.out_time, self.location)
