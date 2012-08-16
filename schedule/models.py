@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
 from labgeeksrpg.chronos.models import Location
-from datetime import date
+from datetime import date, time
 
 
 class TimePeriod(models.Model):
@@ -92,7 +92,7 @@ class ShiftType(models.Model):
     location = models.ForeignKey(Location)
     timeperiod = models.ForeignKey(TimePeriod)
     allowed_groups = models.ManyToManyField(Group)
-    day = models.CharField(max_length=256, choices=DAY_CHOICES)
-    in_time = models.TimeField()
-    out_time = models.TimeField()
+    day = models.CharField(max_length=256, choices=DAY_CHOICES, default='Monday')
+    in_time = models.TimeField(default=time(12,0,0))
+    out_time = models.TimeField(default=time(12,0,0))
     name = models.CharField(max_length=256)
