@@ -59,7 +59,6 @@ def hello(request):
                     today_past_shifts.append(shift)
                 else:
                     today_future_shifts.append(shift)
-
         args = {
             'request': request,
             'locations': locations,
@@ -78,6 +77,7 @@ def hello(request):
 def labgeeks_login(request):
     """ Login a user. Called by the @login_required decorator.
     """
+
     # Get a token to protect from cross-site request forgery
     c = {}
     c.update(csrf(request))
