@@ -8,8 +8,7 @@ from labgeeksrpg.labgeeksrpg_config.models import Notification
 
 
 def hello(request):
-    """ The root view of the site. Just static for now, but later we can return useful information for logged in users.
-    Created a dashboard page.
+    """ The site dashboard.
     """
     #when a user is logged-in correctly
     if request.user.is_authenticated():
