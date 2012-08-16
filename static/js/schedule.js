@@ -34,7 +34,8 @@ $(document).ready(function(){
             showPeriod: true,
             defaultTime: ':45',
             amPmText: ['am', 'pm'],
-            onHourShow: OnHourShowCallback, 
+            onHourShow: OnHourShowCallback,
+            onMinuteShow: HideMinutes,
             rows: 2,
             minutes: {
                 starts: 15,
@@ -46,6 +47,13 @@ $(document).ready(function(){
     function OnHourShowCallback(hour) {
         if (hour < 7 ) {
             return false;
+        }
+        return true;
+    }
+    
+    function HideMinutes(hour) {
+        if (hour == 7) {
+            return false; 
         }
         return true;
     }
