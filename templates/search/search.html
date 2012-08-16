@@ -4,7 +4,9 @@
 </head>
 
 <body>
-    <h2>Search</h2>
+    <h2>Search Wiki</h2>
+
+    <h3><a href="/wiki/">Wiki Home</a></h3>
 
     <form method="get" action=".">
         <table>
@@ -25,8 +27,8 @@
                     <a href="/wiki/{{result.object.name}}/" target="_blank">{{ result.object.name }}</a>
                 </p>
             {% empty %}
+                <p><a href="/search/?q={{ suggestion }}">{{ suggestion }}</a></p>
                 <p>No results found</p>
-                <div>{{ suggestion }}</div>
             {% endfor %}
 
             {% if page.has_previous or page.has_next %}
