@@ -51,6 +51,8 @@ def get_shifts(year, month, day=None, user=None, week=None, payperiod=None):
         for shift in shifts:
             shift_date = shift.intime
             this_week = shift_date.isocalendar()[1]
+            if this_week == 52 and int(month) == 1:
+                this_week = 1
             week_number = this_week - first_week + 1
             if week_number in weekly:
                 weekly[week_number].append(shift)
