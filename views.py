@@ -21,13 +21,20 @@ def hello(request):
             clockin_time = shifts[len(shifts) - 1].intime
 
         notifications = Notification.objects.all()
+        now = datetime.datetime.now()
         events = []
         alerts = []
         for noti in notifications:
             if noti.due_date:
-                events.append(noti)
+                if now.date() - noti.due_date.date() >= datetime.timedelta(days=1):
+                    noti.delete()
+                elif not noti.due_date - now > datetime.timedelta(days=5):
+                    events.append(noti)
             else:
-                alerts.append(noti)
+                if (noti.date.year == now.year and noti.date.month == now.month and noti.date.day == now.day):
+                    alerts.append(noti)
+                else:
+                    noti.delete()
         events.sort(key=lambda x: x.due_date)
 
         c = {}
@@ -53,7 +60,6 @@ def hello(request):
         for shift in workshifts:
             in_time = shift.scheduled_in
             out_time = shift.scheduled_out
-            now = datetime.datetime.now()
             if (in_time.year == now.year and in_time.month == now.month and in_time.day == now.day):
                 if now - out_time > datetime.timedelta(seconds=1):
                     today_past_shifts.append(shift)
