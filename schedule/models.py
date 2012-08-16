@@ -32,6 +32,15 @@ class WorkShift(models.Model):
 
         return "%s: [%s] %s-%s @%s" % (person_string,self.scheduled_in.date(),self.scheduled_in.time(),self.scheduled_out.time(), self.location)
 
+class ShiftType(models.Model):
+    '''defines a type of schedule for a location and timeperiod, and time of day. 
+    Also defines what groups of people are allowed to work in this time
+    '''
+    location = models.ForeignKey(Location)
+    timeperiod = models.ForeignKey(TimePeriod)
+    allowed_groups = models.ManyToManyField(Group)
+    name = models.CharField(max_length=256)
+
 class DefaultShift(models.Model):
     DAY_CHOICES = (
         ('Sunday', 'Sunday'),
@@ -48,7 +57,6 @@ class DefaultShift(models.Model):
     out_time = models.TimeField()
     location = models.ForeignKey(Location)
     timeperiod = models.ForeignKey(TimePeriod, null=True, blank=True)
-
     def __unicode__(self):
         if self.person:
             person_string = self.person
@@ -76,23 +84,4 @@ class ClosedHour(models.Model):
     def __unicode__(self):
         return "[%s] %s-%s @%s" % (self.day,self.in_time,self.out_time, self.location)
 
-class ShiftType(models.Model):
-    '''defines a type of schedule for a location and timeperiod, and time of day. 
-    Also defines what groups of people are allowed to work in this time
-    '''
-    DAY_CHOICES = (
-        ('Sunday', 'Sunday'),
-        ('Monday', 'Monday'),
-        ('Tuesday', 'Tuesday'),
-        ('Wednesday', 'Wednesday'),
-        ('Thursday', 'Thursday'),
-        ('Friday', 'Friday'),
-        ('Saturday', 'Saturday'),
-    )
-    location = models.ForeignKey(Location)
-    timeperiod = models.ForeignKey(TimePeriod)
-    allowed_groups = models.ManyToManyField(Group)
-    day = models.CharField(max_length=256, choices=DAY_CHOICES, default='Monday')
-    in_time = models.TimeField(default=time(12,0,0))
-    out_time = models.TimeField(default=time(12,0,0))
-    name = models.CharField(max_length=256)
+
