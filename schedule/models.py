@@ -38,8 +38,6 @@ class ShiftType(models.Model):
     '''defines a type of schedule for a location and timeperiod, and time of day.
     Also defines what groups of people are allowed to work in this time
     '''
-    location = models.ForeignKey(Location)
-    timeperiod = models.ForeignKey(TimePeriod)
     allowed_groups = models.ManyToManyField(Group)
     name = models.CharField(max_length=256)
 
