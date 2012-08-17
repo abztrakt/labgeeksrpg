@@ -40,10 +40,12 @@ def get_shifts(year, month, day=None, user=None, week=None, payperiod=None):
         shifts = Shift.objects.filter(intime__year=int(year), intime__month=int(month))
 
     if week:
-        #Filter the shifts by the given week of the month (i.e. week=1 means grab shifts in 1st week of month)
+        # Filter the shifts by the given week of the month (i.e. week=1 means
+        # grab shifts in 1st week of month)
         first_week = date(int(year), int(month), 1).isocalendar()[1]
 
-        #TODO: fix this hack to get around isocaledar's first week of the year wierdness. See #98
+        #TODO: fix this hack to get around isocaledar's first week of the year
+        # wierdness. See #98
         if first_week == 52 and int(month) == 1:
             first_week = 1
 
