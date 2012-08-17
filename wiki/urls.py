@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
-                       (r'^goto_page/$', 'labgeeksrpg.wiki.views.goto_page'),
+                       (r'^create_page?/$', 'labgeeksrpg.wiki.views.edit_page'),
                        (r'^(?P<slug>[-\w]+)/edit/$', 'labgeeksrpg.wiki.views.edit_page'),
                        (r'^(?P<slug>[-\w]+)/save/$', 'labgeeksrpg.wiki.views.edit_page'),
                        (r'^(?P<slug>[-\w]+)/$', 'labgeeksrpg.wiki.views.view_page'),
