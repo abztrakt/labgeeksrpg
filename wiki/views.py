@@ -7,29 +7,38 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from datetime import datetime
 import diff_match_patch
+from django.template.defaultfilters import slugify
 
 
 @login_required
-def view_page(request, page_name):
+def view_page(request, slug):
     try:
-        page = Page.objects.get(name=page_name)
+        page = Page.objects.get(slug=slug)
     except Page.DoesNotExist:
-        return render_to_response("create.html", {"page_name": page_name, "request": request, })
-    content = page.content
+        HttpResponseRedirect("/wiki/")
     try:
         REVISIONS = RevisionHistory.objects.filter(page=page).order_by('date')
         last_revision = REVISIONS[len(REVISIONS) - 1]
     except:
         last_revision = None
-    return render_to_response("view.html", {"page_name": page_name, "content": content, 'request': request, "last_revision": last_revision, })
+    return render_to_response("view.html", {"page_name": page.name, "slug": slug, "content": page.content, 'request': request, "last_revision": last_revision, })
 
 
 @login_required
-def edit_page(request, page_name):
+def edit_page(request, slug=None):
+    page_exists = False
+    create_page = False
+    page_saved = False
+    if not slug:
+        page_name = request.GET["page_name"]
+        slug = slugify(page_name)
+        create_page = True
     try:
-        page = Page.objects.get(name=page_name)
+        page = Page.objects.get(slug=slug)
         content = page.content
         revision_message = ''
+        if create_page:
+            page_exists = True
     except Page.DoesNotExist:
         content = ""
         page = None
@@ -40,26 +49,23 @@ def edit_page(request, page_name):
     if request.method == "POST":
         content = request.POST["content"]
         notes = request.POST["notes"]
+        page_name = request.POST['page_name']
         if page:
             page = Page.objects.get(name=page_name)
-            page.content = content
+            if page.content != content:
+                page.content = content
+                page.save()
+                page_saved = True
         else:
-            page = Page(name=page_name, content=content, date=datetime.now(), author=user)
-        page.save()
+            page = Page(name=page_name, slug=slug, content=content, date=datetime.now(), author=user)
+            page.save()
+            page_saved = True
         revision = RevisionHistory.objects.create(page=page, user=user, after=content, date=datetime.now())
-        revision.notes = notes
-        revision.save()
-        return HttpResponseRedirect("/wiki/" + page_name + "/")
+        if page_saved:
+            revision.notes = notes
+            revision.save()
+        return HttpResponseRedirect("/wiki/" + slug + "/")
     return render_to_response("edit.html", locals(), context_instance=RequestContext(request))
-
-
-@login_required
-def goto_page(request):
-    if request.method == "GET":
-        page_name = request.GET['page_name']
-        if page_name != ('' or None):
-            return HttpResponseRedirect("/wiki/" + page_name + '/')
-    return HttpResponseRedirect('/wiki/')
 
 
 @login_required
@@ -72,11 +78,11 @@ def wiki_home(request):
 
 
 @login_required
-def revision_history(request, page_name):
+def revision_history(request, slug):
     c = {}
     c.update(csrf(request))
     try:
-        page = Page.objects.get(name=page_name)
+        page = Page.objects.get(slug=slug)
     except Page.DoesNotExist:
         page = None
     revision_history = []
@@ -107,6 +113,7 @@ def revision_history(request, page_name):
     args = {
         'current_revision': current_revision,
         'name': page_name,
+        'slug': slug,
         'revision_history': revision_history_ordered,
         'request': request,
     }
@@ -114,7 +121,7 @@ def revision_history(request, page_name):
 
 
 @login_required
-def select_revision(request, page_name):
+def select_revision(request, slug):
     c = {}
     c.update(csrf(request))
     if request.method == "POST":
@@ -130,6 +137,7 @@ def select_revision(request, page_name):
         revision = None
     args = {
         'page_name': page_name,
+        'slug': slug,
         'revision': revision,
         'request': request,
     }
