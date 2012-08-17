@@ -12,8 +12,12 @@ from django.template.defaultfilters import slugify
 
 @login_required
 def view_page(request, slug):
+    name = ""
+    content = ""
     try:
         page = Page.objects.get(slug=slug)
+        name = page.name
+        content = page.content
     except Page.DoesNotExist:
         HttpResponseRedirect("/wiki/")
     try:
@@ -21,7 +25,7 @@ def view_page(request, slug):
         last_revision = REVISIONS[len(REVISIONS) - 1]
     except:
         last_revision = None
-    return render_to_response("view.html", {"page_name": page.name,"slug": slug, "content": page.content, 'request': request, "last_revision": last_revision, })
+    return render_to_response("view.html", {"page_name": name,"slug": slug, "content": content, 'request': request, "last_revision": last_revision, })
 
 
 @login_required
