@@ -40,6 +40,7 @@ def edit_page(request, slug=None):
     try:
         page = Page.objects.get(slug=slug)
         content = page.content
+        page_name = page.name
         revision_message = ''
         if create_page:
             page_exists = True
@@ -116,7 +117,7 @@ def revision_history(request, slug):
     current_revision = revision_history_ordered.pop(0)
     args = {
         'current_revision': current_revision,
-        'name': page_name,
+        'name': page.name,
         'slug': slug,
         'revision_history': revision_history_ordered,
         'request': request,
@@ -126,6 +127,10 @@ def revision_history(request, slug):
 
 @login_required
 def select_revision(request, slug):
+    try:
+        page = Page.objects.get(slug=slug)
+    except Page.DoesNotExist:
+        return render_to_response('how_are_you_here.html', {'request': request, })
     c = {}
     c.update(csrf(request))
     if request.method == "POST":
@@ -140,7 +145,7 @@ def select_revision(request, slug):
     else:
         revision = None
     args = {
-        'page_name': page_name,
+        'page_name': page.name,
         'slug': slug,
         'revision': revision,
         'request': request,
