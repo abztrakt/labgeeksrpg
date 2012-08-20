@@ -41,6 +41,9 @@ class ShiftType(models.Model):
     allowed_groups = models.ManyToManyField(Group)
     name = models.CharField(max_length=256)
 
+    def __unicode__(self):
+        return "%s" % (self.name)
+
 
 class DefaultShift(models.Model):
     DAY_CHOICES = (
@@ -87,6 +90,13 @@ class BaseShift(models.Model):
     location = models.ForeignKey(Location)
     timeperiod = models.ForeignKey(TimePeriod, null=True, blank=True)
     shift_type = models.ForeignKey(ShiftType, null=True, blank=True)
+
+    def __unicode__(self):
+        if self.shift_type:
+            shift_string = self.ShiftType.name
+        else:
+            shift_string = 'Open Shift'
+        return "%s: [%s] %s-%s @%s" % (shift_string, self.day, self.in_time, self.out_time, self.location)
 
 
 class ClosedHour(models.Model):
