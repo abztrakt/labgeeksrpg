@@ -61,10 +61,6 @@ $(document).ready(function(){
 
     getPeopleList();
 
-    // Bind the modifyClosingHours method to the buttons.
-    $(".add_closing_hours").bind("click",true,modifyClosingHours);
-    $(".remove_closing_hours").bind("click",false,modifyClosingHours);
-
     // Bind the modifySavingHours method to the buttons.
     $(".add_employee_hours").bind("click",true,modifyEmployeeHours);
     $(".remove_employee_hours").bind("click",false,modifyEmployeeHours);
@@ -216,54 +212,6 @@ function modifyEmployeeHours(event){
         }
     }
 }
-
-/*
-Adds and removes the closing hours to the schedule. 
-*/
-function modifyClosingHours(event){
-
-    // Grab the appropriate data
-    var startTime = $(this).parent().children(".closing_starting_hours")[0].value;
-    var endTime = $(this).parent().children(".closing_ending_hours")[0].value;
-
-    var startTimeSplit = timeDict(startTime);
-    var endTimeSplit = timeDict(endTime);
-
-    var schedule = $(this).parent().parent().parent().parent().children(".schedule_grid")[0];
-    var isAdding = event.data;
-
-    var startIndex = 0;
-    var endIndex = 0;
-
-    // Find out the starting hour and ending hour of each shift.
-    for (var i = 0; i < schedule.children.length; i++) { 
-        var schedule_row = schedule.children[i];
-        var schedule_row_time = schedule_row.children[0].innerHTML;
-
-        if (schedule_row_time == startTime){
-            startIndex = i;
-        }
-        
-        if (schedule_row_time == endTime){
-            endIndex = i-1;
-        }
-    }
-
-    // Add or remove the closed hour status.
-    for (var i = startIndex; i <= endIndex; i++){
-        var schedule_row = schedule.children[i];
-        for (var j = 1; j < schedule_row.children.length; j ++){
-            if (isAdding){
-                $(schedule_row.children[j]).addClass("closed_hours");
-                $(schedule_row.children[j]).html("closed");
-            }else{
-                $(schedule_row.children[j]).removeClass("closed_hours");
-                $(schedule_row.children[j]).empty();
-            }
-        }
-    }
-}
-
 
 /*
 Saves all of the hours on the schedule via Ajax.
