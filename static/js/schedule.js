@@ -183,7 +183,9 @@ function modifyEmployeeHours(event){
                     }
             }else {
                 index = users[user][Day].indexOf(schedule_row_time);
-                users[user][Day].splice(index, 1);
+                if (index != -1) {
+                    users[user][Day].splice(index, 1);
+                }
             }
         }
     }
