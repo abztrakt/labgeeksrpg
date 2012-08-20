@@ -8,6 +8,7 @@ This file deals with the schedule itself. Allows users to interact with the sche
 Loads the page with events.
 */
 var Day;
+var closing_hours = {};
 var users={};
 $(document).ready(function(){
     // Javascript associated with tabs.
@@ -80,7 +81,7 @@ $(document).ready(function(){
 
 function getDefaultShiftData() {
     var schedule_days = $(".tab_container").children();
-    var closing_hours = {};
+    
     
     var csrf = $('input[name=csrfmiddlewaretoken]').val(); 
     var tp = $('.timeperiod')[0].innerHTML; 
@@ -159,7 +160,7 @@ function modifyEmployeeHours(event){
             break;
         }
         if (i >= startIndex){
-            if (isAdding) {
+            if (isAdding && closing_hours[Day].indexOf(schedule_row_time) == -1) {
                     try{
                         if (users[user][Day].indexOf(schedule_row_time) == -1) {         
                             users[user][Day].push(schedule_row_time);
