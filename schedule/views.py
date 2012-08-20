@@ -198,7 +198,11 @@ def create_default_schedule(request):
 
             # Grab the closed hours and default shifts used in a timeperiod.
             closing_hours = ClosedHour.objects.filter(location=location, timeperiod=timeperiod)
-            default_shifts = DefaultShift.objects.filter(location=location, timeperiod=timeperiod);
+            default_shifts = DefaultShift.objects.filter(location=location, timeperiod=timeperiod)
+            base_shifts=BaseShift.objects.filter(location=location, timeperiod=timeperiod)
+            time_in = time(7, 45)
+            time_out = time(11, 45)
+            
             closing_ranges = {
                 'Monday': [],
                 'Tuesday': [],
@@ -219,8 +223,18 @@ def create_default_schedule(request):
                 'Sunday': [],
             }
 
+            base_shift_hours = {
+                'Monday': [],
+                'Tuesday': [],
+                'Wednesday': [],
+                'Thursday': [],
+                'Friday': [],
+                'Saturday': [],
+                'Sunday': [],
+            }
             # TODO: Form a less redundant way of doing the hour ranges.
             # Find out which hours were closing hours
+            ''' going to use base shifts to determine closing hours when changing the schedule now
             for closing_hour in closing_hours:
                 day = closing_hour.day
                 in_time = closing_hour.in_time
@@ -235,7 +249,40 @@ def create_default_schedule(request):
                 hours.append(current.time())
 
                 closing_ranges[day] += hours
+            '''
+            for shift in base_shifts:
+                day = shift.day
+                in_time = shift.in_time
+                out_time = shift.out_time
+                hours = []
 
+                current = datetime(1,1,1,in_time.hour,in_time.minute)
+
+                while current.time() != out_time:
+                    hours.append(current.time())
+                    current += timedelta(minutes=30)
+                hours.append(current.time())
+
+                base_shift_hours[day] += hours
+            for day in base_shift_hours:
+                if len(base_shift_hours[day]) > 0:
+                    in_time = time(7,45)
+                    out_time = time(23, 45)
+                    hours = []
+                    while base_shift_hours[day].count(in_time) == 0:
+                        hours.append(in_time)
+                        if in_time.minute == 45:
+                            in_time = in_time.replace(hour=in_time.hour + 1, minute=15)
+                        elif in_time.minute == 15:
+                            in_time = in_time.replace(minute=45)
+                    while base_shift_hours[day].count(out_time) == 0:
+                        if hours.count(out_time) == 0:
+                            hours.append(out_time)
+                        if out_time.minute == 45:
+                            out_time = out_time.replace(minute=15)
+                        elif out_time.minute == 15:
+                            out_time = out_time.replace(hour=out_time.hour - 1, minute=45)
+                    closing_ranges[day] += hours
             # Find out which hours were shift hours.
             for shift in default_shifts:
                 #currently does nothing if there is no person set to the shift
