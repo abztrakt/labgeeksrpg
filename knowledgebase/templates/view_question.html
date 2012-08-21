@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load markup %}
+{% block content %}
+<h1>{{question}}</h1>
+<strong>asked by {{author}} on {{date}}:</strong>
+<div>
+    {{more_info|markdown}}
+</div>
+<hr />
+{% if best_answer %}
+<strong>Best solution as chosen by leads:</strong>
+<div>
+    {{best_answer|markdown}}
+    <p>submitted by {{best_answer.user}} on {{best_answer.date}}</p>
+</div>
+{% else %}
+{% if answers %}
+<strong>no best solution chosen yet</strong>
+{% endif %}
+{% endif %}
+{% if answers %}
+</hr>
+<p><strong>other solutions:</strong></p>
+{% for answer in answers %}
+<div>
+    {{answer|markdown}}
+    <p>submitted by {{answer.user}} on {{answer.date}}</p>
+</div>
+{% endfor %}
+{% endif %}
+{% endblock %}

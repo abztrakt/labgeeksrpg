@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Creating Issue: {{issue_name}}</h1>
+<h1>Ask a question:</h1>
 <form action='' method='post' enctype='multipart/form-data'>{% csrf_token %}
     {% for field in form_fields %}
     <div>

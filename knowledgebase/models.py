@@ -3,29 +3,30 @@ from datetime import date
 from django.contrib.auth.models import User
 
 
-class Issue(models.Model):
+class Question(models.Model):
     """
-    Issue model that stores and issue and has a foreignkey to a resolution
+    Question model that stores an issue that someone has.  There is no navigation to question, only search
     """
-    name = models.CharField(max_length='30')
-    content = models.TextField()
+    question = models.CharField(max_length='100')
+    more_info = models.TextField()
     user = models.ForeignKey(User, null=True)
-    chosen_resolution = models.ForeignKey('Resolution', related_name="%(app_label)s_%(class)s_related", null=True, blank=True)
     date = models.DateField()
 
     def __unicode__(self):
         return self.name
 
 
-class Resolution(models.Model):
+class Answer(models.Model):
     """
     Possible resolutions that have a foreignkey to the issue they claim to
-    solve.  The issue will point to the best resolution as selected by a lead
+    solve.  The best Answer will be selected by someone with the authority
+    and is_best will be set to true.
     """
-    content = models.TextField()
+    answer = models.TextField()
     user = models.ForeignKey(User, null=True)
     date = models.DateField()
-    issue = models.ForeignKey(Issue, null=True, blank=True)
+    question = models.ForeignKey(Question, null=True, blank=True)
+    is_best = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return "Resolution submitted by %s on %s" % (self.user, self.date)
+        return "Answer submitted by %s on %s" % (self.user, self.date)

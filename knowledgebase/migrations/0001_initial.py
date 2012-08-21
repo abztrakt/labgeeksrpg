@@ -9,32 +9,34 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
 
-        # Adding model 'Issue'
-        db.create_table('knowledgebase_issue', (
+        # Adding model 'Question'
+        db.create_table('knowledgebase_question', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length='30')),
-            ('content', self.gf('django.db.models.fields.TextField')()),
+            ('question', self.gf('django.db.models.fields.CharField')(max_length='100')),
+            ('more_info', self.gf('django.db.models.fields.TextField')()),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True)),
             ('date', self.gf('django.db.models.fields.DateField')()),
         ))
-        db.send_create_signal('knowledgebase', ['Issue'])
+        db.send_create_signal('knowledgebase', ['Question'])
 
-        # Adding model 'Resolution'
-        db.create_table('knowledgebase_resolution', (
+        # Adding model 'Answer'
+        db.create_table('knowledgebase_answer', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('content', self.gf('django.db.models.fields.TextField')()),
+            ('answer', self.gf('django.db.models.fields.TextField')()),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True)),
             ('date', self.gf('django.db.models.fields.DateField')()),
+            ('question', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['knowledgebase.Question'], null=True, blank=True)),
+            ('is_best', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
-        db.send_create_signal('knowledgebase', ['Resolution'])
+        db.send_create_signal('knowledgebase', ['Answer'])
 
     def backwards(self, orm):
 
-        # Deleting model 'Issue'
-        db.delete_table('knowledgebase_issue')
+        # Deleting model 'Question'
+        db.delete_table('knowledgebase_question')
 
-        # Deleting model 'Resolution'
-        db.delete_table('knowledgebase_resolution')
+        # Deleting model 'Answer'
+        db.delete_table('knowledgebase_answer')
 
     models = {
         'auth.group': {
@@ -73,19 +75,21 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'knowledgebase.issue': {
-            'Meta': {'object_name': 'Issue'},
-            'content': ('django.db.models.fields.TextField', [], {}),
+        'knowledgebase.answer': {
+            'Meta': {'object_name': 'Answer'},
+            'answer': ('django.db.models.fields.TextField', [], {}),
             'date': ('django.db.models.fields.DateField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': "'30'"}),
+            'is_best': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'question': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['knowledgebase.Question']", 'null': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True'})
         },
-        'knowledgebase.resolution': {
-            'Meta': {'object_name': 'Resolution'},
-            'content': ('django.db.models.fields.TextField', [], {}),
+        'knowledgebase.question': {
+            'Meta': {'object_name': 'Question'},
             'date': ('django.db.models.fields.DateField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'more_info': ('django.db.models.fields.TextField', [], {}),
+            'question': ('django.db.models.fields.CharField', [], {'max_length': "'100'"}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True'})
         }
     }
