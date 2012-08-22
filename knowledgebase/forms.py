@@ -5,7 +5,7 @@ from django.forms import ModelForm
 
 class CreateQuestionForm(ModelForm):
     """
-    Handles the creation of issues that need solving
+    Handles the creation of questions that need answers
     """
     # TODO: after importing TinyMCE to path use tinyMCE widget
     question = forms.CharField(max_length='100', help_text='What is your question?', required=True)
@@ -17,4 +17,19 @@ class CreateQuestionForm(ModelForm):
 
     def save(self, *args, **kwargs):
         inst = ModelForm.save(self, *args, **kwargs)
+        return inst
+
+
+class CreateAnswerForm(ModelForm):
+    """
+    Handles the creation of an answer to a question
+    """
+    answer = forms.CharField(widget=forms.Textarea, help_text='Answer this question below:', required=True)
+
+    class Meta:
+        model = Answer
+        fields = ('answer',)
+
+    def save(self, *args, **kwargs):
+        inst = ModelForm.save(self, args, **kwargs)
         return inst

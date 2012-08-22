@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load markup %}
 {% block content %}
-<h1>{{question}}</h1>
+<h3>{{question}}</h3>
 <strong>asked by {{author}} on {{date}}:</strong>
 <div>
     {{more_info|markdown}}
@@ -10,7 +10,7 @@
 {% if best_answer %}
 <strong>Best solution as chosen by leads:</strong>
 <div>
-    {{best_answer|markdown}}
+    {{best_answer.answer|markdown}}
     <p>submitted by {{best_answer.user}} on {{best_answer.date}}</p>
 </div>
 {% else %}
@@ -23,9 +23,23 @@
 <p><strong>other solutions:</strong></p>
 {% for answer in answers %}
 <div>
-    {{answer|markdown}}
+    {{answer.answer|markdown}}
     <p>submitted by {{answer.user}} on {{answer.date}}</p>
+    {% if can_select_answer %}
+    <form action='select_answer/' method='get'>
+        <input type='text' name='id' value='{{answer.id}}' style='display:none'/>
+        <input type='submit' value='choose this answer as best' />
+    </form>
+    {% endif %}
 </div>
 {% endfor %}
+{% endif %}
+{% if not answers %}
+<p>no answers yet</p>
+{% endif %}
+{% if can_answer %}
+<form action='answer/' method='get'>
+    <input type='submit' value='Answer this question' />
+</form>
 {% endif %}
 {% endblock %}
