@@ -17,12 +17,12 @@ def view_question(request, q_id):
     try:
         answers = Answer.objects.filter(question=question).exclude(is_best=True)
         try:
-            best_answer = Answer.objects.filter(question=question).get(is_best=True)
+            best_answers = Answer.objects.filter(question=question, is_best=True)
         except Answer.DoesNotExist:
-            best_answer = None
+            best_answers = None
     except Answer.DoesNotExist:
         answers = None
-        best_answer = None
+        best_answers = None
     if request.user.is_superuser:
         """
         TODO: add answer_question permission to Question model, use
@@ -36,7 +36,7 @@ def view_question(request, q_id):
     args = {
         'question': question.question,
         'more_info': question.more_info,
-        'best_answer': best_answer,
+        'best_answer': best_answers,
         'answers': answers,
         'date': question.date,
         'author': question.user,
@@ -126,15 +126,17 @@ def select_answer(request, q_id):
         try:
             question = Question.objects.get(id=q_id)
             try:
-                best_answer = Answer.objects.filter(question=question).get(is_best=True)
-                best_answer.is_best = False
-                best_answer.save()
+                best_answer = Answer.objects.filter(question=question, is_best=True)
+                for answer in best_answer:
+                    answer.is_best = False
+                    answer.save()
             except Answer.DoesNotExist:
                 best_answer = None
             try:
-                new_best_answer = Answer.objects.filter(question=question).get(id=answer_id)
-                new_best_answer.is_best = True
-                new_best_answer.save()
+                for pk in answer_id:
+                    new_best_answer = Answer.objects.filter(question=question).get(id=pk)
+                    new_best_answer.is_best = True
+                    new_best_answer.save()
             except Answer.DoesNotExist:
                 return render_to_response('no_question.html', {"request": request, })
         except Question.DoesNotExist:
