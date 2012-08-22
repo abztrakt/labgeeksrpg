@@ -14,10 +14,14 @@
 <strong>Best solutions as chosen by leads:</strong>
 {% for b_answer in best_answer %}
 <div>
+    {% if can_select_answer %}
+    <input type='checkbox' name='id' value='{{b_answer.id}}' checked />
+    {% endif %}
     {{b_answer.answer|markdown}}
     <p>submitted by {{b_answer.user}} on {{b_answer.date}}</p>
 </div>
 {% endfor %}
+<hr />
 {% else %}
 {% if answers %}
 <strong>no best solution chosen yet</strong>

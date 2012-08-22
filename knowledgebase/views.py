@@ -122,7 +122,7 @@ def answer_question(request, q_id):
 
 def select_answer(request, q_id):
     if request.method == 'GET':
-        answer_id = request.GET['id']
+        answer_ids = request.GET.getlist('id')
         try:
             question = Question.objects.get(id=q_id)
             try:
@@ -133,7 +133,7 @@ def select_answer(request, q_id):
             except Answer.DoesNotExist:
                 best_answer = None
             try:
-                for pk in answer_id:
+                for pk in answer_ids:
                     new_best_answer = Answer.objects.filter(question=question).get(id=pk)
                     new_best_answer.is_best = True
                     new_best_answer.save()
