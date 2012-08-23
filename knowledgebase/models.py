@@ -13,7 +13,7 @@ class Question(models.Model):
     date = models.DateField()
 
     def __unicode__(self):
-        return self.name
+        return self.question
 
 
 class Answer(models.Model):

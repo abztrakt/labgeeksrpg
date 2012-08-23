@@ -7,7 +7,7 @@
     {{more_info|markdown}}
 </div>
 <hr />
-{% if can_select_answer %}
+{% if can_select_answer and answers or best_answer %}
 <form action='select_answer/' method='get'>
 {% endif %}
 {% if best_answer %}
@@ -39,13 +39,17 @@
     <p>submitted by {{answer.user}} on {{answer.date}}</p>
 </div>
 {% endfor %}
-{% if can_select_answer %}
-<input type='submit' value='submit best answers' />
+{% endif %}
+{% if can_select_answer and answers or best_answer %}
+<input type='submit' value='update best answers' />
 </form>
 {% endif %}
-{% endif %}
 {% if not answers %}
-<p>no answers yet</p>
+<p><strong>no 
+{% if best_answer %}
+other 
+{% endif %}
+answers yet</strong></p>
 {% endif %}
 {% if can_answer %}
 <form action='answer/' method='get'>
