@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load markup %}
+{% block content %}
+<h3>{{question}}</h3>
+<strong>asked by {{author}} on {{date}}:</strong>
+<div>
+    {{more_info|markdown}}
+</div>
+<hr />
+{% if can_select_answer %}
+<form action='select_answer/' method='get'>
+{% endif %}
+{% if best_answer %}
+<strong>Best solutions as chosen by leads:</strong>
+{% for b_answer in best_answer %}
+<div>
+    {% if can_select_answer %}
+    <input type='checkbox' name='id' value='{{b_answer.id}}' checked />
+    {% endif %}
+    {{b_answer.answer|markdown}}
+    <p>submitted by {{b_answer.user}} on {{b_answer.date}}</p>
+</div>
+{% endfor %}
+<hr />
+{% else %}
+{% if answers %}
+<strong>no best solution chosen yet</strong>
+{% endif %}
+{% endif %}
+{% if answers %}
+</hr>
+<p><strong>other solutions:</strong></p>
+{% for answer in answers %}
+<div>
+    {% if can_select_answer %}
+    <input type='checkbox' name='id' value='{{answer.id}}'/>
+    {% endif %}
+    {{answer.answer|markdown}}
+    <p>submitted by {{answer.user}} on {{answer.date}}</p>
+</div>
+{% endfor %}
+{% if can_select_answer %}
+<input type='submit' value='submit best answers' />
+</form>
+{% endif %}
+{% endif %}
+{% if not answers %}
+<p>no answers yet</p>
+{% endif %}
+{% if can_answer %}
+<form action='answer/' method='get'>
+    <input type='submit' value='Answer this question' />
+</form>
+{% endif %}
+{% endblock %}

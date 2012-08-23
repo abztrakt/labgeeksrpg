@@ -4,7 +4,7 @@
 {% if pages %}
 <ul><strong>Pages</strong>
     {% for page in pages %}
-    <li><a href="/wiki/{{page}}/">{{page}}</a></li>
+    <li><a href="/wiki/{{page.slug}}/">{{page.name}}</a></li>
     {% endfor %}
 </ul>
 {% else %}

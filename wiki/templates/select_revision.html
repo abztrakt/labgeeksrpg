@@ -14,7 +14,7 @@
 <p><strong>Publish this revision?</strong></p>
 <form action="/wiki/{{slug}}/edit/" method='post'>{% csrf_token %}
     <textarea style='display:none' rows='20' cols='100' name='content'>{{revision.content}}</textarea>
-    <input type='text' name='page_name' style='display:none' value={{page_name}}/>
+    <input type='text' name='page_name' style='display:none' value='{{page_name}}'/>
     <input type='text' name='notes' style='display:none' value='rolled back to revision by {{revision.user}} on {{revision.date}}: {{revision.notes}}'/>
     <input type='submit' value='Yes'/>
 </form>

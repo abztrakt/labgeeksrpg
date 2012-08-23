@@ -4,10 +4,11 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
+
         # Changing field 'Page.name'
         db.alter_column('wiki_page', 'name', self.gf('django.db.models.fields.CharField')(max_length='50'))
 
@@ -17,9 +18,8 @@ class Migration(SchemaMigration):
         # Adding unique constraint on 'Page', fields ['slug']
         db.create_unique('wiki_page', ['slug'])
 
-
     def backwards(self, orm):
-        
+
         # Removing unique constraint on 'Page', fields ['slug']
         db.delete_unique('wiki_page', ['slug'])
 
@@ -28,7 +28,6 @@ class Migration(SchemaMigration):
 
         # Changing field 'Page.slug'
         db.alter_column('wiki_page', 'slug', self.gf('django.db.models.fields.SlugField')(max_length='25', null=True))
-
 
     models = {
         'auth.group': {

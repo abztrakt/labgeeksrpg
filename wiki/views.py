@@ -25,7 +25,7 @@ def view_page(request, slug):
         last_revision = REVISIONS[len(REVISIONS) - 1]
     except:
         last_revision = None
-    return render_to_response("view.html", {"page_name": name,"slug": slug, "content": content, 'request': request, "last_revision": last_revision, })
+    return render_to_response("view.html", {"page_name": name, "slug": slug, "content": content, 'request': request, "last_revision": last_revision, })
 
 
 @login_required
@@ -40,6 +40,7 @@ def edit_page(request, slug=None):
     try:
         page = Page.objects.get(slug=slug)
         content = page.content
+        page_name = page.name
         revision_message = ''
         if create_page:
             page_exists = True
@@ -70,6 +71,7 @@ def edit_page(request, slug=None):
             revision.save()
         return HttpResponseRedirect("/wiki/" + slug + "/")
     return render_to_response("edit.html", locals(), context_instance=RequestContext(request))
+
 
 @login_required
 def wiki_home(request):
@@ -115,7 +117,7 @@ def revision_history(request, slug):
     current_revision = revision_history_ordered.pop(0)
     args = {
         'current_revision': current_revision,
-        'name': page_name,
+        'name': page.name,
         'slug': slug,
         'revision_history': revision_history_ordered,
         'request': request,
@@ -125,6 +127,10 @@ def revision_history(request, slug):
 
 @login_required
 def select_revision(request, slug):
+    try:
+        page = Page.objects.get(slug=slug)
+    except Page.DoesNotExist:
+        return render_to_response('how_are_you_here.html', {'request': request, })
     c = {}
     c.update(csrf(request))
     if request.method == "POST":
@@ -139,7 +145,7 @@ def select_revision(request, slug):
     else:
         revision = None
     args = {
-        'page_name': page_name,
+        'page_name': page.name,
         'slug': slug,
         'revision': revision,
         'request': request,

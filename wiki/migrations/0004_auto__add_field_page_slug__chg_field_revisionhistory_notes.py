@@ -4,25 +4,24 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
+
         # Adding field 'Page.slug'
         db.add_column('wiki_page', 'slug', self.gf('django.db.models.fields.SlugField')(max_length='25', null=True, db_index=True), keep_default=False)
 
         # Changing field 'RevisionHistory.notes'
         db.alter_column('wiki_revisionhistory', 'notes', self.gf('django.db.models.fields.CharField')(max_length='260', null=True))
 
-
     def backwards(self, orm):
-        
+
         # Deleting field 'Page.slug'
         db.delete_column('wiki_page', 'slug')
 
         # Changing field 'RevisionHistory.notes'
         db.alter_column('wiki_revisionhistory', 'notes', self.gf('django.db.models.fields.CharField')(max_length='200', null=True))
-
 
     models = {
         'auth.group': {
