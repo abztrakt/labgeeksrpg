@@ -10,26 +10,38 @@ Loads the page with events.
 var Day;
 var closing_hours = {};
 var users={};
+var shift_types = {};
 $(document).ready(function(){
     // Javascript associated with tabs.
-    $(".tab_content").hide();
-    $("ul.tabs li:first").addClass("active").show(); //Activate first tab
-    $(".tab_content:first").show(); //Show first tab content
-    if ($(".tab_content:first")[0]) {
-        Day=$(".tab_content:first")[0].id
+    $(".tab_content_base").hide();
+    $(".tab_content_default").hide();
+    $("ul.base li:first").addClass("active").show(); //Activate first tab
+    $(".tab_content_base:first").show(); //Show first tab content
+    $("ul.default li:first").addClass("active").show(); //Activate first tab
+    $(".tab_content_default:first").show(); //Show first tab content
+    if ($(".tab_content_default:first")[0]) {
+        Day=$(".tab_content_default:first")[0].id
     }
     //On Click Event
-    $("ul.tabs li").click(function() {
+    $("ul.base li").click(function() {
 
-        $("ul.tabs li").removeClass("active"); //Remove any "active" class
+        $("ul.base li").removeClass("active"); //Remove any "active" class
         $(this).addClass("active"); //Add "active" class to selected tab
-        $(".tab_content").hide(); //Hide all tab content
+        $(".tab_content_base").hide(); //Hide all tab content
+        var activeTab = $(this).find("a").attr("href"); //Find the href attribute value to identify the active tab + content
+        $(activeTab).show(); 
+        return false;
+    });
+    $("ul.default li").click(function() {
+
+        $("ul.default li").removeClass("active"); //Remove any "active" class
+        $(this).addClass("active"); //Add "active" class to selected tab
+        $(".tab_content_default").hide(); //Hide all tab content
         Day=$(this).children().children()[0].innerHTML
         var activeTab = $(this).find("a").attr("href"); //Find the href attribute value to identify the active tab + content
         $(activeTab).show(); 
         return false;
     });
-
     // Use a timepicker widget to select the times in an input field.
     $('.time_input').timepicker({
             showPeriod: true,
@@ -66,17 +78,68 @@ $(document).ready(function(){
     $(".remove_employee_hours").bind("click",false,modifyEmployeeHours);
     
     // Bind the save method to the save button.
-    $
     $("#save_hours").bind("click",saveHours);
     if ($("#schedule").hasClass('visible')) {
        getDefaultShiftData(); 
-        
+       addRules();
+       addShiftTypes();
     }
 });
 
 
+function addShiftTypes() {
+    for(var i =0; i < $("#shift_types")[0].children.length; i++) {
+        var name = $("#shift_types")[0].children[i].id;
+        var users = [];
+        for (var j=0;j < $("#shift_types")[0].children[i].children.length; j++) {
+            var user=$("#shift_types")[0].children[i].children[j].innerHTML;
+            users.push(user);
+        }
+        shift_types[name]=users;
+    }
+}
+
+
+function addRules() {
+    var schedule_days = $(".tab_container_base").children();
+    
+    
+    var csrf = $('input[name=csrfmiddlewaretoken]').val(); 
+    var tp = $('.timeperiod')[0].innerHTML; 
+    var loc = $('.location')[0].innerHTML;
+
+    closing_hours['csrfmiddlewaretoken'] = csrf;
+    closing_hours['timeperiod'] = tp; 
+    closing_hours['location'] = loc;
+
+    // Loop through all days and rows of the schedule and keep track of which hours were assigned.
+    for (var i = 0; i < schedule_days.length; i++){
+        var schedule_box = $(schedule_days[i]);
+        var day = schedule_box.attr("id").toString();
+        closing_hours[day] = [];
+        var grid = $(schedule_box.children(".schedule_grid")[0]).children();
+
+        for (var j = 0; j < grid.length; j++){
+            var row = $(grid[j]);
+            var time = row.children()[0].innerHTML;
+            if (row.children(".closed_hours").length == 0){
+                for (var k = 1; k < row.children().length; k++){
+                    var element = $(row.children()[k]);
+                    if (!element.is(":empty") && element.text() != 'closed'){
+                        var def_schedule_days = $(".tab_container_default").children();                    
+                        var default_element = $(def_schedule_days[i]).children(".schedule_grid")[0].children[j].children[k];
+                        var txt = element.text();
+                        $(default_element).addClass(txt);
+                    } 
+                }
+            }
+        }
+    }
+}
+
+
 function getDefaultShiftData() {
-    var schedule_days = $(".tab_container").children();
+    var schedule_days = $(".tab_container_default").children();
     
     
     var csrf = $('input[name=csrfmiddlewaretoken]').val(); 
@@ -186,7 +249,6 @@ function modifyEmployeeHours(event){
             }
         }
     }
-    
     // Figure out which place in the row the user's name should be.
     var index = null;
     var schedule_row = schedule.children[startIndex];
@@ -198,7 +260,7 @@ function modifyEmployeeHours(event){
         }
     }
 
-    // Add or remove the closed hour status.
+    // Add or remove the users hours.
     if (index != null && startIndex != schedule.children.length+1){
         for (var i = startIndex; i <= endIndex; i++){
             var schedule_row = $(schedule.children[i]);
@@ -217,7 +279,7 @@ function modifyEmployeeHours(event){
 Saves all of the hours on the schedule via Ajax.
 */
 function saveHours(event){
-    var schedule_days = $(".tab_container").children();
+    var schedule_days = $(".tab_container_default").children();
     var closing_hours = {};
     
     var csrf = $('input[name=csrfmiddlewaretoken]').val(); 
