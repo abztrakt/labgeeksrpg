@@ -5,6 +5,7 @@ from django.template import RequestContext
 from labgeeksrpg.forms import LoginForm
 import datetime
 from labgeeksrpg.labgeeksrpg_config.models import Notification
+from labgeeksrpg.labgeeksrpg_config.forms import NotificationForm
 
 
 def hello(request):
@@ -18,14 +19,46 @@ def hello(request):
         if locations:
             clockin_time = shifts[len(shifts) - 1].intime
 
-        workshifts = request.user.workshift_set.all()
         notifications = Notification.objects.all()
+        now = datetime.datetime.now()
+        events = []
+        alerts = []
+        for noti in notifications:
+            if noti.due_date:
+                if now.date() - noti.due_date.date() >= datetime.timedelta(days=1):
+                    noti.delete()
+                elif not noti.due_date - now > datetime.timedelta(days=5):
+                    events.append(noti)
+            else:
+                if (noti.date.year == now.year and noti.date.month == now.month and noti.date.day == now.day):
+                    alerts.append(noti)
+                else:
+                    noti.delete()
+        events.sort(key=lambda x: x.due_date)
+
+        c = {}
+        c.update(csrf(request))
+
+        can_Add = False
+        if request.user.has_perm('labgeeksrpg_config.add_notification'):
+            can_Add = True
+
+        if request.method == 'POST':
+            form = NotificationForm(request.POST)
+            if form.is_valid():
+                notification = form.save(commit=False)
+                notification.user = request.user
+                notification.save()
+                return HttpResponseRedirect('/')
+        else:
+            form = NotificationForm()
+
+        workshifts = request.user.workshift_set.all()
         today_past_shifts = []
         today_future_shifts = []
         for shift in workshifts:
             in_time = shift.scheduled_in
             out_time = shift.scheduled_out
-            now = datetime.datetime.now()
             if (in_time.year == now.year and in_time.month == now.month and in_time.day == now.day):
                 if now - out_time > datetime.timedelta(seconds=1):
                     today_past_shifts.append(shift)
@@ -37,9 +70,11 @@ def hello(request):
             'clockin_time': clockin_time,
             'today_past_shifts': today_past_shifts,
             'today_future_shifts': today_future_shifts,
-            'notifications': notifications,
+            'events': events,
+            'alerts': alerts,
+            'can_Add': can_Add,
         }
-        return render_to_response('dashboard.html', args)
+        return render_to_response('dashboard.html', locals(), context_instance=RequestContext(request))
     else:
         return render_to_response('hello.html', locals())
 
