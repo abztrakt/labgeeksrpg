@@ -9,6 +9,7 @@ class Notification(models.Model):
     content = models.CharField(max_length=256)
     due_date = models.DateTimeField(null=True, blank=True)
     user = models.ForeignKey(User, editable=False)
+    archived = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.title

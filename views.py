@@ -20,21 +20,20 @@ def hello(request):
         if locations:
             clockin_time = shifts[len(shifts) - 1].intime
 
-        notifications = Notification.objects.all()
         now = datetime.datetime.now()
+
+        notifications = Notification.objects.all()
         events = []
         alerts = []
         for noti in notifications:
             if noti.due_date:
                 if now.date() - noti.due_date.date() >= datetime.timedelta(days=1):
-                    noti.delete()
-                elif not noti.due_date - now > datetime.timedelta(days=5):
+                    noti.archived = True
+                elif not noti.due_date - now > datetime.timedelta(days=5) and not noti.archived:
                     events.append(noti)
             else:
-                if (noti.date.year == now.year and noti.date.month == now.month and noti.date.day == now.day):
+                if not noti.archived:
                     alerts.append(noti)
-                else:
-                    noti.delete()
         events.sort(key=lambda x: x.due_date)
 
         c = {}
@@ -45,10 +44,21 @@ def hello(request):
             can_Add = True
 
         if request.method == 'POST':
+            archive_ids = request.POST.getlist('pk')
+            if archive_ids:
+                for archive_id in archive_ids:
+                    notif = Notification.objects.get(pk=archive_id)
+                    notif.archived = True
+                    notif.save()
+                return HttpResponseRedirect('/')
+
             form = NotificationForm(request.POST)
             if form.is_valid():
                 notification = form.save(commit=False)
                 notification.user = request.user
+                if notification.due_date:
+                    if now.date() - notification.due_date.date() >= datetime.timedelta(days=1):
+                        notification.archived = True
                 notification.save()
                 return HttpResponseRedirect('/')
         else:

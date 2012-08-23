@@ -9,4 +9,4 @@ class NotificationForm(ModelForm):
         return inst
 
     class Meta:
-            model = Notification
+        model = Notification
