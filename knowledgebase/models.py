@@ -7,7 +7,7 @@ class Question(models.Model):
     """
     Question model that stores an issue that someone has.  There is no navigation to question, only search
     """
-    question = models.CharField(max_length='100')
+    question = models.CharField(max_length='200')
     more_info = models.TextField()
     user = models.ForeignKey(User, null=True)
     date = models.DateField()
