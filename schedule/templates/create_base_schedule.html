@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block pageJS %}
+<script type="text/javascript" src="/static/js/jquery.tools.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.ui.timepicker.js"></script>
+<script type="text/javascript" src="/static/js/schedule.js"></script>
+
+{% endblock %}
+{% block content %}
+<div class="section">
+    <h1>Schedule</h1>
+    <h2>Create a schedule!</h2>
+</div>
+
+<hr class="separator"/>
+
+<div class="form_box">
+    <a href="/schedule/">Click here to go back</a>
+
+    <form action="" method="post" id="create_daily_schedule">{% csrf_token %}
+        <label class="input_label">
+            <strong>These are default shifts that will be used during the timeperiod. They will help build a base schedule.</strong>
+        </label>
+        
+        <label class="input_label">
+            <strong>Select a timeperiod</strong>
+            {{ form.timeperiods }}
+        </label>
+
+        <strong>Select location</strong>
+        {{ form.location }}
+
+        <input id='create' type="submit" value="Submit"/>
+        <input type="hidden" value="next" value="{{next}}"/>
+    </form>
+</div>
+
+<div id="schedule" class="{{schedule_class}}">
+        <div class="schedule_toolbar">
+            <form>
+                <p>
+                    <strong>Time Period:</strong>
+                    <span class="timeperiod">{{timeperiod}}</span>
+                </p>
+                <p>
+                    <strong>Location:</strong>
+                    <span class="location">{{location}}</span>
+                </p>
+
+                {% if can_edit_schedule %}
+                    <button id="save_hours" type="button">Save</button>
+                {% endif %}
+            </form>
+        </div>
+
+        <div class="schedule_status hidden">
+        </div>
+
+    <ul class="tabs">
+        {% for day in days %}
+            <li><a href="#{{day}}"><span>{{day}}</span></a></li>
+        {% endfor %}
+
+    </ul>
+    <div class="tab_container">
+
+        {% for grid in schedule %}
+            <div id={{grid.day}} class="tab_content">
+                <div class="day_header">{{grid.day}}</div>
+                {% if can_edit_schedule %}
+                    <div class="hours_toolbar">
+                        <form>
+                            <div>
+                                <strong>Closing hours:</strong>
+                                <input class="closing_starting_hours time_input" type="text" />
+                                <input class="closing_ending_hours time_input" type="text" />
+                                <button class="add_closing_hours" type="button">Add closing hours</button>
+                                <button class="remove_closing_hours" type="button">Remove closing hours</button>
+                            </div>
+
+                            <div>
+                                <strong>Employee hours:</strong>
+                                <select class="add_person"></select>
+                                <input class="employee_starting_hours time_input" type="text" />
+                                <input class="employee_ending_hours time_input" type="text" />
+                                <button class="add_employee_hours" type="button">Add employee hours</button>
+                                <button class="remove_employee_hours" type="button">Remove employee hours</button>
+                            </div>
+                        </form>
+                    </div>
+                {% endif %}
+                <div class="schedule_grid"> 
+                    {% for times in grid.times %}
+                        <div class="schedule_row">
+                            <div class="schedule_row_content">{{times.time}}</div>
+
+                            {% for elem in times.row  %}
+                                <div class="schedule_row_content {{elem.class}}">{% if elem.user %}{{elem.user}}{% endif %}</div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+
+        {% endfor %}
+
+    </div>
+
+</div>
+{% if message %}
+
+<div class="section">
+    <h2>{{message}}</h2>
+</div>
+{% endif %}
+
+{% endblock %}
+
