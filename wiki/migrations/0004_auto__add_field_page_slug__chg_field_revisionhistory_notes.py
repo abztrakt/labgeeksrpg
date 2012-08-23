@@ -9,34 +9,19 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
 
-        # Adding model 'Question'
-        db.create_table('knowledgebase_question', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('question', self.gf('django.db.models.fields.CharField')(max_length='100')),
-            ('more_info', self.gf('django.db.models.fields.TextField')()),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True)),
-            ('date', self.gf('django.db.models.fields.DateField')()),
-        ))
-        db.send_create_signal('knowledgebase', ['Question'])
+        # Adding field 'Page.slug'
+        db.add_column('wiki_page', 'slug', self.gf('django.db.models.fields.SlugField')(max_length='25', null=True, db_index=True), keep_default=False)
 
-        # Adding model 'Answer'
-        db.create_table('knowledgebase_answer', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('answer', self.gf('django.db.models.fields.TextField')()),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True)),
-            ('date', self.gf('django.db.models.fields.DateField')()),
-            ('question', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['knowledgebase.Question'], null=True, blank=True)),
-            ('is_best', self.gf('django.db.models.fields.BooleanField')(default=False)),
-        ))
-        db.send_create_signal('knowledgebase', ['Answer'])
+        # Changing field 'RevisionHistory.notes'
+        db.alter_column('wiki_revisionhistory', 'notes', self.gf('django.db.models.fields.CharField')(max_length='260', null=True))
 
     def backwards(self, orm):
 
-        # Deleting model 'Question'
-        db.delete_table('knowledgebase_question')
+        # Deleting field 'Page.slug'
+        db.delete_column('wiki_page', 'slug')
 
-        # Deleting model 'Answer'
-        db.delete_table('knowledgebase_answer')
+        # Changing field 'RevisionHistory.notes'
+        db.alter_column('wiki_revisionhistory', 'notes', self.gf('django.db.models.fields.CharField')(max_length='200', null=True))
 
     models = {
         'auth.group': {
@@ -75,23 +60,24 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'knowledgebase.answer': {
-            'Meta': {'object_name': 'Answer'},
-            'answer': ('django.db.models.fields.TextField', [], {}),
-            'date': ('django.db.models.fields.DateField', [], {}),
+        'wiki.page': {
+            'Meta': {'object_name': 'Page'},
+            'author': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),
+            'content': ('django.db.models.fields.TextField', [], {}),
+            'date': ('django.db.models.fields.DateField', [], {'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_best': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'question': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['knowledgebase.Question']", 'null': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': "'25'"}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': "'25'", 'null': 'True', 'db_index': 'True'})
         },
-        'knowledgebase.question': {
-            'Meta': {'object_name': 'Question'},
+        'wiki.revisionhistory': {
+            'Meta': {'object_name': 'RevisionHistory'},
+            'after': ('django.db.models.fields.TextField', [], {}),
             'date': ('django.db.models.fields.DateField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'more_info': ('django.db.models.fields.TextField', [], {}),
-            'question': ('django.db.models.fields.CharField', [], {'max_length': "'100'"}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True'})
+            'notes': ('django.db.models.fields.CharField', [], {'max_length': "'260'", 'null': 'True'}),
+            'page': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['wiki.Page']"}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         }
     }
 
-    complete_apps = ['knowledgebase']
+    complete_apps = ['wiki']

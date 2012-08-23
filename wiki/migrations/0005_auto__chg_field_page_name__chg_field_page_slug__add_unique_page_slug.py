@@ -9,19 +9,25 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
 
-        # Adding field 'Issue.chosen_resolution'
-        db.add_column('knowledgebase_issue', 'chosen_resolution', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='knowledgebase_issue_related', null=True, to=orm['knowledgebase.Resolution']), keep_default=False)
+        # Changing field 'Page.name'
+        db.alter_column('wiki_page', 'name', self.gf('django.db.models.fields.CharField')(max_length='50'))
 
-        # Adding field 'Resolution.issue'
-        db.add_column('knowledgebase_resolution', 'issue', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['knowledgebase.Issue'], null=True, blank=True), keep_default=False)
+        # Changing field 'Page.slug'
+        db.alter_column('wiki_page', 'slug', self.gf('django.db.models.fields.SlugField')(max_length=50, unique=True, null=True))
+
+        # Adding unique constraint on 'Page', fields ['slug']
+        db.create_unique('wiki_page', ['slug'])
 
     def backwards(self, orm):
 
-        # Deleting field 'Issue.chosen_resolution'
-        db.delete_column('knowledgebase_issue', 'chosen_resolution_id')
+        # Removing unique constraint on 'Page', fields ['slug']
+        db.delete_unique('wiki_page', ['slug'])
 
-        # Deleting field 'Resolution.issue'
-        db.delete_column('knowledgebase_resolution', 'issue_id')
+        # Changing field 'Page.name'
+        db.alter_column('wiki_page', 'name', self.gf('django.db.models.fields.CharField')(max_length='25'))
+
+        # Changing field 'Page.slug'
+        db.alter_column('wiki_page', 'slug', self.gf('django.db.models.fields.SlugField')(max_length='25', null=True))
 
     models = {
         'auth.group': {
@@ -60,23 +66,24 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'knowledgebase.issue': {
-            'Meta': {'object_name': 'Issue'},
-            'chosen_resolution': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'knowledgebase_issue_related'", 'null': 'True', 'to': "orm['knowledgebase.Resolution']"}),
+        'wiki.page': {
+            'Meta': {'object_name': 'Page'},
+            'author': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),
             'content': ('django.db.models.fields.TextField', [], {}),
-            'date': ('django.db.models.fields.DateField', [], {}),
+            'date': ('django.db.models.fields.DateField', [], {'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': "'30'"}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': "'50'"}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'unique': 'True', 'null': 'True', 'db_index': 'True'})
         },
-        'knowledgebase.resolution': {
-            'Meta': {'object_name': 'Resolution'},
-            'content': ('django.db.models.fields.TextField', [], {}),
+        'wiki.revisionhistory': {
+            'Meta': {'object_name': 'RevisionHistory'},
+            'after': ('django.db.models.fields.TextField', [], {}),
             'date': ('django.db.models.fields.DateField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'issue': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['knowledgebase.Issue']", 'null': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True'})
+            'notes': ('django.db.models.fields.CharField', [], {'max_length': "'260'", 'null': 'True'}),
+            'page': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['wiki.Page']"}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         }
     }
 
-    complete_apps = ['knowledgebase']
+    complete_apps = ['wiki']
