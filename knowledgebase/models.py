@@ -7,6 +7,12 @@ class Question(models.Model):
     """
     Question model that stores an issue that someone has.  There is no navigation to question, only search
     """
+
+    class Meta:
+        permissions = (
+            ('can_answer', 'can answer questions'),
+        )
+
     question = models.CharField(max_length='100')
     more_info = models.TextField()
     user = models.ForeignKey(User, null=True)
@@ -22,6 +28,12 @@ class Answer(models.Model):
     solve.  The best Answer will be selected by someone with the authority
     and is_best will be set to true.
     """
+
+    class Meta:
+        permissions = (
+            ('can_select_answer', 'can select a best answer for a question'),
+        )
+
     answer = models.TextField()
     user = models.ForeignKey(User, null=True)
     date = models.DateField()
