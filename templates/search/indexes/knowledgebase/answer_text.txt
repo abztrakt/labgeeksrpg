@@ -1,4 +1,3 @@
 {{ object.answer }}
-{{ object.question }}
 {{ object.user }}
 {{ object.date }}
