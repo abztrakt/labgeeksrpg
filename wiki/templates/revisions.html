@@ -19,6 +19,9 @@
     </div>
 </div>
 {% if revision_history %}
+{% if can_edit_revisions %}
+<form action="/wiki/{{slug}}/select_revision/" method='post'>{% csrf_token %}
+{% endif %}
 {% for revision in revision_history %}
 <div class='revision_history'>
     <h3>past revision by {{revision.user}} on {{revision.date}}</h3>
@@ -29,16 +32,19 @@
             {{revision.diff|markdown}}
         </div>
         <div class='revision_after'>
+            {% if can_edit_revisions %}
+            <input type='radio' name='id' value='{{revision.id}}' />select this revision to publish
+            {% endif%}
             <p><strong>post-revision content</strong></p>
             {{revision.revised_text|markdown}}
-            <form action="/wiki/{{slug}}/select_revision/" method='post'>{% csrf_token %}
-                <input type='text' name='id' style='display:none' value='{{revision.id}}'/>
-                <input type='submit' value='publish this revision'/>
-            </form>
         </div>
     </div>
 </div>
 {% endfor %}
+{% if can_edit_revisions %}
+<input type='submit' value='publish selected revision'/>
+</form>
+{% endif %}
 {% endif %}
 {% else %}
 <h3>No revision history for {{name}}</h3>

@@ -4,7 +4,9 @@
 <h1>{{page_name}}</h1>
 {{ content|markdown }}
 <hr/>
+{% if can_edit_page %}
 <a href="/wiki/{{slug}}/edit/">Edit this page?</a>
+{% endif %}
 {% if last_revision %}
 <p>Last revision by {{last_revision.user}} on {{last_revision.date}}:</p>
 <p>{{last_revision.notes}}</p>

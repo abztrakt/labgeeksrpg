@@ -12,6 +12,9 @@ from django.template.defaultfilters import slugify
 
 @login_required
 def view_page(request, slug):
+    can_edit_page = False
+    if request.user.has_perm('wiki.change_page'):
+        can_edit_page = True
     name = ""
     content = ""
     try:
@@ -25,7 +28,7 @@ def view_page(request, slug):
         last_revision = REVISIONS[len(REVISIONS) - 1]
     except:
         last_revision = None
-    return render_to_response("view.html", {"page_name": name, "slug": slug, "content": content, 'request': request, "last_revision": last_revision, })
+    return render_to_response("view.html", locals())
 
 
 @login_required
@@ -42,12 +45,16 @@ def edit_page(request, slug=None):
         content = page.content
         page_name = page.name
         revision_message = ''
+        if not request.user.has_perm('wiki.change_page'):
+            return render_to_response('how_are_you_here.html', {'request': request, })
         if create_page:
             page_exists = True
     except Page.DoesNotExist:
         content = ""
         page = None
         revision_message = 'initial page creation'
+        if not request.user.has_perm('wiki.add_page'):
+            return render_to_response('how_are_you_here.html', {'request': request, })
     user = request.user
     c = {}
     c.update(csrf(request))
@@ -56,7 +63,6 @@ def edit_page(request, slug=None):
         notes = request.POST["notes"]
         page_name = request.POST['page_name']
         if page:
-            page = Page.objects.get(name=page_name)
             if page.content != content:
                 page.content = content
                 page.save()
@@ -65,8 +71,8 @@ def edit_page(request, slug=None):
             page = Page(name=page_name, slug=slug, content=content, date=datetime.now(), author=user)
             page.save()
             page_saved = True
-        revision = RevisionHistory.objects.create(page=page, user=user, after=content, date=datetime.now())
         if page_saved:
+            revision = RevisionHistory.objects.create(page=page, user=user, after=content, date=datetime.now())
             revision.notes = notes
             revision.save()
         return HttpResponseRedirect("/wiki/" + slug + "/")
@@ -79,11 +85,15 @@ def wiki_home(request):
         PAGES = Page.objects.all()
     except:
         PAGES = None
-    return render_to_response('home.html', {'pages': PAGES, 'request': request, })
+    can_add_page = request.user.has_perm('wiki.add_page')
+    return render_to_response('home.html', {'pages': PAGES, 'request': request, 'can_add_page': can_add_page, })
 
 
 @login_required
 def revision_history(request, slug):
+    can_edit_revisions = False
+    if request.user.has_perm('wiki.change_revisionhistory'):
+        can_edit_revisions = True
     c = {}
     c.update(csrf(request))
     try:
@@ -121,12 +131,15 @@ def revision_history(request, slug):
         'slug': slug,
         'revision_history': revision_history_ordered,
         'request': request,
+        'can_edit_revisions': can_edit_revisions,
     }
     return render_to_response('revisions.html', args, context_instance=RequestContext(request))
 
 
 @login_required
 def select_revision(request, slug):
+    if not request.user.has_perm('wiki.change_revisionhistory'):
+        return render_to_response('how_are_you_here.html', {'request': request, })
     try:
         page = Page.objects.get(slug=slug)
     except Page.DoesNotExist:
