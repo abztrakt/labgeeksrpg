@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load markup %}
 {% block content %}
+{% include 'search.html' %}
 <h1>{{page_name}}</h1>
 {{ content|markdown }}
 <hr/>
