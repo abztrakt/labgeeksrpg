@@ -8,8 +8,6 @@ class PageIndex(RealTimeSearchIndex):
     author = CharField(model_attr='author', null=True)
     date = DateTimeField(model_attr='date')
 
-    content_auto = EdgeNgramField(model_attr='content')
-
     def index_queryset(self):
         """Used when the entire index for model is updated."""
         return Page.objects.filter(date__lte=datetime.datetime.now())

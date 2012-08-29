@@ -1,3 +1,4 @@
+{% load highlight %}
 <html>
 <head>
     <title>Search Page</title>
@@ -23,20 +24,27 @@
             <h3>Results</h3>
 
             {% for result in page.object_list %}
-                <p><a href="/wiki/{{ result.object.slug }}/" target="_blank">{{ result.object.name }}</a></p>
-                <p><a href="/knowledgebase/{{ result.object.question.id }}/" target="_blank">{{ result.object.question }}</a></p>
-				<p>{{ result.object.answer.id }}</p>
+                {% ifequal result.model_name 'page' %}	
+                	<p><strong><big>Wiki: <a href="/wiki/{{ result.object.slug }}/" target="_blank">{{ result.object.name }}</a></big></strong><br/>
+                	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% highlight result.object.content with query max_length 200 %}</p>
+                {% else %}
+                	{% if result.object.answer %}
+                		<p><strong><big>Knowledgebase: <a href="/knowledgebase/{{ result.object.question.id }}/" target="_blank">{{ result.object.question }}</a></big></strong><br/>
+                		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ result.object.more_info }}
+                		&nbsp;{{ result.object.date }}</p>
+                	{% else %}
+                		<p><strong><big>Knowledgebase: <a href="/knowledgebase/{{ result.object.id }}/" target="_blank">{{ result.object.question }}</a></big></strong><br/>
+                		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ result.object.more_info }}
+                		&nbsp;{{ result.object.date }}</p>
+                	{% endif %}
+				{% endifequal %}
+			{% empty %}
+				<p>Sorry, no results were found.</p>
             {% endfor %}
 
-            {% if not page.object_list %}
-                {% if suggestion %}
-                    <p>No results were found, try this:</p>
-                    <p><a href="/search/?q={{ suggestion }}">{{ suggestion }}</a></p>
-                {% else %}
-                    <p>Sorry, no results were found.</p>
-                {% endif %}
+			{% if suggestion %}
+                    <p>Here's a suggestion: <a href="/search/?q={{ suggestion }}">{{ suggestion }}</a></p>
             {% endif %}
-
 
             {% if page.has_previous or page.has_next %}
                 <div>
