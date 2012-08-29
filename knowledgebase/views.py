@@ -10,6 +10,8 @@ from django.core.context_processors import csrf
 
 
 def view_question(request, q_id):
+    can_answer = False
+    can_select_answer = False
     try:
         question = Question.objects.get(id=q_id)
     except Question.DoesNotExist:
@@ -23,16 +25,10 @@ def view_question(request, q_id):
     except Answer.DoesNotExist:
         answers = None
         best_answers = None
-    if request.user.is_superuser:
-        """
-        TODO: add answer_question permission to Question model, use
-        if request.user.has_perm('knowledgebase.answer_question'):
-        """
+    if request.user.has_perm('knowledgebase.can_answer'):
         can_answer = True
+    if request.user.has_perm('knowledgebase.can_select_answer'):
         can_select_answer = True
-    else:
-        can_answer = False
-        can_select_answer = False
     args = {
         'question': question.question,
         'more_info': question.more_info,

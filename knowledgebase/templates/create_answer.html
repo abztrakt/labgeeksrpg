@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load markup %}
 {% block content %}
+{% include 'search.html' %}
 <h2>Answering question posted by {{asker}}</h2>
 <p><strong>{{question}}</strong></p>
 <p>{{more_info|markdown}}</p>

@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+{% include 'search.html' %}
 <h1>Wiki home</h1>
 {% if pages %}
 <ul><strong>Pages</strong>
@@ -10,8 +11,10 @@
 {% else %}
 <p>no pages made yet</p>
 {% endif %}
+{% if can_add_page %}
 <form method='get' action='/wiki/create_page?/'>
     <input type='text' name='page_name' />
     <input type='submit' value='create' />
 </form>
+{% endif %}
 {% endblock %}

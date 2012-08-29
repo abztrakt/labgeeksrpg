@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
-
 {% load markup %}
 {% block content %}
+{% include 'search.html' %}
 {% if revision %}
 <h2>Choosing revision for /{{page_name}}</h2>
 <div class='revision_history'>
