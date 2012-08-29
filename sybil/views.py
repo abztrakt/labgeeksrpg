@@ -15,13 +15,13 @@ class SybilSearch(SearchView):
         results = self.form.search()
         for result in results:
             if result.model_name == 'question':
-                if not result.pk in questions:
+                if not result.object.pk in questions:
                     returned_results.append(result)
-                    questions.append(result.pk)
+                    questions.append(result.object.pk)
             elif result.model_name == 'answer':
-                if not result.question.pk in questions:
+                if not result.object.question.pk in questions:
                     returned_results.append(result)
-                    questions.append(result.question.pk)
+                    questions.append(result.object.question.pk)
             else:
                 returned_results.append(result)
 
