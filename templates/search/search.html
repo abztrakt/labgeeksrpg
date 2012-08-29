@@ -30,7 +30,7 @@
                 {% else %}
                 	{% if result.object.answer %}
                 		<p><strong><big>Knowledgebase: <a href="/knowledgebase/{{ result.object.question.id }}/" target="_blank">{{ result.object.question }}</a></big></strong><br/>
-                		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ result.object.more_info }}
+                		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% highlight result.object.answer with query max_length 200 %}
                 		&nbsp;{{ result.object.date }}</p>
                 	{% else %}
                 		<p><strong><big>Knowledgebase: <a href="/knowledgebase/{{ result.object.id }}/" target="_blank">{{ result.object.question }}</a></big></strong><br/>
