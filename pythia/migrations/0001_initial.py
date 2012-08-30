@@ -4,24 +4,41 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
-
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        
+        # Adding model 'Page'
+        db.create_table('pythia_page', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length='50')),
+            ('slug', self.gf('django.db.models.fields.SlugField')(max_length='50', unique=True, null=True, db_index=True)),
+            ('content', self.gf('django.db.models.fields.TextField')()),
+            ('author', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True)),
+            ('date', self.gf('django.db.models.fields.DateField')(null=True)),
+        ))
+        db.send_create_signal('pythia', ['Page'])
 
-        # Deleting field 'RevisionHistory.before'
-        db.delete_column('wiki_revisionhistory', 'before')
+        # Adding model 'RevisionHistory'
+        db.create_table('pythia_revisionhistory', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('after', self.gf('django.db.models.fields.TextField')()),
+            ('page', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['pythia.Page'])),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('date', self.gf('django.db.models.fields.DateField')()),
+            ('notes', self.gf('django.db.models.fields.CharField')(max_length='260', null=True)),
+        ))
+        db.send_create_signal('pythia', ['RevisionHistory'])
 
-        # Adding field 'RevisionHistory.notes'
-        db.add_column('wiki_revisionhistory', 'notes', self.gf('django.db.models.fields.CharField')(max_length='200', null=True), keep_default=False)
 
     def backwards(self, orm):
+        
+        # Deleting model 'Page'
+        db.delete_table('pythia_page')
 
-        # Adding field 'RevisionHistory.before'
-        db.add_column('wiki_revisionhistory', 'before', self.gf('django.db.models.fields.TextField')(default=''), keep_default=False)
+        # Deleting model 'RevisionHistory'
+        db.delete_table('pythia_revisionhistory')
 
-        # Deleting field 'RevisionHistory.notes'
-        db.delete_column('wiki_revisionhistory', 'notes')
 
     models = {
         'auth.group': {
@@ -60,23 +77,24 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'wiki.page': {
+        'pythia.page': {
             'Meta': {'object_name': 'Page'},
             'author': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),
             'content': ('django.db.models.fields.TextField', [], {}),
             'date': ('django.db.models.fields.DateField', [], {'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': "'25'"})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': "'50'"}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': "'50'", 'unique': 'True', 'null': 'True', 'db_index': 'True'})
         },
-        'wiki.revisionhistory': {
+        'pythia.revisionhistory': {
             'Meta': {'object_name': 'RevisionHistory'},
             'after': ('django.db.models.fields.TextField', [], {}),
             'date': ('django.db.models.fields.DateField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'notes': ('django.db.models.fields.CharField', [], {'max_length': "'200'", 'null': 'True'}),
-            'page': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['wiki.Page']"}),
+            'notes': ('django.db.models.fields.CharField', [], {'max_length': "'260'", 'null': 'True'}),
+            'page': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['pythia.Page']"}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         }
     }
 
-    complete_apps = ['wiki']
+    complete_apps = ['pythia']

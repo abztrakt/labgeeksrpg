@@ -1,5 +1,5 @@
-from labgeeksrpg.knowledgebase.models import *
-from labgeeksrpg.knowledgebase.forms import *
+from labgeeksrpg.delphi.models import *
+from labgeeksrpg.delphi.forms import *
 from django.shortcuts import render_to_response
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -25,9 +25,9 @@ def view_question(request, q_id):
     except Answer.DoesNotExist:
         answers = None
         best_answers = None
-    if request.user.has_perm('knowledgebase.can_answer'):
+    if request.user.has_perm('delphi.can_answer'):
         can_answer = True
-    if request.user.has_perm('knowledgebase.can_select_answer'):
+    if request.user.has_perm('delphi.can_select_answer'):
         can_select_answer = True
     args = {
         'question': question.question,
@@ -55,7 +55,7 @@ def create_question(request):
             question.user = request.user
             question.date = datetime.now().date()
             question.save()
-        return HttpResponseRedirect('/knowledgebase/' + str(question.id) + '/')
+        return HttpResponseRedirect('/delphi/' + str(question.id) + '/')
     else:
         form = CreateQuestionForm()
         form_fields = []
@@ -75,7 +75,7 @@ def create_question(request):
 
 
 def kb_home(request):
-    return HttpResponseRedirect('/knowledgebase/create/')
+    return HttpResponseRedirect('/delphi/create/')
 
 
 def answer_question(request, q_id):
@@ -93,7 +93,7 @@ def answer_question(request, q_id):
             answer.date = datetime.now().date()
             answer.question = question
             answer.save()
-        return HttpResponseRedirect('/knowledgebase/' + str(question.id) + '/')
+        return HttpResponseRedirect('/delphi/' + str(question.id) + '/')
     else:
         form = CreateAnswerForm()
         form_fields = []
@@ -137,4 +137,4 @@ def select_answer(request, q_id):
                 return render_to_response('no_question.html', {"request": request, })
         except Question.DoesNotExist:
             return render_to_response('no_question.html', {'request': request, })
-    return HttpResponseRedirect('/knowledgebase/' + str(q_id) + '/')
+    return HttpResponseRedirect('/delphi/' + str(q_id) + '/')
