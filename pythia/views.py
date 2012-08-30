@@ -15,14 +15,12 @@ def view_page(request, slug):
     can_edit_page = False
     if request.user.has_perm('pythia.change_page'):
         can_edit_page = True
-    page_name = ""
-    content = ""
     try:
         page = Page.objects.get(slug=slug)
         page_name = page.name
         content = page.content
     except Page.DoesNotExist:
-        HttpResponseRedirect("/pythia/")
+        return HttpResponseRedirect('/pythia/')
     try:
         REVISIONS = RevisionHistory.objects.filter(page=page).order_by('date')
         last_revision = REVISIONS[len(REVISIONS) - 1]
