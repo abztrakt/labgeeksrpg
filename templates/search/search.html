@@ -17,14 +17,14 @@
 
             {% for result in page.object_list %}
                 {% ifequal result.model_name 'page' %}	
-                	<p><strong><big>Wiki: <a href="/wiki/{{ result.object.slug }}/" target="_blank">{{ result.object.name }}</a></big></strong><br/>
+                	<p><strong><big>Wiki: <a href="/wiki/{{ result.object.slug }}/">{{ result.object.name }}</a></big></strong><br/>
                 	{% highlight result.object.content with query max_length 200 %}&nbsp;&nbsp;&mdash;&nbsp;{{ result.object.date }}</p>
                 {% else %}
                 	{% if result.object.answer %}
-                		<p><strong><big>Knowledgebase: <a href="/knowledgebase/{{ result.object.question.id }}/" target="_blank">{{ result.object.question }}</a></big></strong><br/>
+                		<p><strong><big>Knowledgebase: <a href="/knowledgebase/{{ result.object.question.id }}/" >{{ result.object.question }}</a></big></strong><br/>
                 		{% highlight result.object.answer with query max_length 200 %}&nbsp;&nbsp;&mdash;&nbsp;{{ result.object.date }}</p>
                 	{% else %}
-                		<p><strong><big>Knowledgebase: <a href="/knowledgebase/{{ result.object.id }}/" target="_blank">{{ result.object.question }}</a></big></strong><br/>
+                		<p><strong><big>Knowledgebase: <a href="/knowledgebase/{{ result.object.id }}/" >{{ result.object.question }}</a></big></strong><br/>
                 		{{ result.object.more_info }}&nbsp;&nbsp;&mdash;&nbsp;{{ result.object.date }}</p>
                 	{% endif %}
 				{% endifequal %}
