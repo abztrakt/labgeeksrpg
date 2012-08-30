@@ -19,7 +19,7 @@ urlpatterns = patterns('',
                        (r'^delphi/', include('labgeeksrpg.delphi.urls')),
                        (r'^pythia/', include('labgeeksrpg.pythia.urls')),
                        (r'^$', 'labgeeksrpg.views.hello'),
-                       (r'^search/', include('labgeeksrpg.sybil.urls')),
+                       (r'^oracles/', include('labgeeksrpg.sybil.urls')),
                        # Uncomment the admin/doc line below and add 'django.contrib.admindocs'
                        # to INSTALLED_APPS to enable admin documentation:
                        # (r'^admin/doc/', include('django.contrib.admindocs.urls')),

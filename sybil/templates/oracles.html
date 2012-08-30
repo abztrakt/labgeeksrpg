@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+	<div>	
+		<form id='search' action='/search/' method='get' style='margin: auto, clear: both'>
+    		<input type='text' name='q'>
+    		<input type='submit' value='search'>
+		</form>
+	</div>
+	
+	<div>
+		<form method='get' action='/pythia/create_page?/'>
+    		<input type='submit' value='Create A Page' />
+		</form>
+	</div>
+	
+	<div>
+		<form method='get' action='/delphi/create/'>
+    		<input type='submit' value='Ask A Question' />
+		</form>
+	</div>
+{% endblock %}
