@@ -20,7 +20,7 @@
 </div>
 {% if revision_history %}
 {% if can_edit_revisions %}
-<form action="/wiki/{{slug}}/select_revision/" method='post'>{% csrf_token %}
+<form action="/pythia/{{slug}}/select_revision/" method='post'>{% csrf_token %}
 {% endif %}
 {% for revision in revision_history %}
 <div class='revision_history'>

@@ -9,7 +9,7 @@
 {% if page_exists %}
 <h2>{{page_name}} already exists.  If you're evil and meant for this to happen, edit below</h2>
 {% endif %}
-<form method="post" action="/wiki/{{slug}}/edit/">{% csrf_token %}
+<form method="post" action="/pythia/{{slug}}/edit/">{% csrf_token %}
 	<textarea name="content" rows="20" cols=100">{{content}}</textarea><br/>
     <input type='text' name='page_name' style='display:none' value="{{page_name}}"/>
     <p>Revision Notes:</p>
