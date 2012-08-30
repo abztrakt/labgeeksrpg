@@ -2,16 +2,18 @@
 {% block content %}
 {% include 'search.html' %}
 {% if create_page %}
-<h1>Creating {{page_name}}</h1>
+<h3>Creating Page:</h1>
 {% else %}
-<h1>Editing {{page_name}}</h1>
+<h3>Editing Page:</h3>
 {% endif %}
 {% if page_exists %}
 <h2>{{page_name}} already exists.  If you're evil and meant for this to happen, edit below</h2>
 {% endif %}
 <form method="post" action="/pythia/{{slug}}/edit/">{% csrf_token %}
-	<textarea name="content" rows="20" cols=100">{{content}}</textarea><br/>
-    <input type='text' name='page_name' style='display:none' value="{{page_name}}"/>
+    Title:
+    <input type='text' name='page_name' value="{{page_name}}"/>
+    <p>Content:</p>
+    <textarea name="content" rows="20" cols=100">{{content}}</textarea><br/>
     <p>Revision Notes:</p>
 	<textarea name="notes" rows="2" cols="100" maxlength="200">{{revision_message}}</textarea>
     <input type="submit" value="Save Page"/>

@@ -61,8 +61,9 @@ def edit_page(request, slug=None):
         notes = request.POST["notes"]
         page_name = request.POST['page_name']
         if page:
-            if page.content != content:
+            if (page.content != content) or (page.name != page_name):
                 page.content = content
+                page.name = page_name
                 page.save()
                 page_saved = True
         else:
