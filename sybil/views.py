@@ -26,3 +26,6 @@ class SybilSearch(SearchView):
                 returned_results.append(result)
 
         return returned_results
+
+    def extra_context(self):
+        return {'request': self.request, }

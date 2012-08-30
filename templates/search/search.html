@@ -1,14 +1,6 @@
+{% extends 'base.html' %}
 {% load highlight %}
-<html>
-<head>
-    <title>Search Page</title>
-</head>
-
-<body>
-    <h2>Search Page</h2>
-
-    <h3><a href="/wiki/">Wiki Home</a>    <a href="/knowledgebase/">KB Home</a></h3>
-
+{% block content %}
     <form method="get" action=".">
         <table>
             {{ form.as_table }}
@@ -21,7 +13,7 @@
         </table>
 
         {% if query %}
-            <h3>Results</h3>
+            <big>Results</big>
 
             {% for result in page.object_list %}
                 {% ifequal result.model_name 'page' %}	
@@ -56,5 +48,4 @@
             {# Show some example queries to run, maybe query syntax, something else? #}
         {% endif %}
     </form>
-</body>
-</html>
+{% endblock %}
