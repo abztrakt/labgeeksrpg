@@ -35,8 +35,6 @@ def edit_page(request, slug=None):
     create_page = False
     page_saved = False
     if not slug:
-        page_name = request.GET["page_name"]
-        slug = slugify(page_name)
         create_page = True
     try:
         page = Page.objects.get(slug=slug)
@@ -60,10 +58,12 @@ def edit_page(request, slug=None):
         content = request.POST["content"]
         notes = request.POST["notes"]
         page_name = request.POST['page_name']
+        slug = slugify(page_name)
         if page:
             if (page.content != content) or (page.name != page_name):
                 page.content = content
                 page.name = page_name
+                page.slug = slug
                 page.save()
                 page_saved = True
         else:
