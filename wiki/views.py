@@ -15,11 +15,11 @@ def view_page(request, slug):
     can_edit_page = False
     if request.user.has_perm('wiki.change_page'):
         can_edit_page = True
-    name = ""
+    page_name = ""
     content = ""
     try:
         page = Page.objects.get(slug=slug)
-        name = page.name
+        page_name = page.name
         content = page.content
     except Page.DoesNotExist:
         HttpResponseRedirect("/wiki/")
