@@ -160,6 +160,7 @@ def staff_report(request, year, month, day=None, user=None, week=None, payperiod
         reason = 'You do not have permission to visit this part of the page.'
 
         return render_to_response('fail.html', locals())
+
     return specific_report(request, user, year, month, day, week, payperiod)
 
 
@@ -167,11 +168,13 @@ def staff_report(request, year, month, day=None, user=None, week=None, payperiod
 def specific_report(request, user, year, month, day=None, week=None, payperiod=None):
     """ This view is used when viewing specific shifts in the given day. (Table form)
     """
+
     #Grab shifts
     if user:
         user = User.objects.get(username=user)
 
     all_shifts = get_shifts(year, month, day, user, week, payperiod)
+
     if day:
         description = "Viewing shifts for %s." % (date(int(year), int(month), int(day)).strftime("%B %d, %Y"))
     elif week:
@@ -287,9 +290,9 @@ def personal_report(request, user=None, year=None, month=None):
         year = date.today().year
     if not month:
         month = date.today().month
+
     year = int(year)
     month = int(month)
-
     if request.user.is_authenticated():
         #Grab user's shifts
         shifts = get_shifts(year, month, None, user)
@@ -372,10 +375,10 @@ def time(request):
                 # Setting the success variable that users will see on success page
                 success = "OUT"
                 at_time = oldshift.outtime
-                at_time = at_time.strftime('%Y-%m-%d, %I:%M %p').replace(' 0', ' ')  # get rid of zeros on the hour
-
+                #get rid of zeros on the hour
+                at_time = at_time.strftime('%Y-%m-%d, %I:%M %p').replace(' 0', ' ')
             else:
-                # if shift.person  location.active_staff
+                #if shift.person  location.active_staff
                 if this_shift.intime is None:
                     this_shift.intime = datetime.now()
                 this_shift.in_clock = punchclock
@@ -383,11 +386,11 @@ def time(request):
                 this_shift.save()
                 # After successful shift save, add person to active_staff in appropriate Location
                 location.active_users.add(this_shift.person)
-
-                # Setting the success variable that users will see on the success page
+                #Setting the success variable that users will see on the success page
                 success = "IN"
                 at_time = this_shift.intime
-                at_time = at_time.strftime('%Y-%m-%d, %I:%M %p').replace(' 0', ' ')  # get rid of zeros on the hour
+                #get rid of zeros on the hour
+                at_time = at_time.strftime('%Y-%m-%d, %I:%M %p').replace(' 0', ' ')
 
             return HttpResponseRedirect("success/?success=%s&at_time=%s&location=%s&user=%s" % (success, at_time, location, this_shift.person))
 

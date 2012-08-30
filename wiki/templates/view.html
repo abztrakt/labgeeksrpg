@@ -1,13 +1,18 @@
+{% extends 'base.html' %}
 {% load markup %}
-
-<html>
-	<head>
-		<title>{{page_name}}</title>
-	</head>
-	<body>
-		<h1>{{page_name}}</h1>
-		{{ content|markdown }}
-		<hr/>
-		<a href="/wiki/{{page_name}}/edit/">Edit this page?</a>
-	</body>
-</html>
+{% block content %}
+{% include 'search.html' %}
+<h1>{{page_name}}</h1>
+{{ content|markdown }}
+<hr/>
+{% if can_edit_page %}
+<a href="/wiki/{{slug}}/edit/">Edit this page?</a>
+{% endif %}
+{% if last_revision %}
+<p>Last revision by {{last_revision.user}} on {{last_revision.date}}:</p>
+<p>{{last_revision.notes}}</p>
+<a href="/wiki/{{slug}}/revisions/">View revisions</a>
+{% else %}
+<p>no revisions yet!</p>
+{% endif %}
+{% endblock %}
