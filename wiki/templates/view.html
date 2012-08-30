@@ -4,11 +4,11 @@
 <h1>{{page_name}}</h1>
 {{ content|markdown }}
 <hr/>
-<a href="/wiki/{{page_name}}/edit/">Edit this page?</a>
+<a href="/wiki/{{slug}}/edit/">Edit this page?</a>
 {% if last_revision %}
 <p>Last revision by {{last_revision.user}} on {{last_revision.date}}:</p>
 <p>{{last_revision.notes}}</p>
-<a href="/wiki/{{page_name}}/revisions/">View revisions</a>
+<a href="/wiki/{{slug}}/revisions/">View revisions</a>
 {% else %}
 <p>no revisions yet!</p>
 {% endif %}

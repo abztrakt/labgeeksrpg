@@ -225,7 +225,8 @@ def view_and_edit_reviews(request, user):
     except:
         badge_photo = None
 
-    # Handle the form submission and differentiate between the sub-reviewers and the final reviewer.
+    # Handle the form submission and differentiate between the sub-reviewers
+    # and the final reviewer.
     try:
         recent_review = UWLTReview.objects.filter(reviewer=this_user, user=user, is_final=False, is_used_up=False).order_by('-date')[0]
     except:
@@ -272,7 +273,8 @@ def view_and_edit_reviews(request, user):
             elif wage_history.wage is not None:
                 wage_history.save()
 
-            # If the review is FINAL, mark the other reviews as used up and don't show use them for averaging the scores.
+            # If the review is FINAL, mark the other reviews as used up and
+            # don't show use them for averaging the scores.
             if 'is_final' in form.cleaned_data.keys() and form.cleaned_data['is_final']:
                 old_reviews = UWLTReview.objects.filter(user=user, is_final=False, is_used_up=False)
                 for old_review in old_reviews:
@@ -341,7 +343,8 @@ def view_and_edit_reviews(request, user):
     table_dict['scores'] = table_scores
     table_dict['date'] = table_date_info
 
-    # Create a list of all of the review fields and append review stats along with them. The stats won't be appended if the review isn't a final one.
+    # Create a list of all of the review fields and append review stats along
+    # with them. The stats won't be appended if the review isn't a final one.
     form_fields = []
     for field in form.visible_fields():
         stats = None
@@ -370,7 +373,8 @@ def view_and_edit_reviews(request, user):
 
     form2_fields = []
     for field in form2.visible_fields():
-        # wage help text/previous wage not showing up for some reason, so this is my stopgap answer
+        # wage help text/previous wage not showing up for some reason, so this
+        # is my stopgap answer
         if field.name == "wage":
             field.help_text = last_wage_history_help
         field_info = {
@@ -385,7 +389,8 @@ def view_and_edit_reviews(request, user):
     if recent_review:
         recent_message = 'Looks like you made a review for %s on %s. Saved entries have been filled out.' % (user, recent_review.date)
 
-    # The following code is used for displaying the user's call_me_by or first name.
+    # The following code is used for displaying the user's call_me_by or first
+    # name.
     try:
         profile = UserProfile.objects.get(user=this_user)
         if profile.call_me_by:

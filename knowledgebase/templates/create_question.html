@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Ask a question:</h1>
+<form action='' method='post' enctype='multipart/form-data'>{% csrf_token %}
+    {% for field in form_fields %}
+    <div>
+        <p><strong>{{field.help_text}}</strong></p>
+        {{field.field}}
+    </div>
+    {% endfor %}
+    <input type='submit' value='Save'/>
+</form>
+{% endblock %}

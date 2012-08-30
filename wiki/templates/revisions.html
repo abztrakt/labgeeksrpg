@@ -31,7 +31,7 @@
         <div class='revision_after'>
             <p><strong>post-revision content</strong></p>
             {{revision.revised_text|markdown}}
-            <form action="/wiki/{{name}}/select_revision/" method='post'>{% csrf_token %}
+            <form action="/wiki/{{slug}}/select_revision/" method='post'>{% csrf_token %}
                 <input type='text' name='id' style='display:none' value='{{revision.id}}'/>
                 <input type='submit' value='publish this revision'/>
             </form>
