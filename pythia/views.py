@@ -21,6 +21,9 @@ def view_page(request, slug):
         content = page.content
     except Page.DoesNotExist:
         return HttpResponseRedirect('/pythia/')
+    if page.times_viewed is None:
+        page.times_viewed = 0
+    page.times_viewed = page.times_viewed + 1
     try:
         REVISIONS = RevisionHistory.objects.filter(page=page).order_by('date')
         last_revision = REVISIONS[len(REVISIONS) - 1]
@@ -76,6 +79,12 @@ def edit_page(request, slug=None):
             revision = RevisionHistory.objects.create(page=page, user=user, after=content, date=datetime.now())
             revision.notes = notes
             revision.save()
+        if page.times_viewed is None:
+            page.times_viewed = 0
+        else:
+            '''in the course of editing the page, you view it twice.  This
+            little bit of logic rights that wrong'''
+            page.times_viewed = page.times_viewed - 1
         return HttpResponseRedirect("/pythia/" + slug + "/")
     return render_to_response("edit.html", locals(), context_instance=RequestContext(request))
 

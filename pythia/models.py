@@ -10,6 +10,7 @@ class Page(models.Model):
     content = models.TextField()
     author = models.ForeignKey(User, null=True, blank=True)
     date = models.DateField(null=True)
+    times_viewed = models.IntegerField(null=True, default=0)
 
     def __unicode__(self):
         return self.name

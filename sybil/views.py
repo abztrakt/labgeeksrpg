@@ -35,4 +35,6 @@ class SybilSearch(SearchView):
 
 
 def oracle_home(request):
+    pages = Page.objects.all().order_by('times_viewed')[:10]
+    questions = Question.objects.all().order_by('times_viewed')[:10]
     return render_to_response('oracles.html', locals())

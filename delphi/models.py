@@ -17,6 +17,7 @@ class Question(models.Model):
     more_info = models.TextField()
     user = models.ForeignKey(User, null=True)
     date = models.DateField()
+    times_viewed = models.IntegerField(null=True, default=0)
 
     def __unicode__(self):
         return self.question

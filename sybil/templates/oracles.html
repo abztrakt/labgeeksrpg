@@ -1,19 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
-	<div>	
-		<form id='search' action='/oracles/search/' method='get' style='margin: auto; clear: both'>
+	<h2>Consult the Oracles</h2>
+    <div>	
+		<form id='search' action='/oracles/search/' method='get' style='text-align:center; margin: 50px; clear: both'>
     		<input type='text' name='q' style='width: 500px; height: 35px; font-size: 20px' />
     		<input type='submit' value='search' />
 		</form>
 	</div>
 	
-	<div>
+	<div style='float:left; display:inline'>
+        <h3>Pythia (Wiki)</h3>
+        {% for page in pages %}
+        <p><a href='/pythia/{{page.slug}}/'>{{page.name}}</a></p>
+        {% endfor %}
 		<form method='get' action='/pythia/create_page?/'>
     		<input type='submit' value='Create A Page' />
 		</form>
 	</div>
 	
-	<div>
+	<div style='float:right; display:inline'>
+        <h3>Delphi (Knowledge Base)</h3>
+        {% for question in questions %}
+        <p><a href='/delphi/{{question.id}}/'>{{question.question}}</a></p>
+        {% endfor %}
 		<form method='get' action='/delphi/create/'>
     		<input type='submit' value='Ask A Question' />
 		</form>
