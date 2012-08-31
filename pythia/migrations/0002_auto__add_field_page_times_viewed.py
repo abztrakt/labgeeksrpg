@@ -9,25 +9,13 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
 
-        # Changing field 'Page.name'
-        db.alter_column('wiki_page', 'name', self.gf('django.db.models.fields.CharField')(max_length='50'))
-
-        # Changing field 'Page.slug'
-        db.alter_column('wiki_page', 'slug', self.gf('django.db.models.fields.SlugField')(max_length=50, unique=True, null=True))
-
-        # Adding unique constraint on 'Page', fields ['slug']
-        db.create_unique('wiki_page', ['slug'])
+        # Adding field 'Page.times_viewed'
+        db.add_column('pythia_page', 'times_viewed', self.gf('django.db.models.fields.IntegerField')(default=0, null=True), keep_default=False)
 
     def backwards(self, orm):
 
-        # Removing unique constraint on 'Page', fields ['slug']
-        db.delete_unique('wiki_page', ['slug'])
-
-        # Changing field 'Page.name'
-        db.alter_column('wiki_page', 'name', self.gf('django.db.models.fields.CharField')(max_length='25'))
-
-        # Changing field 'Page.slug'
-        db.alter_column('wiki_page', 'slug', self.gf('django.db.models.fields.SlugField')(max_length='25', null=True))
+        # Deleting field 'Page.times_viewed'
+        db.delete_column('pythia_page', 'times_viewed')
 
     models = {
         'auth.group': {
@@ -66,24 +54,25 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'wiki.page': {
+        'pythia.page': {
             'Meta': {'object_name': 'Page'},
             'author': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),
             'content': ('django.db.models.fields.TextField', [], {}),
             'date': ('django.db.models.fields.DateField', [], {'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': "'50'"}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'unique': 'True', 'null': 'True', 'db_index': 'True'})
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': "'50'", 'unique': 'True', 'null': 'True', 'db_index': 'True'}),
+            'times_viewed': ('django.db.models.fields.IntegerField', [], {'default': '0', 'null': 'True'})
         },
-        'wiki.revisionhistory': {
+        'pythia.revisionhistory': {
             'Meta': {'object_name': 'RevisionHistory'},
             'after': ('django.db.models.fields.TextField', [], {}),
             'date': ('django.db.models.fields.DateField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'notes': ('django.db.models.fields.CharField', [], {'max_length': "'260'", 'null': 'True'}),
-            'page': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['wiki.Page']"}),
+            'page': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['pythia.Page']"}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         }
     }
 
-    complete_apps = ['wiki']
+    complete_apps = ['pythia']

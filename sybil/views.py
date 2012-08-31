@@ -1,4 +1,7 @@
 from haystack.views import *
+from labgeeksrpg.delphi.models import Question
+from labgeeksrpg.pythia.models import Page
+from django.shortcuts import render_to_response
 
 
 class SybilSearch(SearchView):
@@ -29,3 +32,9 @@ class SybilSearch(SearchView):
 
     def extra_context(self):
         return {'request': self.request, }
+
+
+def oracle_home(request):
+    pages = Page.objects.all().order_by('times_viewed')[:10]
+    questions = Question.objects.all().order_by('times_viewed')[:10]
+    return render_to_response('oracles.html', locals())

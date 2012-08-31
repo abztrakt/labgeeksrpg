@@ -1,5 +1,5 @@
 from django.contrib import admin
-from labgeeksrpg.knowledgebase.models import Question, Answer
+from labgeeksrpg.delphi.models import Question, Answer
 
 
 class QuestionAdmin(admin.ModelAdmin):

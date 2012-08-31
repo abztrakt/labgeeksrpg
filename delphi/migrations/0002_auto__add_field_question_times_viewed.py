@@ -9,19 +9,13 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
 
-        # Deleting field 'RevisionHistory.before'
-        db.delete_column('wiki_revisionhistory', 'before')
-
-        # Adding field 'RevisionHistory.notes'
-        db.add_column('wiki_revisionhistory', 'notes', self.gf('django.db.models.fields.CharField')(max_length='200', null=True), keep_default=False)
+        # Adding field 'Question.times_viewed'
+        db.add_column('delphi_question', 'times_viewed', self.gf('django.db.models.fields.IntegerField')(default=0, null=True), keep_default=False)
 
     def backwards(self, orm):
 
-        # Adding field 'RevisionHistory.before'
-        db.add_column('wiki_revisionhistory', 'before', self.gf('django.db.models.fields.TextField')(default=''), keep_default=False)
-
-        # Deleting field 'RevisionHistory.notes'
-        db.delete_column('wiki_revisionhistory', 'notes')
+        # Deleting field 'Question.times_viewed'
+        db.delete_column('delphi_question', 'times_viewed')
 
     models = {
         'auth.group': {
@@ -60,23 +54,24 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'wiki.page': {
-            'Meta': {'object_name': 'Page'},
-            'author': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),
-            'content': ('django.db.models.fields.TextField', [], {}),
-            'date': ('django.db.models.fields.DateField', [], {'null': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': "'25'"})
-        },
-        'wiki.revisionhistory': {
-            'Meta': {'object_name': 'RevisionHistory'},
-            'after': ('django.db.models.fields.TextField', [], {}),
+        'delphi.answer': {
+            'Meta': {'object_name': 'Answer'},
+            'answer': ('django.db.models.fields.TextField', [], {}),
             'date': ('django.db.models.fields.DateField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'notes': ('django.db.models.fields.CharField', [], {'max_length': "'200'", 'null': 'True'}),
-            'page': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['wiki.Page']"}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+            'is_best': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'question': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['delphi.Question']", 'null': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True'})
+        },
+        'delphi.question': {
+            'Meta': {'object_name': 'Question'},
+            'date': ('django.db.models.fields.DateField', [], {}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'more_info': ('django.db.models.fields.TextField', [], {}),
+            'question': ('django.db.models.fields.CharField', [], {'max_length': "'200'"}),
+            'times_viewed': ('django.db.models.fields.IntegerField', [], {'default': '0', 'null': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True'})
         }
     }
 
-    complete_apps = ['wiki']
+    complete_apps = ['delphi']

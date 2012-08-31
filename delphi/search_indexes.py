@@ -1,7 +1,7 @@
 import datetime
 from haystack.indexes import *
 from haystack import site
-from knowledgebase.models import Question, Answer
+from delphi.models import Question, Answer
 
 class QuestionIndex(RealTimeSearchIndex):
     text = CharField(document=True, use_template=True)

@@ -1,4 +1,4 @@
-from labgeeksrpg.knowledgebase.models import *
+from labgeeksrpg.delphi.models import *
 from django import forms
 from django.forms import ModelForm
 

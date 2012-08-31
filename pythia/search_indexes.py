@@ -1,7 +1,7 @@
 import datetime
 from haystack.indexes import *
 from haystack import site
-from wiki.models import Page
+from pythia.models import Page
 
 class PageIndex(RealTimeSearchIndex):
     text = CharField(document=True, use_template=True)

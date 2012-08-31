@@ -1,4 +1,4 @@
-from labgeeksrpg.wiki.models import Page, RevisionHistory
+from labgeeksrpg.pythia.models import Page, RevisionHistory
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
@@ -13,16 +13,17 @@ from django.template.defaultfilters import slugify
 @login_required
 def view_page(request, slug):
     can_edit_page = False
-    if request.user.has_perm('wiki.change_page'):
+    if request.user.has_perm('pythia.change_page'):
         can_edit_page = True
-    page_name = ""
-    content = ""
     try:
         page = Page.objects.get(slug=slug)
         page_name = page.name
         content = page.content
     except Page.DoesNotExist:
-        HttpResponseRedirect("/wiki/")
+        return HttpResponseRedirect('/pythia/')
+    if page.times_viewed is None:
+        page.times_viewed = 0
+    page.times_viewed = page.times_viewed + 1
     try:
         REVISIONS = RevisionHistory.objects.filter(page=page).order_by('date')
         last_revision = REVISIONS[len(REVISIONS) - 1]
@@ -37,15 +38,13 @@ def edit_page(request, slug=None):
     create_page = False
     page_saved = False
     if not slug:
-        page_name = request.GET["page_name"]
-        slug = slugify(page_name)
         create_page = True
     try:
         page = Page.objects.get(slug=slug)
         content = page.content
         page_name = page.name
         revision_message = ''
-        if not request.user.has_perm('wiki.change_page'):
+        if not request.user.has_perm('pythia.change_page'):
             return render_to_response('how_are_you_here.html', {'request': request, })
         if create_page:
             page_exists = True
@@ -53,7 +52,7 @@ def edit_page(request, slug=None):
         content = ""
         page = None
         revision_message = 'initial page creation'
-        if not request.user.has_perm('wiki.add_page'):
+        if not request.user.has_perm('pythia.add_page'):
             return render_to_response('how_are_you_here.html', {'request': request, })
     user = request.user
     c = {}
@@ -62,9 +61,14 @@ def edit_page(request, slug=None):
         content = request.POST["content"]
         notes = request.POST["notes"]
         page_name = request.POST['page_name']
+        slug = slugify(page_name)
+        if slug == '':
+            return render_to_response('at_least_try.html', {'request': request, })
         if page:
-            if page.content != content:
+            if (page.content != content) or (page.name != page_name):
                 page.content = content
+                page.name = page_name
+                page.slug = slug
                 page.save()
                 page_saved = True
         else:
@@ -75,25 +79,29 @@ def edit_page(request, slug=None):
             revision = RevisionHistory.objects.create(page=page, user=user, after=content, date=datetime.now())
             revision.notes = notes
             revision.save()
-        return HttpResponseRedirect("/wiki/" + slug + "/")
+        if page.times_viewed is None:
+            page.times_viewed = 0
+        else:
+            '''in the course of editing the page, you view it twice.  This
+            little bit of logic rights that wrong'''
+            page.times_viewed = page.times_viewed - 1
+        return HttpResponseRedirect("/pythia/" + slug + "/")
     return render_to_response("edit.html", locals(), context_instance=RequestContext(request))
 
 
 @login_required
-def wiki_home(request):
+def pythia_home(request):
     try:
         PAGES = Page.objects.all()
     except:
         PAGES = None
-    can_add_page = request.user.has_perm('wiki.add_page')
+    can_add_page = request.user.has_perm('pythia.add_page')
     return render_to_response('home.html', {'pages': PAGES, 'request': request, 'can_add_page': can_add_page, })
 
 
 @login_required
 def revision_history(request, slug):
-    can_edit_revisions = False
-    if request.user.has_perm('wiki.change_revisionhistory'):
-        can_edit_revisions = True
+    can_edit_revisions = request.user.has_perm('pythia.change_revisionhistory')
     c = {}
     c.update(csrf(request))
     try:
@@ -138,7 +146,7 @@ def revision_history(request, slug):
 
 @login_required
 def select_revision(request, slug):
-    if not request.user.has_perm('wiki.change_revisionhistory'):
+    if not request.user.has_perm('pythia.change_revisionhistory'):
         return render_to_response('how_are_you_here.html', {'request': request, })
     try:
         page = Page.objects.get(slug=slug)
