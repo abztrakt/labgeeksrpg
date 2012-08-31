@@ -15,7 +15,7 @@ def hello(request):
         locations = request.user.location_set.all()
         shifts = request.user.shift_set.all()
         clockin_time = 0
-        if locations:
+        if locations and shifts:
             clockin_time = shifts[len(shifts) - 1].intime
 
         workshifts = request.user.workshift_set.all()
