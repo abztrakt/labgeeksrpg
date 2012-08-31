@@ -59,6 +59,8 @@ def edit_page(request, slug=None):
         notes = request.POST["notes"]
         page_name = request.POST['page_name']
         slug = slugify(page_name)
+        if slug == '':
+            return render_to_response('at_least_try.html', {'request': request, })
         if page:
             if (page.content != content) or (page.name != page_name):
                 page.content = content
