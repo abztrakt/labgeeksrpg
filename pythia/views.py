@@ -21,6 +21,9 @@ def view_page(request, slug):
         content = page.content
     except Page.DoesNotExist:
         return HttpResponseRedirect('/pythia/')
+    if page.times_viewed is None:
+        page.times_viewed = 0
+    page.times_viewed = page.times_viewed + 1
     try:
         REVISIONS = RevisionHistory.objects.filter(page=page).order_by('date')
         last_revision = REVISIONS[len(REVISIONS) - 1]
@@ -35,8 +38,6 @@ def edit_page(request, slug=None):
     create_page = False
     page_saved = False
     if not slug:
-        page_name = request.GET["page_name"]
-        slug = slugify(page_name)
         create_page = True
     try:
         page = Page.objects.get(slug=slug)
@@ -60,10 +61,14 @@ def edit_page(request, slug=None):
         content = request.POST["content"]
         notes = request.POST["notes"]
         page_name = request.POST['page_name']
+        slug = slugify(page_name)
+        if slug == '':
+            return render_to_response('at_least_try.html', {'request': request, })
         if page:
             if (page.content != content) or (page.name != page_name):
                 page.content = content
                 page.name = page_name
+                page.slug = slug
                 page.save()
                 page_saved = True
         else:
@@ -74,6 +79,12 @@ def edit_page(request, slug=None):
             revision = RevisionHistory.objects.create(page=page, user=user, after=content, date=datetime.now())
             revision.notes = notes
             revision.save()
+        if page.times_viewed is None:
+            page.times_viewed = 0
+        else:
+            '''in the course of editing the page, you view it twice.  This
+            little bit of logic rights that wrong'''
+            page.times_viewed = page.times_viewed - 1
         return HttpResponseRedirect("/pythia/" + slug + "/")
     return render_to_response("edit.html", locals(), context_instance=RequestContext(request))
 

@@ -16,6 +16,11 @@ def view_question(request, q_id):
         question = Question.objects.get(id=q_id)
     except Question.DoesNotExist:
         return render_to_response('no_question.html', {"request": request, })
+    if question.times_viewed is None:
+        ''' This is just in case we have a null times_viewed (as it is allowed
+        by the model) '''
+        question.times_viewed = 0
+    question.times_viewed = question.times_viewed + 1
     try:
         answers = Answer.objects.filter(question=question).exclude(is_best=True)
         try:
@@ -93,6 +98,15 @@ def answer_question(request, q_id):
             answer.date = datetime.now().date()
             answer.question = question
             answer.save()
+        if question.times_viewed is None:
+            ''' This is just in case we have a null times_viewed (as it is allowed
+            by the model) '''
+            question.times_viewed = 0
+        else:
+            ''' We count times_viewed backwards one because the page was viewed
+            to get here in the normal flow, and will be viewed again, but it should
+            only be counted once'''
+            question.times_viewed = question.times_viewed - 1
         return HttpResponseRedirect('/delphi/' + str(question.id) + '/')
     else:
         form = CreateAnswerForm()
@@ -137,4 +151,11 @@ def select_answer(request, q_id):
                 return render_to_response('no_question.html', {"request": request, })
         except Question.DoesNotExist:
             return render_to_response('no_question.html', {'request': request, })
+    if question.times_viewed is None:
+        question.times_viewed = 0
+    else:
+        ''' We count times_viewed backwards one because the page was viewed
+        to get here in the normal flow, and will be viewed again, but it should
+        only be counted once'''
+        question.times_viewed = question.times_viewed - 1
     return HttpResponseRedirect('/delphi/' + str(q_id) + '/')
