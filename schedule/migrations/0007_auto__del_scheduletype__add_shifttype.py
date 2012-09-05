@@ -8,22 +8,60 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'ClosedHour'
-        db.create_table('schedule_closedhour', (
+        # Deleting model 'ScheduleType'
+        db.delete_table('schedule_scheduletype')
+
+        # Removing M2M table for field allowed_groups on 'ScheduleType'
+        db.delete_table('schedule_scheduletype_allowed_groups')
+
+        # Adding model 'ShiftType'
+        db.create_table('schedule_shifttype', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('location', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['chronos.Location'])),
+            ('timeperiod', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.TimePeriod'])),
             ('day', self.gf('django.db.models.fields.CharField')(max_length=256)),
             ('in_time', self.gf('django.db.models.fields.TimeField')()),
             ('out_time', self.gf('django.db.models.fields.TimeField')()),
-            ('location', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['chronos.Location'])),
-            ('timeperiod', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.TimePeriod'])),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=256)),
         ))
-        db.send_create_signal('schedule', ['ClosedHour'])
+        db.send_create_signal('schedule', ['ShiftType'])
+
+        # Adding M2M table for field allowed_groups on 'ShiftType'
+        db.create_table('schedule_shifttype_allowed_groups', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('shifttype', models.ForeignKey(orm['schedule.shifttype'], null=False)),
+            ('group', models.ForeignKey(orm['auth.group'], null=False))
+        ))
+        db.create_unique('schedule_shifttype_allowed_groups', ['shifttype_id', 'group_id'])
 
 
     def backwards(self, orm):
         
-        # Deleting model 'ClosedHour'
-        db.delete_table('schedule_closedhour')
+        # Adding model 'ScheduleType'
+        db.create_table('schedule_scheduletype', (
+            ('out_time', self.gf('django.db.models.fields.TimeField')()),
+            ('in_time', self.gf('django.db.models.fields.TimeField')()),
+            ('location', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['chronos.Location'])),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=256)),
+            ('timeperiod', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.TimePeriod'])),
+            ('day', self.gf('django.db.models.fields.CharField')(max_length=256)),
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+        ))
+        db.send_create_signal('schedule', ['ScheduleType'])
+
+        # Adding M2M table for field allowed_groups on 'ScheduleType'
+        db.create_table('schedule_scheduletype_allowed_groups', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('scheduletype', models.ForeignKey(orm['schedule.scheduletype'], null=False)),
+            ('group', models.ForeignKey(orm['auth.group'], null=False))
+        ))
+        db.create_unique('schedule_scheduletype_allowed_groups', ['scheduletype_id', 'group_id'])
+
+        # Deleting model 'ShiftType'
+        db.delete_table('schedule_shifttype')
+
+        # Removing M2M table for field allowed_groups on 'ShiftType'
+        db.delete_table('schedule_shifttype_allowed_groups')
 
 
     models = {
@@ -85,16 +123,28 @@ class Migration(SchemaMigration):
             'in_time': ('django.db.models.fields.TimeField', [], {}),
             'location': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['chronos.Location']"}),
             'out_time': ('django.db.models.fields.TimeField', [], {}),
-            'person': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'})
+            'person': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),
+            'timeperiod': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['schedule.TimePeriod']", 'null': 'True', 'blank': 'True'})
+        },
+        'schedule.shifttype': {
+            'Meta': {'object_name': 'ShiftType'},
+            'allowed_groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False'}),
+            'day': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'in_time': ('django.db.models.fields.TimeField', [], {}),
+            'location': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['chronos.Location']"}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+            'out_time': ('django.db.models.fields.TimeField', [], {}),
+            'timeperiod': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['schedule.TimePeriod']"})
         },
         'schedule.timeperiod': {
             'Meta': {'object_name': 'TimePeriod'},
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'end_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 4, 23)'}),
+            'end_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 8, 14)'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'db_index': 'True'}),
-            'start_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 4, 23)'})
+            'start_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 8, 14)'})
         },
         'schedule.workshift': {
             'Meta': {'object_name': 'WorkShift'},

@@ -18,4 +18,9 @@
 	<textarea name="notes" rows="2" cols="100" maxlength="200">{{revision_message}}</textarea>
     <input type="submit" value="Save Page"/>
 </form>
+<form action='/oracles/upload_image/' method='get' target='_new'>
+    need to embed screenshots?
+    <input type='submit' value='upload' />
+    <a href='{% url view_all_screenshots %}' target='_blank'>view uploaded photos</a>
+</form>
 {% endblock %}

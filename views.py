@@ -8,15 +8,14 @@ from labgeeksrpg.labgeeksrpg_config.models import Notification
 
 
 def hello(request):
-    """ The root view of the site. Just static for now, but later we can return useful information for logged in users.
-    Created a dashboard page.
+    """ The site dashboard.
     """
     #when a user is logged-in correctly
     if request.user.is_authenticated():
         locations = request.user.location_set.all()
         shifts = request.user.shift_set.all()
         clockin_time = 0
-        if locations:
+        if locations and shifts:
             clockin_time = shifts[len(shifts) - 1].intime
 
         workshifts = request.user.workshift_set.all()
@@ -32,7 +31,6 @@ def hello(request):
                     today_past_shifts.append(shift)
                 else:
                     today_future_shifts.append(shift)
-
         args = {
             'request': request,
             'locations': locations,
@@ -49,6 +47,7 @@ def hello(request):
 def labgeeks_login(request):
     """ Login a user. Called by the @login_required decorator.
     """
+
     # Get a token to protect from cross-site request forgery
     c = {}
     c.update(csrf(request))

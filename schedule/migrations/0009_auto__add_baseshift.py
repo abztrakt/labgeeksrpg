@@ -8,22 +8,23 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'ClosedHour'
-        db.create_table('schedule_closedhour', (
+        # Adding model 'BaseShift'
+        db.create_table('schedule_baseshift', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('day', self.gf('django.db.models.fields.CharField')(max_length=256)),
             ('in_time', self.gf('django.db.models.fields.TimeField')()),
             ('out_time', self.gf('django.db.models.fields.TimeField')()),
             ('location', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['chronos.Location'])),
-            ('timeperiod', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.TimePeriod'])),
+            ('timeperiod', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.TimePeriod'], null=True, blank=True)),
+            ('shift_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['schedule.ShiftType'], null=True, blank=True)),
         ))
-        db.send_create_signal('schedule', ['ClosedHour'])
+        db.send_create_signal('schedule', ['BaseShift'])
 
 
     def backwards(self, orm):
         
-        # Deleting model 'ClosedHour'
-        db.delete_table('schedule_closedhour')
+        # Deleting model 'BaseShift'
+        db.delete_table('schedule_baseshift')
 
 
     models = {
@@ -69,6 +70,16 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
+        'schedule.baseshift': {
+            'Meta': {'object_name': 'BaseShift'},
+            'day': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'in_time': ('django.db.models.fields.TimeField', [], {}),
+            'location': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['chronos.Location']"}),
+            'out_time': ('django.db.models.fields.TimeField', [], {}),
+            'shift_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['schedule.ShiftType']", 'null': 'True', 'blank': 'True'}),
+            'timeperiod': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['schedule.TimePeriod']", 'null': 'True', 'blank': 'True'})
+        },
         'schedule.closedhour': {
             'Meta': {'object_name': 'ClosedHour'},
             'day': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
@@ -85,16 +96,25 @@ class Migration(SchemaMigration):
             'in_time': ('django.db.models.fields.TimeField', [], {}),
             'location': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['chronos.Location']"}),
             'out_time': ('django.db.models.fields.TimeField', [], {}),
-            'person': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'})
+            'person': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),
+            'timeperiod': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['schedule.TimePeriod']", 'null': 'True', 'blank': 'True'})
+        },
+        'schedule.shifttype': {
+            'Meta': {'object_name': 'ShiftType'},
+            'allowed_groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'location': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['chronos.Location']"}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+            'timeperiod': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['schedule.TimePeriod']"})
         },
         'schedule.timeperiod': {
             'Meta': {'object_name': 'TimePeriod'},
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'end_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 4, 23)'}),
+            'end_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 8, 16)'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'db_index': 'True'}),
-            'start_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 4, 23)'})
+            'start_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.date(2012, 8, 16)'})
         },
         'schedule.workshift': {
             'Meta': {'object_name': 'WorkShift'},

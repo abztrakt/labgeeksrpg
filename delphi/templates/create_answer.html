@@ -14,4 +14,9 @@
     {% endfor %}
     <input type='submit' value='Save'/>
 </form>
+<form action='/oracles/upload_image/' method='get' target='_new'>
+    need to upload screenshots?
+    <input type='submit' value='upload' />
+    <a href='{% url view_all_screenshots %}' target='_blank'>view uploaded photos</a>
+</form>
 {% endblock %}
