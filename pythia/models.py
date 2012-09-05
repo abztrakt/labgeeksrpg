@@ -11,6 +11,7 @@ class Page(models.Model):
     author = models.ForeignKey(User, null=True, blank=True)
     date = models.DateField(null=True)
     times_viewed = models.IntegerField(null=True, default=0)
+    tags = models.ManyToManyField('sybil.Tag', null=True)
 
     def __unicode__(self):
         return self.name

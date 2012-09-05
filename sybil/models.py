@@ -11,3 +11,11 @@ class Screenshot(models.Model):
 
     def __unicode__(self):
         return str(self.pk)
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=25)
+    description = models.TextField()
+
+    def __unicode__(self):
+        return self.name
