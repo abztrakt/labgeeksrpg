@@ -8,6 +8,7 @@ from django.template import RequestContext
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from labgeeksrpg.sybil.forms import *
+from PIL import Image
 
 
 class SybilSearch(SearchView):
@@ -58,7 +59,7 @@ def upload_image(request):
     c.update(csrf(request))
     if request.method == 'POST':
         form = UploadPictureForm(request.POST, request.FILES)
-        if form.is_valid():
+        if form.is_valid() and 'picture' in request.FILES:
             screenshot = form.save(commit=False)
             screenshot.user = request.user
             screenshot.date = datetime.now().date()
