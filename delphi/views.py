@@ -79,8 +79,13 @@ def create_question(request):
         return render_to_response('create_question.html', args, context_instance=RequestContext(request))
 
 
-def kb_home(request):
-    return HttpResponseRedirect('/delphi/create/')
+def delphi_home(request):
+    try:
+        questions = Question.objects.all()
+    except:
+        questions = None
+    can_add_question = request.user.has_perm('delphi.add_question')
+    return render_to_response('delphi.html', {'questions': questions, 'request': request, 'can_add_question': can_add_question,})
 
 
 def answer_question(request, q_id):
