@@ -64,6 +64,7 @@
                 </div>
             {% endfor %}
         </div>
+    <h3>Base Schedule</h3>
     <div id='base_schedule'>
         <ul class="tabs base">
             {% for day in days %}
@@ -79,7 +80,7 @@
                     <div class="schedule_grid"> 
                         {% for times in grid.times %}
                             <div class="schedule_row">
-                                <div class="schedule_row_content">{{times.time}}</div>
+                                <div class="schedule_row_hours">{{times.time}}</div>
 
                                 {% for elem in times.row  %}
                                     <div class="schedule_row_content {{elem.class}}">{{elem.name}}</div>
@@ -94,7 +95,7 @@
 
         </div>
     </div> 
-    
+    <h3>Default Schedule</h3> 
     <div id='default_schedule'>
         <ul class="tabs default">
             {% for day in days %}
@@ -111,12 +112,11 @@
                         <div class="hours_toolbar">
                             <form>
                                 <div>
-                                    <strong>Employee hours:</strong>
-                                    <select class="add_person"></select>
-                                    <input class="employee_starting_hours time_input" type="text" />
-                                    <input class="employee_ending_hours time_input" type="text" />
-                                    <button class="add_employee_hours" type="button">Add employee hours</button>
-                                    <button class="remove_employee_hours" type="button">Remove employee hours</button>
+                                    <strong>Action:</strong>
+                                    <input id='remove' type="checkbox" /><span id='remove_box'>Remove</span>
+                                    <input id='add_replace' type="checkbox"/><span id='add_box'>Add/Replace</span>
+                                    <span id='add_person'>employee:
+                                    <select class="add_person"></select></span>
                                 </div>
                             </form>
                         </div>
@@ -124,7 +124,7 @@
                     <div class="schedule_grid"> 
                         {% for times in grid.times %}
                             <div class="schedule_row">
-                                <div class="schedule_row_content">{{times.time}}</div>
+                                <div class="schedule_row_hours">{{times.time}}</div>
 
                                 {% for elem in times.row  %}
                                     <div class="schedule_row_content {{elem.class}}">{% if elem.user %}{{elem.user}}{% endif %}</div>

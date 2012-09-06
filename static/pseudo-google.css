@@ -595,7 +595,7 @@ Schedule CSS
     overflow:hidden;
 }
 
-#schedule .schedule_row_content{
+#schedule .schedule_row_content, .schedule_row_hours{
     border-bottom: 1px solid #DDDDDD;
     border-right: 1px solid #DDDDDD;
     height: 1.2em;

@@ -7,6 +7,7 @@ This file deals with the schedule itself. Allows users to interact with the sche
 /* 
 Loads the page with events.
 */
+var shift_type_names = [];
 var Day;
 var closing_hours = {};
 var users={};
@@ -42,6 +43,7 @@ $(document).ready(function(){
         $(activeTab).show(); 
         return false;
     });
+    $("#default_schedule .schedule_row_content").bind("click", modEmployeeHours);
     // Use a timepicker widget to select the times in an input field.
     $('.time_input').timepicker({
             showPeriod: true,
@@ -74,9 +76,33 @@ $(document).ready(function(){
     getPeopleList();
 
     // Bind the modifySavingHours method to the buttons.
-    $(".add_employee_hours").bind("click",true,modifyEmployeeHours);
-    $(".remove_employee_hours").bind("click",false,modifyEmployeeHours);
+    //$(".add_employee_hours").bind("click",true,modifyEmployeeHours);
+    //$(".remove_employee_hours").bind("click",false,modifyEmployeeHours);
     
+    //bind the add and remove buttons to uncheck the other
+    $('#add_box').click(function () {
+        $('#add_replace')[0].checked = !$('#add_replace')[0].checked;
+        $('#add_replace').trigger('change'); 
+    });
+    $('#remove_box').click(function () {
+        $('#remove')[0].checked = !$('#remove')[0].checked;
+        $('#remove').trigger('change');
+    });
+    $('#add_person').hide();
+    $('#add_replace').change(function () {
+        $('#remove')[0].checked =  false;
+        if ($('#add_replace')[0].checked) {
+            $('#add_person').show();
+        }else{
+            $('#add_person').hide();    
+        }
+    });
+    $('#remove').change(function () {
+        $('#add_replace')[0].checked =  false;
+        if ($('#remove')[0].checked) {
+            $('#add_person').hide();
+        }
+    });
     // Bind the save method to the save button.
     $("#save_hours").bind("click",saveHours);
     if ($("#schedule").hasClass('visible')) {
@@ -96,6 +122,7 @@ function addShiftTypes() {
             users.push(user);
         }
         shift_types[name]=users;
+        shift_type_names.push(name);
     }
 }
 
@@ -188,9 +215,76 @@ function getDefaultShiftData() {
         }
     }
 }
+
+/*
+adds and removes an employee's hours from the schedule via clicking on the schedule
+*/
+function modEmployeeHours(event){
+    var element = $(this);
+    var in_group = false;
+    var user = $('#add_person').children('.add_person')[0].value;
+    var schedule_row_time = element.parent().children('.schedule_row_hours')[0].innerHTML; 
+    if ($('#add_replace')[0].checked) {
+        var new_user = $('#add_person').children('.add_person')[0].value;
+        if ($(element).hasClass('Open_Shift')) {
+            in_group = true;
+        }else {
+            for (var k=0;k <shift_type_names.length; k++) {
+                if ($(element).hasClass(shift_type_names[k])) {
+                    var people  = shift_types[shift_type_names[k]];
+                    if (people.indexOf(new_user) != -1) {
+                        in_group = true; 
+                        break
+                    }
+                }
+            } 
+            if (in_group){
+                
+                if(!$(this).is(":empty")) { 
+                    var old_user=element.text();
+                    index = users[old_user][Day].indexOf(schedule_row_time);
+                    if (index != -1) {
+                        users[old_user][Day].splice(index, 1);
+                    }
+                }
+                var user = new_user;
+                element.html(user);
+                try{
+                    if (users[user][Day].indexOf(schedule_row_time) == -1) {         
+                        users[user][Day].push(schedule_row_time);
+                        users[user][Day].sort(function(a,b){return a-b});
+                    }
+                }catch(err){      
+                    users[user] = {
+                        'Monday': [],
+                        'Tuesday': [],
+                        'Wednesday': [],
+                        'Thursday':[],
+                        'Wednesday':[],
+                        'Friday': [],
+                        'Saturday': [],
+                        'Sunday': [],
+                    }
+                    if (users[user][Day].indexOf(schedule_row_time) == -1) {
+                        users[user][Day].push(schedule_row_time);
+                        users[user][Day].sort();
+                    }
+                }
+            }else {
+                alert('The person you tried to add to this shift is not in the required group for this shift');
+            }
+        }
+    }else if ($('#remove')[0].checked && !$(this).is(":empty")){
+        var user = element.text();
+        element.empty();
+        index = users[user][Day].indexOf(schedule_row_time);
+        if (index != -1) {
+            users[user][Day].splice(index, 1);
+        }
+    }
+}
 /*
 Adds and removes an employee's hours from the schedule. 
-*/
 function modifyEmployeeHours(event){
     // Grab the appropriate data
     var startTime = $(this).parent().children(".employee_starting_hours")[0].value;
@@ -218,30 +312,57 @@ function modifyEmployeeHours(event){
             endIndex = i-1;
             break;
         }
-        if (i >= startIndex){
-            if (isAdding && closing_hours[Day].indexOf(schedule_row_time) == -1) {
-                    try{
-                        if (users[user][Day].indexOf(schedule_row_time) == -1) {         
-                            users[user][Day].push(schedule_row_time);
-                            users[user][Day].sort(function(a,b){return a-b});
-                        }
-                    }catch(err){      
-                        users[user] = {
-                            'Monday': [],
-                            'Tuesday': [],
-                            'Wednesday': [],
-                            'Thursday':[],
-                            'Wednesday':[],
-                            'Friday': [],
-                            'Saturday': [],
-                            'Sunday': [],
-                        }
-                        if (users[user][Day].indexOf(schedule_row_time) == -1) {
-                            users[user][Day].push(schedule_row_time);
-                            users[user][Day].sort();
+    }
+    // Figure out which place in the row the user's name should be.
+    var index = null;
+    
+
+    // Add or remove the users hours.
+    if (startIndex != schedule.children.length+1){
+        for (var i = startIndex; i <= endIndex; i++){
+            var schedule_row = $(schedule.children[i]);
+            var schedule_row_time = schedule_row.children()[0].innerHTML;
+            for (var j  = 1; j < schedule_row[0].children.length; j ++){
+                var element = $(schedule_row.children()[j]);
+                if (element.is(":empty") || element.text() == user){
+                    index = j;
+                    var element = $(schedule_row.children()[index]);
+                    for (var k=0;k <shift_type_names.length; k++) {
+                        if ($(element).hasClass(shift_type_names[k])) {
+                            var people  = shift_types[shift_type_names[k]];
+                            if (people.indexOf(user) != -1) {
+                               var in_group = true; 
+                            }
                         }
                     }
-            }else {
+                    break; 
+                }
+            }
+            if (isAdding && in_group){
+                element.html(user);
+                try{
+                    if (users[user][Day].indexOf(schedule_row_time) == -1) {         
+                        users[user][Day].push(schedule_row_time);
+                        users[user][Day].sort(function(a,b){return a-b});
+                    }
+                }catch(err){      
+                    users[user] = {
+                        'Monday': [],
+                        'Tuesday': [],
+                        'Wednesday': [],
+                        'Thursday':[],
+                        'Wednesday':[],
+                        'Friday': [],
+                        'Saturday': [],
+                        'Sunday': [],
+                    }
+                    if (users[user][Day].indexOf(schedule_row_time) == -1) {
+                        users[user][Day].push(schedule_row_time);
+                        users[user][Day].sort();
+                    }
+                }
+            } else if (!isAdding){
+                element.empty();
                 index = users[user][Day].indexOf(schedule_row_time);
                 if (index != -1) {
                     users[user][Day].splice(index, 1);
@@ -249,32 +370,8 @@ function modifyEmployeeHours(event){
             }
         }
     }
-    // Figure out which place in the row the user's name should be.
-    var index = null;
-    var schedule_row = schedule.children[startIndex];
-    for (var i = 1; i < schedule_row.children.length; i ++){
-        var element = $(schedule_row.children[i]);
-        if (element.is(":empty") || element.text() == user){
-            index = i;
-            break; 
-        }
-    }
-
-    // Add or remove the users hours.
-    if (index != null && startIndex != schedule.children.length+1){
-        for (var i = startIndex; i <= endIndex; i++){
-            var schedule_row = $(schedule.children[i]);
-            var element = $(schedule_row.children()[index]);
-            
-            if (isAdding){
-                element.html(user);
-            } else{
-                element.empty();
-            }
-        }
-    }
 }
-
+*/
 /*
 Saves all of the hours on the schedule via Ajax.
 */
