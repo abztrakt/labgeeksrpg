@@ -36,7 +36,11 @@
                 {% for event in events %}
                     <h2>{% if can_Add %}<input type="checkbox" name="pk" value="{{event.pk}}">{% endif %}
                     {{event.due_date.month}}/{{event.due_date.day}} {{event.title}} </h2>
-                    <p> {{event.user}} posted on {{event.date}} </p>
+                    {% if event.user%}
+                        <p> {{event.user}} posted on {{event.date}} </p>
+                    {% else %}
+                        <p> Labgeeks posted on {{event.date}} </p>
+                    {% endif %}
                     <p> {{event.content}} </p>
                     <p> Due on {{event.due_date}}</p>
                 {% endfor %}
@@ -48,7 +52,11 @@
                 <h3>Alerts</h3>
                 {% for alert in alerts %}
                     <h2>{% if can_Add %}<input type="checkbox" name="pk" value="{{alert.pk}}">{% endif %}{{alert.title}} </h2>
-                    <p> {{alert.user}} posted on {{alert.date}} </p>
+                    {% if alert.user%}
+                        <p> {{alert.user}} posted on {{alert.date}} </p>
+                    {% else %}
+                        <p> Labgeeks posted on {{alert.date}} </p>
+                    {% endif %}
                     <p> {{alert.content}} </p>
                 {% endfor %}
                 </div>

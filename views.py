@@ -29,7 +29,7 @@ def hello(request):
             if noti.due_date:
                 if now.date() - noti.due_date.date() >= datetime.timedelta(days=1):
                     noti.archived = True
-                elif not noti.due_date - now > datetime.timedelta(days=5) and not noti.archived:
+                elif not noti.due_date - now > datetime.timedelta(days=7) and not noti.archived:
                     events.append(noti)
             else:
                 if not noti.archived:
