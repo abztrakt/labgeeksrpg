@@ -150,11 +150,11 @@ class CreateFinalUWLTReviewForm(CreateUWLTReviewForm):
 
 
 class UpdateWageHistoryForm(ModelForm):
+
     WH_REASONS = WageChangeReason.objects.all()
     if not WH_REASONS:
-        default_wage_change_reason = WageChangeReason.objects.create(title='Promotion')
-        default_wage_change_reason.save()
-        WH_REASONS.append(default_wage_change_reason)
+        default = WageChangeReason.objects.create(title='Starting Wage')
+        WH_REASONS = WageChangeReason.objects.all()
 
     wage_change_reason = forms.ModelChoiceField(required=True, queryset=WH_REASONS, help_text="Choose a reason for this wage change (not recorded if no wage change)", initial=WH_REASONS[0])
 
