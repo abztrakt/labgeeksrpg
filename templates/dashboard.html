@@ -10,11 +10,8 @@
 
 {% block content %}
     <div id="login_info">
-        <div class="section">
             <h1>Dashboard</h1>
             <h2>Hello {{request.user.first_name}}</h2>
-        </div>
-        <p>Welcome to Labgeeks, a staff and work shift management site.</p>
 
         {% if locations %}
             {% for location in locations %}
@@ -29,10 +26,12 @@
             <div id="events">
             <h3>Events</h3>
             {% for event in events %}
+            <div class="notification">
                 <h2>{{event.due_date.month}}/{{event.due_date.day}} {{event.title}} </h2>
-                <p> {{event.user}} posted on {{event.date}} </p>
+                <p class="info"> {{event.user}} posted on {{event.date}} </p>
                 <p> {{event.content}} </p>
                 <p> Due on {{event.due_date}}</p>
+            </div>
             {% endfor %}
             </div>
         {% endif %}
@@ -41,18 +40,18 @@
             <div id="alerts">
             <h3>Alerts</h3>
             {% for alert in alerts %}
+            <div class="notification">
                 <h2> {{alert.title}} </h2>
-                <p> {{alert.user}} posted on {{alert.date}} </p>
+                <p class="info"> {{alert.user}} posted on {{alert.date}} </p>
                 <p> {{alert.content}} </p>
+            </div>
             {% endfor %}
             </div>
         {% endif %}
 
         {% if can_Add%}
-        <div class="dropdown" id="add-notification"> 
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Add a notification</a>
-            <div class = "dropdown-menu" role="menu" aria-labelledby="dLabel">
-            <h3>Post Notifications</h3>
+        <h3>Post Notifications</h3>
+        <div id="addNotification">
             <form method="post" action="">{% csrf_token %}
                 <label class="input_label">
                     <strong>Title</strong>
@@ -68,7 +67,6 @@
                 </label>
                 <input type="submit" value="Submit"/>
             </form>
-            </div>
         </div>
         {% endif %}
 
