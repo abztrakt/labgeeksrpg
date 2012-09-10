@@ -1,17 +1,20 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
-    "http://www.w3.org/TR/REC-html40/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <title>Labgeeks RPG</title>
-<link rel="ico" type="image/x-icon" href="/static/favicon.ico" id="uwfavicon" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="ico" type="image/x-icon" href="/static/favicon.ico" id="uwfavicon" >
 {% load labgeeksrpg_extras %}
-<style>@import url("/static/main.css");</style>
+<link rel="stylesheet/less" type="text/css" href="/static/css/main.less" >
 <style>@import url("/static/css/pepper-grinder/jquery-ui-1.8.16.custom.css");</style>
 <style>@import url("/static/css/ui-lightness/jquery-ui-1.8.16.custom.css");</style>
+<script src="/static/js/less.js" type="text/javascript"></script>
 {% block pageCSS %}
 {% endblock %}
 <script type="text/javascript" src="/static/js/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="/static/js/jquery-ui-1.8.18.custom.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.ui.timepicker.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap-dropdown.js"></script>
 {% block pageJS %}
 {% endblock %}
 </head>
@@ -21,5 +24,6 @@
 {% block content %}
 {% endblock %}
 </div>
+{% include "footer.html" %}
 </body>
 </html>

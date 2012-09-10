@@ -289,6 +289,7 @@ def personal_report(request, user=None, year=None, month=None):
     # Determine who the user is. This will return a calendar specific to that
     # person.
     if not user:
+        print "No user for you"
         user = request.user
     else:
         user = User.objects.get(username=user)
@@ -296,8 +297,10 @@ def personal_report(request, user=None, year=None, month=None):
     # If the year and month are not given, assume it is the current year &
     # month.
     if not year:
+        print "No year for you"
         year = date.today().year
     if not month:
+        print "No month for you"
         month = date.today().month
 
     year = int(year)

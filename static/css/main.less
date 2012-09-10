@@ -1,0 +1,171 @@
+@import "dropdowns.less";
+@import "variables.less";
+@import "mixins.less";
+@import "nav.less";
+@import "footer.less";
+@import "review.less";
+@import "calendar.less";
+
+* {
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    font-weight: normal;
+    text-decoration: none;
+}
+
+body {
+    font-size: 10pt;
+}
+
+#content {
+    min-height: 600px;
+    padding: 10px;
+    h1 {
+        color: @dropdownBackground;
+        font-weight: bold;
+        font-size: 16pt;
+        padding-bottom: 1em;
+    }
+    h2 {
+        font-size: 12pt;
+        padding-bottom: .5em;
+    }
+    font-size: 11pt;
+    ul{
+        padding: 1em;
+        line-height: 17px;
+        list-style: none outside none;
+    }
+}
+
+a {
+    color: @black;
+}
+a:hover {
+    color: #c0c0c0;
+}
+
+table {
+    margin: auto;
+}
+
+form {
+    margin-top: 2em;
+    text-align: left;
+    border: 1px;
+}
+
+th, td {
+    padding: .2em .5em;
+}
+
+th {
+    text-align: left;
+}
+
+tr:nth-child(even) {
+    background: @tableEvenBackground;
+}
+tr:nth-child(odd) {
+    background: @tableOddBackground;
+}
+
+tr:first-child {
+    background-color: @tableOddBackground;
+}
+
+
+
+
+#login_box{
+    float: right;
+    width: 335px;
+}
+
+#create_profile_box, .time_period_box{
+    width: 650px;
+    margin: auto;
+}
+
+.time_period_box td{
+    color: black;
+}
+
+.normal_box{
+    background: none repeat scroll 0 0 rgba(200, 200, 200, 0.5);
+    padding: 20px 25px 15px;
+    border: 1px solid #E5E5E5;
+    margin: 12px 0 0;
+    width: 650px;
+    color: black;
+}
+
+.form_box{
+    background: none repeat scroll 0 0 @grayLighter;
+    padding: 20px 25px 15px;
+    border: 1px;
+    color: black;
+}
+
+.form_box strong, .form_box p{
+    color:black;
+}
+
+.form_box a{
+    font-size: 15pt;
+    color:black;
+}
+
+form .input_label{
+    color: black;
+    display: block;
+    margin: 0 0 1.5em;
+}
+
+form label strong{
+    font-size: 11pt;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 1em;
+}
+
+form input[type="submit"]{
+    background-color: #4D90FE;
+    color: @white;
+    border: 1px solid #3079ED;
+    height: 32px;
+    font-weight: bold;
+    padding: 0 8px;
+    width: 6em;
+}
+
+
+form input[type="text"], form input[type="password"]{
+    height: 32px;
+    border: 1px solid #C0C0C0;
+    padding-left: 8px;
+}
+
+
+#login_info li{
+    margin: 3px 0 2em;
+}
+
+.section{
+    margin-bottom: 1.5em;
+}
+
+.section h1{
+    font-size: 25px;
+}
+
+.section h2{
+    font-size: 16px;
+    margin: 0.4em 0 0;
+}
+
+#people {
+    float: left;
+}

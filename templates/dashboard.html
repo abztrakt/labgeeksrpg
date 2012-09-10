@@ -49,22 +49,31 @@
         {% endif %}
 
         {% if can_Add%}
-        <h3>Post Notifications</h3>
-        <form method="post" action="">{% csrf_token %}
-            <label class="input_label">
-                <strong>Title</strong>
-                {{ form.title }}
-            </label>
-            <label class="input_label">
-                <strong>Content</strong>
-                {{form.content}}
-            </label>
-            <label class="input_label">
-                <strong>Due Date</strong>
-                {{form.due_date}}
-            </label>
-            <input type="submit" value="Submit"/>
-        </form>
+        <!--
+        <div class="dropdown"> 
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Add a notification</a>
+            <div class = "dropdown-menu" role="menu" aria-labelledby="dLabel" id="add-notification">
+        -->
+            <h3>Post Notifications</h3>
+            <form method="post" action="">{% csrf_token %}
+                <label class="input_label">
+                    <strong>Title</strong>
+                    {{ form.title }}
+                </label>
+                <label class="input_label">
+                    <strong>Content</strong>
+                    {{form.content}}
+                </label>
+                <label class="input_label">
+                    <strong>Due Date</strong>
+                    {{form.due_date}}
+                </label>
+                <input type="submit" value="Submit"/>
+            </form>
+        <!--
+            </div>
+        </div>
+        -->
         {% endif %}
 
         {% if today_past_shifts or today_future_shifts %}

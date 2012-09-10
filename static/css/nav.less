@@ -1,0 +1,55 @@
+#navbar {
+    margin-bottom: 1em;
+    #header {
+        a {
+            color: @white;
+            padding-bottom: 3px;
+        }
+        a.dropdown-toggle:hover {
+            color: @lightHover;
+            border-bottom: 2px solid @white;
+        }
+        ul a:hover {
+            color: @lightHover;
+        }
+        background-color: @headerBackground;
+        padding: 8px;
+        height: 1.5em;
+        h1 {
+            float: left;
+            font-size: 1.5em;
+            color: @white;
+        }
+        div {
+            float: right;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+    }
+    .nav {
+        padding-left: 8px;
+        a {
+            color: @black;
+        }
+        a:hover {
+            color: @darkHover;
+        }
+        background-color: @navBackground;
+        clear: both;
+        overflow: hidden;
+        ul {
+            list-style-type: none;
+        }
+        li {
+            float: left;
+            margin-right: 1px;
+            padding: 5px 8px;
+            background: @white;
+            border-bottom: 2px solid @navBackground;
+        }
+        li.active_tab {
+            border-bottom: 2px solid @white;
+            color: @black;
+        }
+    }
+}
