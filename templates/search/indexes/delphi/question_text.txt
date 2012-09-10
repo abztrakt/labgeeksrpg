@@ -1,0 +1,4 @@
+{{ object.question }}
+{{ object.more_info }}
+{{ object.user }}
+{{ object.date }}

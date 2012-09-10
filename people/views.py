@@ -263,15 +263,16 @@ def view_and_edit_reviews(request, user):
             review.reviewer = this_user
             review.is_used_up = False
 
-        if form2.is_valid():
-            wage_history = form2.save(commit=False)
-            wage_history.user = user
-            wage_history.effective_date = datetime.now().date()
-            if last_wage_history:
-                if last_wage != wage_history.wage and wage_history.wage is not None:
-                    wage_history.save()
-            elif wage_history.wage is not None:
-                wage_history.save()
+            if final_reviewer:
+                if form2.is_valid():
+                    wage_history = form2.save(commit=False)
+                    wage_history.user = user
+                    wage_history.effective_date = datetime.now().date()
+                    if last_wage_history:
+                        if last_wage != wage_history.wage and wage_history.wage is not None:
+                            wage_history.save()
+                    elif wage_history.wage is not None:
+                        wage_history.save()
 
             # If the review is FINAL, mark the other reviews as used up and
             # don't show use them for averaging the scores.
@@ -372,17 +373,17 @@ def view_and_edit_reviews(request, user):
         form_fields.append(field_info)
 
     form2_fields = []
-    for field in form2.visible_fields():
-        # wage help text/previous wage not showing up for some reason, so this
-        # is my stopgap answer
-        if field.name == "wage":
-            field.help_text = last_wage_history_help
-        field_info = {
-            'label_tag': field.label_tag,
-            'help_text': field.help_text,
-            'field': field,
-        }
-        form2_fields.append(field_info)
+    if final_reviewer:
+        for field in form2.visible_fields():
+            # wage help text/previous wage not showing up for some reason, so this is my stopgap answer
+            if field.name == "wage":
+                field.help_text = last_wage_history_help
+            field_info = {
+                'label_tag': field.label_tag,
+                'help_text': field.help_text,
+                'field': field,
+            }
+            form2_fields.append(field_info)
 
     # Notify the user of a previous review.
     recent_message = ''
