@@ -25,51 +25,58 @@
             <h3>You are clocked <strong>OUT</strong></h3>
         {% endif %}
 
-        {% if events %}
-            <div id="events">
-            <h3>Events</h3>
-            {% for event in events %}
-                <h2>{{event.due_date.month}}/{{event.due_date.day}} {{event.title}} </h2>
-                <p> {{event.user}} posted on {{event.date}} </p>
-                <p> {{event.content}} </p>
-                <p> Due on {{event.due_date}}</p>
-            {% endfor %}
-            </div>
+        {% if events or alerts %}
+            {% if can_Add %}
+            <form method="post" action=""> {% csrf_token %}
+            {% endif %}
         {% endif %}
+            {% if events %}
+                <div id="events">
+                <h3>Events</h3>
+                {% for event in events %}
+                    <h2>{% if can_Add %}<input type="checkbox" name="pk" value="{{event.pk}}">{% endif %}
+                    {{event.due_date.month}}/{{event.due_date.day}} {{event.title}} </h2>
+                    <p> {{event.user}} posted on {{event.date}} </p>
+                    <p> {{event.content}} </p>
+                    <p> Due on {{event.due_date}}</p>
+                {% endfor %}
+                </div>
+            {% endif %}
 
-        {% if alerts %}
-            <div id="alerts">
-            <h3>Alerts</h3>
-            {% for alert in alerts %}
-                <h2> {{alert.title}} </h2>
-                <p> {{alert.user}} posted on {{alert.date}} </p>
-                <p> {{alert.content}} </p>
-            {% endfor %}
-            </div>
+            {% if alerts %}
+                <div id="alerts">
+                <h3>Alerts</h3>
+                {% for alert in alerts %}
+                    <h2>{% if can_Add %}<input type="checkbox" name="pk" value="{{alert.pk}}">{% endif %}{{alert.title}} </h2>
+                    <p> {{alert.user}} posted on {{alert.date}} </p>
+                    <p> {{alert.content}} </p>
+                {% endfor %}
+                </div>
+            {% endif %}
+        {% if events or alerts %}
+            {% if can_Add %}
+            <input type="submit" value="Archive" />
+            </form>
+            {% endif %}
         {% endif %}
 
         {% if can_Add%}
-        <div class="dropdown" id="add-notification"> 
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Add a notification</a>
-            <div class = "dropdown-menu" role="menu" aria-labelledby="dLabel">
-            <h3>Post Notifications</h3>
-            <form method="post" action="">{% csrf_token %}
-                <label class="input_label">
-                    <strong>Title</strong>
-                    {{ form.title }}
-                </label>
-                <label class="input_label">
-                    <strong>Content</strong>
-                    {{form.content}}
-                </label>
-                <label class="input_label">
-                    <strong>Due Date</strong>
-                    {{form.due_date}}
-                </label>
-                <input type="submit" value="Submit"/>
-            </form>
-            </div>
-        </div>
+        <h3>Post Notifications</h3>
+        <form method="post" action="">{% csrf_token %}
+            <label class="input_label">
+                <strong>Title</strong>
+                {{ form.title }}
+            </label>
+            <label class="input_label">
+                <strong>Content</strong>
+                {{form.content}}
+            </label>
+            <label class="input_label">
+                <strong>Due Date</strong>
+                {{form.due_date}}
+            </label>
+            <input type="submit" value="Post"/>
+        </form>
         {% endif %}
 
         {% if today_past_shifts or today_future_shifts %}
