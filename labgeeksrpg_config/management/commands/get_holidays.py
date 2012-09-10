@@ -4,9 +4,24 @@ import datetime
 import urllib
 import urllib2
 from xml.dom.minidom import parse, parseString
+from optparse import make_option
 
 
 class Command(BaseCommand):
+
+    args = ''
+    help = 'Put the number of days or weeks in the argument and it will check a given timespan into the future. It will then get those holidays and create notifications.'
+
+    option_list = BaseCommand.option_list + (
+        make_option('-d', '--days',
+                    action='store_true',
+                    default=False,
+                    help='Uses a timespan with a unit of days'),
+        make_option('-w', '--weeks',
+                    action='store_true',
+                    default=False,
+                    help='Uses a timespan with a unit of weeks'),
+    )
 
     def handle(self, *args, **options):
 
@@ -15,9 +30,15 @@ class Command(BaseCommand):
                 return '0' + repr(num)
             return '' + repr(num)
 
-        num_of_days = 90
         now = datetime.date.today()
-        end = now + datetime.timedelta(days=num_of_days)
+        end = now
+        for duration in args:
+            amount = int(duration)
+            if options['days']:
+                end = now + datetime.timedelta(days=amount)
+            elif options['weeks']:
+                end = now + datetime.timedelta(weeks=amount)
+
         start_date = repr(now.year) + add_zero(now.month) + add_zero(now.day)
         end_date = repr(end.year) + add_zero(end.month) + add_zero(end.day)
 
