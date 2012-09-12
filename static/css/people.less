@@ -15,11 +15,11 @@ tbody {
         background-color: @navBackground;
     }
     tr:nth-child(odd) td {
-        background: @tableOddBackground;
+        background: @background;
     }
     tr:nth-child(even) td {
-        background: @tableEvenBackground;
-        border-right: 1px solid @white;
+        background: @insetBackground;
+        border-right: 1px solid @background;
     }
 }
 
@@ -33,14 +33,14 @@ table {
 }
 thead th {
     background: @white;
-    border-top: 1px solid @black;
-    border-bottom: 1px solid @black;
+    border-top: 1px solid @detail;
+    border-bottom: 1px solid @detail;
 }
 
 .profile_section {
     > h2 {
         .border-top-radius(5px);
-        background: @grayLight;
+        background: @insetBackground;
         width: 30em;
         padding: 5px;
     }

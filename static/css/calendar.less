@@ -5,12 +5,12 @@
 }
 
 #calendar tr:first-child {
-    background-color: @calendarHead;
+    background-color: @insetBackground;
     font-size: 2.0em;
 }
 
 #calendar tr:nth-child(2) {
-    background-color: @calendarDays;
+    background-color: @background;
     font-size: 1em;
 }
 
@@ -20,36 +20,37 @@
 }
 
 #calendar .first{
-    background-color: @firstPayPeriod;
+    background-color: @scale11;
 }
 
 #calendar .second{
-    background-color: @secondPayPeriod;
+    background-color: @scale21;
     /*border: .3em solid #FFFFFF;*/
 }
 
 #calendar .first.filled{
-    background-color: @firstPayPeriodFilled;
+    background-color: @scale12;
 }
 
 #calendar .second.filled{
-    background-color: @secondPayPeriodFilled;
+    background-color: @scale22;
 }
 
 #calendar .today{
-    border: .2em solid @todayBorder;
+    border: .2em solid @highlight;
 }
 
 #calendar .noday{
-    background-color: white;
+    background-color: @background;
     border: none;
-    border-top: 1px solid #DDDDDD;
+    border-top: 1px solid @border;
 }
 
 #calendar th, #calendar td{
     padding: .5em;
-    border-left: 1px solid white;
-    border-top: 1px solid white;
+    border-left: 1px solid @background;
+    border-top: 1px solid @background;
+    border-right: 0;
     height: 5em;
     width: 5em;
     vertical-align: text-top;
