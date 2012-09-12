@@ -13,7 +13,7 @@
             {% for result in page.object_list %}
             <div class="search_result">
                 {% ifequal result.model_name 'page' %}	
-                    <p><strong><big>Wiki: <a href="/pythia/{{ result.object.slug }}/">{{ result.object.name }}</a></big></strong><br/>
+                    <p><strong>Wiki: <a href="/pythia/{{ result.object.slug }}/">{{ result.object.name }}</a></strong><br/>
                     {% highlight result.object.content with query max_length 200 %}&nbsp;&nbsp;&mdash;&nbsp;by {{ result.object.author }}, 
                     {{ result.object.date }}</p>
                 {% else %}
