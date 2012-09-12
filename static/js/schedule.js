@@ -178,6 +178,7 @@ function getDefaultShiftData() {
     closing_hours['location'] = loc;
 
     // Loop through all days and rows of the schedule and keep track of which hours were assigned.
+    // populates the users array which keeps track of the users and what hours are assigned to them
     for (var i = 0; i < schedule_days.length; i++){
         var schedule_box = $(schedule_days[i]);
         var day = schedule_box.attr("id").toString();
@@ -224,13 +225,16 @@ function modEmployeeHours(event){
     var in_group = false;
     var user = $('#add_person').children('.add_person')[0].value;
     var schedule_row_time = element.parent().children('.schedule_row_hours')[0].innerHTML; 
+    var count = 0;
     if ($('#add_replace')[0].checked) {
         var new_user = $('#add_person').children('.add_person')[0].value;
         if ($(element).hasClass('Open_Shift')) {
             in_group = true;
         }else {
+            
             for (var k=0;k <shift_type_names.length; k++) {
                 if ($(element).hasClass(shift_type_names[k])) {
+                    count = 1;
                     var people  = shift_types[shift_type_names[k]];
                     if (people.indexOf(new_user) != -1) {
                         in_group = true; 
@@ -238,40 +242,44 @@ function modEmployeeHours(event){
                     }
                 }
             } 
-            if (in_group){
-                
-                if(!$(this).is(":empty")) { 
-                    var old_user=element.text();
-                    index = users[old_user][Day].indexOf(schedule_row_time);
-                    if (index != -1) {
-                        users[old_user][Day].splice(index, 1);
-                    }
+        }
+        if (in_group){
+            
+            if(!$(this).is(":empty")) { 
+                var old_user=element.text();
+                index = users[old_user][Day].indexOf(schedule_row_time);
+                if (index != -1) {
+                    users[old_user][Day].splice(index, 1);
                 }
-                var user = new_user;
-                element.html(user);
-                try{
-                    if (users[user][Day].indexOf(schedule_row_time) == -1) {         
-                        users[user][Day].push(schedule_row_time);
-                        users[user][Day].sort(function(a,b){return a-b});
-                    }
-                }catch(err){      
-                    users[user] = {
-                        'Monday': [],
-                        'Tuesday': [],
-                        'Wednesday': [],
-                        'Thursday':[],
-                        'Wednesday':[],
-                        'Friday': [],
-                        'Saturday': [],
-                        'Sunday': [],
-                    }
-                    if (users[user][Day].indexOf(schedule_row_time) == -1) {
-                        users[user][Day].push(schedule_row_time);
-                        users[user][Day].sort();
-                    }
+            }
+            var user = new_user;
+            element.html(user);
+            try{
+                if (users[user][Day].indexOf(schedule_row_time) == -1) {         
+                    users[user][Day].push(schedule_row_time);
+                    users[user][Day].sort(function(a,b){return a-b});
                 }
-            }else {
+            }catch(err){      
+                users[user] = {
+                    'Monday': [],
+                    'Tuesday': [],
+                    'Wednesday': [],
+                    'Thursday':[],
+                    'Wednesday':[],
+                    'Friday': [],
+                    'Saturday': [],
+                    'Sunday': [],
+                }
+                if (users[user][Day].indexOf(schedule_row_time) == -1) {
+                    users[user][Day].push(schedule_row_time);
+                    users[user][Day].sort();
+                }
+            }
+        }else {
+            if (count == 1) {
                 alert('The person you tried to add to this shift is not in the required group for this shift');
+            }else {
+                alert('You tried to add to a shift that is not covered by the base shifts');
             }
         }
     }else if ($('#remove')[0].checked && !$(this).is(":empty")){

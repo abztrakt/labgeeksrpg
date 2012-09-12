@@ -2,12 +2,15 @@
     margin-top: 1em;
 }
 
-
+#schedule .head{
+    font-size: 2em;
+    color: @header2Text;
+}
 #schedule .day_header{
     font-size: 2em;
-    background-color: #F5F5F5;
+    background-color: @brandingText;
     padding: 1em;
-    border-bottom: 1px solid #999999;
+    border-bottom: 1px solid @scale11;
 }
 
 #schedule .schedule_row{
@@ -15,8 +18,8 @@
 }
 
 #schedule .schedule_row_content, .schedule_row_hours{
-    border-bottom: 1px solid #DDDDDD;
-    border-right: 1px solid #DDDDDD;
+    border-bottom: 1px solid @scale11;
+    border-right: 1px solid @scale11;
     height: 1.2em;
     text-align: center;
     width: 4.9em;
@@ -25,15 +28,15 @@
 }
 
 #schedule .closed_hours{
-    background-color: black;
-    border-bottom: 1px solid black;
-    border-right: 1px solid black;
-    color: white;
+    background-color: @header2Text;
+    border-bottom: 1px solid @header2Text;
+    border-right: 1px solid @header2Text;
+    color: @brandingText;
 }
 
 #schedule .hours_toolbar{
     padding: .5em;
-    border-bottom: 1px solid #999999;
+    border-bottom: 1px solid @scale11;
 }
 
 #schedule .hours_toolbar input {
@@ -49,8 +52,8 @@
 }
 
 .schedule_toolbar form button{
-    background-color: #D14836;
-    color: #FFFFFF;
+    background-color: @highlight;
+    color: @brandingText;
     border: 1px solid transparent;
     height: 32px;
     font-weight: bold;
@@ -78,7 +81,7 @@
     display: block;
     border: 1px solid black;
     padding: 1.5em;
-    background-color: #F5F5F5;
+    background-color: @background;
 }
 
 #schedule_options a{
@@ -97,7 +100,7 @@
 }
 
 #schedule_options li:hover {
-    background-color: #4D90FE;
+    background-color: @scale21;
 }
 
 .link_background{
@@ -110,7 +113,7 @@
 
 
 #schedule_options a:hover {
-    border: 1px solid #4D90FE;
+    border: 1px solid @scale21; 
 }
 
 
@@ -134,8 +137,8 @@ ul.tabs {
     float: left;
     list-style: none;
     height: 32px; /*--Set height of tabs--*/
-    border-bottom: 1px solid #999;
-    border-left: 1px solid #999;
+    border-bottom: 1px solid @scale11;
+    border-left: 1px solid @scale11;
     width: 100%;
 }
 
@@ -145,89 +148,38 @@ ul.tabs li {
     padding: 0;
     height: 31px; /*--Subtract 1px from the height of the unordered list--*/
     line-height: 31px; /*--Vertically aligns the text within the tab--*/
-    border: 1px solid #999;
+    border: 1px solid @scale11;
     border-left: none;
     margin-bottom: -1px; /*--Pull the list item down 1px--*/
     overflow: hidden;
     position: relative;
-    background: #e0e0e0;
+    background: @scale11;
 }
 ul.tabs li a {
     text-decoration: none;
-    color: #000;
+    color: @header2Text; 
     display: block;
     font-size: 1.2em;
     padding: 0 20px;
-    border: 1px solid #fff; /*--Gives the bevel look with a 1px white border inside the list item--*/
+    border: 1px solid @brandingText; /*--Gives the bevel look with a 1px white border inside the list item--*/
     outline: none;
 }
 ul.tabs li a:hover {
-    background: #ccc;
+    background: @scale11; 
 }
 
 html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that the active tab does not listen to the hover properties--*/
-    background: #fff;
-    border-bottom: 1px solid #fff; /*--Makes the active tab look like it's connected with its content--*/
+    background: @brandingText;
+    border-bottom: 1px solid @brandingText; /*--Makes the active tab look like it's connected with its content--*/
 }
 
 .tab_container {
-    border: 1px solid #999;
+    border: 1px solid @scale11;
     border-top: none;
     overflow: hidden;
     clear: both;
     float: left; width: 100%;
-    background: #F5F5F5;
-}
-
-ul.tabs {
-    margin: 0;
-    padding: 0;
-    float: left;
-    list-style: none;
-    height: 32px; /*--Set height of tabs--*/
-    border-bottom: 1px solid #999;
-    border-left: 1px solid #999;
-    width: 100%;
-}
-
-ul.tabs li {
-    float: left;
-    margin: 0;
-    padding: 0;
-    height: 31px; /*--Subtract 1px from the height of the unordered list--*/
-    line-height: 31px; /*--Vertically aligns the text within the tab--*/
-    border: 1px solid #999;
-    border-left: none;
-    margin-bottom: -1px; /*--Pull the list item down 1px--*/
-    overflow: hidden;
-    position: relative;
-    background: #e0e0e0;
-}
-ul.tabs li a {
-    text-decoration: none;
-    color: #000;
-    display: block;
-    font-size: 1.2em;
-    padding: 0 20px;
-    border: 1px solid #fff; /*--Gives the bevel look with a 1px white border inside the list item--*/
-    outline: none;
-}
-ul.tabs li a:hover {
-    background: #ccc;
-}
-
-html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that the active tab does not listen to the hover properties--*/
-    background: #fff;
-    border-bottom: 1px solid #fff; /*--Makes the active tab look like it's connected with its content--*/
-}
-
-.tab_container {
-    border: 1px solid #999;
-    border-top: none;
-    overflow: hidden;
-    clear: both;
-    float: left; width: 100%;
-    background: #F5F5F5;
+    background: @brandingText;
 }
 
 
@@ -249,8 +201,8 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
 }
 
 #timeperiod_heading, #review_heading {
-    border-top: 1px solid #DD4B39;
-    border-left: 10px solid #DD4B39;
+    border-top: 1px solid @highlight;
+    border-left: 10px solid @highlight;
     padding: 10px;
 }
 
