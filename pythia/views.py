@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from datetime import datetime
 import diff_match_patch
 from django.template.defaultfilters import slugify
+from django.utils.html import strip_tags
 
 
 @login_required
@@ -66,7 +67,7 @@ def edit_page(request, slug=None):
             return render_to_response('at_least_try.html', {'request': request, })
         if page:
             if (page.content != content) or (page.name != page_name):
-                page.content = content
+                page.content = strip_tags(content)
                 page.name = page_name
                 page.slug = slug
                 page.save()
@@ -77,7 +78,7 @@ def edit_page(request, slug=None):
             page_saved = True
         if page_saved:
             revision = RevisionHistory.objects.create(page=page, user=user, after=content, date=datetime.now())
-            revision.notes = notes
+            revision.notes = strip_tags(notes)
             revision.save()
         if page.times_viewed is None:
             page.times_viewed = 0

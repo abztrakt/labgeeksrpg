@@ -4,10 +4,10 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
         # Adding model 'Page'
         db.create_table('pythia_page', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -30,15 +30,12 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('pythia', ['RevisionHistory'])
 
-
     def backwards(self, orm):
-        
         # Deleting model 'Page'
         db.delete_table('pythia_page')
 
         # Deleting model 'RevisionHistory'
         db.delete_table('pythia_revisionhistory')
-
 
     models = {
         'auth.group': {

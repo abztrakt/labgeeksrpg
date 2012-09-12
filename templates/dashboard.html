@@ -22,48 +22,53 @@
             <h3>You are clocked <strong>OUT</strong></h3>
         {% endif %}
 
-     {%if events or alerts %}
+    {%if events or alerts %}
         {% if can_Add %}
         <form method="post" action=""> {% csrf_token %}
         {% endif %}
 
         {% if events %}
-                <div id="events">
-                <h3>Events</h3>
-                {% for event in events %}
+            <div id="events">
+            <h3>Events</h3>
+            {% for event in events %}
                 <div class="notification">
-                    <h2>{% if can_Add %}<input type="checkbox" name="pk" value="{{event.pk}}">{% endif %}
-                    {{event.due_date.month}}/{{event.due_date.day}} {{event.title}} </h2>
+                <h2>{% if can_Add %}<input type="checkbox" name="pk" value="{{event.pk}}">{% endif %}
+                {{event.due_date.month}}/{{event.due_date.day}} {{event.title}} </h2>
+                {% if event.user%}
                     <p class="info"> {{event.user}} posted on {{event.date}} </p>
-                    <p> {{event.content}} </p>
-                    <p> Due on {{event.due_date}}</p>
+                {% else %}
+                    <p class="info"> Labgeeks posted on {{event.date}} </p>
+                {% endif %}
+                <p> {{event.content}} </p>
+                <p> Due on {{event.due_date}}</p>
                 </div>
-                {% endfor %}
-                </div>
+            {% endfor %}
         {% endif %}
 
         {% if alerts %}
             <div id="alerts">
             <h3>Alerts</h3>
             {% for alert in alerts %}
-            <div class="notification">
-                <h2>
-                    {% if can_Add %}<input type="checkbox" name="pk" value="{{alert.pk}}">{% endif %}{{alert.title}} 
-                </h2>
-                <p class="info"> {{alert.user}} posted on {{alert.date}} </p>
+                <div class="notification">
+                <h2>{% if can_Add %}<input type="checkbox" name="pk" value="{{alert.pk}}">{% endif %}{{alert.title}} </h2>
+                {% if alert.user%}
+                    <p class="info"> {{alert.user}} posted on {{alert.date}} </p>
+                {% else %}
+                    <p class="info"> Labgeeks posted on {{alert.date}} </p>
+                {% endif %}
                 <p> {{alert.content}} </p>
-            </div>
-            {% endfor %}
+                {% endfor %}
+                </div>
             </div>
         {% endif %}
-        </div>
+    {% endif %}
+
         {% if events or alerts %}
             {% if can_Add %}
-            <input type="submit" value="Archive" />
-            </form>
+                <input type="submit" value="Archive" />
+                </form>
             {% endif %}
         {% endif %}
-      {% endif %}
 
         {% if can_Add%}
         <h3>Post Notifications</h3>

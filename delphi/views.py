@@ -15,7 +15,7 @@ def view_question(request, q_id):
     try:
         question = Question.objects.get(id=q_id)
     except Question.DoesNotExist:
-        return render_to_response('no_question.html', {"request": request, })
+        return render_to_response('no_question.html', {"request": request, 'urlhack': True, 'bad_form': False, })
     if question.times_viewed is None:
         ''' This is just in case we have a null times_viewed (as it is allowed
         by the model) '''
@@ -60,7 +60,9 @@ def create_question(request):
             question.user = request.user
             question.date = datetime.now().date()
             question.save()
-        return HttpResponseRedirect('/delphi/' + str(question.id) + '/')
+            return HttpResponseRedirect('/delphi/' + str(question.id) + '/')
+        else:
+            return render_to_response('no_question.html', {'request': request, 'urlhack': False, 'bad_form': True, })
     else:
         form = CreateQuestionForm()
         form_fields = []
@@ -89,7 +91,7 @@ def answer_question(request, q_id):
     try:
         question = Question.objects.get(id=q_id)
     except Question.DoesNotExist:
-        return render_to_response('no_question.html', {"request": request, })
+        return render_to_response('no_question.html', {"request": request, 'urlhack': True, 'bad_form': False, })
     c = {}
     c.update(csrf(request))
     if request.method == 'POST':
@@ -152,9 +154,9 @@ def select_answer(request, q_id):
                     new_best_answer.is_best = True
                     new_best_answer.save()
             except Answer.DoesNotExist:
-                return render_to_response('no_question.html', {"request": request, })
+                return render_to_response('no_question.html', {"request": request, 'urlhack': True, 'bad_form': False, })
         except Question.DoesNotExist:
-            return render_to_response('no_question.html', {'request': request, })
+            return render_to_response('no_question.html', {'request': request, 'urlhack': True, 'bad_form': False, })
     if question.times_viewed is None:
         question.times_viewed = 0
     else:

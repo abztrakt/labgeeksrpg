@@ -4,10 +4,10 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
         # Adding model 'Question'
         db.create_table('delphi_question', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -29,15 +29,12 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('delphi', ['Answer'])
 
-
     def backwards(self, orm):
-        
         # Deleting model 'Question'
         db.delete_table('delphi_question')
 
         # Deleting model 'Answer'
         db.delete_table('delphi_answer')
-
 
     models = {
         'auth.group': {

@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
 {% include 'search.html' %}
-<p>Hello traveler,  it seems as though you've fallen through a hole in the internet.  There is, as of this moment, no question corresponding to this url.</p>
+<p>Hello traveler,  it seems as though you've fallen through a hole in the internet.</p>
+{% if urlhack %}
+<p>There is, as of this moment, no question corresponding to this url.</p>
+{% endif %}
+{% if bad_form %}
+<p>The form you attempted to submit is full of missing data, that is to say, not full of proper data.  Try again</p>
+{% endif %}
 {% endblock %}
