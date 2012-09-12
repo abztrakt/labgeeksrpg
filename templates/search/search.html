@@ -2,40 +2,37 @@
 {% load highlight %}
 {% block content %}
     <form method="get" action=".">
-        <table>
-            {{ form.as_table }}
-            <tr>
-                <td>&nbsp</td>
-                <td>
-                    <input type="submit" value="Search">
-                </td>
-            </tr>
-        </table>
+        <ul id="search_params">
+            {{ form.as_ul }}
+            <li><input type="submit" value="Search"></li>
+        </ul>
 
         {% if query %}
             <big>Results</big>
 
             {% for result in page.object_list %}
+            <div class="search_result">
                 {% ifequal result.model_name 'page' %}	
                     <p><strong><big>Wiki: <a href="/pythia/{{ result.object.slug }}/">{{ result.object.name }}</a></big></strong><br/>
                     {% highlight result.object.content with query max_length 200 %}&nbsp;&nbsp;&mdash;&nbsp;by {{ result.object.author }}, 
                     {{ result.object.date }}</p>
                 {% else %}
                     {% if result.object.answer %}
-                        <p><strong><big>Knowledgebase: <a href="/delphi/{{ result.object.question.id }}/" >{{ result.object.question }}</a></big></strong><br/>
+                        <p><strong>Knowledgebase: <a href="/delphi/{{ result.object.question.id }}/" >{{ result.object.question }}</a></strong><br/>
                         {% highlight result.object.answer with query max_length 200 %}&nbsp;&nbsp;&mdash;&nbsp;by {{ result.object.user }}, 
                         {{ result.object.date }}</p>
                     {% else %}
-                        <p><strong><big>Knowledgebase: <a href="/delphi/{{ result.object.id }}/" >{{ result.object.question }}</a></big></strong><br/>
+                        <p><strong>Knowledgebase: <a href="/delphi/{{ result.object.id }}/" >{{ result.object.question }}</a></strong><br/>
                         {{ result.object.more_info }}&nbsp;&nbsp;&mdash;&nbsp;by {{ result.object.user }}, {{ result.object.date }}</p>
                     {% endif %}
                 {% endifequal %}
+            </div>
             {% empty %}
                 <p>Sorry, no results were found.</p>
             {% endfor %}
 
             {% if suggestion %}
-                    <p>Here's a suggestion: <a href="/oracles/search/?q={{ suggestion }}">{{ suggestion }}</a></p>
+                <h2>Here's a suggestion: <a href="/oracles/search/?q={{ suggestion }}">{{ suggestion }}</a></h2>
             {% endif %}
 
             {% if page.has_previous or page.has_next %}
