@@ -72,7 +72,7 @@
     {% endif %}
 
     {% if can_Add%}
-        <h3>Post Notifications</h3>
+        <h3>Post Alert or Event</h3>
         <div id="addNotification">
             <form method="post" action="">{% csrf_token %}
                 <label class="input_label">
@@ -85,6 +85,7 @@
                 </label>
                 <label class="input_label">
                     <strong>Due Date</strong>
+                    <p class="info">Add a due date to create an event</p>
                     {{form.due_date}}
                 </label>
                 <input type="submit" value="Submit"/>
