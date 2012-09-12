@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if screenshots %}
+<ul><strong>All screenshots</strong>
+    {% for screenshot in screenshots %}
+    <li><a href='{{screenshot.url}}' target='_blank'>{{ screenshot.markdown_code }}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p><strong>no screenshots uploaded</strong></p>
+{% endif %}
+{% endblock %}

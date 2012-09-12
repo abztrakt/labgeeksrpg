@@ -5,22 +5,13 @@ import os
 
 
 class CreateUserProfileForm(ModelForm):
-    def get_css_files():
-        css_choices = []
-        path = 'static/'
-        for infile in os.listdir(path):
-                if infile.endswith(".css"):
-                    css_choices.append((infile, infile))
-        return css_choices
-    site_skin = forms.ChoiceField(choices=get_css_files())
-
     def save(self, *args, **kwargs):
         inst = ModelForm.save(self, *args, **kwargs)
         return inst
 
     class Meta:
         model = UserProfile
-        fields = ('staff_photo', 'call_me_by', 'working_periods', 'grad_date', 'office', 'about_me', 'phone', 'alt_phone', 'site_skin')
+        fields = ('staff_photo', 'call_me_by', 'working_periods', 'grad_date', 'office', 'about_me', 'phone', 'alt_phone')
 
 
 class CreatePerformanceReviewForm(ModelForm):
@@ -150,11 +141,11 @@ class CreateFinalUWLTReviewForm(CreateUWLTReviewForm):
 
 
 class UpdateWageHistoryForm(ModelForm):
+
     WH_REASONS = WageChangeReason.objects.all()
     if not WH_REASONS:
-        default_wage_change_reason = WageChangeReason.objects.create(title='Promotion')
-        default_wage_change_reason.save()
-        WH_REASONS.append(default_wage_change_reason)
+        default = WageChangeReason.objects.create(title='Starting Wage')
+        WH_REASONS = WageChangeReason.objects.all()
 
     wage_change_reason = forms.ModelChoiceField(required=True, queryset=WH_REASONS, help_text="Choose a reason for this wage change (not recorded if no wage change)", initial=WH_REASONS[0])
 

@@ -10,7 +10,7 @@
 
 {% block content %}
 <div class="section">
-    <h1>Hello {{this_user}}.</h1>
+    <h1>Editing profile for {{this_user}}.</h1>
     <h2>{{message}}</h2>
 </div>
 <div id="create_profile_box">
@@ -57,11 +57,6 @@
             <label class="input_label">
                 <strong>About me</strong>
                 {{ form.about_me}}
-            </label>
-
-            <label class="input_label">
-                <strong>Site Skin ( Try the new skin out! )</strong>
-                {{ form.site_skin}}
             </label>
 
             <input type="submit" value="Submit"/>

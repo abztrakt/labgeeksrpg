@@ -1,0 +1,283 @@
+#schedule{
+    margin-top: 1em;
+}
+
+
+#schedule .day_header{
+    font-size: 2em;
+    background-color: #F5F5F5;
+    padding: 1em;
+    border-bottom: 1px solid #999999;
+}
+
+#schedule .schedule_row{
+    overflow:hidden;
+}
+
+#schedule .schedule_row_content, .schedule_row_hours{
+    border-bottom: 1px solid #DDDDDD;
+    border-right: 1px solid #DDDDDD;
+    height: 1.2em;
+    text-align: center;
+    width: 4.9em;
+    padding: 1em;
+    float: left;
+}
+
+#schedule .closed_hours{
+    background-color: black;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+    color: white;
+}
+
+#schedule .hours_toolbar{
+    padding: .5em;
+    border-bottom: 1px solid #999999;
+}
+
+#schedule .hours_toolbar input {
+    width: 6em;
+}
+
+#schedule .hours_toolbar div{
+    margin-bottom: 1em;
+}
+
+.schedule_toolbar form, .hours_toolbar form{
+    margin-top: 1em;
+}
+
+.schedule_toolbar form button{
+    background-color: #D14836;
+    color: #FFFFFF;
+    border: 1px solid transparent;
+    height: 32px;
+    font-weight: bold;
+    padding: 0 8px;
+    width: 6em;
+}
+
+.schedule_status {
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 4px;
+    box-shadow: 0 2px 3px rgba(20,20,20,0.5);
+    border: 2px solid #339900;
+    background-color: #c8ffad;
+    padding: 1em;
+    margin: 1em;
+    overflow: auto;
+}
+
+#schedule_options{
+    margin: 2em;
+}
+
+#schedule_options a{
+    display: block;
+    border: 1px solid black;
+    padding: 1.5em;
+    background-color: #F5F5F5;
+}
+
+#schedule_options a{
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    box-shadow: 0 2px 3px rgba(20,20,20,0.5);
+}
+
+#schedule_options li{
+    padding: 3px;
+    margin: 1em;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
+
+#schedule_options li:hover {
+    background-color: #4D90FE;
+}
+
+.link_background{
+    padding: 3px;
+    margin: 1em;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
+
+
+#schedule_options a:hover {
+    border: 1px solid #4D90FE;
+}
+
+
+.option_title{
+    font-size: 20px;
+    float: left;
+    margin-right: 2em;
+    width: 5em;
+}
+
+.option_description{
+    font-size: 12px;
+    float: right;
+    margin-right: 2em;
+    width: 6em;
+}
+
+ul.tabs {
+    margin: 0;
+    padding: 0;
+    float: left;
+    list-style: none;
+    height: 32px; /*--Set height of tabs--*/
+    border-bottom: 1px solid #999;
+    border-left: 1px solid #999;
+    width: 100%;
+}
+
+ul.tabs li {
+    float: left;
+    margin: 0;
+    padding: 0;
+    height: 31px; /*--Subtract 1px from the height of the unordered list--*/
+    line-height: 31px; /*--Vertically aligns the text within the tab--*/
+    border: 1px solid #999;
+    border-left: none;
+    margin-bottom: -1px; /*--Pull the list item down 1px--*/
+    overflow: hidden;
+    position: relative;
+    background: #e0e0e0;
+}
+ul.tabs li a {
+    text-decoration: none;
+    color: #000;
+    display: block;
+    font-size: 1.2em;
+    padding: 0 20px;
+    border: 1px solid #fff; /*--Gives the bevel look with a 1px white border inside the list item--*/
+    outline: none;
+}
+ul.tabs li a:hover {
+    background: #ccc;
+}
+
+html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that the active tab does not listen to the hover properties--*/
+    background: #fff;
+    border-bottom: 1px solid #fff; /*--Makes the active tab look like it's connected with its content--*/
+}
+
+.tab_container {
+    border: 1px solid #999;
+    border-top: none;
+    overflow: hidden;
+    clear: both;
+    float: left; width: 100%;
+    background: #F5F5F5;
+}
+
+ul.tabs {
+    margin: 0;
+    padding: 0;
+    float: left;
+    list-style: none;
+    height: 32px; /*--Set height of tabs--*/
+    border-bottom: 1px solid #999;
+    border-left: 1px solid #999;
+    width: 100%;
+}
+
+ul.tabs li {
+    float: left;
+    margin: 0;
+    padding: 0;
+    height: 31px; /*--Subtract 1px from the height of the unordered list--*/
+    line-height: 31px; /*--Vertically aligns the text within the tab--*/
+    border: 1px solid #999;
+    border-left: none;
+    margin-bottom: -1px; /*--Pull the list item down 1px--*/
+    overflow: hidden;
+    position: relative;
+    background: #e0e0e0;
+}
+ul.tabs li a {
+    text-decoration: none;
+    color: #000;
+    display: block;
+    font-size: 1.2em;
+    padding: 0 20px;
+    border: 1px solid #fff; /*--Gives the bevel look with a 1px white border inside the list item--*/
+    outline: none;
+}
+ul.tabs li a:hover {
+    background: #ccc;
+}
+
+html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that the active tab does not listen to the hover properties--*/
+    background: #fff;
+    border-bottom: 1px solid #fff; /*--Makes the active tab look like it's connected with its content--*/
+}
+
+.tab_container {
+    border: 1px solid #999;
+    border-top: none;
+    overflow: hidden;
+    clear: both;
+    float: left; width: 100%;
+    background: #F5F5F5;
+}
+
+
+.hidden{
+    display: none;
+}
+
+.visible {
+    visibility: visible;
+}
+
+
+.timeperiod_selector:hover, .review_selector:hover {
+    cursor: pointer;
+}
+
+#timeperiod_info, #review_info {
+    margin: 1em;
+}
+
+#timeperiod_heading, #review_heading {
+    border-top: 1px solid #DD4B39;
+    border-left: 10px solid #DD4B39;
+    padding: 10px;
+}
+
+#timeperiod_title, #review_title{
+    text-align: left;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+.review_section{
+    text-align: left;
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+#timeperiod_details, #review_details{
+    margin-left: 2em;
+}
+
+
+#timeperiod_info ul{
+    margin: 0;
+}
+
+#timeperiod_info strong{
+    float: left;
+    margin-right: 3px;
+}

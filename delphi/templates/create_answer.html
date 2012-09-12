@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load markup %}
+{% block content %}
+{% include 'search.html' %}
+<h2>Answering question posted by {{asker}}</h2>
+<p><strong>{{question}}</strong></p>
+<p>{{more_info|markdown}}</p>
+<form action='' method='post' enctype='multipart/form-data'>{% csrf_token %}
+    {% for field in form_fields %}
+    <div>
+        <p><strong>{{field.help_text}}</strong></p>
+        {{field.field}}
+    </div>
+    {% endfor %}
+    <input type='submit' value='Save'/>
+</form>
+<form action='/oracles/upload_image/' method='get' target='_new'>
+    need to upload screenshots?
+    <input type='submit' value='upload' />
+    <a href='{% url view_all_screenshots %}' target='_blank'>view uploaded photos</a>
+</form>
+{% endblock %}

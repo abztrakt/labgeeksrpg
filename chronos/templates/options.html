@@ -3,7 +3,7 @@
 {% block content %}
     
     <div class="section">
-        <h1><a id="clock_in_or_out" href="{% url Time %}">Clock IN or OUT</a></h1>
+        <h1><a id="clock_in_or_out" href="/chronos/time/">Clock IN or OUT</a></h1>
         <h2>Any hours worked are displayed on the calendar. Click on a day to view shifts in detail</h2>
     </div>
         <div id="calendar">
@@ -12,8 +12,8 @@
                 <p>Pay period totals:</p>
                 {% if weekly_totals %}
                 <ul>
-                    <li><a href="{% url Personal-Report-Payperiod user year month 1 %}">First: <strong>{{payperiod_totals.first}}</strong></a></li>
-                    <li><a href="{% url Personal-Report-Payperiod user year month 2 %}">Second: <strong>{{payperiod_totals.second}}</strong></a></li>
+                    <li><a href="/chronos/{{user}}/{{year}}/{{month}}/payperiod/1">First: <strong>{{payperiod_totals.first}}</strong></a></li>
+                    <li><a href="/chronos/{{user}}/{{year}}/{{month}}/payperiod/2">Second: <strong>{{payperiod_totals.second}}</strong></a></li>
                 </ul>
                 {% else %}
                     <p>No shifts this month</p>
@@ -25,7 +25,7 @@
                 {% if weekly_totals %}
                     <ul>
                     {% for week in weekly_totals %}
-                        <li><a href="{% url Personal-Report-Weekly user year month week.week %}">Week {{week.week}}: <strong>{{week.total}}</strong></a></li>
+                        <li><a href="/chronos/{{user}}/{{year}}/{{month}}/week/{{week.week}}">Week {{week.week}}: <strong>{{week.total}}</strong></a></li>
                     {% endfor %}
                     </ul>
                 {% else %}
@@ -47,8 +47,8 @@
             {{ calendar }}
 
             <div id="calendar_nav">
-                <a class="calendar_nav_link" href="{% url Personal-Report_Monthly user prev_date.year prev_date.month %}">&#060;&#060; Prev month</a>
-                <a class="calendar_nav_link" href="{% url Personal-Report_Monthly user next_date.year next_date.month %}">Next month &#062;&#062;</a>
+                <a class="calendar_nav_link" href="/chronos/{{user}}/{{prev_date.year}}/{{prev_date.month}}">&#060;&#060; Prev month</a>
+                <a class="calendar_nav_link" href="/chronos/{{user}}/{{next_date.year}}/{{next_date.month}}">&#062;&#062; Next month</a>
             </div>
         </div>   
 {% endblock %}
