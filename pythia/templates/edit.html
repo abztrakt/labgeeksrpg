@@ -2,9 +2,9 @@
 {% block content %}
 {% include 'search.html' %}
 {% if create_page %}
-<h3>Creating Page:</h1>
+<h1>Create Page:</h1>
 {% else %}
-<h3>Editing Page:</h3>
+<h1>Edit Page:</h1>
 {% endif %}
 {% if page_exists %}
 <h2>{{page_name}} already exists.  If you're evil and meant for this to happen, edit below</h2>
