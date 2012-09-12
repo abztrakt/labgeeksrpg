@@ -2,17 +2,17 @@
     margin-bottom: 1em;
     #header {
         a {
-            color: @white;
+            color: @brandingText;
             padding-bottom: 3px;
         }
         a.dropdown-toggle:hover {
-            color: @white;
-            border-bottom: 2px solid @white;
+            color: @brandingText;
+            border-bottom: 2px solid @brandingText;
         }
         ul a:hover {
-            color: @lightHover;
+            color: @brandingText;
         }
-        background-color: @headerBackground;
+        background-color: @brandingBackground;
         padding: 8px;
         height: 1.5em;
         h1 {
@@ -28,16 +28,16 @@
             margin-top: 5px;
         }
         .dropdown-menu {
-            background: @dropdownBackground;
+            background: @brandingBackground;
         }
     }
     .nav {
         padding-left: 8px;
         a {
-            color: @black;
+            color: @link;
         }
         a:hover {
-            color: @darkHover;
+            color: @linkHover;
         }
         background-color: @navBackground;
         clear: both;
@@ -46,15 +46,15 @@
             list-style-type: none;
         }
         li {
+            color: @text;
             float: left;
             margin-right: 1px;
             padding: 5px 8px;
-            background: @white;
+            background: @background;
             border-bottom: 2px solid @navBackground;
         }
         li.active_tab {
-            border-bottom: 2px solid @white;
-            color: @black;
+            border-bottom: 2px solid @background;
         }
     }
 }
