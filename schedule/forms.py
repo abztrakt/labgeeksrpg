@@ -31,7 +31,7 @@ class CreateDailyScheduleForm(forms.Form):
         ('Saturday', 'Saturday'),
     )
     timeperiods = forms.ChoiceField(choices=[(tp.name,tp.name) for tp in TimePeriod.objects.all()])
-    location = forms.ChoiceField(widget=forms.RadioSelect,choices=[(loc.name,loc.name) for loc in Location.objects.all()],required=True)
+    location = forms.ChoiceField(choices=[(loc.name,loc.name) for loc in Location.objects.all()],required=True)
 
 
 class SelectDailyScheduleForm(forms.Form):

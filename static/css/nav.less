@@ -1,0 +1,60 @@
+#navbar {
+    margin-bottom: 1em;
+    #header {
+        a {
+            color: @brandingText;
+            padding-bottom: 3px;
+        }
+        a.dropdown-toggle:hover {
+            color: @brandingText;
+            border-bottom: 2px solid @brandingText;
+        }
+        ul a:hover {
+            color: @brandingText;
+        }
+        background-color: @brandingBackground;
+        padding: 8px;
+        height: 1.5em;
+        h1 {
+            float: left;
+            font-size: 1.5em;
+            color: @white;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        div {
+            float: right;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+        .dropdown-menu {
+            background: @brandingBackground;
+        }
+    }
+    .nav {
+        padding-left: 8px;
+        a {
+            color: @link;
+        }
+        a:hover {
+            color: @linkHover;
+        }
+        background-color: @navBackground;
+        clear: both;
+        overflow: hidden;
+        ul {
+            list-style-type: none;
+        }
+        li {
+            color: @text;
+            float: left;
+            margin-right: 1px;
+            padding: 5px 8px;
+            background: @background;
+            border-bottom: 2px solid @navBackground;
+        }
+        li.active_tab {
+            border-bottom: 2px solid @background;
+        }
+    }
+}

@@ -1,5 +1,4 @@
-"""
-Begin testing for Chronos, import proper libraries and models.
+""" Begin testing for Chronos, import proper libraries and models.
 """
 from django.test import TestCase
 from datetime import datetime
@@ -10,9 +9,8 @@ from labgeeksrpg.chronos import views as c_views
 
 
 class StartTestCase(TestCase):
-    """
-    Create models for the test cases. Make sure all test cases inherit from this class so that they have models.
-    Feel free to add or edit models.
+    """ Create models for the test cases. Make sure all test cases inherit from
+    this class so that they have models. Feel free to add or edit models.
     """
     def setUp(self):
 
@@ -26,7 +24,8 @@ class StartTestCase(TestCase):
         self.ryu.is_staff = True
         self.ryu.is_superuser = True
 
-        # Ken can do anything a regular staff can do, minus things a superuser user can do.
+        # Ken can do anything a regular staff can do, minus things a superuser
+        # can do.
         self.ken.is_active = True
         self.ken.is_staff = True
         self.ken.is_superuser = False
@@ -93,8 +92,8 @@ class ClockInClockOutTestCase(StartTestCase):
 
 class ShiftsTestCase(StartTestCase):
 
-    """
-    Test shifts. Make sure we are grabbing the right ones. Either create shifts or use ones from the db.
+    """ Test shifts. Make sure we are grabbing the right ones. Either create
+    shifts or use ones from the db.
     """
     def setUp(self):
         super(ShiftsTestCase, self).setUp()

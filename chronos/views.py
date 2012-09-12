@@ -40,10 +40,12 @@ def get_shifts(year, month, day=None, user=None, week=None, payperiod=None):
         shifts = Shift.objects.filter(intime__year=int(year), intime__month=int(month))
 
     if week:
-        #Filter the shifts by the given week of the month (i.e. week=1 means grab shifts in 1st week of month)
+        # Filter the shifts by the given week of the month (i.e. week=1 means
+        # grab shifts in 1st week of month)
         first_week = date(int(year), int(month), 1).isocalendar()[1]
 
-        #TODO: fix this hack to get around isocaledar's first week of the year wierdness. See #98
+        #TODO: fix this hack to get around isocaledar's first week of the year
+        # wierdness. See #98
         if first_week == 52 and int(month) == 1:
             first_week = 1
 
@@ -60,7 +62,8 @@ def get_shifts(year, month, day=None, user=None, week=None, payperiod=None):
                 weekly[week_number] = [shift]
         shifts = weekly[int(week)]
     elif payperiod:
-        #Filter the shifts by the given payperiod of the month (i.e. payperiod=1 means grab shifts in 1st payperiod of month)
+        # Filter the shifts by the given payperiod of the month
+        # (i.e. payperiod=1 means grab shifts in 1st payperiod of month)
         payperiod_shifts = {'first': [], 'second': []}
         for shift in shifts:
             shift_date = shift.intime
@@ -79,14 +82,15 @@ def get_shifts(year, month, day=None, user=None, week=None, payperiod=None):
 
 
 def calc_shift_stats(shifts, year, month):
-    '''
-    This method returns various calculations regarding a collection of shifts in a given year and month.
-    '''
+    """ This method returns various calculations regarding a collection of
+    shifts in a given year and month.
+    """
     payperiod_totals = {'first': 0, 'second': 0}
     weekly = {}
     first_week = date(year, month, 1).isocalendar()[1]
 
-    #TODO: fix this hack around isocalendars calculating first week of the year, see #98
+    #TODO: fix this hack around isocalendars calculating first week of the
+    # year, see #98
     if first_week == 52 and month == 1:
         first_week = 1
 
@@ -127,9 +131,9 @@ def calc_shift_stats(shifts, year, month):
 
 
 def prev_and_next_dates(year, month):
-    '''
-    This method returns a previous and upcomming months from a given month and year.
-    '''
+    """ This method returns a previous and upcomming months from a given month
+    and year.
+    """
     #Figure out the prev and next months
     if month == 1:
         #Its January
@@ -146,44 +150,46 @@ def prev_and_next_dates(year, month):
 
     result = {'prev_date': prev_date, 'next_date': next_date}
     return result
-
-"""
-    The methods and views below deal with OVERALL calendar information
-"""
+    """ The methods and views below deal with OVERALL calendar information
+    """
 
 
 @login_required
 def staff_report(request, year, month, day=None, user=None, week=None, payperiod=None):
-    '''
-    This view is used to display all shifts in a time frame. Only users with specific permissions can view this information.
-    '''
+    """ This view is used to display all shifts in a time frame. Only users
+    with specific permissions can view this information.
+    """
 
     if not request.user.is_staff:
         message = 'Permission Denied'
         reason = 'You do not have permission to visit this part of the page.'
 
         return render_to_response('fail.html', locals())
+
     return specific_report(request, user, year, month, day, week, payperiod)
 
 
 @login_required
 def specific_report(request, user, year, month, day=None, week=None, payperiod=None):
-    """ This view is used when viewing specific shifts in the given day. (Table form)
+    """ This view is used when viewing specific shifts in the given day.
     """
+
     #Grab shifts
     if user:
         user = User.objects.get(username=user)
 
     all_shifts = get_shifts(year, month, day, user, week, payperiod)
+
     if day:
         description = "Viewing shifts for %s." % (date(int(year), int(month), int(day)).strftime("%B %d, %Y"))
     elif week:
         description = "Viewing shifts in week %d of %s." % (int(week), date(int(year), int(month), 1).strftime("%B, %Y"))
     else:
-        #This should be a payperiod view
+        # This should be a payperiod view
         description = "Viewing shifts in payperiod %d of %s." % (int(payperiod), date(int(year), int(month), 1).strftime("%B, %Y"))
 
-    # The following code is used for displaying the user's call_me_by or first name.
+    # The following code is used for displaying the user's call_me_by or first
+    # name.
     shifts = []
     for shift in all_shifts:
         if "\n\n" in shift.shiftnote:
@@ -205,7 +211,8 @@ def specific_report(request, user, year, month, day=None, week=None, payperiod=N
         except UserProfile.DoesNotExist:
             user = user.first_name
 
-        #Splits up shiftnotes into two separate variables if there are two to begin with
+        # Splits up shiftnotes into two separate variables if there are two to
+        # begin with
         if "\n\n" in shift.shiftnote:
             shiftnotes = shift.shiftnote.split("\n\n")
             shift.shiftinnote = shiftnotes[0]
@@ -268,7 +275,7 @@ def report(request, user=None, year=None, month=None):
         'calendar': calendar,
         'prev_date': prev_date,
         'next_date': next_date,
-        'weeks': weeks
+        'weeks': weeks,
     }
 
     return render_to_response('report.html', args)
@@ -279,20 +286,25 @@ def personal_report(request, user=None, year=None, month=None):
     """ Creates a personal report of all shifts for that user.
     """
     args = {}
-    # Determine who the user is. This will return a calendar specific to that person.
+    # Determine who the user is. This will return a calendar specific to that
+    # person.
     if not user:
+        print "No user for you"
         user = request.user
     else:
         user = User.objects.get(username=user)
 
-    # If the year and month are not given, assume it is the current year & month.
+    # If the year and month are not given, assume it is the current year &
+    # month.
     if not year:
+        print "No year for you"
         year = date.today().year
     if not month:
+        print "No month for you"
         month = date.today().month
+
     year = int(year)
     month = int(month)
-
     if request.user.is_authenticated():
         #Grab user's shifts
         shifts = get_shifts(year, month, None, user)
@@ -330,19 +342,19 @@ def personal_report(request, user=None, year=None, month=None):
 def time(request):
     """ Sign in or sign out of a shift.
     """
-    #Generate a token to protect from cross-site request forgery
+    # Generate a token to protect from cross-site request forgery
     c = {}
     c.update(csrf(request))
 
     # Grab information we want to pass along no matter what state we're in
     user = request.user
-    #Getting machine location user is currently using
+    # Getting machine location user is currently using
     current_ip = request.META['REMOTE_ADDR']
 
     try:
         punchclock = Punchclock.objects.filter(ip_address=current_ip)[0]
     except:
-        #implement bad monkey page redirect
+        # implement bad monkey page redirect
         message = "You are a very bad monkey!"
         reason = "This computer isn't one of the punchclocks, silly..."
         log_msg = "Your IP Address, %s, has been logged and will be reported. (Just kidding. But seriously, you can't sign in or out from here.)" % current_ip
@@ -350,12 +362,13 @@ def time(request):
 
     location = punchclock.location
 
-    #Check for POST, if not blank form, if true 'take in data'
+    # Check for POST, if not blank form, if true 'take in data'
     if request.method == 'POST':
         form = ShiftForm(request.POST)
         #Check form data for validity, if not valid, fail gracefully
         if form.is_valid():
-            #We are creating a shift object that we can manipulate programatically later
+            # We are creating a shift object that we can manipulate
+            # programatically later
             this_shift = form.save(commit=False)
             this_shift.person = request.user
 
@@ -372,7 +385,8 @@ def time(request):
                 oldshift.out_clock = punchclock
                 oldshift.save()
                 location.active_users.remove(request.user)
-                #Setting the success variable that users will see on success page
+                # Setting the success variable that users will see on success
+                # page
                 success = "OUT"
                 at_time = oldshift.outtime
                 #get rid of zeros on the hour
@@ -382,11 +396,13 @@ def time(request):
                 if this_shift.intime is None:
                     this_shift.intime = datetime.now()
                 this_shift.in_clock = punchclock
-                #On success, save the shift
+                # On success, save the shift
                 this_shift.save()
-                #After successful shift save, add person to active_staff in appropriate Location
+                # After successful shift save, add person to active_staff in
+                # appropriate Location
                 location.active_users.add(this_shift.person)
-                #Setting the success variable that users will see on the success page
+                #Setting the success variable that users will see on the
+                # success page
                 success = "IN"
                 at_time = this_shift.intime
                 #get rid of zeros on the hour
@@ -401,7 +417,8 @@ def time(request):
         if user in location.active_users.all():
             in_or_out = 'OUT'
 
-    # The following code is used for displaying the user's call_me_by or first name.
+    # The following code is used for displaying the user's call_me_by or first
+    # name.
     user = User.objects.get(username=user)
     try:
         profile = UserProfile.objects.get(user=user)
@@ -416,7 +433,9 @@ def time(request):
 
 
 def fail(request):
-    """ If signing in or out of a shift fails, show the user a page stating that. This is the page shown if someone tries to log in from a non-punchclock.
+    """ If signing in or out of a shift fails, show the user a page stating
+    that. This is the page shown if someone tries to log in from a non-
+    punchclock.
     """
     try:
         message = request.GET['message']
@@ -441,7 +460,8 @@ def success(request):
     location = request.GET['location']
     user = request.GET['user']
 
-    # The following code is used for displaying the user's call_me_by or first name.
+    # The following code is used for displaying the user's call_me_by or first
+    # name.
     user = User.objects.get(username=user)
     try:
         profile = UserProfile.objects.get(user=user)

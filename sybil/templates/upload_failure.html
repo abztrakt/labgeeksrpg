@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Uh oh...</h2>
+<p>something went wrong...</p>
+<form action='/oracles/upload_image/' method='get'>
+    try again?
+    <input type='submit' value='yes' />
+</form>
+{% endblock %}

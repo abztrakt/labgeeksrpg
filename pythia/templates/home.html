@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'search.html' %}
+<h1>Pythia home</h1>
+{% if pages %}
+<ul><strong>Pages</strong>
+    {% for page in pages %}
+    <li><a href="/pythia/{{page.slug}}/">{{page.name}}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>no pages made yet</p>
+{% endif %}
+{% if can_add_page %}
+<form method='get' action='/pythia/create_page?/'>
+    <input type='text' name='page_name' />
+    <input type='submit' value='create' />
+</form>
+{% endif %}
+{% endblock %}

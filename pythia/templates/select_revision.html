@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load markup %}
+{% block content %}
+{% include 'search.html' %}
+{% if revision %}
+<h2>Choosing revision for /{{page_name}}</h2>
+<div class='revision_history'>
+    <h3>revision by {{revision.user}} on {{revision.date}}</h3>
+    <p><strong>{{revision.notes}}</strong></p>
+    <div class='revision_after'>
+        {{revision.content|markdown}}
+    </div>
+</div>
+<p><strong>Publish this revision?</strong></p>
+<form action="/pythia/{{slug}}/edit/" method='post'>{% csrf_token %}
+    <textarea style='display:none' rows='20' cols='100' name='content'>{{revision.content}}</textarea>
+    <input type='text' name='page_name' style='display:none' value='{{page_name}}'/>
+    <input type='text' name='notes' style='display:none' value='rolled back to revision by {{revision.user}} on {{revision.date}}: {{revision.notes}}'/>
+    <input type='submit' value='Yes'/>
+</form>
+<form action="/pythia/{{slug}}" method='get'>{% csrf_token %}
+    <input type='submit' value='Cancel'/>
+</form>
+{% else %}
+<h2>No revision selected for {{page_name}}</h2>
+{% endif %}
+{% endblock %}
+

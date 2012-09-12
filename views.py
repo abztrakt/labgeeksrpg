@@ -9,15 +9,14 @@ from labgeeksrpg.labgeeksrpg_config.forms import NotificationForm
 
 
 def hello(request):
-    """ The root view of the site. Just static for now, but later we can return useful information for logged in users.
-    Created a dashboard page.
+    """ The site dashboard.
     """
     #when a user is logged-in correctly
     if request.user.is_authenticated():
         locations = request.user.location_set.all()
         shifts = request.user.shift_set.all()
         clockin_time = 0
-        if locations:
+        if locations and shifts:
             clockin_time = shifts[len(shifts) - 1].intime
 
         now = datetime.datetime.now()

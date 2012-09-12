@@ -1,0 +1,5 @@
+{{ object.name }}
+{{ object.slug }}
+{{ object.date }}
+{{ object.content }}
+{{ object.author }}
