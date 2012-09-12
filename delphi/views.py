@@ -7,6 +7,7 @@ from datetime import datetime
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
 from django.core.context_processors import csrf
+from django.utils.html import strip_tags
 
 
 def view_question(request, q_id):
@@ -57,6 +58,8 @@ def create_question(request):
         form = CreateQuestionForm(request.POST)
         if form.is_valid():
             question = form.save(commit=False)
+            question.question = strip_tags(question.question)
+            question.more_info = strip_tags(question.more_info)
             question.user = request.user
             question.date = datetime.now().date()
             question.save()
@@ -98,6 +101,7 @@ def answer_question(request, q_id):
         form = CreateAnswerForm(request.POST)
         if form.is_valid():
             answer = form.save()
+            answer.answer = strip_tags(answer.answer)
             answer.user = request.user
             answer.date = datetime.now().date()
             answer.question = question
