@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from datetime import date
 
 
-
 class Notification(models.Model):
     date = models.DateTimeField(auto_now=True)
     title = models.CharField(max_length=100)
