@@ -2,7 +2,7 @@
 {% load markup %}
 {% block content %}
 {% include 'search.html' %}
-<h2>Answering question posted by {{asker}}</h2>
+<h1>Answering question posted by {{asker}}</h1>
 <p><strong>{{question}}</strong></p>
 <p>{{more_info|markdown}}</p>
 <form action='' method='post' enctype='multipart/form-data'>{% csrf_token %}
