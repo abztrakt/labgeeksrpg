@@ -2,6 +2,27 @@ form {
     margin-top: 2em;
     text-align: left;
     border: 1px;
+
+    .input_label {
+        color: @text;
+        display: block;
+        margin: 0 0 1.5em;
+    }
+
+    label strong {
+        font-size: 11pt;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 1em;
+    }
+
+    input[type="text"], input[type="password"] {
+        height: 32px;
+        padding-left: 8px;
+    }
+    input[type="text"], input[type="password"], textarea {
+        border: 1px solid @border;
+    }
 }
 
 .form_box {
@@ -9,28 +30,15 @@ form {
     padding: 20px 25px 15px;
     border: 1px;
     color: black;
-}
 
-.form_box strong, .form_box p{
-    color: @detail;
-}
+    strong, p {
+        color: @detail;
+    }
 
-.form_box a {
-    font-size: 15pt;
-    color: @link;
-}
-
-form .input_label {
-    color: @text;
-    display: block;
-    margin: 0 0 1.5em;
-}
-
-form label strong{
-    font-size: 11pt;
-    font-weight: bold;
-    display: block;
-    margin-bottom: 1em;
+    a { 
+        font-size: 15pt;
+        color: @link;
+    }
 }
 
 input[type="submit"] {
@@ -40,13 +48,5 @@ input[type="submit"] {
     height: 32px;
     font-weight: bold;
     padding: 0 8px;
-}
-
-form input[type="text"], form input[type="password"] {
-    height: 32px;
-    padding-left: 8px;
-}
-form input[type="text"], form input[type="password"], textarea {
-    border: 1px solid @border;
 }
 
