@@ -32,45 +32,46 @@
             <h3>Events</h3>
             {% for event in events %}
                 <div class="notification">
-                <h2>{% if can_Add %}<input type="checkbox" name="pk" value="{{event.pk}}">{% endif %}
-                {{event.due_date.month}}/{{event.due_date.day}} {{event.title}} </h2>
-                {% if event.user%}
-                    <p class="info"> {{event.user}} posted on {{event.date}} </p>
-                {% else %}
-                    <p class="info"> Labgeeks posted on {{event.date}} </p>
-                {% endif %}
-                <p> {{event.content}} </p>
-                <p> Due on {{event.due_date}}</p>
+                    <h2>{% if can_Add %}<input type="checkbox" name="pk" value="{{event.pk}}">{% endif %}
+                    {{event.due_date.month}}/{{event.due_date.day}} {{event.title}} </h2>
+                    {% if event.user%}
+                        <p class="info"> {{event.user}} posted on {{event.date}} </p>
+                    {% else %}
+                        <p class="info"> Labgeeks posted on {{event.date}} </p>
+                    {% endif %}
+                    <p> {{event.content}} </p>
+                    <p> Due on {{event.due_date}}</p>
                 </div>
             {% endfor %}
+            </div>
         {% endif %}
 
         {% if alerts %}
             <div id="alerts">
-            <h3>Alerts</h3>
-            {% for alert in alerts %}
-                <div class="notification">
-                <h2>{% if can_Add %}<input type="checkbox" name="pk" value="{{alert.pk}}">{% endif %}{{alert.title}} </h2>
-                {% if alert.user%}
-                    <p class="info"> {{alert.user}} posted on {{alert.date}} </p>
-                {% else %}
-                    <p class="info"> Labgeeks posted on {{alert.date}} </p>
-                {% endif %}
-                <p> {{alert.content}} </p>
+                <h3>Alerts</h3>
+                {% for alert in alerts %}
+                    <div class="notification">
+                        <h2>{% if can_Add %}<input type="checkbox" name="pk" value="{{alert.pk}}">{% endif %}{{alert.title}} </h2>
+                        {% if alert.user%}
+                            <p class="info"> {{alert.user}} posted on {{alert.date}} </p>
+                        {% else %}
+                            <p class="info"> Labgeeks posted on {{alert.date}} </p>
+                        {% endif %}
+                        <p> {{alert.content}} </p>
+                    </div>
                 {% endfor %}
-                </div>
             </div>
         {% endif %}
     {% endif %}
 
-        {% if events or alerts %}
-            {% if can_Add %}
-                <input type="submit" value="Archive" />
-                </form>
-            {% endif %}
+    {% if events or alerts %}
+        {% if can_Add %}
+            <input type="submit" value="Archive" />
+            </form>
         {% endif %}
+    {% endif %}
 
-        {% if can_Add%}
+    {% if can_Add%}
         <h3>Post Notifications</h3>
         <div id="addNotification">
             <form method="post" action="">{% csrf_token %}
@@ -89,16 +90,16 @@
                 <input type="submit" value="Submit"/>
             </form>
         </div>
-        {% endif %}
+    {% endif %}
 
-        {% if today_past_shifts or today_future_shifts %}
-            <h2>Your shifts for today are:</h2>
-            {%for shift in today_past_shifts%}
-                <span class='past_shifts'><p>From {{shift.scheduled_in.time}} to {{shift.scheduled_out.time}} at {{shift.location}}</p></span>
-            {% endfor %}
-            {%for shift in today_future_shifts%}
-                <span><p>From {{shift.scheduled_in.time}} to {{shift.scheduled_out.time}} at {{shift.location}}</p></span>
-            {% endfor %}
-        {% endif %}
+    {% if today_past_shifts or today_future_shifts %}
+        <h2>Your shifts for today are:</h2>
+        {%for shift in today_past_shifts%}
+            <span class='past_shifts'><p>From {{shift.scheduled_in.time}} to {{shift.scheduled_out.time}} at {{shift.location}}</p></span>
+        {% endfor %}
+        {%for shift in today_future_shifts%}
+            <span><p>From {{shift.scheduled_in.time}} to {{shift.scheduled_out.time}} at {{shift.location}}</p></span>
+        {% endfor %}
+    {% endif %}
     </div>
 {% endblock %}
