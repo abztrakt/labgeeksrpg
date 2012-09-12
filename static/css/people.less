@@ -2,6 +2,10 @@
     float: left;
 }
 
+.hidden {
+    display: none;
+}
+
 th, td {
     padding: .2em .5em;
 }
@@ -20,6 +24,33 @@ tbody {
     tr:nth-child(even) td {
         background: @insetBackground;
         border-right: 1px solid @background;
+    }
+}
+
+.review_field {
+    padding-bottom: 1em;
+    label {
+        font-weight: bold;
+    }
+    textarea {
+        height: 5em;
+    }
+    ul {
+        overflow: hidden;
+    }
+    li label {
+        float: left;
+        padding-right: .7em;
+    }
+    input[type=radio] {
+        display: block;
+    }
+    li {
+        text-align: center;
+    }
+    li:first-child {
+        text-align: right;
+        text-align: -moz-right;
     }
 }
 
