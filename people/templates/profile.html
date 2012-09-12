@@ -43,10 +43,8 @@ $(document).ready(function() {
                 ({{ profile.user }})
             </h1>
             {% if edit %}<strong><a href="{% url People-Create_Profile profile.user %}">Edit profile</a></strong>{% endif %}
-            {% if edit and can_view_review %}<strong>|</strong>{% endif %}
-            {% if can_view_review %}<strong><a href="{% url People-View_Reviews profile.user %}">Reviews</a></strong>{% endif %}
-            {% if edit or can_view_review and can_view_wage_history %}<strong>|</strong>{% endif %}
-            {% if can_view_wage_history %}<strong><a href="{% url People-Wage_History profile.user %}">View Wage History</a></strong>{% endif %}
+            {% if can_view_review %}<strong>| <a href="{% url People-View_Reviews profile.user %}">Reviews</a></strong>{% endif %}
+            {% if can_view_wage_history %}<strong>| <a href="{% url People-Wage_History profile.user %}">View Wage History</a></strong>{% endif %}
         </div>
 
         <div id="work_status" class="profile_section" >
