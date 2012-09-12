@@ -2,42 +2,41 @@
 {% load markup %}
 {% block content %}
 {% include 'search.html' %}
-<h3>{{question}}</h3>
-<strong>asked by {{author}} on {{date}}:</strong>
-<div>
-    {{more_info|markdown}}
-</div>
-<hr />
+<h1>{{question}}</h1>
+<p class="info">asked by {{author}} on {{date}}: {{more_info|markdown}}</p>
+
 {% if can_select_answer and answers or best_answer %}
 <form action='select_answer/' method='get'>
 {% endif %}
+
 {% if best_answer %}
 <strong>Best solutions as chosen by leads:</strong>
 {% for b_answer in best_answer %}
-<div>
+<div class="notification">
     {% if can_select_answer %}
     <input type='checkbox' name='id' value='{{b_answer.id}}' checked />
     {% endif %}
     {{b_answer.answer|markdown}}
-    <p>submitted by {{b_answer.user}} on {{b_answer.date}}</p>
+    <p class="info">submitted by {{b_answer.user}} on {{b_answer.date}}</p>
 </div>
 {% endfor %}
-<hr />
+
 {% else %}
-{% if answers %}
-<strong>no best solution chosen yet</strong>
+    {% if answers %}
+    <strong>no best solution chosen yet</strong>
+    {% endif %}
 {% endif %}
-{% endif %}
+
 {% if answers %}
-</hr>
+
 <p><strong>other solutions:</strong></p>
 {% for answer in answers %}
-<div>
+<div class="notification">
     {% if can_select_answer %}
     <input type='checkbox' name='id' value='{{answer.id}}'/>
     {% endif %}
     {{answer.answer|markdown}}
-    <p>submitted by {{answer.user}} on {{answer.date}}</p>
+    <p class="info">submitted by {{answer.user}} on {{answer.date}}</p>
 </div>
 {% endfor %}
 {% endif %}
