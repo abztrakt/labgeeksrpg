@@ -18,36 +18,15 @@ $(document).ready(function()
 </script>
 {% endblock %}
 
-{% block pageCSS %}
-<style type='text/css'>
-th.header {
-    background-image: url('/static/img/bg.gif');
-    cursor: pointer;
-    background-repeat: no-repeat;
-    background-position: center left;
-    padding-left: 20px;
-}
-th.headerSortUp {
-    background-image: url('/static/img/asc.gif');
-}
-th.headerSortDown {
-    background-image: url('/static/img/desc.gif');
-}
-</style>
-{% endblock %}
-
 {% block content %}
     <div class="section">
-        <h1>People List</h1>
-        <h2>Below is the list of employees.</h2>
+        <h1>Employee List</h1>
     </div>
     
     {% for group in group_list %}
     
     <div class="group_section">
-        <div class="group_title">
-            <h2>{{group.group_name}}</h2>
-        </div>
+        <h2>{{group.group_name}}</h2>
         <table class="people">
             <thead>
                 <tr>

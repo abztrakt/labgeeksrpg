@@ -23,23 +23,25 @@ $(document).ready(function() {
         {% if profile.staff_photo %}
         <img id="photo" src="{{profile.staff_photo.url}}" alt="Profile Picture"/>
         {% else %}
-        {% if profile.badge_photo %}
-        <img id="photo" src="{{profile.badge_photo.url}}" alt="Profile Picture"/>
-        {% endif %}
+            {% if profile.badge_photo %}
+            <img id="photo" src="{{profile.badge_photo.url}}" alt="Profile Picture"/>
+            {% endif %}
         {% endif %}
         {% if profile.staff_photo and profile.badge_photo %}
-        <div id="photo_chooser"><a id="profile_p" href='#'>Profile</a> | <a id="badge_p" href='#'>Official</a></div>
+        <div id="photo_chooser">
+            <a id="profile_p" href='#'>Profile</a> | <a id="badge_p" href='#'>Official</a>
+        </div>
         {% endif %}
     </div>
 
     <div id="profile_info">
         <div class="profile_section">
-            <p id="user_name">
+            <h1 id="user_name">
                 {{ profile.user.first_name }}
                 {% if profile.call_me_by %} "{{ profile.call_me_by }}"{% endif %}
                 {{ profile.user.last_name }} 
                 ({{ profile.user }})
-            </p>
+            </h1>
             {% if edit %}<strong><a href="{% url People-Create_Profile profile.user %}">Edit profile</a></strong>{% endif %}
             {% if edit and can_view_review %}<strong>|</strong>{% endif %}
             {% if can_view_review %}<strong><a href="{% url People-View_Reviews profile.user %}">Reviews</a></strong>{% endif %}
@@ -48,64 +50,64 @@ $(document).ready(function() {
         </div>
 
         <div id="work_status" class="profile_section" >
-            <h1 class="section_title">Work info</h1>
+            <h2 class="section_title">Work info</h2>
             <div class="profile_info_section">
-                <h1>Title</h1>
-                <h2>{{profile.title}}</h2>
+                <h2>Title</h2>
+                <p>{{profile.title}}</p>
             </div>
 
             <div class="profile_info_section">
-                <h1>Status</h1>
-                <h2>{{profile.status}}</h2>
+                <h2>Status</h2>
+                <p>{{profile.status}}</p>
             </div>
 
             <div class="profile_info_section">
-                <h1>Office</h1>
-                <h2>{{profile.office}}</h2>
+                <h2>Office</h2>
+                <p>{{profile.office}}</p>
             </div>
 
             <div class="profile_info_section">
-                <h1>Supervisor</h1>
-                <h2>{{profile.supervisor}}</h2>
+                <h2>Supervisor</h2>
+                <p>{{profile.supervisor}}</p>
             </div>
         </div>
 
         <div id="work_contact" class="profile_section">
-            <h1 class="section_title">Contact info</h1>
+            <h2 class="section_title">Contact info</h2>
             <div class="profile_info_section">
-                <h1>Phone</h1>
-                <h2>{{profile.phone}}</h2>
+                <h2>Phone</h2>
+                <p>{{profile.phone}}</p>
             </div>
 
             <div class="profile_info_section">
-                <h1>Alt Phone</h1>
-                <h2>{{profile.alt_phone}}</h2>
+                <h2>Alt Phone</h2>
+                <p>{{profile.alt_phone}}</p>
             </div>
         </div>
     
         <div id="work_dates" class="profile_section">
-            <h1 class="section_title">Dates of hire</h1>
+            <h2 class="section_title">Dates of hire</h2>
             <div class="profile_info_section">
-                <h1>Starting Date</h1>
-                <h2>{{profile.start_date}}</h2>
+                <h2>Starting Date</h2>
+                <p>{{profile.start_date}}</p>
             </div>
 
             <div class="profile_info_section">
-                <h1>Ending Date</h1>
-                <h2>{{profile.end_date}}</h2>
+                <h2>Ending Date</h2>
+                <p>{{profile.end_date}}</p>
             </div>
 
             <div class="profile_info_section">
-                <h1>Graduation Date</h1>
-                <h2>{{profile.grad_date}}</h2>
+                <h2>Graduation Date</h2>
+                <p>{{profile.grad_date}}</p>
             </div>
         </div>
 
         <div id="personal_info" class="profile_section">
-            <h1 class="section_title">Personal info</h1>
+            <h2 class="section_title">Personal info</h2>
             <div class="profile_info_section">
-                <h1>About me</h1>
-                <h2>{{profile.about_me}}</h2>
+                <h2>About me</h2>
+                <p>{{profile.about_me}}</p>
             </div>
         </div>
     </div>

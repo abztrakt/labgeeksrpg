@@ -6,7 +6,7 @@
         <div class="dropdown">
             {% if request.user.is_authenticated %}
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                {{ request.user }}@uw.edu
+                {{ request.user }}@uw.edu <b class="caret"></b>
             </a>
             <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dLabel">
                 <li><a tabindex="-1" href="/people/{{ request.user }}">Profile</a></li>

@@ -1,10 +1,12 @@
 @import "dropdowns.less";
+@import "dashboard.less";
 @import "variables.less";
 @import "mixins.less";
 @import "nav.less";
 @import "footer.less";
 @import "review.less";
 @import "calendar.less";
+@import "people.less";
 
 * {
     font-family: Arial, Helvetica, sans-serif;
@@ -26,11 +28,13 @@ body {
         color: @dropdownBackground;
         font-weight: bold;
         font-size: 16pt;
-        padding-bottom: 1em;
     }
-    h2 {
+    h2, h3 {
         font-size: 12pt;
-        padding-bottom: .5em;
+    }
+    > h2, h3 {
+        padding-top: .5em;
+        padding-bottom: .3em;
     }
     font-size: 11pt;
     ul{
@@ -47,59 +51,15 @@ a:hover {
     color: #c0c0c0;
 }
 
-table {
-    margin: auto;
-}
-
 form {
     margin-top: 2em;
     text-align: left;
     border: 1px;
 }
 
-th, td {
-    padding: .2em .5em;
-}
-
-th {
-    text-align: left;
-}
-
-tr:nth-child(even) {
-    background: @tableEvenBackground;
-}
-tr:nth-child(odd) {
-    background: @tableOddBackground;
-}
-
-tr:first-child {
-    background-color: @tableOddBackground;
-}
-
-
-
-
 #login_box{
     float: right;
     width: 335px;
-}
-
-#create_profile_box, .time_period_box{
-    width: 650px;
-    margin: auto;
-}
-
-.time_period_box td{
-    color: black;
-}
-
-.normal_box{
-    background: none repeat scroll 0 0 rgba(200, 200, 200, 0.5);
-    padding: 20px 25px 15px;
-    border: 1px solid #E5E5E5;
-    margin: 12px 0 0;
-    width: 650px;
-    color: black;
 }
 
 .form_box{
@@ -131,20 +91,19 @@ form label strong{
     margin-bottom: 1em;
 }
 
-form input[type="submit"]{
-    background-color: #4D90FE;
+input[type="submit"]{
+    background-color: @navBackground;
     color: @white;
-    border: 1px solid #3079ED;
+    border: 1px solid @headerBackground;
     height: 32px;
     font-weight: bold;
     padding: 0 8px;
-    width: 6em;
 }
 
 
 form input[type="text"], form input[type="password"]{
     height: 32px;
-    border: 1px solid #C0C0C0;
+    border: 1px solid @grayLight;
     padding-left: 8px;
 }
 
@@ -153,18 +112,6 @@ form input[type="text"], form input[type="password"]{
     margin: 3px 0 2em;
 }
 
-.section{
-    margin-bottom: 1.5em;
-}
-
-.section h1{
-    font-size: 25px;
-}
-
-.section h2{
-    font-size: 16px;
-    margin: 0.4em 0 0;
-}
 
 #people {
     float: left;

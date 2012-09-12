@@ -1,0 +1,56 @@
+th, td {
+    padding: .2em .5em;
+}
+
+th {
+    text-align: left;
+}
+
+tbody {
+    tr:hover td {
+        background-color: @navBackground;
+    }
+    tr:nth-child(odd) td {
+        background: @tableOddBackground;
+    }
+    tr:nth-child(even) td {
+        background: @tableEvenBackground;
+        border-right: 1px solid @white;
+    }
+}
+
+.group_section {
+    padding-top: 1em;
+}
+
+table {
+    border-collapse: collapse;
+    margin-top: .5em;
+}
+thead th {
+    background: @white;
+    border-top: 1px solid @black;
+    border-bottom: 1px solid @black;
+}
+
+.profile_section {
+    > h2 {
+        .border-top-radius(5px);
+        background: @grayLight;
+        width: 30em;
+        padding: 5px;
+    }
+    margin-bottom: 1em;
+    overflow: hidden;
+}
+
+.profile_info_section {
+    h2 {
+        float: left;
+        clear: both;
+    }
+    p {
+        margin-left: 10em;
+        width: 20em;
+    }
+}
