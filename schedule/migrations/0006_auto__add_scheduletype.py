@@ -4,10 +4,10 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
         # Adding model 'ScheduleType'
         db.create_table('schedule_scheduletype', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -28,15 +28,12 @@ class Migration(SchemaMigration):
         ))
         db.create_unique('schedule_scheduletype_allowed_groups', ['scheduletype_id', 'group_id'])
 
-
     def backwards(self, orm):
-        
         # Deleting model 'ScheduleType'
         db.delete_table('schedule_scheduletype')
 
         # Removing M2M table for field allowed_groups on 'ScheduleType'
         db.delete_table('schedule_scheduletype_allowed_groups')
-
 
     models = {
         'auth.group': {

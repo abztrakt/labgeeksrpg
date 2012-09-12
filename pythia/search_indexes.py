@@ -3,6 +3,7 @@ from haystack.indexes import *
 from haystack import site
 from pythia.models import Page
 
+
 class PageIndex(RealTimeSearchIndex):
     text = CharField(document=True, use_template=True)
     author = CharField(model_attr='author', null=True)

@@ -4,10 +4,10 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
         # Deleting field 'ShiftType.out_time'
         db.delete_column('schedule_shifttype', 'out_time')
 
@@ -17,9 +17,7 @@ class Migration(SchemaMigration):
         # Deleting field 'ShiftType.day'
         db.delete_column('schedule_shifttype', 'day')
 
-
     def backwards(self, orm):
-        
         # Adding field 'ShiftType.out_time'
         db.add_column('schedule_shifttype', 'out_time', self.gf('django.db.models.fields.TimeField')(default=datetime.time(12, 0)), keep_default=False)
 
@@ -28,7 +26,6 @@ class Migration(SchemaMigration):
 
         # Adding field 'ShiftType.day'
         db.add_column('schedule_shifttype', 'day', self.gf('django.db.models.fields.CharField')(default='Monday', max_length=256), keep_default=False)
-
 
     models = {
         'auth.group': {
