@@ -34,6 +34,11 @@
             <li class="{% active_tab request "/oracles" %}"><a href="/oracles">Consult the Oracles</a></li>
             <!--<li><a class="bug_sug" href="http://trac.eplt.washington.edu/labgeeks4/newticket">Bugs + Feedback</a></li>-->
         </ul>
+        <form id='search' action='/oracles/search/' method='get' style='float:right'>
+            <input type='text' name='q' />
+            <input type='submit' value='search' />
+        </form>
+
     </div>
     {% endif %}
 </div>
