@@ -194,11 +194,17 @@ def create_default_schedule(request):
             days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
 
             # Create a schedule dictionary to hold the data.
+            base_schedule = []
             schedule = []
 
             # Grab the closed hours and default shifts used in a timeperiod.
             closing_hours = ClosedHour.objects.filter(location=location, timeperiod=timeperiod)
-            default_shifts = DefaultShift.objects.filter(location=location, timeperiod=timeperiod);
+            default_shifts = DefaultShift.objects.filter(location=location, timeperiod=timeperiod)
+            base_shifts=BaseShift.objects.filter(location=location, timeperiod=timeperiod)
+            time_in = time(7, 45)
+            time_out = time(11, 45)
+            
+            Shift_Types = []
             closing_ranges = {
                 'Monday': [],
                 'Tuesday': [],
@@ -219,8 +225,27 @@ def create_default_schedule(request):
                 'Sunday': [],
             }
 
+            base_shift_ranges= {
+                'Monday': [],
+                'Tuesday': [],
+                'Wednesday': [],
+                'Thursday': [],
+                'Friday': [],
+                'Saturday': [],
+                'Sunday': [],
+            }
+            base_shift_hours = {
+                'Monday': [],
+                'Tuesday': [],
+                'Wednesday': [],
+                'Thursday': [],
+                'Friday': [],
+                'Saturday': [],
+                'Sunday': [],
+            }
             # TODO: Form a less redundant way of doing the hour ranges.
             # Find out which hours were closing hours
+            ''' going to use base shifts to determine closing hours when changing the schedule now
             for closing_hour in closing_hours:
                 day = closing_hour.day
                 in_time = closing_hour.in_time
@@ -235,7 +260,57 @@ def create_default_schedule(request):
                 hours.append(current.time())
 
                 closing_ranges[day] += hours
+            '''
+            for shift in base_shifts:
+                day = shift.day
+                in_time = shift.in_time
+                out_time = shift.out_time
+                hours = []
 
+                current = datetime(1,1,1,in_time.hour,in_time.minute)
+
+                while current.time() != out_time:
+                    hours.append(current.time())
+                    current += timedelta(minutes=30)
+                base_shift_hours[day] += hours
+                if shift.shift_type:
+                    groups =''
+                    count = 0
+                    users = []
+                    for group in shift.shift_type.allowed_groups.get_query_set():
+                        if count == 0:
+                            groups += group.name
+                        else:
+                            groups += ', ' + group.name
+                        count = 1
+                        count1 = 0
+                        for user in group.user_set.values():
+                                users.append(user['username'])
+                    if not {'name': shift.shift_type.name, 'users': users} in Shift_Types:
+                        Shift_Types.append({'name': shift.shift_type.name, 'users': users})
+                    base_shift_ranges[day].append({'hours': hours, 'name': shift.shift_type.name}) 
+                else:
+                    base_shift_ranges[day].append({'hours': hours, 'name': 'Open Shift'})
+            
+            for day in base_shift_hours:
+                if len(base_shift_hours[day]) > 0:
+                    in_time = time(7,45)
+                    out_time = time(23, 45)
+                    hours = []
+                    while base_shift_hours[day].count(in_time) == 0:
+                        hours.append(in_time)
+                        if in_time.minute == 45:
+                            in_time = in_time.replace(hour=in_time.hour + 1, minute=15)
+                        elif in_time.minute == 15:
+                            in_time = in_time.replace(minute=45)
+                    while base_shift_hours[day].count(out_time) == 0:
+                        if hours.count(out_time) == 0:
+                            hours.append(out_time)
+                        if out_time.minute == 45:
+                            out_time = out_time.replace(minute=15)
+                        elif out_time.minute == 15:
+                            out_time = out_time.replace(hour=out_time.hour - 1, minute=45)
+                    closing_ranges[day] += hours
             # Find out which hours were shift hours.
             for shift in default_shifts:
                 #currently does nothing if there is no person set to the shift
@@ -259,19 +334,31 @@ def create_default_schedule(request):
             for day in days:
                 closing_range = closing_ranges[day]
                 shift_range = shift_ranges[day] 
+                base_shift_range = base_shift_ranges[day]
                 times = []
+                base_times = []
                 counter = datetime(1,1,1,7,45)
     
                 # Loop through the time and start appending the rows to each time.
                 while counter.hour != 0:
                     row = []
-                     
+                    base_row = [] 
                     if counter.time() in closing_range:
                         # Fill in the closing hours
                         for i in range(len(schedule_length)):
                             row.append({'class': 'closed_hours', 'user': 'closed'})
+                            base_row.append({'class': 'closed_hours', 'user': 'closed'})
                     else:
                         # Fill in the shift hours.
+                        count = 0
+                        for shift in base_shift_range:
+
+                            if counter.time() in shift['hours']:
+                                count += 1
+                                base_row.append({'class':None, 'name': shift['name']})
+
+                        for i in range(len(schedule_length)-count):
+                            base_row.append({'class': None, 'user': None})
                         count = 0
                         for shift in shift_range:
 
@@ -285,13 +372,14 @@ def create_default_schedule(request):
                     
                     # Append the row and time
                     times.append({'time': counter.time().strftime('%I:%M %p').lower(), 'row': row})
-                    
+                    base_times.append({'time': counter.time().strftime('%I:%M %p').lower(), 'row': base_row}) 
 
                     # Increment by 30 minutes
                     counter += timedelta(minutes=30)
 
                 # Append the time row to the schedule.
                 schedule.append({'times': times, 'day': day})
+                base_schedule.append({'times': base_times, 'day': day})
 
             schedule_class = "visible"
 
