@@ -1,12 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
-{% if screenshots %}
-<ul><strong>All screenshots</strong>
-    {% for screenshot in screenshots %}
+{% if yourshot %}
+<ul><strong>Your Screenshots</strong>
+    {% for screenshot in yourshot %}
+    <li>
+    	<a href='{{screenshot.url}}' target='_blank'>{{ screenshot.markdown_code }}</a> &nbsp;
+    	<form action="" method="post" style="display:inline;">{% csrf_token %}
+    		<button type="submit" name="" value="">Delete this</button>
+    	</form>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<ul><strong>You didn't upload any screenshots</strong></ul>
+{% endif %}
+
+{% if othershot %}
+<ul><strong>Other's Screenshots</strong>
+    {% for screenshot in othershot %}
     <li><a href='{{screenshot.url}}' target='_blank'>{{ screenshot.markdown_code }}</a></li>
     {% endfor %}
 </ul>
 {% else %}
-<p><strong>no screenshots uploaded</strong></p>
+<ul><strong>No screenshots uploaded by others</strong></ul>
 {% endif %}
+
 {% endblock %}

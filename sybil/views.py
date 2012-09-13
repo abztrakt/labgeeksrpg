@@ -8,7 +8,6 @@ from django.template import RequestContext
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from labgeeksrpg.sybil.forms import *
-from PIL import Image
 
 
 class SybilSearch(SearchView):
@@ -59,7 +58,7 @@ def upload_image(request):
     c.update(csrf(request))
     if request.method == 'POST':
         form = UploadPictureForm(request.POST, request.FILES)
-        if form.is_valid() and 'picture' in request.FILES:
+        if form.is_valid():
             screenshot = form.save(commit=False)
             screenshot.user = request.user
             screenshot.date = datetime.now().date()
@@ -90,17 +89,31 @@ def view_all_screenshots(request):
     except Screenshot.DoesNotExist:
         screenshots = None
     ss_list = []
+    ss_listother = []
     if screenshots:
-        for screenshot in screenshots:
-            url = '/uploads/oracles/screenshots/' + screenshot.name
-            markdown_code = '![alt](' + url + ')'
-            ss_info = {
-                'url': url,
-                'markdown_code': markdown_code,
-            }
-            ss_list.append(ss_info)
+        yours = screenshots.filter(user = request.user)
+        if yours:
+            for screenshot in yours:
+                url = '/uploads/oracles/screenshots/' + screenshot.name
+                markdown_code = '![alt](' + url + ')'
+                ss_info = {
+                    'url': url,
+                    'markdown_code': markdown_code,
+                }
+                ss_list.append(ss_info)
+        others = screenshots.exclude(user = request.user)
+        if others:
+            for screenshot in others:
+                url = '/uploads/oracles/screenshots/' + screenshot.name
+                markdown_code = '![alt](' + url + ')'
+                ss_info = {
+                    'url': url,
+                    'markdown_code': markdown_code,
+                }
+                ss_listother.append(ss_info)
     args = {
-        'screenshots': ss_list,
+        'yourshot': ss_list,
+        'othershot': ss_listother,
         'request': request,
     }
     return render_to_response('screenshots.html', args)
