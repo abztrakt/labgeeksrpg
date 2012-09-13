@@ -3,14 +3,12 @@
     {% if table_dict.scores %}
         <p><strong class="review_section">{{table_dict.user}}</strong></p>
         <table class="review_score_table">
-            <thead>
             <tr>
                 <td>Date</td>
                 {% for info in table_dict.date %}
                 <td class="review_selector" title="view details for this review" id="{{info.id}}">{{info.date}}</td>
                 {% endfor %}
             </tr>
-            </thead>
             <tbody>
                 {% for key,scores in table_dict.scores.items %}
                 <tr>
@@ -33,7 +31,6 @@
                     {% endfor %}
                 </tr>
             </tbody>
-            <thead>
             <tr>
                 <td></td>
                 {% for info in table_dict.date %}
