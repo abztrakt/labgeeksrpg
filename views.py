@@ -42,6 +42,7 @@ def hello(request):
         if request.user.has_perm('labgeeksrpg_config.add_notification'):
             can_Add = True
 
+        form_is_valid = True
         if request.method == 'POST':
             archive_ids = request.POST.getlist('pk')
             if archive_ids:
@@ -53,6 +54,7 @@ def hello(request):
 
             form = NotificationForm(request.POST)
             if form.is_valid():
+                form_is_valid = True
                 notification = form.save(commit=False)
                 notification.user = request.user
                 if notification.due_date:
@@ -60,6 +62,8 @@ def hello(request):
                         notification.archived = True
                 notification.save()
                 return HttpResponseRedirect('/')
+            else:
+                form_is_valid = False
         else:
             form = NotificationForm()
 

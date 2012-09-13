@@ -76,7 +76,12 @@
         <div id="addNotification">
             <form method="post" action="">{% csrf_token %}
                 <label class="input_label">
-                    <strong>Title</strong>
+                    <strong>Title
+                    {% if not form_is_valid %}
+                        <span class="required">*</span></strong>
+                    {% else %}
+                        </strong>
+                    {% endif %}
                     {{ form.title }}
                 </label>
                 <label class="input_label">
@@ -88,6 +93,9 @@
                     <p class="info">Add a due date to create an event</p>
                     {{form.due_date}}
                 </label>
+                {% if not form_is_valid %}
+                    <p class="required">This field is required.</p>
+                {% endif %}
                 <input type="submit" value="Submit"/>
             </form>
         </div>
