@@ -19,10 +19,12 @@
 {% endblock %}
 </head>
 <body>
+<div id="wrapper">
 {% include "nav.html" %}
 <div id="content">
 {% block content %}
 {% endblock %}
+</div>
 </div>
 {% include "footer.html" %}
 </body>
