@@ -81,11 +81,11 @@ function loadReviewData(data){
 
         for(key in data['scores']){
             intscore = parseInt(data['scores'][key]);
-            review_list.append("<li>" + key + ': ' + data['scores'][key] + inline[intscore] + '<br/><span class="tooltips">'+ tooltips[key] + "</span><p>" + data['comments'][key] + "</p></li>");
+            review_list.append("<li class='field'>" + key + ': ' + data['scores'][key] + inline[intscore] + '<br/><span class="tooltips">'+ tooltips[key] + "</span><p>" + data['comments'][key] + "</p></li>");
         }
-        review_list.append("<li><strong>Average: " + data['average'] + "</strong></li>");
-        review_list.append("<li><strong>Weighted Average: " + data['weighted'] + "</strong></li>");
-        review_list.append("<li><strong>Overall: <p>" + data['overall'] + "</p></strong></li>");
+        review_list.append("<li class='field'><strong>Average: " + data['average'] + "</strong></li>");
+        review_list.append("<li class='field'><strong>Weighted Average: " + data['weighted'] + "</strong></li>");
+        review_list.append("<li class='field'><strong>Overall: <p>" + data['overall'] + "</p></strong></li>");
 
     }
 }
