@@ -2,7 +2,6 @@
 
 {% block content %}
 
-<div class="section">
 <h1>Clock-in and out</h1>
 
 <h2>Welcome 
@@ -14,26 +13,19 @@
 {% endif %}
 
 </h2>
-</div>
+
 {% if errors %}
-    <p style="color:red;">
+    <p class="highlight">
         Please correct the error {{ form.errors|pluralize }} below.
     </p>
 {% endif %}
-<div id="clock_in">
-
 
 
 <form style="text-align: center;" action="" method="post">{% csrf_token %}
-    <table>
-    <div class="form_style">
-        <label for="shiftnote">Notes about your shift:</label><br />
-        {{ form.shiftnote }}
-    </div>
+    <label for="shiftnote">Notes about your shift:</label><br />
+    {{ form.shiftnote }}
     <br />
     <input type="submit" id="submit_button" value="Clock {{ in_or_out }}!" />
 </form>
-
-</div> <!-- end content div  -->
 
 {% endblock %}
