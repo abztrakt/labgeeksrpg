@@ -18,6 +18,8 @@ def active_tab(request, pattern):
             is_active = 'active_tab'
     if not is_home and pattern == '/':
         is_active = 'nonactive_tab'
+    if pattern == '/oracles' and re.search('pythia|delphi', request.path):
+        is_active = 'active_tab'
     return is_active
 
 
