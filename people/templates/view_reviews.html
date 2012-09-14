@@ -1,4 +1,21 @@
-{% block view_reviews %}
+{% extends 'base.html' %}
+
+{% block pageJS %}
+<script type="text/javascript" src="/static/js/review.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<div class='section'>
+    <h1>Reviews for {{user}}</h1>
+</div>
+
+{% if can_add_review %}
+<ul class="tabs">
+    <li><a href="/people/{{user}}/review/"><span>Edit/Create</span></a></li>
+</ul>
+{% endif %}
+
 <div id="view_reviews" class="tab_content">
     {% if table_dict.scores %}
         <p><strong class="review_section">{{table_dict.user}}</strong></p>
@@ -9,28 +26,26 @@
                 <td class="review_selector" title="view details for this review" id="{{info.id}}">{{info.date}}</td>
                 {% endfor %}
             </tr>
-            <tbody>
                 {% for key,scores in table_dict.scores.items %}
-                <tr>
-                    <td>{{key|capfirst}}</td>
-                    {% for score in scores %}
-                        <td>{{score}}</td>
-                    {% endfor %}
-                </tr>
+            <tr>
+                <td>{{key|capfirst}}</td>
+                {% for score in scores %}
+                    <td>{{score}}</td>
                 {% endfor %}
-                <tr>
-                    <td>Average</td>
-                    {% for average in averages %}
-                        <td>{{average}}</td>
-                    {% endfor %}
-                </tr>
-                <tr>
-                    <td>Weighted Average</td>
-                    {% for weight in weights %}
-                        <td>{{weight}}</td>
-                    {% endfor %}
-                </tr>
-            </tbody>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td>Average</td>
+                {% for average in averages %}
+                    <td>{{average}}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td>Weighted Average</td>
+                {% for weight in weights %}
+                    <td>{{weight}}</td>
+                {% endfor %}
+            </tr>
             <tr>
                 <td></td>
                 {% for info in table_dict.date %}
