@@ -3,12 +3,12 @@
 {% block content %}
 <h1>{{page_name}}</h1>
 {{ content|markdown }}
-<hr/>
+<hr />
 {% if can_edit_page %}
 <a href="/pythia/{{slug}}/edit/">Edit this page?</a>
 {% endif %}
 {% if last_revision %}
-<p>Last revision by {{last_revision.user}} on {{last_revision.date}}:</p>
+<p><em>Last revision by {{last_revision.user}} on {{last_revision.date}}:</em></p>
 <p>{{last_revision.notes}}</p>
 <a href="/pythia/{{slug}}/revisions/">View revisions</a>
 {% else %}
