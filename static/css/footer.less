@@ -1,9 +1,12 @@
 #footer {
     background-color: @footerBackground;
-    overflow: hidden;
+    overflow: auto; 
     color: @white;
     margin-top: 2em;
     width: 100%;
+    > div {
+        min-width: 60em;
+    }
     position: relative;
     margin-top: -@footerHeight;
     height: @footerHeight;
@@ -27,9 +30,19 @@
         font-size: 10px;
         padding-left: 4em;
     }
-    div {
+    div div {
         width: 21%;
+        margin-top: 1em;
+        min-width: 20em;
+        float: right;
+    }
+    div:first-child {
         float: left;
-        margin: 1em 6%;
+        padding-left: 1em;
+    }
+    div:last-child {
+        margin-left: auto;
+        margin-right: auto;
+        float: none;
     }
 }
