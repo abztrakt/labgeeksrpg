@@ -7,7 +7,6 @@
 {% block content %}
 <div class="section">
     <h1>Reviews for {{user}}</h1>
-    <h2></h2>
 </div>
 
 <hr class="separator"/>
@@ -15,15 +14,12 @@
 {% if can_add_review %}
 
 <ul class="tabs">
-    <li><a href="#view_reviews"><span>View</span></a></li>
+    <li><a href="/people/{{user}}/view_reviews/"><span>View</span></a></li>
     <li><a href="#create_review"><span>Edit/Create</span></a></li>
 </ul>
 
 
 <div class="tab_container">
-    
-    {% include "view_reviews.html" %}
-    
     <div id="create_review" class="tab_content">
         <div class="form_box">
             <form action="" method='post' enctype="multipart/form-data">{% csrf_token %}
@@ -48,7 +44,7 @@
                         {% if field.stats %}
                         <div class="review_other_scores">
                             <p>{{field.stats_text}}</p>
-                            <ul class="other_scores">
+                            <ul class='other_scores'>
                             {% for stat in field.stats %}
                                 <li>{{stat.reviewer}}: {{stat.value}} - {{stat.comments}}</li>
                             {% endfor %}
@@ -56,7 +52,9 @@
                         </div>
                         {% endif %}
 
+                        <div class='review_field_list'>
                         {{field.field}}
+                        </div>
                     </div>
                 {% endfor %}
 
@@ -81,8 +79,5 @@
         </div>
     </div>
 </div>
-
-{% else %}
-{% include "view_reviews.html" %}
 {% endif %}
 {% endblock %}

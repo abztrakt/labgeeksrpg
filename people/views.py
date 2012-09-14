@@ -47,17 +47,16 @@ def list_all(request):
 def view_profile(request, name):
     """ Show a user profile.
     """
-
-    this_user = User.objects.get(username=name)
-    if UserProfile.objects.filter(user=this_user):
+    user = User.objects.get(username=name)
+    if UserProfile.objects.filter(user=user):
         #User has already created a user profile.
-        profile = UserProfile.objects.get(user=this_user)
+        profile = UserProfile.objects.get(user=user)
 
-        if request.user.__str__() == name or request.user.has_perm('people.change_userprofile'):
+        if request.user == user or request.user.has_perm('people.change_userprofile'):
             edit = True
-        if request.user.__str__() == name or request.user.has_perm('people.view_wagehistory'):
+        if request.user == user or request.user.has_perm('people.view_wagehistory'):
             can_view_wage_history = True
-        if request.user.__str__() == name or request.user.has_perm('people.add_uwltreview'):
+        if request.user == user or request.user.has_perm('people.add_uwltreview'):
             can_view_review = True
 
         return render_to_response('profile.html', locals())
@@ -209,7 +208,7 @@ def view_wage_history(request, user):
 
 
 @login_required
-def view_and_edit_reviews(request, user):
+def edit_reviews(request, user):
     # Grab the user and any reviews they may have.
     user = User.objects.get(username=user)
     this_user = request.user
@@ -301,55 +300,27 @@ def view_and_edit_reviews(request, user):
         else:
             form = CreateUWLTReviewForm(instance=recent_review)
 
+    # Gather the data from the reviews and separate out fields.
+    review_stats = {}
+    comment_stats = []
+
     try:
         reviews = UWLTReview.objects.filter(user=user, is_used_up=False).order_by('-date')
     except UWLTReview.DoesNotExist:
         reviews = None
 
-    # Gather the data from the reviews and separate out fields.
-    review_stats = {}
-    comment_stats = []
-
-    # Used for table viewing.
-    table_dict = {}
-    if this_user == user:
-        table_dict['user'] = 'Your review scores:'
-    else:
-        table_dict['user'] = "%s's review scores:" % user.username
-
-    table_date_info = []
-    table_scores = {}
-    weights = []
-    averages = []
-
     for review in reviews:
         scores = get_scores(review)
         comments = get_comments(review)
-        if review.is_final:
-            weights.append(weight_review(review))
-            total = sum(dict.values(scores)) * 1.0
-            averages.append("%.2f" % (total / len(scores)))
         for key, value in scores.items():
-            if review.is_final:
-                if key in table_scores.keys():
-                    table_scores[key].append(value)
-                else:
-                    table_scores[key] = [value]
-            elif final_reviewer and review.reviewer != this_user:
+            if final_reviewer and review.reviewer != this_user:
                 stats = {'value': value, 'reviewer': review.reviewer, 'comments': comments[key]}
                 if key in review_stats.keys():
                     review_stats[key].append(stats)
                 else:
                     review_stats[key] = [stats]
-
         if final_reviewer and not review.is_final:
             comment_stats.append({'reviewer': review.reviewer, 'value': review.comments})
-
-        if review.is_final:
-            table_date_info.append({'date': review.date, 'id': review.id})
-
-    table_dict['scores'] = table_scores
-    table_dict['date'] = table_date_info
 
     # Create a list of all of the review fields and append review stats along
     # with them. The stats won't be appended if the review isn't a final one.
@@ -411,9 +382,6 @@ def view_and_edit_reviews(request, user):
     # Return anything needed for the review form.
     args = {
         'request': request,
-        'table_dict': table_dict,
-        'weights': weights,
-        'averages': averages,
         'form_fields': form_fields,
         'form2_fields': form2_fields,
         'this_user': this_user,
@@ -423,6 +391,73 @@ def view_and_edit_reviews(request, user):
         'recent_message': recent_message,
     }
     return render_to_response('reviews.html', args, context_instance=RequestContext(request))
+
+
+def view_reviews(request, user):
+    this_user = request.user
+    user = User.objects.get(username=user)
+
+    if this_user.has_perm('people.finalize_uwltreview'):  # change to people.finalize_review for modularity
+        final_reviewer = True
+    else:
+        final_reviewer = False
+
+    if not final_reviewer and this_user != user:
+        # raise Http403 (for django 1.4)
+        return render_to_response('403.html', locals(), context_instance=RequestContext(request))
+
+    try:
+        badge_photo = UserProfile.objects.get(user=user).bagde_photo._get_url()
+    except:
+        badge_photo = None
+    try:
+        reviews = UWLTReview.objects.filter(user=user, is_used_up=False).order_by('-date')
+    except UWLTReview.DoesNotExist:
+        reviews = None
+
+    # Used for table viewing.
+    table_dict = {}
+    if this_user == user:
+        table_dict['user'] = 'Your review scores:'
+    else:
+        table_dict['user'] = "%s's review scores:" % user.username
+
+    table_date_info = []
+    table_scores = {}
+    weights = []
+    averages = []
+
+    for review in reviews:
+        scores = get_scores(review)
+        comments = get_comments(review)
+        if review.is_final:
+            weights.append(weight_review(review))
+            total = sum(dict.values(scores)) * 1.0
+            averages.append("%.2f" % (total / len(scores)))
+        for key, value in scores.items():
+            if review.is_final:
+                if key in table_scores.keys():
+                    table_scores[key].append(value)
+                else:
+                    table_scores[key] = [value]
+
+        if review.is_final:
+            table_date_info.append({'date': review.date, 'id': review.id})
+
+    table_dict['scores'] = table_scores
+    table_dict['date'] = table_date_info
+
+    args = {
+        'request': request,
+        'table_dict': table_dict,
+        'weights': weights,
+        'averages': averages,
+        'this_user': this_user,
+        'user': user,
+        'badge_photo': badge_photo,
+    }
+
+    return render_to_response('view_reviews.html', args)
 
 
 def view_review_data(request, user):
