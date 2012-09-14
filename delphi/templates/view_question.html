@@ -2,7 +2,10 @@
 {% load markup %}
 {% block content %}
 <h1>{{question}}</h1>
-<p class="info">asked by {{author}} on {{date}}: {{more_info|markdown}}</p>
+<div id="question">
+    <p class="info">asked by {{author}} on {{date}}:</p>
+    {{more_info|markdown}}
+</div>
 
 {% if can_select_answer and answers or best_answer %}
 <form action='select_answer/' method='get'>

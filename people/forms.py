@@ -9,10 +9,17 @@ class CreateUserProfileForm(ModelForm):
         inst = ModelForm.save(self, *args, **kwargs)
         return inst
 
+    def clean_image(self):
+        image = self.cleaned_data.get('staff_photo',False)
+        if image:
+            if image._size > 1024*1024:
+                raise forms.ValidationError("Image file too large ( > 2mb )")
+            return image
+
     class Meta:
         model = UserProfile
         fields = ('staff_photo', 'call_me_by', 'working_periods', 'grad_date', 'office', 'about_me', 'phone', 'alt_phone')
-
+  
 
 class CreatePerformanceReviewForm(ModelForm):
     def save(self, *args, **kwargs):
