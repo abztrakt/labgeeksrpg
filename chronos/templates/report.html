@@ -8,7 +8,7 @@
 <div id="calendar">
     <fieldset id="calendar_key">
         <legend>Quick info:</legend>
-            <p>Pay period shifts:</p>
+            <p><strong>Pay period shifts:</strong></p>
             {% if weeks %}
             <ul>
                 <li><a href="{% url Report-Payperiod year month 1 %}">First</a></li>
@@ -21,7 +21,7 @@
 
             <hr class="separator"/>
 
-            <p>Weekly shifts :</p>
+            <p><strong>Weekly shifts:</strong></p>
             {% if weeks %}
             <ul>
                 {% for week in weeks %}
@@ -34,7 +34,7 @@
 
             <hr class="separator"/>
 
-            <p>Color key:</p>
+            <p><strong>Color key:</strong></p>
             <div class="today key">Today</div>
             <hr/>
             <div class="first key">1st pay period</div>
