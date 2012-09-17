@@ -2,7 +2,9 @@
 {% load markup %}
 {% block content %}
 <h1>{{page_name}}</h1>
+<div id='wiki_page'>
 {{ content|markdown }}
+</div>
 <hr />
 {% if can_edit_page %}
 <a href="/pythia/{{slug}}/edit/">Edit this page?</a>
