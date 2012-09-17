@@ -39,7 +39,7 @@ class PageTestCase(TestCase):
         client.logout()
         client.login(username='Writer', password='pass')
         resp = client.get('/pythia/create_page/')
-        self.assertContains(resp, 'Creating Page')
+        self.assertContains(resp, 'Create Page')
         resp = client.post('/pythia/None/edit/', {'content': 'I am a wee babby wiki page', 'notes': 'inintial page creation', 'page_name': "I'm a page!"})
         self.assertEqual(resp.status_code, 302)  # will be a redirect if successful
         resp = client.get('/pythia/im-a-page/')  # testing slugification along with page creation
@@ -60,7 +60,7 @@ class PageTestCase(TestCase):
         client.logout()
         client.login(username='Editor', password='pass')
         resp = client.get('/pythia/hello/edit/')
-        self.assertContains(resp, 'Editing Page')
+        self.assertContains(resp, 'Edit Page')
         resp = client.post('/pythia/hello/edit/', {'content': 'This is NOT an empty page.  I swear', 'notes': 'not empty', 'page_name': 'hello'})
         self.assertEqual(resp.status_code, 302)  # will be a 'found' redirect
         resp = client.get('/pythia/hello/')

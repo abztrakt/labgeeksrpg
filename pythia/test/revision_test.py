@@ -36,7 +36,7 @@ class RevisionHistoryTestCase(TestCase):
         client = Client()
         client.login(username='Editor', password='pass')
         resp = client.get('/pythia/hello/edit/')
-        self.assertContains(resp, 'Editing Page')
+        self.assertContains(resp, 'Edit Page')
         resp = client.post('/pythia/hello/edit/', {'content': 'This is a full page.  I swear', 'notes': 'not empty', 'page_name': 'hello'})
         self.assertEqual(resp.status_code, 302)  # will be a 'found' redirect
         resp = client.get('/pythia/hello/')
