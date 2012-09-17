@@ -210,7 +210,7 @@ def edit_reviews(request, user):
     else:
         can_add_review = False
 
-    if not can_add_review and this_user != user:
+    if not can_add_review:
         # raise Http403 (for django 1.4)
         return render_to_response('403.html', locals(), context_instance=RequestContext(request))
 
@@ -461,12 +461,12 @@ def view_review_data(request, user):
     data = request.REQUEST.copy()
     review_id = data.getlist('id')[0]
     review = UWLTReview.objects.get(id=review_id)
-    if this_user.has_perm('people.add_uwltreview') and this_user != user:
-        can_add_review = True
+    if this_user.has_perm('people.finalize_uwltreview') and this_user != user:
+        can_finalize_review = True
     else:
-        can_add_review = False
+        can_finalize_review = False
 
-    if not can_add_review and this_user != review.user or not review.is_final:
+    if not can_finalize_review or not this_user == user or not review.is_final:
         result = json.dumps({
             'return_status': False,
             'message': 'You do not have permission to view this review.'
