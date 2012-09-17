@@ -23,6 +23,9 @@
             <label class="input_label">
                 <strong>Staff Photo</strong>
                 {{ form.staff_photo }}
+                {% if validation_message %}
+                <em>{{validation_message}}</em>
+                {% endif %}
             </label>
 
             <label class="input_label">
