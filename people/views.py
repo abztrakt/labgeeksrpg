@@ -97,31 +97,24 @@ def create_user_profile(request, name):
     if request.method == 'POST':
         form = CreateUserProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            try: 
-                form.clean_image()
-                if profile:
-                    # Update the user profile
-                    profile = form.save()
-                else:
-                    # Create a user profile, but DON'T add to database quite yet.
-                    profile = form.save(commit=False)
+            if profile:
+                # Update the user profile
+                profile = form.save()
+            else:
+                # Create a user profile, but DON'T add to database quite yet.
+                profile = form.save(commit=False)
 
-                    # Add user to the profile and save
-                    profile.user = user
-                    profile.save()
+                # Add user to the profile and save
+                profile.user = user
+                profile.save()
 
-                    # Now, save the many-to-many data for the form (Required when commit=False)
-                    form.save_m2m()
+                # Now, save the many-to-many data for the form (Required when commit=False)
+                form.save_m2m()
 
-                # Allow editing right after creating/editing a profile.
-                edit = True
-                # View the profile
-                return render_to_response('profile.html', locals(), context_instance=RequestContext(request))
-            except:
-                this_user = request.user
-                message = "You are editing a user profile for "
-                alert = "Image was too large. Please upload a file that is less than 1mb"
-                return render_to_response('create_profile.html', locals(), context_instance=RequestContext(request))
+            # Allow editing right after creating/editing a profile.
+            edit = True
+            # View the profile
+            return render_to_response('profile.html', locals(), context_instance=RequestContext(request))
     else:
         form = CreateUserProfileForm(instance=profile)
 
@@ -389,6 +382,7 @@ def edit_reviews(request, user):
         'badge_photo': badge_photo,
         'can_add_review': can_add_review,
         'recent_message': recent_message,
+        'final_reviewer': final_reviewer,
     }
     return render_to_response('reviews.html', args, context_instance=RequestContext(request))
 
@@ -455,6 +449,7 @@ def view_reviews(request, user):
         'this_user': this_user,
         'user': user,
         'badge_photo': badge_photo,
+        'final_reviewer': final_reviewer,
     }
 
     return render_to_response('view_reviews.html', args)

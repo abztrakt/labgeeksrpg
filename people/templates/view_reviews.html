@@ -9,11 +9,10 @@
 <div class='section'>
     <h1>Reviews for {{user}}</h1>
 </div>
-
-{% if can_add_review %}
-<ul class="tabs">
-    <li><a href="/people/{{user}}/review/"><span>Edit/Create</span></a></li>
-</ul>
+<hr class='separator' />
+{% if final_reviewer %}
+<p><a href="/people/{{user}}/review/">Edit/Create a review for {{user}}</a></p>
+<hr class='separator' />
 {% endif %}
 
 <div id="view_reviews" class="tab_content">

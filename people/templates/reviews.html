@@ -13,11 +13,10 @@
 
 {% if can_add_review %}
 
-<ul class="tabs">
-    <li><a href="/people/{{user}}/view_reviews/"><span>View</span></a></li>
-    <li><a href="#create_review"><span>Edit/Create</span></a></li>
-</ul>
-
+{% if final_reviewer %}
+<p><a href="/people/{{user}}/view_reviews/">View finalized reviews for {{user}}</a></p>
+<hr class='separator' />
+{% endif %}
 
 <div class="tab_container">
     <div id="create_review" class="tab_content">
