@@ -22,7 +22,7 @@
             <tr>
                 <td>Date</td>
                 {% for info in table_dict.date %}
-                <td class="review_selector" title="view details for this review" id="{{info.id}}">{{info.date}}</td>
+                <td class="review_selector link" title="view details for this review" id="{{info.id}}">{{info.date}}</td>
                 {% endfor %}
             </tr>
                 {% for key,scores in table_dict.scores.items %}
@@ -48,7 +48,7 @@
             <tr>
                 <td></td>
                 {% for info in table_dict.date %}
-                <td class="review_selector" id="{{info.id}}">Details</td>
+                <td class="review_selector link" id="{{info.id}}">Details</td>
                 {% endfor %}
             </tr>
         </table>

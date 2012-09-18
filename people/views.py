@@ -475,7 +475,7 @@ def view_review_data(request, user):
     else:
         can_finalize_review = False
 
-    if not can_finalize_review or not this_user == user or not review.is_final:
+    if not can_finalize_review and not this_user == user or not review.is_final:
         result = json.dumps({
             'return_status': False,
             'message': 'You do not have permission to view this review.'
