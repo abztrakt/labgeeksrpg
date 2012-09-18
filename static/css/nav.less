@@ -50,16 +50,22 @@
             float: left;
             margin-right: 1px;
             padding: 5px 8px;
-            background: @background;
+            background-color: @backgroundOff;
             border-bottom: 2px solid @navBackground;
         }
         li.active_tab {
             border-bottom: 2px solid @background;
+            background: @background;
         }
+    }
+    #search {
+        width: 25%;
+        min-width: 14em;
     }
     #search input {
         height: 100%;
         margin: 2px;
         font-size: 10pt;
+        width: 7em;
     }
 }

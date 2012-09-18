@@ -8,43 +8,7 @@
         <p>Any hours worked are displayed on the calendar. Click on a day to view shifts in detail</p>
     </div>
         <div id="calendar">
-            <fieldset id="calendar_key">
-                <legend>Quick info:</legend>
-                <p><strong>Pay period totals:</strong></p>
-                {% if weekly_totals %}
-                <ul>
-                    <li><a href="/chronos/{{user}}/{{year}}/{{month}}/payperiod/1">First: <strong>{{payperiod_totals.first}}</strong></a></li>
-                    <li><a href="/chronos/{{user}}/{{year}}/{{month}}/payperiod/2">Second: <strong>{{payperiod_totals.second}}</strong></a></li>
-                </ul>
-                {% else %}
-                    <p>No shifts this month</p>
-                {% endif %}
-               
-                <hr class="separator"/>
-                
-                <p><strong>Weekly totals:</strong></p>
-                {% if weekly_totals %}
-                    <ul>
-                    {% for week in weekly_totals %}
-                        <li><a href="/chronos/{{user}}/{{year}}/{{month}}/week/{{week.week}}">Week {{week.week}}: <strong>{{week.total}}</strong></a></li>
-                    {% endfor %}
-                    </ul>
-                {% else %}
-                    <p>No shifts this month</p>
-                {% endif %}
-
-                <hr class="separator"/>
-
-                <p><strong>Color key:</strong></p>
-                <div class="today key">Today</div>
-                <hr/>
-                <div class="first key">1st pay period</div>
-                <div class="first filled key">Filled shift in 1st pay period (Timesheet)</div>
-                <hr/>
-                <div class="second key">2nd pay period</div>
-                <div class="second filled key">Filled shift in 2nd pay period (Timesheet)</div>
-            </fieldset>          
-            
+            {% include "calendar_key.html" %}
             {{ calendar }}
 
             <div id="calendar_nav">
