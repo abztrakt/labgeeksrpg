@@ -97,24 +97,33 @@ def create_user_profile(request, name):
     if request.method == 'POST':
         form = CreateUserProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            if profile:
-                # Update the user profile
-                profile = form.save()
-            else:
-                # Create a user profile, but DON'T add to database quite yet.
-                profile = form.save(commit=False)
+            gtg = True
+            validation_message = False
+            if 'staff_photo' in request.FILES:
+                try:
+                    form.clean_image()
+                except:
+                    validation_message = 'Image is too large (bigger than 1024*1024).  Try a smaller one!'
+                    gtg = False
+            if gtg:
+                if profile:
+                    # Update the user profile
+                    profile = form.save()
+                else:
+                    # Create a user profile, but DON'T add to database quite yet.
+                    profile = form.save(commit=False)
 
-                # Add user to the profile and save
-                profile.user = user
-                profile.save()
+                    # Add user to the profile and save
+                    profile.user = user
+                    profile.save()
 
-                # Now, save the many-to-many data for the form (Required when commit=False)
-                form.save_m2m()
+                    # Now, save the many-to-many data for the form (Required when commit=False)
+                    form.save_m2m()
 
-            # Allow editing right after creating/editing a profile.
-            edit = True
-            # View the profile
-            return render_to_response('profile.html', locals(), context_instance=RequestContext(request))
+                # Allow editing right after creating/editing a profile.
+                edit = True
+                # View the profile
+                return render_to_response('profile.html', locals(), context_instance=RequestContext(request))
     else:
         form = CreateUserProfileForm(instance=profile)
 
@@ -205,7 +214,7 @@ def edit_reviews(request, user):
     # Grab the user and any reviews they may have.
     user = User.objects.get(username=user)
     this_user = request.user
-    if this_user.has_perm('people.add_uwltreview') and this_user != user:
+    if this_user.has_perm('people.add_uwltreview'):
         can_add_review = True
     else:
         can_add_review = False

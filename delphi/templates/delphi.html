@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Delphi Home</h1>
+{% if questions %}
+<ul><strong>Questions</strong>
+    {% for question in questions %}
+    <li><a href="/delphi/{{question.id}}/">{{question.question}}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>no questions asked yet</p>
+{% endif %}
+{% if can_add_question %}
+<form method='get' action='/delphi/create/'>
+    <input type='submit' value='Ask A Question' />
+</form>
+{% endif %}
+{% endblock %}
