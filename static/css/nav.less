@@ -59,8 +59,12 @@
         }
     }
     #search {
-        width: 25%;
-        min-width: 14em;
+        width: 9em;
+    }
+    @media only screen and (min-width: @tablet_portrait) {
+        #search {
+            width: 25em;
+        }
     }
     #search input {
         height: 100%;
