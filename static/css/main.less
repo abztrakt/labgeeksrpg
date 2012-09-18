@@ -15,6 +15,10 @@
 @import "people.less";
 @import "oracles.less";
 
+/*--FontAwesome--*/
+@import "font-awesome-ie7.less";
+@import "font-awesome.less";
+
 * {
     font-family: Arial, Helvetica, sans-serif;
     padding: 0;
@@ -30,6 +34,8 @@ html, body {
 
 body {
     font-size: 10pt;
+    width: 100%;
+    overflow: visible;
 }
 
 #wrapper {
@@ -37,9 +43,9 @@ body {
 }
 
 #content {
-    overflow:hidden;
+    overflow: visible;
     padding: 10px;
-    padding-bottom: @footerHeight+10px;
+    padding-bottom: @footerHeight+50px;
     h1 {
         color: @header1Text;
         font-weight: bold;
@@ -53,16 +59,32 @@ body {
         padding-bottom: .3em;
     }
     font-size: 11pt;
-    ul{
+    form ul{
         padding: 1em;
         line-height: 17px;
         list-style: none outside none;
     }
 }
 
-a {
+a, .link {
     color: @link;
 }
-a:hover {
+a:hover, .link:hover {
     color: @linkHover;
+}
+
+i {
+    padding-right: .3em;
+    font-size: 1.8em;
+}
+.long {
+    display: none;
+}
+@media only screen and (min-width: @tablet_portrait) {
+    i {
+        font-size: 1em;
+    }
+    .long {
+        display: inline;
+    }
 }

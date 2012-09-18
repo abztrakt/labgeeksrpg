@@ -32,7 +32,7 @@ class TimesheetCalendar(HTMLCalendar):
                 for shift in self.shifts[day]:
                     if shift.outtime:
                         total_hours += float(shift.length())
-                body = '<p><a href="/chronos/%s/%s/%s/%s">Total Hours: <strong class="hours">' % (self.user.username, self.year, self.month, day) + str(total_hours) + '</strong></a></p>'
+                body = '<p><a href="/chronos/%s/%s/%s/%s"><i class="icon-list-alt"></i><span class="long">Total Hours: <strong class="hours">' % (self.user.username, self.year, self.month, day) + str(total_hours) + '</strong></span></a></p>'
                 s += '%s' % (body)
                 return self.day_cell(cssclass, s)
             return self.day_cell(cssclass, s)
@@ -87,7 +87,7 @@ class ReportCalendar(TimesheetCalendar):
             if date.today() == date(self.year, self.month, day):
                 cssclass += ' today'
             if day in self.shifts:
-                s += '<p><a href="/chronos/report/%s/%s/%s">Shift Details</a></p>' % (self.year, self.month, day)
+                s += '<p><a href="/chronos/report/%s/%s/%s"><i class="icon-list-alt"></i><span class="long">Shift Details</span></a></p>' % (self.year, self.month, day)
 
                 return super(ReportCalendar, self).day_cell(cssclass, s)
             return super(ReportCalendar, self).day_cell(cssclass, s)

@@ -37,8 +37,10 @@ function getReviewData(id){
 /*
 Inserts the data into the page dynamically. 
 */
+var test;
 function loadReviewData(data){
     data = JSON.parse(data);
+    test = data;
 
     return_status = data['return_status'];
     if (return_status){
@@ -86,6 +88,5 @@ function loadReviewData(data){
         review_list.append("<li class='field'><strong>Average: " + data['average'] + "</strong></li>");
         review_list.append("<li class='field'><strong>Weighted Average: " + data['weighted'] + "</strong></li>");
         review_list.append("<li class='field'><strong>Overall: <p>" + data['overall'] + "</p></strong></li>");
-
     }
 }

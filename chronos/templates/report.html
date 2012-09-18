@@ -6,44 +6,7 @@
     <h2>Click "Shift Details" to view specific daily shifts.</h2>
 </div>
 <div id="calendar">
-    <fieldset id="calendar_key">
-        <legend>Quick info:</legend>
-            <p><strong>Pay period shifts:</strong></p>
-            {% if weeks %}
-            <ul>
-                <li><a href="{% url Report-Payperiod year month 1 %}">First</a></li>
-                <li><a href="{% url Report-Payperiod year month 2 %}">Second</a></li>
-            </ul>
-            {% else %}
-                <p>No shifts this month</p>
-            {% endif %}
-
-
-            <hr class="separator"/>
-
-            <p><strong>Weekly shifts:</strong></p>
-            {% if weeks %}
-            <ul>
-                {% for week in weeks %}
-                    <li><a href="{% url Report-Weekly year month week %}">Week {{week}}</a></li>
-                {% endfor %}
-            </ul>
-            {% else %}
-                <p>No shifts this month</p>
-            {% endif %}
-
-            <hr class="separator"/>
-
-            <p><strong>Color key:</strong></p>
-            <div class="today key">Today</div>
-            <hr/>
-            <div class="first key">1st pay period</div>
-            <div class="first filled key">Filled shift in 1st pay period (Timesheet)</div>
-            <hr/>
-            <div class="second key">2nd pay period</div>
-            <div class="second filled key">Filled shift in 2nd pay period (Timesheet)</div>
-    </fieldset>
-    
+    {% include "calendar_key.html" %}
     {{ calendar }}
 
     <div id="calendar_nav">

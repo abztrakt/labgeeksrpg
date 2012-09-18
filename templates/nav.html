@@ -10,8 +10,8 @@
             </a>
             <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dLabel">
                 <li><a tabindex="-1" href="/people/{{ request.user }}">Profile</a></li>
-                <li><a tabindex="-1" href="/chronos/report">Report</a></li>
                 {% if request.user.is_staff %}
+                <li><a tabindex="-1" href="/chronos/report">Report</a></li>
                     <li><a tabindex="-1" href="/admin">Administrator</a></li>
                 {% endif %}
                 <li class="divider"></li>
