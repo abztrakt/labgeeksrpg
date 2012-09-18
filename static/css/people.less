@@ -18,7 +18,23 @@
 }
 
 th, td {
-    padding: .2em .5em;
+    padding: 2px;
+    max-width: 4em;
+    overflow: hidden;
+}
+
+@media only screen and (min-width: @phone_landscape) {
+    th, td {
+        max-width: none;
+        padding: 3px 5px;
+    }
+}
+
+@media only screen and (min-width: @tablet_portrait) {
+    td, th {
+        padding: .2em .5em;
+        max-width: none;
+    }
 }
 
 th {
