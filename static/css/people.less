@@ -3,8 +3,8 @@
 }
 
 #photo_box img {
-    max-height: 20em;
-    width: auto;
+    max-width: 300px;
+    height: auto;
 }
 
 .alert {
@@ -18,7 +18,27 @@
 }
 
 th, td {
-    padding: .2em .5em;
+    padding: 2px;
+    max-width: 4em;
+    overflow: hidden;
+}
+
+@media only screen and (min-width: @phone_landscape) {
+    th, td {
+        max-width: none;
+        padding: 3px 5px;
+    }
+}
+
+@media only screen and (min-width: @tablet_portrait) {
+    td, th {
+        padding: .2em .5em;
+        max-width: none;
+    }
+    #photo_box img {
+        max-height: 20em;
+        width: auto;
+    }
 }
 
 th {
@@ -64,7 +84,6 @@ tbody {
         text-align: center;
     }
     li:first-child {
-        text-align: right;
         text-align: -moz-right;
     }
 }
@@ -107,6 +126,6 @@ thead th {
     }
     p {
         margin-left: 10em;
-        width: 20em;
+        max-width: 20em;
     }
 }

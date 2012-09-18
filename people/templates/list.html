@@ -46,9 +46,9 @@ $(document).ready(function()
                     <td>{{ user.last_name }}</td>
                     <td>{{ user }}</td>
                     <td>{{ user.get_profile.title }}</td>
-                    <td><a href="{% url People-View_Profile user %}">Profile</a></td>
-                    <td><a href="{% url Personal-Timesheet user %}">Timesheet</a></td>
-                    {% if can_add_review%}<td><a href="{% url People-Edit_Reviews user %}">Create/Edit Review</a></td>{% endif %}
+                    <td><a href="{% url People-View_Profile user %}"><i class="icon-user"></i><span class="long">Profile</span></a></td>
+                    <td><a href="{% url Personal-Timesheet user %}"><i class="icon-list-alt"></i><span class="long">Timesheet</span></a></td>
+                    {% if can_add_review%}<td><a href="{% url People-Edit_Reviews user %}"><i class="icon-pencil"></i><span class="long">Create/Edit Review</span></a></td>{% endif %}
                 </tr>
             {% endfor %}
             </tbody>
