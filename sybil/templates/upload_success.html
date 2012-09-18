@@ -2,7 +2,8 @@
 {% load markup %}
 {% block content %}
 <h2>Image Uploaded successfully</h2>
-<p>Markdown code: {{markdown_code}}</p>
+<p>Copy and paste the following into your page: </p>
+<p>{{markdown_code}}</p>
 <div>{{markdown_code|markdown}}</div>
 <form action='/oracles/upload_image/' method='get'>
     upload another image?
