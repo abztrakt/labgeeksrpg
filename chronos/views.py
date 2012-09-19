@@ -283,6 +283,7 @@ def report(request, user=None, year=None, month=None):
 
 @login_required
 def personal_report(request, user=None, year=None, month=None):
+
     """ Creates a personal report of all shifts for that user.
     """
     args = {}
@@ -319,7 +320,7 @@ def personal_report(request, user=None, year=None, month=None):
     stats = calc_shift_stats(shifts, year, month)
     payperiod_totals = stats['payperiod_totals']
     weekly_totals = stats['weekly_totals']
-
+    
     args = {
         'request': request,
         'user': user.username,
@@ -330,10 +331,25 @@ def personal_report(request, user=None, year=None, month=None):
         'next_date': next_date,
         'weekly_totals': weekly_totals,
         'payperiod_totals': payperiod_totals,
-    }
+        'today_year': date.today().year,
+        'today_month': date.today().month,
+    }   
+    
+    if request.GET:
+        if 'q' in request.GET and request.GET['q']:
+            query = request.GET['q']
+            if "/" in query:
+                searched_date = query.split("/")
+                if len(searched_date) == 2:
+                    month = searched_date[0]
+                    year = searched_date[1]
+                    if year.isnumeric() and month.isnumeric() and int(year) >= 2 and int(year) <= 9998 and int(month) <= 12:
+                        return HttpResponseRedirect("/chronos/" + user.username + "/" + year + "/" + month)
+                        #return HttpResponseRedirect("/chronos/" + user.username + "/calendarsearch")
+                        #return render_to_response('options.html', args)
+        return HttpResponseRedirect("/chronos")
 
     return render_to_response('options.html', args)
-
 
 @login_required
 def time(request):

@@ -13,7 +13,14 @@
 
             <div id="calendar_nav">
                 <a class="calendar_nav_link" href="/chronos/{{user}}/{{prev_date.year}}/{{prev_date.month}}">&#060;&#060; Prev month</a>
+                <a class="calendar_nav_link" href="/chronos/{{user}}/{{today_year}}/{{today_month}}">Today</a>
                 <a class="calendar_nav_link" href="/chronos/{{user}}/{{next_date.year}}/{{next_date.month}}">Next month &#062;&#062;</a>
+                <br /><br />
+                <form action="/chronos/{{user}}/" method="get">
+                    <p>Please enter a month and year mm/yyyy</p>
+                    <input type="text" name="q">
+                    <input type="submit" value="Calendar Search">
+                </form>
             </div>
         </div>   
 {% endblock %}

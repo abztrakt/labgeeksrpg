@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import *
+from django.views.generic.simple import redirect_to
 
 urlpatterns = patterns('labgeeksrpg.chronos.views',
                        (r'^report$', 'report'),
@@ -9,6 +10,7 @@ urlpatterns = patterns('labgeeksrpg.chronos.views',
                        url(r'^report/(?P<year>\w+)/(?P<month>\w+)/(?P<day>\w+)', 'staff_report', name="Report-Specific"),
                        (r'^time/success/$', 'success'),
                        (r'^time/fail/', 'fail'),
+                       (r'^chronos/(?P<user>\w+)/calendarsearch$', redirect_to, {'url': r'^(?P<user>\w+)/(?P<year>\w+)/(?P<month>\w+)$'}),
                        url(r'^(?P<user>\w+)/(?P<year>\w+)/(?P<month>\w+)$', 'personal_report', name="Personal-Report-Monthly"),
                        url(r'^(?P<user>\w+)/(?P<year>\w+)/(?P<month>\w+)/payperiod/(?P<payperiod>\w+)', 'specific_report', name="Personal-Report-Payperiod"),
                        url(r'^(?P<user>\w+)/(?P<year>\w+)/(?P<month>\w+)/week/(?P<week>\w+)', 'specific_report', name="Personal-Report-Weekly"),
