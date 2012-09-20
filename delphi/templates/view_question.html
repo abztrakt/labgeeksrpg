@@ -15,11 +15,12 @@
 <strong>Best solutions as chosen by leads:</strong>
 {% for b_answer in best_answer %}
 <div class="notification">
-    {% if can_select_answer %}
-    <input type='checkbox' name='id' value='{{b_answer.id}}' checked />
-    {% endif %}
     {{b_answer.answer|markdown}}
     <p class="info">submitted by {{b_answer.user}} on {{b_answer.date}}</p>
+    {% if can_select_answer %}
+    <input type='checkbox' name='id' value='{{b_answer.id}}' checked />
+    mark as best answer
+    {% endif %}
 </div>
 {% endfor %}
 
@@ -34,11 +35,12 @@
 <p><strong>other solutions:</strong></p>
 {% for answer in answers %}
 <div class="notification">
-    {% if can_select_answer %}
-    <input type='checkbox' name='id' value='{{answer.id}}'/>
-    {% endif %}
     {{answer.answer|markdown}}
     <p class="info">submitted by {{answer.user}} on {{answer.date}}</p>
+    {% if can_select_answer %}
+    <input type='checkbox' name='id' value='{{answer.id}}' />
+    mark as best answer
+    {% endif %}
 </div>
 {% endfor %}
 {% endif %}
