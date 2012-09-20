@@ -277,6 +277,8 @@ def report(request, user=None, year=None, month=None):
         'prev_date': prev_date,
         'next_date': next_date,
         'weeks': weeks,
+        'today_year': date.today().year,
+        'today_month': date.today().month,
     }
 
     return render_to_response('report.html', args)

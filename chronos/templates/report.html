@@ -10,7 +10,8 @@
     {{ calendar }}
 
     <div id="calendar_nav">
-        <a class="calendar_nav_link" href="{% url Report-Monthly prev_date.year prev_date.month %}">&#060;&#060; Prev Month </a>
+        <a class="calendar_nav_link" href="{% url Report-Monthly prev_date.year prev_date.month %}">&#060;&#060; Prev Month</a>
+        <a class="calendar_nav_link" href="{% url Report-Monthly today_year today_month %}">Today</a>
         <a class="calendar_nav_link" href="{% url Report-Monthly next_date.year next_date.month %}">Next Month &#062;&#062;</a>
     </div>
     
