@@ -14,10 +14,11 @@
 {% if requested_tags %}
  tagged as: 
 {% for tag in requested_tags %}
-{{tag}} 
+{{tag}}, 
 {% endfor %}
 {% endif %}
 </strong>
+<hr class='separator' />
     {% for page in pages %}
     <li><a href="/pythia/{{page.slug}}/">{{page.name}}</a></li>
     <p>{{page.preview}}</p>
@@ -29,7 +30,7 @@
 {% if requested_tags %}
  tagged as 
 {% for tag in requested_tags %}
-{{tag}} 
+{{tag}}, 
 {% endfor %}
 {% endif %}
 </p>
