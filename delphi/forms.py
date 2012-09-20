@@ -7,7 +7,6 @@ class CreateQuestionForm(ModelForm):
     """
     Handles the creation of questions that need answers
     """
-    # TODO: after importing TinyMCE to path use tinyMCE widget
     question = forms.CharField(max_length='100', help_text='What is your question?', required=True)
     more_info = forms.CharField(widget=forms.Textarea, help_text='Describe your issue in detail:', required=True)
 

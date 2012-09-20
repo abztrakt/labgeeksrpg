@@ -1,5 +1,6 @@
 from labgeeksrpg.delphi.models import *
 from labgeeksrpg.delphi.forms import *
+from labgeeksrpg.sybil.models import Tag
 from django.shortcuts import render_to_response
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -45,6 +46,7 @@ def view_question(request, q_id):
         'request': request,
         'question_id': q_id,
         'can_answer': can_answer,
+        'tags': question.tags.all(),
         'can_select_answer': can_select_answer,
     }
     return render_to_response('view_question.html', args)
@@ -63,6 +65,12 @@ def create_question(request):
             question.user = request.user
             question.date = datetime.now().date()
             question.save()
+            tags = request.POST.getlist('tags')
+            for tag in tags:
+                if tag != '':
+                    tag_tuple = Tag.objects.get_or_create(name=tag)
+                    question.tags.add(tag_tuple[0])
+            question.save()
             return HttpResponseRedirect('/delphi/' + str(question.id) + '/')
         else:
             return render_to_response('no_question.html', {'request': request, 'urlhack': False, 'bad_form': True, })
@@ -78,6 +86,7 @@ def create_question(request):
             form_fields.append(field_info)
         args = {
             'form_fields': form_fields,
+            'tags': Tag.objects.all(),
             'user': request.user,
             'request': request,
         }
