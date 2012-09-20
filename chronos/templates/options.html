@@ -4,7 +4,11 @@
     
     <div class="section">
         <h1>Chronos Report for {{user}}</h1>
-        <h2><a id="clock_in_or_out" href="/chronos/time/">Clock IN or OUT</a></h2>
+        {% if is_a_punchclock %}
+            <h2><a id="clock_in_or_out" href="/chronos/time/">{{ punchclock_message }}</a></h2>
+        {% else %}
+            <h2>{{ punchclock_message }}</h2>
+        {% endif %}
         <p>Any hours worked are displayed on the calendar. Click on a day to view shifts in detail</p>
     </div>
         <div id="calendar">
@@ -13,6 +17,7 @@
 
             <div id="calendar_nav">
                 <a class="calendar_nav_link" href="/chronos/{{user}}/{{prev_date.year}}/{{prev_date.month}}">&#060;&#060; Prev month</a>
+                <a class="calendar_nav_link" href="/chronos/{{user}}/{{today_year}}/{{today_month}}">Today</a>
                 <a class="calendar_nav_link" href="/chronos/{{user}}/{{next_date.year}}/{{next_date.month}}">Next month &#062;&#062;</a>
             </div>
         </div>   

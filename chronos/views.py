@@ -6,6 +6,7 @@ from django.shortcuts import render_to_response, get_object_or_404, \
 from django.template import RequestContext
 from labgeeksrpg.chronos.forms import ShiftForm
 from labgeeksrpg.chronos.models import Shift, Punchclock
+from random import choice
 
 from labgeeksrpg.utils import ReportCalendar, TimesheetCalendar
 from django.contrib.auth.models import User
@@ -276,6 +277,8 @@ def report(request, user=None, year=None, month=None):
         'prev_date': prev_date,
         'next_date': next_date,
         'weeks': weeks,
+        'today_year': date.today().year,
+        'today_month': date.today().month,
     }
 
     return render_to_response('report.html', args)
@@ -310,6 +313,21 @@ def personal_report(request, user=None, year=None, month=None):
         shifts = None
         calendar = None
 
+    # Only has Clock IN or OUT link if computer is a punchclock
+    current_ip = request.META['REMOTE_ADDR']
+    punchclock_ips = []
+    while len(punchclock_ips) < len(Punchclock.objects.all()):
+        punchclock_ips.append(Punchclock.objects.values('ip_address')[len(punchclock_ips)]['ip_address'])
+    if current_ip in punchclock_ips:
+        is_a_punchclock = True
+        punchclock_message = ["Clock IN or OUT"]
+    else:
+        is_a_punchclock = False
+        punchclock_message = ["This machine is not a punch clock.", \
+            "I'm sorry %s, I'm afraid I can't let you Clock IN or OUT from this machine." %user.first_name, \
+            "You shall not pass (or Clock IN or OUT)!", \
+            "The cake is a lie, and this box isn't a punch clock."]
+
     # Calculate the previous and upcomming months.
     prev_and_next = prev_and_next_dates(year, month)
     prev_date = prev_and_next['prev_date']
@@ -330,10 +348,13 @@ def personal_report(request, user=None, year=None, month=None):
         'next_date': next_date,
         'weekly_totals': weekly_totals,
         'payperiod_totals': payperiod_totals,
+        'today_year': date.today().year,
+        'today_month': date.today().month,
+        'is_a_punchclock': is_a_punchclock,
+        'punchclock_message': choice(punchclock_message),
     }
 
     return render_to_response('options.html', args)
-
 
 @login_required
 def time(request):

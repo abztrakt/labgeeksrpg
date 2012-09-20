@@ -93,7 +93,6 @@ class ReviewTestCase(TestCase):
         self.assertEqual(resp.status_code, 200)
         resp2 = c.get('/people/BigBoss/review/')
         self.assertEqual(resp2.status_code, 200)
-        self.assertContains(resp2, 'security hole')
         resp3 = c.get('/people/Dawg/view_reviews/info/?id=1')
         self.assertEqual(resp3.status_code, 200)
         resp4 = c.get('/people/BigBoss/view_reviews/info/?id=3')
