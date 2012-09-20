@@ -9,6 +9,7 @@ from datetime import datetime
 import diff_match_patch
 from django.template.defaultfilters import slugify
 from django.utils.html import strip_tags
+from labgeeksrpg.sybil.models import Tag
 
 
 @login_required
@@ -20,6 +21,7 @@ def view_page(request, slug):
         page = Page.objects.get(slug=slug)
         page_name = page.name
         content = page.content
+        tags = page.tags.all()
     except Page.DoesNotExist:
         return HttpResponseRedirect('/pythia/')
     if page.times_viewed is None:
@@ -45,6 +47,7 @@ def edit_page(request, slug=None):
         content = page.content
         page_name = page.name
         revision_message = ''
+        current_tags = page.tags.all()
         if not request.user.has_perm('pythia.change_page'):
             return render_to_response('how_are_you_here.html', {'request': request, })
         if create_page:
@@ -56,19 +59,31 @@ def edit_page(request, slug=None):
         if not request.user.has_perm('pythia.add_page'):
             return render_to_response('how_are_you_here.html', {'request': request, })
     user = request.user
+    tags = Tag.objects.all()
     c = {}
     c.update(csrf(request))
     if request.method == "POST":
+        posttags = request.POST.getlist('tags')
+        tags = []
+        for posttag in posttags:
+            if posttag != '':
+                tags.append(Tag.objects.get_or_create(name=posttag))
         content = request.POST["content"]
+        content = strip_tags(content)
         notes = request.POST["notes"]
+        notes = strip_tags(notes)
         page_name = request.POST['page_name']
+        page_name = strip_tags(page_name)
         slug = slugify(page_name)
         if slug == '':
             return render_to_response('at_least_try.html', {'request': request, })
         if page:
             if (page.content != content) or (page.name != page_name):
-                page.content = strip_tags(content)
-                page.name = page_name
+                page.content = content
+                page.tags.clear()
+                for tag in tags:
+                    page.tags.add(tag[0])
+                page.name = strip_tags(page_name)
                 page.slug = slug
                 page.save()
                 page_saved = True
@@ -76,6 +91,9 @@ def edit_page(request, slug=None):
             page = Page(name=page_name, slug=slug, content=content, date=datetime.now(), author=user)
             page.save()
             page_saved = True
+            for tag in tags:
+                page.tags.add(tag[0])
+            page.save()
         if page_saved:
             revision = RevisionHistory.objects.create(page=page, user=user, after=content, date=datetime.now())
             revision.notes = strip_tags(notes)

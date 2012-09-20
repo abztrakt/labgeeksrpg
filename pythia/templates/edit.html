@@ -13,6 +13,12 @@
     <input type='text' name='page_name' value="{{page_name}}"/>
     <p>Content:</p>
     <textarea name="content" rows="20" cols=100">{{content}}</textarea><br/>
+    <p>Tag this page:</p>
+    {% for tag in tags %}
+    <input type='checkbox' name='tags' value='{{tag}}' {% if tag in current_tags %} checked {% endif %} /> {{tag}} <br />
+    {% endfor %}
+    need a new tag?
+    <input type='text' name='tags'/>
     <p>Revision Notes:</p>
 	<textarea name="notes" rows="2" cols="100" maxlength="200">{{revision_message}}</textarea>
     <input type="submit" value="Save Page"/>
