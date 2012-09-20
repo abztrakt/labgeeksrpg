@@ -1,14 +1,39 @@
 {% extends 'base.html' %}
 {% block content %}
 <h1>Delphi Home</h1>
+{% if tags %}
+<form id='tags' action='' method='get'><p><strong>Filter by tags:</strong></p>
+    {% for tag in tags %}
+    <input type='checkbox' name='tag' value='{{tag}}' /> {{tag}}<br />
+    {% endfor %}
+    <input type='submit' value='filter' />
+</form>
+{% endif %}
 {% if questions %}
-<ul><strong>Questions</strong>
+<ul><strong>Questions
+{% if requested_tags %}
+ tagged as: 
+{% for tag in requested_tags %}
+{{tag}}, 
+{% endfor %}
+{% endif %}
+</strong>
+<hr class='separator' />
     {% for question in questions %}
     <li><a href="/delphi/{{question.id}}/">{{question.question}}</a></li>
+    <p>{{question.preview}}</p>
+    <hr class='separator' />
     {% endfor %}
 </ul>
 {% else %}
-<p>no questions asked yet</p>
+<p>no questions
+{% if requested_tags %}
+ tagged as 
+{% for tag in requested_tags %}
+{{tag}}, 
+{% endfor %}
+{% endif %}
+</p>
 {% endif %}
 {% if can_add_question %}
 <form method='get' action='/delphi/create/'>

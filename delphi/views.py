@@ -94,12 +94,31 @@ def create_question(request):
 
 
 def delphi_home(request):
-    try:
-        questions = Question.objects.all()
-    except:
-        questions = None
+    requested_tags = request.GET.getlist('tag')
+    QUESTIONS = []
+    tags = Tag.objects.all()
+    if requested_tags:
+        for tag in requested_tags:
+            tag_object = Tag.objects.get(name=tag)
+            tagged_qs = Question.objects.filter(tags=tag_object)
+            for tagged_q in tagged_qs:
+                if tagged_q not in QUESTIONS:
+                    QUESTIONS.append(tagged_q)
+    else:
+        try:
+            QUESTIONS = Question.objects.all()
+        except:
+            QUESTIONS = None
+    questions = []
+    for QUESTION in QUESTIONS:
+        question = {
+            'question': QUESTION.question,
+            'id': QUESTION.id,
+            'preview': QUESTION.more_info[:200],
+        }
+        questions.append(question)
     can_add_question = request.user.has_perm('delphi.add_question')
-    return render_to_response('delphi.html', {'questions': questions, 'request': request, 'can_add_question': can_add_question, })
+    return render_to_response('delphi.html', {'tags': tags, 'requested_tags': requested_tags, 'questions': questions, 'request': request, 'can_add_question': can_add_question, })
 
 
 def answer_question(request, q_id):
