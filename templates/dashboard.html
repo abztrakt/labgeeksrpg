@@ -15,11 +15,11 @@
 
         {% if locations %}
             {% for location in locations %}
-                <h3>You are clocked <strong>IN</strong></h3>
+                <h3>You are clocked <span id="in">IN</span></h3>
                 <h2>@{{location.name}}, {{clockin_time}}</h2>
             {% endfor %}
         {% else %}
-            <h3>You are clocked <strong>OUT</strong></h3>
+            <h3>You are clocked <span id="out">OUT</span></h3>
         {% endif %}
 
     {%if events or alerts %}
