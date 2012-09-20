@@ -10,6 +10,7 @@ import diff_match_patch
 from django.template.defaultfilters import slugify
 from django.utils.html import strip_tags
 from labgeeksrpg.sybil.models import Tag
+from itertools import chain
 
 
 @login_required
@@ -110,12 +111,31 @@ def edit_page(request, slug=None):
 
 @login_required
 def pythia_home(request):
-    try:
-        PAGES = Page.objects.all()
-    except:
-        PAGES = None
+    requested_tags = request.GET.getlist('tag')
+    PAGES = []
+    tags = Tag.objects.all()
+    if requested_tags:
+        for tag in requested_tags:
+            tag_object = Tag.objects.get(name=tag)
+            tagged_pages = Page.objects.filter(tags=tag_object)
+            for tagged_page in tagged_pages:
+                if tagged_page not in PAGES:
+                    PAGES.append(tagged_page)
+    else:
+        try:
+            PAGES = Page.objects.all()
+        except:
+            PAGES = None
+    pages = []
+    for PAGE in PAGES:
+        page = {
+            'name': PAGE.name,
+            'slug': PAGE.slug,
+            'preview': PAGE.content[:200],
+        }
+        pages.append(page)
     can_add_page = request.user.has_perm('pythia.add_page')
-    return render_to_response('home.html', {'pages': PAGES, 'request': request, 'can_add_page': can_add_page, })
+    return render_to_response('home.html', {'tags': tags, 'requested_tags': requested_tags, 'pages': pages, 'request': request, 'can_add_page': can_add_page, })
 
 
 @login_required

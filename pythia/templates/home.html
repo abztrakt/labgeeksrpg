@@ -1,14 +1,38 @@
 {% extends 'base.html' %}
 {% block content %}
 <h1>Pythia home</h1>
+{% if tags %}
+<form id='tags' action='' method='get'><p><strong>Filter by tags:</strong></p>
+    {% for tag in tags %}
+    <input type='checkbox' name='tag' value='{{tag}}' /> {{tag}}<br />
+    {% endfor %}
+    <input type='submit' value='filter' />
+</form>
+{% endif %}
 {% if pages %}
-<ul><strong>Pages</strong>
+<ul><strong>Pages 
+{% if requested_tags %}
+ tagged as: 
+{% for tag in requested_tags %}
+{{tag}} 
+{% endfor %}
+{% endif %}
+</strong>
     {% for page in pages %}
     <li><a href="/pythia/{{page.slug}}/">{{page.name}}</a></li>
+    <p>{{page.preview}}</p>
+    <hr class='separator' />
     {% endfor %}
 </ul>
 {% else %}
-<p>no pages made yet</p>
+<p>no pages
+{% if requested_tags %}
+ tagged as 
+{% for tag in requested_tags %}
+{{tag}} 
+{% endfor %}
+{% endif %}
+</p>
 {% endif %}
 {% if can_add_page %}
 <form method='get' action='/pythia/create_page?/'>
