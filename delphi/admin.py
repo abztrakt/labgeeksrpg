@@ -3,8 +3,8 @@ from labgeeksrpg.delphi.models import Question, Answer
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('user', 'date', 'question')
-    fields = ('question', 'more_info')
+    list_display = ('question', 'user', 'date')
+    fields = ('question', 'more_info', 'tags')
 
 
 admin.site.register(Question, QuestionAdmin)

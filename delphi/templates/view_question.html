@@ -6,7 +6,15 @@
     <p class="info">asked by {{author}} on {{date}}:</p>
     {{more_info|markdown}}
 </div>
-
+{% if tags %}
+<p>
+Tagged in:
+{% for tag in tags %}
+ {{ tag }},
+{% endfor %}
+</p>
+<hr class='separator' />
+{% endif %}
 {% if can_select_answer and answers or best_answer %}
 <form action='select_answer/' method='get'>
 {% endif %}
