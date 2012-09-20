@@ -283,6 +283,7 @@ def report(request, user=None, year=None, month=None):
 
 @login_required
 def personal_report(request, user=None, year=None, month=None):
+
     """ Creates a personal report of all shifts for that user.
     """
     args = {}
@@ -330,10 +331,11 @@ def personal_report(request, user=None, year=None, month=None):
         'next_date': next_date,
         'weekly_totals': weekly_totals,
         'payperiod_totals': payperiod_totals,
+        'today_year': date.today().year,
+        'today_month': date.today().month,
     }
 
     return render_to_response('options.html', args)
-
 
 @login_required
 def time(request):
