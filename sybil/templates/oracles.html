@@ -2,14 +2,14 @@
 {% block content %}
 	<h1>Consult the Oracles</h1>
     <div>	
-		<form id='search' action='/oracles/search/' method='get' style='text-align:center; margin: 50px; clear: both'>
-    		<input type='text' name='q' style='width: 40%; min-width: 10em; height: 35px; font-size: 20px' />
+		<form id='oracle_search' action='/oracles/search/' method='get'>
+    		<input id='oracle_search_bar' type='text' name='q' />
     		<input type='submit' value='search' />
 		</form>
 	</div>
 	
-	<div style='float:left; display:inline'>
-        <h3>Pythia (Wiki)</h3>
+	<div id='pythia_block'>
+        <h3><a href='/pythia/'>Pythia (Wiki)</a></h3>
         {% for page in pages %}
         <p><a href='/pythia/{{page.slug}}/'>{{page.name}}</a></p>
         {% endfor %}
@@ -18,8 +18,8 @@
 		</form>
 	</div>
 	
-	<div style='float:right; display:inline'>
-        <h3>Delphi (Knowledge Base)</h3>
+	<div id='delphi_block'>
+        <h3><a href='/delphi/'>Delphi (Knowledge Base)</a></h3>
         {% for question in questions %}
         <p><a href='/delphi/{{question.id}}/'>{{question.question}}</a></p>
         {% endfor %}

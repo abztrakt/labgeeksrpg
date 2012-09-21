@@ -19,3 +19,14 @@ class UploadPictureForm(ModelForm):
     class Meta:
         model = Screenshot
         fields = ('picture',)
+
+
+class CreateTagForm(ModelForm):
+
+    class Meta:
+        model = Tag
+        fields = ('name', 'description',)
+
+    def save(self, *args, **kwargs):
+        instance = ModelForm.save(self, *args, **kwargs)
+        return instance
