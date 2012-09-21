@@ -9,10 +9,10 @@
     <div>
         <div class='revision_diff'>
             <p><strong>Changes (diff)</strong></p>
-            {{current_revision.diff|markdown}}
+            {{current_revision.diff|safe}}
         </div>
-        <div class='revision_after'>
-            <p><strong>current content</strong></p>
+        <p><strong>current content</strong></p>
+        <div class='wiki_page'>
             {{current_revision.revised_text|markdown}}
         </div>
     </div>
@@ -28,13 +28,13 @@
     <div>
         <div class='revision_diff'>
             <p><strong>Changes (diff)</strong></p>
-            {{revision.diff|markdown}}
+            {{revision.diff|safe}}
         </div>
-        <div class='revision_after'>
-            {% if can_edit_revisions %}
-            <input type='radio' name='id' value='{{revision.id}}' />select this revision to publish
-            {% endif%}
-            <p><strong>post-revision content</strong></p>
+        {% if can_edit_revisions %}
+        <input type='radio' name='id' value='{{revision.id}}' />select this revision to publish
+        {% endif%}
+        <p><strong>post-revision content</strong></p>
+        <div class='wiki_page'>
             {{revision.revised_text|markdown}}
         </div>
     </div>
