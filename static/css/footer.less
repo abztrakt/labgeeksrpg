@@ -5,21 +5,23 @@
     margin-top: 2em;
     width: 100%;
     > div {
-        min-width: 60em;
+        min-width: 80.8em;
     }
     position: relative;
     margin-top: -@footerHeight;
     height: @footerHeight;
     clear: both;
+    text-align: justify;
 
-
-    dl {
+    dl, ul{
         font-size: 10pt;
+        width: 80%;
         margin: auto;
         overflow: hidden;
     }
     dd {
         float: left;
+        margin-left: auto;
     }
     dt {
         float: left;
@@ -31,18 +33,9 @@
         padding-left: 4em;
     }
     div div {
-        width: 21%;
         margin-top: 1em;
         min-width: 20em;
-        float: right;
-    }
-    div:first-child {
-        float: left;
-        padding-left: 1em;
-    }
-    div:last-child {
-        margin-left: auto;
-        margin-right: auto;
-        float: none;
+        width: 24.5%;
+        display: inline-block;
     }
 }

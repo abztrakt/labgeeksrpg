@@ -1,4 +1,4 @@
-<div id="footer"><div>
+<div id="footer"><div {% if not request.user.is_authenticated %} style='min-width:60.4em;' {% endif %}>
     <div>
         <h2>//Contact Numbers</h2>
         <dl>
@@ -29,7 +29,7 @@
         <h2>//Quick Links</h2>
         <dl>
             <dt>Library:</dt>
-            <dd><a hef="http://lib.washington.edu/" target="_blank">www.lib.washington.edu</a></dd>
+            <dd><a hef="http://lib.washington.edu/" target="_blank">link to library</a></dd>
 
             <dt>Other:</dt>
             <dd><a href="#">www.other.link.edu</a></dd>
@@ -38,4 +38,14 @@
             <dd><a href="#">www.other.link.edu</a></dd>
         </dl>
     </div>
+    {% if request.user.is_authenticated %}
+    <div>
+        <h2>//Feedback</h2>
+        <ul>
+            <li><a href='http://jira.cac.washington.edu/secure/CreateIssueDetails!init.jspa?pid=10243&components=10563&issuetype=1'>Report a Bug</a></li>
+            <li><a href='http://jira.cac.washington.edu/secure/CreateIssueDetails!init.jspa?pid=10243&components=10563&issuetype=2'>Request a Feature</a></li>
+            <li><a href='http://jira.cac.washington.edu/secure/CreateIssueDetails!init.jspa?pid=10243&components=10563&issuetype=4'>Suggest Improvement</a></li>
+        </ul>
+    </div>
+    {% endif %}
 </div></div>
