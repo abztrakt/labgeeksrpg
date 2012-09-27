@@ -1,5 +1,5 @@
 <div id="footer"><div {% if not request.user.is_authenticated %} style='min-width:60.4em;' {% endif %}>
-    <div>
+    <div class='footer_column_outer' {% if not request.user.is_authenticated %} style='width:33%;' {% endif %}>
         <h2>//Contact Numbers</h2>
         <dl>
             <dt>Help desk:</dt>
@@ -12,7 +12,25 @@
             <dd>555-555-5555</dd>
         </dl>
     </div>
-    <div>
+    <div class='footer_column_outer' {% if not request.user.is_authenticated %} style='width:33%;' {% endif %}>
+        <h2>//Quick Links</h2>
+        <ul>
+            <li><a hef="http://lib.washington.edu/" target="_blank">link to library</a></li>
+            <li><a href="#">www.other.link.edu</a></li>
+            <li><a href="#">www.other.link.edu</a></li>
+        </ul>
+    </div>
+    {% if request.user.is_authenticated %}
+    <div class='footer_column_outer'>
+        <h2>//Feedback</h2>
+        <ul>
+            <li><a href='http://jira.cac.washington.edu/secure/CreateIssueDetails!init.jspa?pid=10243&components=10563&issuetype=1'>Report a Bug</a></li>
+            <li><a href='http://jira.cac.washington.edu/secure/CreateIssueDetails!init.jspa?pid=10243&components=10563&issuetype=2'>Request a Feature</a></li>
+            <li><a href='http://jira.cac.washington.edu/secure/CreateIssueDetails!init.jspa?pid=10243&components=10563&issuetype=4'>Suggest Improvement</a></li>
+        </ul>
+    </div>
+    {% endif %}
+    <div class='footer_column_outer' {% if not request.user.is_authenticated %} style='width:33%;' {% endif %}>
         <h2>//Email Info</h2>
         <dl>
             <dt>Info Name:</dt>
@@ -25,27 +43,4 @@
             <dd><a href="#">name@uw.edu</a></dd>
         </dl>
     </div>
-    <div>
-        <h2>//Quick Links</h2>
-        <dl>
-            <dt>Library:</dt>
-            <dd><a hef="http://lib.washington.edu/" target="_blank">link to library</a></dd>
-
-            <dt>Other:</dt>
-            <dd><a href="#">www.other.link.edu</a></dd>
-
-            <dt>Other:</dt>
-            <dd><a href="#">www.other.link.edu</a></dd>
-        </dl>
-    </div>
-    {% if request.user.is_authenticated %}
-    <div>
-        <h2>//Feedback</h2>
-        <ul>
-            <li><a href='http://jira.cac.washington.edu/secure/CreateIssueDetails!init.jspa?pid=10243&components=10563&issuetype=1'>Report a Bug</a></li>
-            <li><a href='http://jira.cac.washington.edu/secure/CreateIssueDetails!init.jspa?pid=10243&components=10563&issuetype=2'>Request a Feature</a></li>
-            <li><a href='http://jira.cac.washington.edu/secure/CreateIssueDetails!init.jspa?pid=10243&components=10563&issuetype=4'>Suggest Improvement</a></li>
-        </ul>
-    </div>
-    {% endif %}
 </div></div>
