@@ -58,12 +58,12 @@ function loadReviewData(data){
         review_list = $("#review_scores_comments");
         review_list.empty();
         var inline = [
-            ' (N/A)',
+            ' (n/a)',
             ' (unsatisfactory)',
-            ' (needs work)',
-            ' (satisfactory)',
-            ' (very good)',
-            ' (exemplary)'
+            ' (needs improvement)',
+            ' (meets expectations)',
+            ' (exceeds expectations)',
+            ' (outstanding)'
         ];
         var intscore;
         var tooltips = {
