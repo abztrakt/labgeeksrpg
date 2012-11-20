@@ -10,16 +10,17 @@ class CreateUserProfileForm(ModelForm):
         return inst
 
     def clean_image(self):
-        image = self.cleaned_data.get('staff_photo',False)
+        image = self.cleaned_data.get('staff_photo', False)
         if image:
-            if image._size > 1024*1024:
+            if image._size > 1024 * 1024:
                 raise forms.ValidationError("Image file too large ( > 2mb )")
             return image
 
-    class Meta:
+
+class Meta:
         model = UserProfile
         fields = ('staff_photo', 'call_me_by', 'working_periods', 'grad_date', 'office', 'about_me', 'phone', 'alt_phone')
-  
+
 
 class CreatePerformanceReviewForm(ModelForm):
     def save(self, *args, **kwargs):
@@ -32,34 +33,34 @@ class CreatePerformanceReviewForm(ModelForm):
 
 class CreateUWLTReviewForm(CreatePerformanceReviewForm):
 
-    RANK_CHOICES = [(0, '0 (worst)')] + [(i, i) for i in range(1, 5)] + [(5, '5 (best)')]
+    RANK_CHOICES = [(1, '1 (Unsatisfactory)')] + [(2, '2 (Needs Improvement)')] + [(3, '3 (Meets Expectations)')] + [(4, '4 (Exceeds Expectations)')] + [(5, '5 (Outstanding)')]
     HELP_TEXT_CHOICES = {
         'teamwork': 'Participates effectively in team efforts and encourages others. Treats people with fairness and respect. Carefully considers other points of view. Promotes collaboration amongst all student staff.',
         'customer_service': 'Is professional in dealing with customers and satisfies their needs within the parameters of the service we provide.',
         'dependability': 'Is responsible and punctual, has good attendance, and finds a substitute when unable to work.',
         'integrity': 'Adheres to the UW principles and standards of conduct. Actively demonstrates commitment to UW computing policies. Honors commitments, earns trust.',
         'communication': 'Expresses thoughts clearly in a way others understand and accept.',
-        'initiative': 'Offers suggestions for new or better methods of operations. Looks for opportunities for self improvment.',
-        'attitude': 'Is enthusiastic, interested, dilligent, and courteous.',
+        'initiative': 'Offers suggestions for new or better methods of operations. Looks for opportunities for self-improvement.',
+        'attitude': 'Is enthusiastic, interested, diligent, and courteous.',
         'productivity': 'Takes initiative to complete tasks and achieve goals. Plans and organizes work to improve output. Completes assigned projects by agreed completion date.',
         'technical_knowledge': 'Has increased knowledge of hardware and/or software. Is up to date with the development of the UWTSC technical environment.',
         'responsibility': 'Willingness to take on responsibility.',
         'policies': 'Knows and enforces UW, C&C and staff policies.',
-        'procedures': 'Understands and follows departamental procedures.',
+        'procedures': 'Understands and follows departmental procedures.',
     }
 
-    teamwork = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['teamwork'], required=False, initial=0)
-    customer_service = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['customer_service'], required=False, initial=0)
-    dependability = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['dependability'], required=False, initial=0)
-    integrity = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['integrity'], required=False, initial=0)
-    communication = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['communication'], required=False, initial=0)
-    initiative = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['initiative'], required=False, initial=0)
-    attitude = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['attitude'], required=False, initial=0)
-    productivity = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['productivity'], required=False, initial=0)
-    technical_knowledge = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['technical_knowledge'], required=False, initial=0)
-    responsibility = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['responsibility'], required=False, initial=0)
-    policies = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['policies'], required=False, initial=0)
-    procedures = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['procedures'], required=False, initial=0)
+    teamwork = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['teamwork'], required=False, initial=1)
+    customer_service = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['customer_service'], required=False, initial=1)
+    dependability = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['dependability'], required=False, initial=1)
+    integrity = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['integrity'], required=False, initial=1)
+    communication = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['communication'], required=False, initial=1)
+    initiative = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['initiative'], required=False, initial=1)
+    attitude = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['attitude'], required=False, initial=1)
+    productivity = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['productivity'], required=False, initial=1)
+    technical_knowledge = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['technical_knowledge'], required=False, initial=1)
+    responsibility = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['responsibility'], required=False, initial=1)
+    policies = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['policies'], required=False, initial=1)
+    procedures = forms.ChoiceField(widget=forms.RadioSelect, choices=RANK_CHOICES, help_text=HELP_TEXT_CHOICES['procedures'], required=False, initial=1)
 
     def save(self, *args, **kwargs):
         inst = ModelForm.save(self, *args, **kwargs)
