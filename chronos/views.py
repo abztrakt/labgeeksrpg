@@ -494,9 +494,16 @@ def success(request):
     return render_to_response('success.html', locals())
 
 
+@login_required
 def alltime(request):
     """ Count every user's hours worked since the beginning of time.
     """
+    if not request.user.is_staff:
+        message = 'Permission Denied'
+        reason = 'You do not have permission to visit this page.'
+
+        return render_to_response('fail.html', locals())
+
     shiftdict = {}
     people = User.objects.all()
     for person in people:
