@@ -510,6 +510,9 @@ def alltime(request):
         total = 0
         shifts = Shift.objects.filter(person=person)
         for shift in shifts:
-            total += float(shift.length())
+            try:
+                total += float(shift.length())
+            except:
+                pass
         shiftdict[person] = total
     return render_to_response('alltime.html', locals())
