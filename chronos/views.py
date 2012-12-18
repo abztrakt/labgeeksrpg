@@ -323,10 +323,10 @@ def personal_report(request, user=None, year=None, month=None):
         punchclock_message = ["Clock IN or OUT"]
     else:
         is_a_punchclock = False
-        punchclock_message = ["This machine is not a punch clock.", \
-            "I'm sorry %s, I'm afraid I can't let you Clock IN or OUT from this machine." %user.first_name, \
-            "You shall not pass (or Clock IN or OUT)!", \
-            "The cake is a lie, and this box isn't a punch clock."]
+        punchclock_message = ["This machine is not a punch clock.",
+                              "I'm sorry %s, I'm afraid I can't let you Clock IN or OUT from this machine." % user.first_name,
+                              "You shall not pass (or Clock IN or OUT)!",
+                              "The cake is a lie, and this box isn't a punch clock."]
 
     # Calculate the previous and upcomming months.
     prev_and_next = prev_and_next_dates(year, month)
@@ -355,6 +355,7 @@ def personal_report(request, user=None, year=None, month=None):
     }
 
     return render_to_response('options.html', args)
+
 
 @login_required
 def time(request):
@@ -491,3 +492,17 @@ def success(request):
         user = user.first_name
 
     return render_to_response('success.html', locals())
+
+
+def alltime(request):
+    """ Count every user's hours worked since the beginning of time.
+    """
+    shiftdict = {}
+    people = User.objects.all()
+    for person in people:
+        total = 0
+        shifts = Shift.objects.filter(person=person)
+        for shift in shifts:
+            total += float(shift.length())
+        shiftdict[person] = total
+    return render_to_response('alltime.html', locals())

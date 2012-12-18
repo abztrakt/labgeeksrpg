@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>All-time report</h1>
+
+<table>
+<th><b>User</b></th><th><b>Total hours</b></th>
+{% for person, total in shiftdict.items %}
+<tr />
+<td>{{ person.get_full_name }} ({{ person }})</td><td>{{ total }}</td>
+{% endfor %}
+</table>
+
+<hr />
+{{ debug }}
+{% endblock %}
